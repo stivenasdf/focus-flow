@@ -1292,6 +1292,7 @@
     .recovery-summary-stat { border: 1px solid var(--border-color); border-radius: 0.7rem; padding: 0.55rem 0.65rem; min-width: 0; background: rgba(0,0,0,0.08); }
     .recovery-summary-stat-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.35px; color: var(--text-color); opacity: 0.5; margin-bottom: 0.22rem; font-family: 'JetBrains Mono', monospace; }
     .recovery-summary-stat-value { font-size: 0.78rem; color: var(--text-color); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #summaryReadiness { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.3; }
     .recovery-summary-stat-value.good { color: #5ec98a; }
     .recovery-summary-stat-value.caution { color: #d4a94a; }
     .recovery-summary-stat-value.bad { color: #e05a5a; }
@@ -1617,9 +1618,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.103</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.104</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.103 adds a clearly labelled yesterday-readiness reference while today's check-in is pending.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.104 restores lifting load from lift history when a recovery-day record is missing and keeps readiness context visible.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2693,7 +2694,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.103';
+      const APP_VERSION='1.104';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -3669,7 +3670,8 @@ function updateNotificationSettingUI(){
           const d=new Date(refDate);d.setDate(d.getDate()-i);
           const ds=toDateStr(d);
           const rec=biometrics[ds];
-          if(rec&&rec[metricKey]!=null&&rec[metricKey]!=='')vals.push(Number(rec[metricKey]));
+          const value=metricKey==='load'?getEffectiveTrainingLoad(ds):(rec&&rec[metricKey]);
+          if(value!=null&&value!=='')vals.push(Number(value));
         }
         if(!vals.length)return null;
         return vals.reduce((a,b)=>a+b,0)/vals.length;
@@ -4648,7 +4650,7 @@ function updateNotificationSettingUI(){
         const strip=document.getElementById('trainingLoadStressStrip');
         if(strip){
           strip.innerHTML='';
-          const trainingVals=days.map(d=>{const r=biometrics[d];return r&&r.load!=null?Number(r.load):0;});
+          const trainingVals=days.map(d=>getEffectiveTrainingLoad(d)||0);
           const workVals=days.map(d=>{const w=getWorkStressData(d);return w.score||0;});
           const tMax=Math.max(1,...trainingVals),wMax=Math.max(1,...workVals);
           days.forEach((d,i)=>{
@@ -4884,6 +4886,19 @@ function updateNotificationSettingUI(){
       // Opportunistic minimum-dose lifting: no A/B/C split, no required weekly frequency.
       // Legacy slot/cycle fields remain in saved data for backward compatibility but are ignored here.
       function getLiftSetLoad(pct,reps){return Math.round(pct*100*reps/35*10)/10;}
+      function getLiftingLoadForDate(dateStr){
+        return Math.round((liftingHistory||[]).filter(h=>h&&h.kind==='exposure'&&h.date===dateStr).reduce((sum,h)=>{
+          if(Number.isFinite(Number(h.loadValue)))return sum+Number(h.loadValue);
+          const profile=getLiftProfile(h.liftName||'');
+          const warmupLoad=LIFTING_WARMUP.slice(0,profile.warmups||0).reduce((n,w)=>n+getLiftSetLoad(w.pct,w.reps),0);
+          const workLoad=Math.max(1,Number(h.sets)||1)*getLiftSetLoad(Number(h.pct)||profile.pct,Number(h.actualReps)||Number(h.targetReps)||profile.reps);
+          return sum+warmupLoad+workLoad;
+        },0)*10)/10;
+      }
+      function getEffectiveTrainingLoad(dateStr){
+        const recorded=biometrics[dateStr]&&biometrics[dateStr].load!=null?Number(biometrics[dateStr].load):0;
+        return Math.max(recorded||0,getLiftingLoadForDate(dateStr)||0)||null;
+      }
       // Strength-first profiles: low rep exposure, conservative RIR, and only enough volume to practice force production.
       // The app is not trying to maximize hypertrophy; minimum-dose work deliberately leaves several reps in reserve.
       const LIFTING_DEFAULT_PROFILE={fatigue:2.5,reps:5,repLabel:'5 reps',pct:0.70,region:'general',warmups:1};
@@ -5105,7 +5120,7 @@ function updateNotificationSettingUI(){
         let loadAdd=0;
         rx.warmups.forEach(w=>{loadAdd+=getLiftSetLoad(w.pct,w.reps);});
         loadAdd+=rx.sets*getLiftSetLoad(rx.pct,rx.reps);
-        liftingHistory.push({id:generateId(),kind:'exposure',date:today,liftId,liftName:lift.name,week:'minimum-dose',weight:rx.weight,targetReps:rx.reps,actualReps:rx.reps,sets:rx.sets,rir:r,success:r>=3,e1rm:null,pct:rx.pct,tmAtTime:lift.trainingMax,fatigueCost:rx.profile.fatigue});
+        liftingHistory.push({id:generateId(),kind:'exposure',date:today,liftId,liftName:lift.name,week:'minimum-dose',weight:rx.weight,targetReps:rx.reps,actualReps:rx.reps,sets:rx.sets,rir:r,success:r>=3,e1rm:null,pct:rx.pct,tmAtTime:lift.trainingMax,fatigueCost:rx.profile.fatigue,loadValue:Math.round(loadAdd*10)/10});
         const rec=biometrics[today]||{};
         rec.load=(rec.load||0)+Math.round(loadAdd*10)/10;
         rec.modalities=Array.from(new Set([...normalizeModalityList(rec.modalities),'weights']));
