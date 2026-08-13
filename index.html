@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.115 batch -->
+<!-- Focus::Flow deployment marker: v1.116 polish batch -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1086,6 +1086,9 @@
     [data-theme="cyberspace"] .search-input, [data-theme="midnight"] .search-input, [data-theme="cadence"] .search-input, [data-theme="slate"] .search-input { background: rgba(0, 0, 0, 0.4); }
     .search-input:focus { border-color: var(--main-color); box-shadow: 0 0 15px var(--main-glow); }
     .search-input::placeholder { color: var(--text-color); opacity: 0.3; }
+    select.search-input { appearance:auto; background-color:var(--sub-alt-color); color:var(--text-color); border-color:var(--border-color); cursor:pointer; color-scheme:light; }
+    [data-theme="cyberspace"] select.search-input,[data-theme="midnight"] select.search-input,[data-theme="cadence"] select.search-input,[data-theme="slate"] select.search-input,[data-theme="ocean"] select.search-input { color-scheme:dark; }
+    select.search-input option { background:var(--sub-alt-color); color:var(--text-color); }
     .notes-block { width: 100%; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px dashed var(--border-color); }
     .notes-textarea { width: 100%; min-height: 50px; background: rgba(0, 0, 0, 0.06); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.4rem 0.6rem; color: var(--text-color); font-size: 0.72rem; outline: none; font-family: 'Lexend Deca', sans-serif; resize: vertical; }
     [data-theme="cyberspace"] .notes-textarea, [data-theme="midnight"] .notes-textarea, [data-theme="cadence"] .notes-textarea, [data-theme="slate"] .notes-textarea { background: rgba(0, 0, 0, 0.35); }
@@ -1125,7 +1128,11 @@
     .activity-summary-stat { border:1px solid var(--border-color); border-radius:.65rem; padding:.55rem .6rem; background:var(--bg-color); color:var(--text-color); }
     .activity-summary-value { font-family:'JetBrains Mono',monospace; font-size:1rem; font-weight:700; color:var(--text-color); }
     .activity-summary-label { font-size:.55rem; color:var(--text-color); opacity:.52; text-transform:uppercase; margin-top:.18rem; }
-    .activity-list { display:flex; flex-direction:column; gap:.55rem; max-height:720px; overflow:auto; padding-right:.15rem; }
+    .activity-list { display:flex; flex-direction:column; gap:.55rem; max-height:720px; overflow:auto; padding-right:.15rem; scrollbar-width:thin; scrollbar-color:var(--border-color) transparent; }
+    .activity-list::-webkit-scrollbar { width:3px; }
+    .activity-list::-webkit-scrollbar-track { background:transparent; }
+    .activity-list::-webkit-scrollbar-thumb { background:var(--border-color); border-radius:10px; }
+    .activity-list::-webkit-scrollbar-thumb:hover { background:var(--main-color); }
     .activity-row { border:1px solid var(--border-color); border-radius:.7rem; padding:.65rem .75rem; background:var(--bg-color); color:var(--text-color); }
     .activity-row-head { display:flex; align-items:flex-start; justify-content:space-between; gap:.7rem; }
     .activity-row-name { font-size:.76rem; font-weight:600; color:var(--text-color); }
@@ -1341,7 +1348,7 @@
     .training-load-stack { width:38%; min-height:2px; display:flex; flex-direction:column-reverse; overflow:hidden; border-radius:2px 2px 0 0; }
     .training-load-stack.empty { background:var(--main-color); opacity:0.12; height:4%; }
     .training-load-segment.other { background:var(--main-color); }
-    .training-load-segment.lifting { background:repeating-linear-gradient(135deg,var(--main-color) 0 3px,var(--text-color) 3px 5px); }
+    .training-load-segment.lifting { background:var(--text-color); opacity:.5; border-top:1px solid var(--bg-color); }
     .training-load-bar.work { background:var(--sub-color); opacity:0.75; }
     .training-load-day-label { font-size:0.48rem; color:var(--text-color); opacity:0.45; font-family:'JetBrains Mono', monospace; }
     .training-load-strip-legend { display:flex; gap:0.8rem; justify-content:center; margin-top:0.35rem; font-size:0.52rem; color:var(--text-color); opacity:0.55; }
@@ -1382,6 +1389,15 @@
     .outlook-column { border:1px solid var(--border-color); border-radius:.6rem; padding:.55rem; }
     .outlook-day { display:grid; grid-template-columns:54px 1fr; gap:.4rem; padding:.35rem 0; border-bottom:1px solid var(--border-color); }
     .outlook-day:last-child {border-bottom:0}.outlook-date{font:.56rem 'JetBrains Mono',monospace;opacity:.55}.outlook-call{font-size:.62rem}.outlook-why{font-size:.55rem;opacity:.5;margin-top:.1rem}
+    .wake-schedule { margin-top:.7rem; border-top:1px solid var(--border-color); padding-top:.65rem; }
+    .wake-schedule-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.3rem; }
+    .wake-day { border:1px solid var(--border-color); border-radius:.5rem; padding:.35rem; min-width:0; }
+    .wake-day-name { font:.55rem 'JetBrains Mono',monospace; opacity:.55; margin-bottom:.25rem; text-transform:uppercase; }
+    .wake-day select,.wake-day input { width:100%; font-size:.55rem; padding:.2rem; margin:0 0 .22rem; border-radius:.35rem; }
+    .wake-plan-summary { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.55rem; }
+    .wake-plan-chip { border:1px solid var(--border-color); border-radius:.45rem; padding:.25rem .4rem; font-size:.56rem; }
+    .wake-override { display:grid; grid-template-columns:auto 120px 110px; gap:.35rem; align-items:center; margin-top:.5rem; }
+    @media(max-width:700px){.wake-schedule-grid{grid-template-columns:repeat(2,1fr)}.wake-override{grid-template-columns:1fr 1fr}.wake-override label{grid-column:1/-1}}
     @media(max-width:650px){.outlook-scenarios{grid-template-columns:1fr;}}
     .training-call-week-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; }
     .training-call-week-row span { font-size: 0.6rem; color: var(--text-color); opacity: 0.5; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
@@ -1650,9 +1666,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.115</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.116</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.115 adds prediction learning, Deload Watch, recovery blocks, and a conditional 7-day outlook.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.116 improves theme consistency, rapid habit logging, readiness explanations, cloud-write safety, and wake-time planning.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2543,7 +2559,7 @@
             <div class="training-load-strip-wrap">
               <div class="training-call-subheading">last 7 days — where the stress came from</div>
               <div class="training-load-strip" id="trainingLoadStressStrip"></div>
-              <div class="training-load-strip-legend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:repeating-linear-gradient(135deg,var(--main-color) 0 3px,var(--text-color) 3px 5px);"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
+              <div class="training-load-strip-legend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--text-color);opacity:.5;"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
             </div>
             <div class="recovery-acwr-caption" id="chronicTrendCaption" style="display:none;"></div>
             <div class="training-load-warning" id="trainingLoadWarning" style="display:none;"></div>
@@ -2568,6 +2584,12 @@
             <div class="recovery-sleep-target-row">
               <label for="sleepTargetInput">target sleep, hrs/night</label>
               <input type="number" id="sleepTargetInput" class="search-input" value="8" step="0.5" min="4" max="12">
+            </div>
+            <div class="wake-schedule">
+              <div class="training-call-subheading">weekly wake schedule</div>
+              <div class="wake-schedule-grid" id="wakeScheduleGrid"></div>
+              <div class="wake-override"><label>one-off next-day override</label><input type="time" class="search-input" id="wakeOverrideTime"><select class="search-input" id="wakeOverrideType"><option value="">none</option><option value="required">required</option><option value="preferred">preferred</option><option value="open">open</option></select></div>
+              <div class="wake-plan-summary" id="wakePlanSummary"></div>
             </div>
             <div class="recovery-acwr-caption" id="sleepDebtCaption"></div>
           </div>
@@ -2744,7 +2766,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.115';
+      const APP_VERSION='1.116';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -2770,6 +2792,8 @@
       let intervalsSyncInFlight=false;
       let intervalsAutoSyncTimer=null;
       let sleepTargetHours=8;
+      let wakeSchedule=['preferred','required','required','required','required','required','preferred'].map((type,i)=>({type,time:'06:00'}));
+      let wakeOverride={date:'',type:'',time:''};
       let recoveryChartPeriod=14,recoveryChartMetric='freshness',recoveryChartOffset=0;
       let collapsedCardKeys=new Set();
       let taskFilter='active';
@@ -2919,7 +2943,7 @@
       let saveFailureWarned=false;
       function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
       const buildStateSnapshotCore=buildStateSnapshot;
-      buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.trainingCallSnapshots=trainingCallSnapshots;return state;};
+      buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.trainingCallSnapshots=trainingCallSnapshots;state.wakeSchedule=wakeSchedule;state.wakeOverride=wakeOverride;return state;};
       function saveData(){const d=buildStateSnapshot();try{localStorage.setItem('pomodoro-cyberspace-data',JSON.stringify(d));saveFailureWarned=false;}catch(e){if(!saveFailureWarned){saveFailureWarned=true;showToast('⚠ save failed — storage may be full');}}scheduleCloudPush();}
 
       function loadData(sourceData){try{const r=sourceData||JSON.parse(localStorage.getItem('pomodoro-cyberspace-data')||'null');if(!r)return;const d=r,today=getToday();if(d.todayDate!==today){
@@ -2932,6 +2956,8 @@
       totalFocusMinutes=d.totalFocusMinutes||0;sessionsCompleted=d.sessionsCompleted||0;tasksCompletedCount=d.tasksCompletedCount||0;taskNameFrequency=d.taskNameFrequency||{};taskLastUsed=d.taskLastUsed||{};lastActiveDate=d.lastActiveDate||null;dailyHistory=d.dailyHistory||{};taskHabitHistory=d.taskHabitHistory||{};librarySort=d.librarySort||'frequent';tasks=d.tasks||[];taskTimeLog=d.taskTimeLog||{};selectedTaskForGraph=d.selectedTaskForGraph||null;soundEnabled=d.soundEnabled!==undefined?d.soundEnabled:true;currentTheme=d.currentTheme||'cyberspace';bgHabits=d.bgHabits||[];totalXP=d.totalXP!==undefined?d.totalXP:(d.totalFocusMinutes||0);dailyGoalBonusDate=d.dailyGoalBonusDate||null;focusPeriod=d.focusPeriod||7;habitCheckPeriod=d.habitCheckPeriod||84;dailyGoal=d.dailyGoal||90;selectedHabitForGraph=d.selectedHabitForGraph||null;focusMode=(d.focusMode==='nudge')?'pause':(d.focusMode||'auto');habitGraphSort=d.habitGraphSort||'frequent';activePanel=d.activePanel||'tasks';notificationsEnabled=d.notificationsEnabled!==undefined?d.notificationsEnabled:false;sessionLog=d.sessionLog||[];lastSessionLogId=d.lastSessionLogId||null;estimateAccuracyLog=d.estimateAccuracyLog||[];tasksAbandonedCount=d.tasksAbandonedCount||0;taskFilter=d.taskFilter||'active';chartOffset=d.chartOffset||0;heatmapOffset=d.heatmapOffset||0;habitCheckOffset=d.habitCheckOffset||0;overviewOffset=d.overviewOffset||0;hasSeenWelcome=d.hasSeenWelcome!==undefined?d.hasSeenWelcome:false;taskSort=d.taskSort||'manual';recurringTasks=d.recurringTasks||{};lastRecapWeek=d.lastRecapWeek||null;taskWeeklyGoal=d.taskWeeklyGoal||10;habitOrderSort=d.habitOrderSort||'manual';xpFromFocus=d.xpFromFocus||0;xpFromTasks=d.xpFromTasks||0;xpFromHabits=d.xpFromHabits||0;xpFromGoals=d.xpFromGoals||0;xpFromChains=d.xpFromChains||0;notepadContent=d.notepadContent||'';notepadPinned=d.notepadPinned||false;notepadPosX=null;notepadPosY=null;todayHabitSort=d.todayHabitSort||'manual';todoSort=d.todoSort||'manual';overviewSort=d.overviewSort||'manual';adaptiveGoalEnabled=d.adaptiveGoalEnabled||false;adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled!==undefined?d.adaptiveFocusGoalEnabled:true;todayDueSort=d.todayDueSort||'date';todayPrioritySort=d.todayPrioritySort||'priority';goals=d.goals||[];taskSchedule=d.taskSchedule||{};scheduleDate=d.scheduleDate||null;viewMode=d.viewMode||'auto';collapsedCardKeys=new Set(d.collapsedCardKeys||[]);todayHubTab=d.todayHubTab||'current';completionEvents=d.completionEvents||[];biometrics=d.biometrics||{};importedActivities=d.importedActivities||[];intervalsBestRecords=d.intervalsBestRecords||{run:{},ride:{},runRanks:{},rideRanks:{},lastSyncAt:null};intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsLastSyncAt=d.intervalsLastSyncAt||null;recoveryChartPeriod=d.recoveryChartPeriod||14;recoveryChartMetric=d.recoveryChartMetric||'freshness';sleepTargetHours=d.sleepTargetHours||8;recoveryChartOffset=d.recoveryChartOffset||0;breakOvertimeLog=d.breakOvertimeLog||[];books=d.books||[];bookStatusFilter=d.bookStatusFilter||'reading';hasSeenGoalsTutorial=d.hasSeenGoalsTutorial!==undefined?d.hasSeenGoalsTutorial:false;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}else{liftingLifts=[];}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;else liftingSequencePosition=0;liftingCycleNumber=d.liftingCycleNumber!==undefined?d.liftingCycleNumber:1;liftingHistory=d.liftingHistory||[];liftingPendingLiftIds=d.liftingPendingLiftIds||[];liftingWarmupChecks=d.liftingWarmupChecks||{};dailyCheckins=d.dailyCheckins||{};currentTaskId=d.currentTaskId!==undefined?d.currentTaskId:null;taskTimeLimits=d.taskTimeLimits||{};taskTimerRemaining=d.taskTimerRemaining||{};
       sessionResponses=d.sessionResponses||{};
       trainingCallSnapshots=d.trainingCallSnapshots||{};
+      if(Array.isArray(d.wakeSchedule)&&d.wakeSchedule.length===7)wakeSchedule=d.wakeSchedule;
+      wakeOverride=d.wakeOverride||{date:'',type:'',time:''};
       restoredActiveTimer=false;
       if(!sourceData&&d.activeTimer){
         const at=d.activeTimer;
@@ -4685,8 +4711,10 @@ function updateNotificationSettingUI(){
         const bodyMax=vals.length?Math.max(...vals):null;
         const yesterdayDate=new Date(today+'T00:00:00');yesterdayDate.setDate(yesterdayDate.getDate()-1);
         const yesterdayFreshness=getFreshnessData(toDateStr(yesterdayDate));
-        const readinessText=freshness.score==null?(yesterdayFreshness.score==null?'pending today':`pending today · yesterday ${yesterdayFreshness.score}/100`):`${freshness.score}/100 · ${freshness.dataPoints}/6 signals`;
+        const readinessBand=freshness.score==null?'':freshness.score>=75?'ready':freshness.score>=60?'caution':'low';
+        const readinessText=freshness.score==null?(yesterdayFreshness.score==null?'pending today':`pending today · yesterday ${yesterdayFreshness.score}/100`):`${freshness.score}/100 · ${readinessBand}`;
         setRecoverySummaryValue('summaryReadiness',readinessText,freshness.score==null?null:freshness.score>=75?'good':freshness.score>=60?'caution':'bad');
+        const readinessEl=document.getElementById('summaryReadiness');if(readinessEl&&freshness.score!=null)readinessEl.title=`Composite of ${freshness.dataPoints}/6 available readiness signals. Training Call overrides are evaluated separately.`;
         setRecoverySummaryValue('summaryWorkStress',work.score==null?'--':work.status==='red'?'high':work.status==='yellow'?'moderate':'low',work.status==='red'?'bad':work.status==='yellow'?'caution':work.score==null?null:'good');
         setRecoverySummaryValue('summaryBodyFatigue',bodyMax==null?'--':bodyMax>=9?'high':bodyMax>=7?'moderate':'low',bodyMax==null?null:bodyMax>=9?'bad':bodyMax>=7?'caution':'good');
         const level=call&&call.level?call.level:'--';
@@ -4702,9 +4730,10 @@ function updateNotificationSettingUI(){
         const g=document.getElementById('summaryGuidance');
         if(g){
           const parts=[];
+          if(level==='rest'&&freshness.score!=null&&freshness.score>=60&&call.reasons?.length)parts.push(`readiness is ${readinessBand}; rest override: ${call.reasons[0]}`);
           if(work.status==='red')parts.push('work stress is high');
           if(bodyMax!=null&&bodyMax>=8)parts.push('local fatigue is elevated');
-          if(call&&call.level)parts.push(`primary prescription: ${call.level}`);
+          if(call&&call.level&&!(level==='rest'&&freshness.score!=null&&freshness.score>=60))parts.push(`primary prescription: ${call.level}`);
           if(liftText&&liftText!=='--')parts.push(liftText==='skip'?'lifting stays off the table':`minimum-dose lift: ${liftText}`);
           g.textContent=parts.length?parts.join(' · '):'log today\'s recovery and work data to build the daily picture.';
         }
@@ -4990,6 +5019,12 @@ function updateNotificationSettingUI(){
           sleepChartHitboxes.push({x:x-3,y:yTop,w:barW+6,h:barH,text:`${days[i]}\nbed: ${plotMinutesToTimeStr(n.startMin)} · wake: ${plotMinutesToTimeStr(n.endMin)}\n${n.duration.toFixed(1)}h asleep`});
         });
       }
+      function shiftClock(time,minutes){if(!time)return'';const [h,m]=time.split(':').map(Number),n=(h*60+m+minutes+1440*3)%1440;return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;}
+      function formatClock(time){if(!time)return'open';const [h,m]=time.split(':').map(Number),suffix=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(m).padStart(2,'0')} ${suffix}`;}
+      function getWakePlanForDate(dateStr){const d=new Date(dateStr+'T12:00:00'),base=wakeSchedule[d.getDay()]||{type:'open',time:''};if(wakeOverride.date===dateStr&&wakeOverride.type)return{type:wakeOverride.type,time:wakeOverride.type==='open'?'':wakeOverride.time,override:true};return{...base,override:false};}
+      function renderWakeSchedule(){const grid=document.getElementById('wakeScheduleGrid'),summary=document.getElementById('wakePlanSummary');if(!grid||!summary)return;const names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];grid.innerHTML='';wakeSchedule.forEach((x,i)=>{const el=document.createElement('div');el.className='wake-day';el.innerHTML=`<div class="wake-day-name">${names[i]}</div><select class="search-input" data-wake-type="${i}"><option value="required" ${x.type==='required'?'selected':''}>required</option><option value="preferred" ${x.type==='preferred'?'selected':''}>preferred</option><option value="open" ${x.type==='open'?'selected':''}>open</option></select><input type="time" class="search-input" data-wake-time="${i}" value="${x.time||''}" ${x.type==='open'?'disabled':''}>`;grid.appendChild(el);});
+        const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);const ds=toDateStr(tomorrow);if(wakeOverride.date&&wakeOverride.date<ds)wakeOverride={date:'',type:'',time:''};const typeEl=document.getElementById('wakeOverrideType'),timeEl=document.getElementById('wakeOverrideTime');if(typeEl)typeEl.value=wakeOverride.date===ds?wakeOverride.type:'';if(timeEl)timeEl.value=wakeOverride.date===ds?wakeOverride.time:'';
+        const plan=getWakePlanForDate(ds);if(plan.type==='open'||!plan.time)summary.innerHTML='<span class="wake-plan-chip">tomorrow · open wake time</span>';else{const asleep=shiftClock(plan.time,-Math.round(sleepTargetHours*60)),wind=shiftClock(asleep,-45);summary.innerHTML=`<span class="wake-plan-chip">${formatClock(wind)} wind-down</span><span class="wake-plan-chip">${formatClock(asleep)} target asleep</span><span class="wake-plan-chip">${formatClock(plan.time)} ${plan.type} wake${plan.override?' · override':''}</span>`;}}
       function updateSleepCard(){
         const targetInput=document.getElementById('sleepTargetInput');
         if(targetInput&&document.activeElement!==targetInput)targetInput.value=sleepTargetHours;
@@ -5030,6 +5065,7 @@ function updateNotificationSettingUI(){
         const insightsEl=document.getElementById('sleepInsights');
         if(insightsEl)insightsEl.innerHTML=insights.length?insights.map(([k,t])=>`<div class="sleep-insight-row"><div class="sleep-insight-key">${k}</div><div class="sleep-insight-text">${t}</div></div>`).join(''):`<div class="sleep-insight-row"><div class="sleep-insight-key">data</div><div class="sleep-insight-text">log sleep start and end times for a few nights to build this summary.</div></div>`;
         caption.textContent=debt?`${debt.daysWithData} logged night${debt.daysWithData===1?'':'s'} in the 14-day debt window · target ${sleepTargetHours}h/night`:'sleep debt appears once sleep start/end times are logged.';
+        renderWakeSchedule();
         drawSleepDurationChart();
       }
       function roundToLoadStep(w){return Math.round(Number(w)/2.5)*2.5;}
@@ -5568,7 +5604,8 @@ function updateNotificationSettingUI(){
         const row=(date,callText,why)=>`<div class="outlook-day"><div class="outlook-date">${new Date(date+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</div><div><div class="outlook-call">${escapeHtml(callText)}</div><div class="outlook-why">${escapeHtml(why)}</div></div></div>`;
         const a=[],b=[];for(let i=1;i<=7;i++){const d=new Date(today+'T12:00:00');d.setDate(d.getDate()+i);const ds=toDateStr(d),early=i<=2;
           let cur=watch.level==='high'?'recovery-biased':watch.level==='moderate'?(early?'easy likely':'moderate opportunity: low'):(call.level==='rest'&&early?'easy possible':'moderate opportunity: possible');
-          let why=watch.level==='low'?'depends on daily recovery and accumulated load':`${watch.level} deload watch keeps structured stress conservative`;
+          const wakePlan=getWakePlanForDate(ds),wakeNote=wakePlan.type==='required'&&wakePlan.time?` · ${formatClock(wakePlan.time)} required wake`:wakePlan.type==='preferred'&&wakePlan.time?` · ${formatClock(wakePlan.time)} preferred wake`:'';
+          let why=(watch.level==='low'?'depends on daily recovery and accumulated load':`${watch.level} deload watch keeps structured stress conservative`)+wakeNote;
           if(health!=='none'){cur='recovery-biased';why='health override must clear before training opportunity returns';}
           const opt=i<=2?'easy / minimum-dose lift possible':i<=4?'moderate aerobic opportunity':'quality opportunity: possible';
           const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep target is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,why));b.push(row(ds,opt,optWhy));}
@@ -6013,6 +6050,8 @@ function updateNotificationSettingUI(){
       function createHabitFreqSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';[1,2,3,4,5,6,7].forEach(n=>{const opt=document.createElement('option');opt.value=n;opt.textContent=n===7?'daily':`${n}x/wk`;if((h.targetPerWeek||7)===n)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitFrequency(h.id,parseInt(sel.value));});return sel;}
       function createHabitDailyTargetSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';[1,2].forEach(n=>{const opt=document.createElement('option');opt.value=n;opt.textContent=n===1?'1x/day':'2x/day';if((h.timesPerDay||1)===n)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitDailyTarget(h.id,parseInt(sel.value));});return sel;}
       function createHabitControlsRow(h){const row=document.createElement('div');row.className='habit-controls-row';row.appendChild(createHabitFreqSelect(h));row.appendChild(createHabitDailyTargetSelect(h));return row;}
+      let habitOverviewRefreshTimer=null;
+      function scheduleHabitOverviewRefresh(){if(habitOverviewRefreshTimer)clearTimeout(habitOverviewRefreshTimer);habitOverviewRefreshTimer=setTimeout(()=>{habitOverviewRefreshTimer=null;renderBgHabits();renderHabitGraphList();if(selectedHabitForGraph)drawHabitCheckGraph();},600);}
 
       function renderHabitOverview(){
         const grid=document.getElementById('habitOverviewGrid');
@@ -6096,7 +6135,9 @@ function updateNotificationSettingUI(){
             cell.title=`${h.name} — ${d}${target>1?` (${cnt}/${target})`:done?' (done)':''}`;
             cell.addEventListener('click',()=>{
               checkOffHabit(h,d);
-              saveData();updateStats();renderBgHabits();renderHabitGraphList();if(selectedHabitForGraph===h.id)drawHabitCheckGraph();
+              const next=getHabitDayCount(h,d),isDone=next>=target&&next>0,isPartial=next>0&&!isDone;
+              cell.classList.toggle('done',isDone);cell.classList.toggle('partial',isPartial);cell.title=`${h.name} — ${d}${target>1?` (${next}/${target})`:isDone?' (done)':''}`;
+              saveData();updateStats();scheduleHabitOverviewRefresh();
             });
             cellsRow.appendChild(cell);
           });
@@ -7055,6 +7096,9 @@ function updateNotificationSettingUI(){
       document.getElementById('recoveryDateInput').addEventListener('change',e=>{loadRecoveryEntryForDate(e.target.value);updateRecoveryEntrySummary();});
       document.getElementById('recoveryDateInput').addEventListener('click',e=>{e.preventDefault();try{e.target.showPicker();}catch(err){}});
       document.getElementById('sleepTargetInput').addEventListener('change',e=>{sleepTargetHours=Math.max(4,Math.min(12,Number(e.target.value)||8));saveData();updateSleepCard();updateSettingsPlanningUI();});
+      document.getElementById('wakeScheduleGrid').addEventListener('change',e=>{const ti=e.target.dataset.wakeType,wi=e.target.dataset.wakeTime;if(ti!=null){wakeSchedule[Number(ti)].type=e.target.value;if(e.target.value!=='open'&&!wakeSchedule[Number(ti)].time)wakeSchedule[Number(ti)].time='06:00';}if(wi!=null)wakeSchedule[Number(wi)].time=e.target.value;saveData();renderWakeSchedule();renderTrainingOutlook();});
+      document.getElementById('wakeOverrideType').addEventListener('change',e=>{const d=new Date();d.setDate(d.getDate()+1);wakeOverride={date:e.target.value?toDateStr(d):'',type:e.target.value,time:e.target.value==='open'?'':(document.getElementById('wakeOverrideTime').value||'06:00')};saveData();renderWakeSchedule();renderTrainingOutlook();});
+      document.getElementById('wakeOverrideTime').addEventListener('change',e=>{const d=new Date();d.setDate(d.getDate()+1);const type=document.getElementById('wakeOverrideType').value||'preferred';wakeOverride={date:toDateStr(d),type,time:e.target.value};saveData();renderWakeSchedule();renderTrainingOutlook();});
       ['recoveryHrvInput','recoveryBodyweightInput','recoveryLoadInput','recoverySleepInput','recoveryRecoveryInput','recoveryStrainInput','recoveryRpeInput','recoveryTrainingRpeInput','recoveryWorkHoursInput','recoveryWorkEffortInput','recoverySystemicFatigueInput','recoveryLegFatigueInput','recoveryBackFatigueInput','recoveryUpperFatigueInput','recoverySleepStartInput','recoverySleepEndInput','recoveryTestTimeInput'].forEach(id=>{
         document.getElementById(id).addEventListener('input',()=>recoveryTouchedFields.add(id));
       });
@@ -8873,6 +8917,7 @@ function updateNotificationSettingUI(){
       function resolveSyncConflictLocal(){document.getElementById('syncConflictOverlay').classList.remove('open');pendingConflictRemoteState=null;pushToCloud();showToast("kept this device's data — pushed to cloud");checkWeeklyRecap();}
       function resolveSyncConflictCancel(){document.getElementById('syncConflictOverlay').classList.remove('open');pendingConflictRemoteState=null;handleSyncSignOut();checkWeeklyRecap();}
       let lastPushedStateJSON=null;
+      let hasUnsyncedLocalChanges=false;
       function pushToCloud(){
         if(!syncUser)return;
         updateSyncStatusDot('syncing');
@@ -8880,11 +8925,12 @@ function updateNotificationSettingUI(){
           const state=buildStateSnapshot();
           const stateJSON=JSON.stringify(state);
           const ref=window.fb.doc(window.fb.db,'userStates',syncUser.uid);
-          window.fb.setDoc(ref,{state,updatedAt:window.fb.serverTimestamp(),schemaVersion:SYNC_SCHEMA_VERSION},{merge:true}).then(()=>{lastPushedStateJSON=stateJSON;updateSyncStatusDot('synced');}).catch(err=>{console.error(err);showToast('⚠ cloud sync failed — will retry on next change');updateSyncStatusDot('error');});
+          window.fb.setDoc(ref,{state,updatedAt:window.fb.serverTimestamp(),schemaVersion:SYNC_SCHEMA_VERSION},{merge:true}).then(()=>{lastPushedStateJSON=stateJSON;const currentJSON=JSON.stringify(buildStateSnapshot());hasUnsyncedLocalChanges=currentJSON!==stateJSON;if(hasUnsyncedLocalChanges)scheduleCloudPush();else updateSyncStatusDot('synced');}).catch(err=>{hasUnsyncedLocalChanges=true;console.error(err);showToast('⚠ cloud sync failed — will retry on next change');updateSyncStatusDot('error');});
         });
       }
       function scheduleCloudPush(){
         if(!syncUser||isApplyingRemoteUpdate)return;
+        hasUnsyncedLocalChanges=true;
         updateSyncStatusDot('syncing');
         if(pendingCloudPushTimeout)clearTimeout(pendingCloudPushTimeout);
         pendingCloudPushTimeout=setTimeout(()=>{pushToCloud();},2500);
@@ -8906,6 +8952,7 @@ function updateNotificationSettingUI(){
             if(snap.metadata&&snap.metadata.hasPendingWrites)return;
             if(!snap.exists)return;
             if(isApplyingRemoteUpdate)return;
+            if(hasUnsyncedLocalChanges)return;
             const remote=snap.data();
             const remoteState=remote.state||{};
             if(lastPushedStateJSON!==null&&JSON.stringify(remoteState)===lastPushedStateJSON)return;
