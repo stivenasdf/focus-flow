@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.119 recovery layout -->
+<!-- Focus::Flow deployment marker: v1.120 roadmap completion -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1364,6 +1364,8 @@
     .training-load-strip-legend { display:flex; gap:0.8rem; justify-content:center; margin-top:0.35rem; font-size:0.52rem; color:var(--text-color); opacity:0.55; }
     .training-load-strip-key { display:inline-flex; align-items:center; gap:0.25rem; }
     .training-load-strip-swatch { width:7px; height:7px; border-radius:2px; display:inline-block; }
+    .training-load-view-toggle { display:flex; gap:.3rem; margin:-.2rem 0 .7rem; }
+    .training-load-view-toggle .sort-btn { flex:1; }
     [data-view-mode="mobile"] .recovery-daily-summary-grid { grid-template-columns:1fr 1fr; }
     [data-view-mode="mobile"] .recovery-daily-summary-grid .recovery-summary-stat:last-child { grid-column:1/-1; }
     [data-view-mode="mobile"] .training-load-detail-grid { grid-template-columns:1fr; }
@@ -1399,6 +1401,8 @@
     .outlook-column { border:1px solid var(--border-color); border-radius:.6rem; padding:.55rem; color:var(--text-color); background:var(--bg-color); }
     .outlook-day { display:grid; grid-template-columns:54px 1fr; gap:.4rem; padding:.35rem 0; border-bottom:1px solid var(--border-color); color:var(--text-color); }
     .outlook-day:last-child {border-bottom:0}.outlook-date{font:.56rem 'JetBrains Mono',monospace;color:var(--text-color);opacity:.6}.outlook-call{font-size:.62rem;color:var(--text-color)}.outlook-why{font-size:.55rem;color:var(--text-color);opacity:.58;margin-top:.1rem}
+    .recovery-path { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.65rem; }
+    .recovery-path-chip { border:1px solid var(--border-color); border-radius:.55rem; padding:.35rem .5rem; color:var(--text-color); font-size:.58rem; line-height:1.35; }
     .recovery-long-card .training-call-confidence-detail { color:var(--text-color); opacity:.58; }
     .recovery-snapshot-card .goal-ring .fg-circle { filter:none; stroke-width:5; }
     .recovery-snapshot-card .goal-ring .bg-circle { stroke:var(--border-color); stroke-width:5; }
@@ -1695,7 +1699,7 @@
         <div class="settings-section-title">app</div>
         <div class="settings-desc" style="margin-top:0;"><strong>Version 1.116</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.119 repairs the Recovery layout and Sleep contrast, adds capacity to Today at a Glance, and introduces personal aerobic baselines.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.120 completes the recovery roadmap: Body Battery naming, cardio-only chronic load, automatic HR flags, activity-load deduplication, leaner cloud sync, lift classification, and recovery opportunity cues.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2399,8 +2403,8 @@
           <div class="recovery-card recovery-daily-summary">
             <h2>today at a glance</h2>
             <div class="recovery-daily-summary-grid">
-              <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">readiness</div><div class="recovery-summary-stat-value" id="summaryReadiness">--</div></div>
-              <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">est. capacity</div><div class="recovery-summary-stat-value" id="summaryCapacity">--</div></div>
+              <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">recovery signals</div><div class="recovery-summary-stat-value" id="summaryReadiness">--</div></div>
+              <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body battery · est.</div><div class="recovery-summary-stat-value" id="summaryCapacity">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">work stress</div><div class="recovery-summary-stat-value" id="summaryWorkStress">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body fatigue</div><div class="recovery-summary-stat-value" id="summaryBodyFatigue">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">primary training</div><div class="recovery-summary-stat-value" id="summaryTrainingCall">--</div></div>
@@ -2446,7 +2450,7 @@
 
           <div class="recovery-card recovery-long-card" id="trainingOutlookCard">
             <div class="recovery-watch-head"><h2>7-day training outlook</h2><span class="training-call-confidence-detail">possibilities, not prescriptions</span></div>
-            <div class="outlook-scenarios"><div class="outlook-column"><div class="training-call-subheading">current trend</div><div id="outlookCurrent"></div></div><div class="outlook-column"><div class="training-call-subheading">if recovery improves</div><div id="outlookOptimal"></div></div></div>
+            <div class="outlook-scenarios"><div class="outlook-column"><div class="training-call-subheading">current trend</div><div id="outlookCurrent"></div></div><div class="outlook-column"><div class="training-call-subheading">if recovery improves</div><div id="outlookOptimal"></div></div></div><div class="recovery-path" id="recoveryOpportunityPath"></div>
           </div>
 
           <div class="recovery-card recovery-entry-card">
@@ -2522,7 +2526,7 @@
                   <div class="recovery-modality-status" id="recoveryModalityStatus"></div>
                 </div>
                 <div class="recovery-input-grid">
-                  <div class="recovery-input-group"><label>workout load — intervals.icu</label><input type="number" id="recoveryLoadInput" class="search-input" placeholder="e.g. 85" inputmode="decimal"></div>
+                  <div class="recovery-input-group" id="recoveryLoadInputGroup"><label>workout load — fallback only</label><input type="number" id="recoveryLoadInput" class="search-input" placeholder="e.g. 85" inputmode="decimal"><div class="goal-form-hint" id="recoveryLoadSourceHint">Used only when Intervals.icu has no load for this date.</div></div>
                   <div class="recovery-input-group"><label>end-of-day strain — whoop</label><input type="number" id="recoveryStrainInput" class="search-input" placeholder="0-21" inputmode="decimal" min="0" max="21" step="0.1"></div>
                   <div class="recovery-input-group" id="recoveryTrainingRpeGroup"><label>session RPE (1=very easy, 10=maximal)</label><input type="number" id="recoveryTrainingRpeInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
                   <div class="recovery-input-group" style="grid-column:1/-1;">
@@ -2548,7 +2552,7 @@
           </div>
 
           <div class="recovery-card recovery-snapshot-card">
-            <h2>today's freshness</h2>
+            <h2>recovery signals today</h2>
             <div class="recovery-ring-row">
               <div class="goal-ring" style="width:100px;height:100px;">
                 <svg viewBox="0 0 80 80"><circle class="bg-circle" cx="40" cy="40" r="34"/><circle class="fg-circle" id="freshnessRingFill" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg>
@@ -2571,7 +2575,7 @@
           </div>
 
           <div class="recovery-card capacity-card">
-            <h2>estimated capacity</h2>
+            <h2>body battery · estimated</h2>
             <div class="capacity-layout">
               <div class="capacity-battery" title="Projected reserve after logged and expected demands"><div class="capacity-battery-fill" id="capacityBatteryFill"></div><div class="capacity-battery-value" id="capacityBatteryValue">--</div></div>
               <div>
@@ -2579,11 +2583,12 @@
                 <div class="capacity-ledger" id="capacityLedger"></div>
               </div>
             </div>
-            <div class="capacity-note">A transparent planning estimate, not live physiology or Garmin Body Battery. Readiness asks “should I train?”; capacity estimates “how much reserve may remain after today’s demands?”</div>
+            <div class="capacity-note">Your estimated readiness reserve after today’s demands. It is a Focus::Flow planning estimate, not Garmin’s live physiological Body Battery.</div>
           </div>
 
           <div class="recovery-card recovery-load-card">
             <h2>training load</h2>
+            <div class="training-load-view-toggle" id="trainingLoadViewToggle"><button class="sort-btn active" data-load-view="all">all training</button><button class="sort-btn" data-load-view="cardio">cardio only</button></div>
             <div class="recovery-acwr-row">
               <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="acuteLoadValue">--</div><div class="recovery-acwr-label">acute (7d avg)</div></div>
               <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="chronicLoadValue">--</div><div class="recovery-acwr-label">chronic (28d avg)</div></div>
@@ -2847,7 +2852,7 @@
       let sleepTargetHours=8;
       let wakeSchedule=['preferred','required','required','required','required','required','preferred'].map((type,i)=>({type,time:'06:00'}));
       let wakeOverride={date:'',type:'',time:''};
-      let recoveryChartPeriod=14,recoveryChartMetric='freshness',recoveryChartOffset=0;
+      let recoveryChartPeriod=14,recoveryChartMetric='freshness',recoveryChartOffset=0,trainingLoadView='all';
       let collapsedCardKeys=new Set();
       let taskFilter='active';
       let taskSort='manual';
@@ -2995,6 +3000,7 @@
 
       let saveFailureWarned=false;
       function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
+      function buildCloudStateSnapshot(){const state=buildStateSnapshot();delete state.importedActivities;delete state.intervalsLastSyncAt;return state;}
       const buildStateSnapshotCore=buildStateSnapshot;
       buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.trainingCallSnapshots=trainingCallSnapshots;state.wakeSchedule=wakeSchedule;state.wakeOverride=wakeOverride;return state;};
       function saveData(){const d=buildStateSnapshot();try{localStorage.setItem('pomodoro-cyberspace-data',JSON.stringify(d));saveFailureWarned=false;}catch(e){if(!saveFailureWarned){saveFailureWarned=true;showToast('⚠ save failed — storage may be full');}}scheduleCloudPush();}
@@ -3436,6 +3442,18 @@
         if(rides.length>=3){set('baselineRidePower',`${Math.round(ridePower)} W`);set('baselineRideHr',`${Math.round(rideHr)} bpm`);}else{set('baselineRidePower','—');set('baselineRideHr','—');}
         const note=document.getElementById('aerobicBaselineNote');if(note){const bits=[runs.length>=3?`running baseline: ${runs.length} sessions`:`running: ${runs.length}/3 usable sessions`,rides.length>=3?`cycling baseline: ${rides.length} sessions`:`cycling: ${rides.length}/3 usable sessions`];note.textContent=`Last 120 days · ${bits.join(' · ')} · medians resist one unusual workout.`;}
       }
+      function getAutomaticActivityAnomaly(activity){
+        if(!activity||!activity.start_date_local||!activity.average_heartrate)return null;
+        const type=/run/i.test(activity.type)?'run':/ride|cycling|virtualride/i.test(activity.type)?'ride':null;if(!type)return null;
+        const activityTime=new Date(activity.start_date_local).getTime(),cutoff=activityTime-180*86400000;
+        const peers=importedActivities.filter(a=>String(a.id)!==String(activity.id)&&new Date(a.start_date_local).getTime()>=cutoff&&new Date(a.start_date_local).getTime()<activityTime&&a.average_heartrate>0&&(type==='run'?/run/i.test(a.type)&&a.distance>0&&a.moving_time>0:/ride|cycling|virtualride/i.test(a.type)&&a.average_watts>0));
+        if(peers.length<5)return null;
+        const typicalHr=medianNumber(peers.map(a=>a.average_heartrate)),currentMetric=type==='run'?activity.moving_time/(activity.distance/1000):activity.average_watts,typicalMetric=medianNumber(peers.map(a=>type==='run'?a.moving_time/(a.distance/1000):a.average_watts));
+        if(!currentMetric||!typicalMetric)return null;
+        const comparable=type==='run'?Math.abs(currentMetric-typicalMetric)/typicalMetric<=.15:Math.abs(currentMetric-typicalMetric)/typicalMetric<=.15;
+        const hrDelta=Math.round(activity.average_heartrate-typicalHr);if(!comparable||Math.abs(hrDelta)<10)return null;
+        return{direction:hrDelta>0?'high':'low',hrDelta,typicalHr:Math.round(typicalHr),peerCount:peers.length,detail:`HR ${Math.abs(hrDelta)} bpm ${hrDelta>0?'above':'below'} your typical response at comparable ${type==='run'?'pace':'power'}`};
+      }
       function renderHeartRateRanges(){
         const cutoff=Date.now()-30*86400000,recent=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff),withHr=recent.filter(a=>a.average_heartrate!=null),runs=withHr.filter(a=>/run/i.test(a.type)),rides=withHr.filter(a=>/ride|cycling|virtualride/i.test(a.type));
         const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
@@ -3479,6 +3497,7 @@
       function renderActivityResponse(a){
         const r=sessionResponses[String(a.id)]||{},has=!!r.updatedAt,alert=r.physiology==='high'||r.physiology==='low';
         const chips=[];
+        const automatic=getAutomaticActivityAnomaly(a);if(automatic)chips.push(`<span class="activity-response-chip alert" title="${escapeHtml(`Compared with ${automatic.peerCount} earlier similar sessions · typical ${automatic.typicalHr} bpm`)}">auto flag · ${escapeHtml(automatic.detail)}</span>`);
         if(r.feel)chips.push(`<span class="activity-response-chip">felt ${escapeHtml({easier:'easier than expected',right:'about right',harder:'harder than expected'}[r.feel]||r.feel)}</span>`);
         if(r.physiology&&r.physiology!=='normal')chips.push(`<span class="activity-response-chip ${alert?'alert':''}">${escapeHtml({high:'HR unusually high',low:'HR unusually low',sensor:'sensor questionable'}[r.physiology]||r.physiology)}</span>`);
         if(r.outcome&&r.outcome!=='completed')chips.push(`<span class="activity-response-chip">${escapeHtml(r.outcome==='shortened'?'shortened':'stopped early')}</span>`);
@@ -3893,6 +3912,12 @@ function updateNotificationSettingUI(){
         if(acute==null||!chronic)return null;
         return{ratio:acute/chronic,acute,chronic};
       }
+      function getDisplayedACWR(referenceDateStr){
+        if(trainingLoadView!=='cardio')return getACWR(referenceDateStr);
+        const avg=days=>{let sum=0;for(let i=0;i<days;i++)sum+=getTrainingLoadBreakdown(getDateStrFromReference(referenceDateStr,i)).other||0;return sum/days;};
+        const acute=avg(7),chronic=avg(28);return chronic?{ratio:acute/chronic,acute,chronic}:null;
+      }
+      function getDateStrFromReference(referenceDateStr,daysAgo){const d=new Date(referenceDateStr+'T12:00:00');d.setDate(d.getDate()-daysAgo);return toDateStr(d);}
       function getACWRStatus(ratio){
         if(ratio==null)return null;
         if(ratio>=0.8&&ratio<=1.3)return'green';
@@ -4208,7 +4233,9 @@ function updateNotificationSettingUI(){
       }
       function getRecentSessionAnomaly(referenceDateStr){
         const ref=new Date(referenceDateStr+'T12:00:00');
-        return Object.values(sessionResponses||{}).filter(r=>r&&['high','low'].includes(r.physiology)&&r.reason!=='sensor'&&r.activityDate&&r.activityDate<referenceDateStr).map(r=>({...r,daysAgo:Math.round((ref-new Date(r.activityDate+'T12:00:00'))/86400000)})).filter(r=>r.daysAgo>=1&&r.daysAgo<=2).sort((a,b)=>String(b.activityDate).localeCompare(String(a.activityDate)))[0]||null;
+        const manual=Object.values(sessionResponses||{}).filter(r=>r&&['high','low'].includes(r.physiology)&&r.reason!=='sensor'&&r.activityDate&&r.activityDate<referenceDateStr).map(r=>({...r,daysAgo:Math.round((ref-new Date(r.activityDate+'T12:00:00'))/86400000)})).filter(r=>r.daysAgo>=1&&r.daysAgo<=2);
+        const automatic=(importedActivities||[]).map(a=>{const anomaly=getAutomaticActivityAnomaly(a),activityDate=String(a.start_date_local||'').slice(0,10);return anomaly&&activityDate<referenceDateStr?{activityDate,activityType:a.type,physiology:anomaly.direction,automatic:true,detail:anomaly.detail,daysAgo:Math.round((ref-new Date(activityDate+'T12:00:00'))/86400000)}:null;}).filter(r=>r&&r.daysAgo>=1&&r.daysAgo<=2&&!manual.some(m=>m.activityDate===r.activityDate&&m.activityType===r.activityType));
+        return manual.concat(automatic).sort((a,b)=>String(b.activityDate).localeCompare(String(a.activityDate)))[0]||null;
       }
       function getLearnedMismatchPattern(referenceDateStr){
         const recent=Object.values(sessionResponses||{}).filter(r=>r&&r.activityDate<referenceDateStr&&r.mismatchReason).sort((a,b)=>String(b.activityDate).localeCompare(String(a.activityDate))).slice(0,10),counts={};recent.forEach(r=>counts[r.mismatchReason]=(counts[r.mismatchReason]||0)+1);const ranked=Object.entries(counts).sort((a,b)=>b[1]-a[1]);if(!ranked.length||ranked[0][1]<2)return null;return{reason:ranked[0][0],count:ranked[0][1],total:recent.length};
@@ -4616,6 +4643,9 @@ function updateNotificationSettingUI(){
         document.getElementById('recoveryHrvInput').value=rec.hrv!=null?rec.hrv:'';
         document.getElementById('recoveryBodyweightInput').value=rec.bodyweight!=null?rec.bodyweight:'';
         document.getElementById('recoveryLoadInput').value=rec.load!=null?rec.load:'';
+        const importedBreakdown=getImportedLoadForDate(dateStr),importedLoad=(importedBreakdown.other||0)+(importedBreakdown.lifting||0),loadInput=document.getElementById('recoveryLoadInput'),loadHint=document.getElementById('recoveryLoadSourceHint');
+        loadInput.disabled=importedLoad>0;
+        if(loadHint)loadHint.textContent=importedLoad>0?`Intervals.icu supplied ${Math.round(importedLoad*10)/10} load; manual entry is disabled to prevent double-counting.`:'Used only when Intervals.icu has no load for this date.';
         document.getElementById('recoverySleepInput').value=rec.sleep!=null?rec.sleep:'';
         document.getElementById('recoveryRecoveryInput').value=rec.recovery!=null?rec.recovery:'';
         document.getElementById('recoveryStrainInput').value=rec.strain!=null?rec.strain:'';
@@ -4909,8 +4939,8 @@ function updateNotificationSettingUI(){
       }
       function updateTrainingLoadDetails(){
         const today=getToday();
-        const acwr=getACWR(today);
-        const past=getACWR(toDateStr((()=>{const d=new Date();d.setDate(d.getDate()-28);return d;})()));
+        const acwr=getDisplayedACWR(today);
+        const past=getDisplayedACWR(toDateStr((()=>{const d=new Date();d.setDate(d.getDate()-28);return d;})()));
         const base=document.getElementById('trainingLoadBaseTrend');
         if(base){
           if(!acwr||!past||!past.chronic)base.textContent='building baseline';
@@ -4927,7 +4957,7 @@ function updateNotificationSettingUI(){
         if(strip){
           strip.innerHTML='';
           const loadBreakdowns=days.map(getTrainingLoadBreakdown);
-          const trainingVals=loadBreakdowns.map(x=>x.total);
+          const trainingVals=loadBreakdowns.map(x=>trainingLoadView==='cardio'?x.other:x.total);
           const liftingVals=loadBreakdowns.map(x=>x.lifting);
           const otherTrainingVals=loadBreakdowns.map(x=>x.other);
           const workVals=days.map(d=>{const w=getWorkStressData(d);return w.score||0;});
@@ -4937,8 +4967,9 @@ function updateNotificationSettingUI(){
             const bars=document.createElement('div');bars.className='training-load-bars';
             const tb=document.createElement('div');tb.className='training-load-stack'+(trainingVals[i]?'':' empty');tb.style.height=(trainingVals[i]?Math.max(8,trainingVals[i]/tMax*100):4)+'%';
             if(trainingVals[i]){
-              if(otherTrainingVals[i]){const seg=document.createElement('div');seg.className='training-load-segment other';seg.style.height=(otherTrainingVals[i]/trainingVals[i]*100)+'%';tb.appendChild(seg);}
-              if(liftingVals[i]){const seg=document.createElement('div');seg.className='training-load-segment lifting';seg.style.height=(Math.min(liftingVals[i],trainingVals[i])/trainingVals[i]*100)+'%';tb.appendChild(seg);}
+              const cardioShown=trainingLoadView==='cardio'?trainingVals[i]:otherTrainingVals[i],liftingShown=trainingLoadView==='cardio'?0:liftingVals[i];
+              if(cardioShown){const seg=document.createElement('div');seg.className='training-load-segment other';seg.style.height=(cardioShown/trainingVals[i]*100)+'%';tb.appendChild(seg);}
+              if(liftingShown){const seg=document.createElement('div');seg.className='training-load-segment lifting';seg.style.height=(Math.min(liftingShown,trainingVals[i])/trainingVals[i]*100)+'%';tb.appendChild(seg);}
             }
             const wb=document.createElement('div');wb.className='training-load-bar work';wb.style.height=(workVals[i]?Math.max(8,workVals[i]/wMax*100):4)+'%';wb.style.opacity=workVals[i]?0.78:0.12;
             bars.appendChild(tb);bars.appendChild(wb);
@@ -4952,14 +4983,14 @@ function updateNotificationSettingUI(){
       }
       function updateAcwrCard(){
         const todayStr=getToday();
-        const acwrInfo=getACWR(todayStr);
+        const acwrInfo=getDisplayedACWR(todayStr);
         const acuteEl=document.getElementById('acuteLoadValue'),chronicEl=document.getElementById('chronicLoadValue'),ratioEl=document.getElementById('acwrValue');
         const barFill=document.getElementById('acwrBarFill'),caption=document.getElementById('acwrCaption');
         if(!acuteEl||!chronicEl||!ratioEl||!barFill||!caption)return;
         if(!acwrInfo){
           acuteEl.textContent='--';chronicEl.textContent='--';ratioEl.textContent='--';
           barFill.style.display='none';
-          caption.textContent='log at least a week of workout load to see your acute:chronic ratio.';
+          caption.textContent=`log enough ${trainingLoadView==='cardio'?'cardio':'workout'} load to see your acute:chronic ratio.`;
           return;
         }
         acuteEl.textContent=acwrInfo.acute.toFixed(0);
@@ -4969,7 +5000,7 @@ function updateNotificationSettingUI(){
         barFill.style.display='block';
         barFill.style.left=Math.min(100,acwrInfo.ratio/2*100)+'%';
         barFill.style.background=status==='green'?'#5ec98a':status==='yellow'?'#d4a94a':'#e05a5a';
-        if(status==='green')caption.textContent='within your typical training range.';
+        if(status==='green')caption.textContent=`${trainingLoadView==='cardio'?'cardio':'combined'} load is within your typical range; chronic load is the 28-day base.`;
         else if(status==='red'&&acwrInfo.ratio>1.5)caption.textContent='recent workout load is well above your usual base. this often shows up as fatigue a day or two later, even if today feels fine.';
         else if(status==='red')caption.textContent='recent workout load has dropped well below your usual base.';
         else caption.textContent='a bit outside your typical training range.';
@@ -5234,7 +5265,8 @@ function updateNotificationSettingUI(){
       function refreshLiftIncrementPreview(){
         const el=document.getElementById('liftingNewLiftIncrementPreview');if(!el)return;
         const name=(document.getElementById('liftingNewLiftName')||{}).value||'';
-        el.textContent=`auto increment: +${formatLb(getAutoLiftIncrement(name))}lb`;
+        const p=getLiftProfile(name),pattern=p.region==='posterior/back'?'hinge / posterior':p.region;
+        el.textContent=`${pattern} · ${getLiftFatigueLabel(p.fatigue)} fatigue · +${formatLb(getAutoLiftIncrement(name))}lb`;
       }
       function getLiftFatigueLabel(cost){return cost<=1.8?'low':cost<=3?'moderate':'high';}
       function getLiftExposureHistory(liftId){return liftingHistory.filter(h=>h.liftId===liftId);}
@@ -5715,6 +5747,7 @@ function updateNotificationSettingUI(){
           const opt=i<=2?'easy / minimum-dose lift possible':i<=4?'moderate aerobic opportunity':'quality opportunity: possible';
           const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep target is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,why));b.push(row(ds,opt,optWhy));}
         current.innerHTML=a.join('');optimal.innerHTML=b.join('');
+        const path=document.getElementById('recoveryOpportunityPath');if(path){const f=getFreshnessData(today),body=getBodyFatigueData(today),sleep=getSleepDuration(today),steps=[];if(sleep==null||sleep<sleepTargetHours)steps.push(`sleep target · improves the next opportunity`);if(body.legs>=7)steps.push('easy mobility / leg recovery · supports the next quality day');if(body.systemic>=7)steps.push('reduce optional stress · protect tomorrow’s reserve');if(!steps.length)steps.push('maintain sleep and hydration · keep the next opportunity open');path.innerHTML=steps.slice(0,3).map(x=>`<div class="recovery-path-chip">${escapeHtml(x)}</div>`).join('');}
       }
       function renderRecoveryTab(){
         const dateInput=document.getElementById('recoveryDateInput');
@@ -7257,6 +7290,7 @@ function updateNotificationSettingUI(){
       document.querySelector('.recovery-date-row').addEventListener('click',e=>{if(e.target.id!=='recoveryDateInput'){try{document.getElementById('recoveryDateInput').showPicker();}catch(err){}}});
       document.getElementById('recoveryPeriodTabs').addEventListener('click',e=>{if(e.target.classList.contains('period-btn')){recoveryChartPeriod=parseInt(e.target.dataset.period);recoveryChartOffset=0;document.querySelectorAll('#recoveryPeriodTabs .period-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');drawRecoveryChart();saveData();}});
       document.getElementById('recoveryMetricTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){recoveryLegendHover=null;recoveryChartMetric=e.target.dataset.metric;document.querySelectorAll('#recoveryMetricTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');drawRecoveryChart();saveData();}});
+      document.getElementById('trainingLoadViewToggle').addEventListener('click',e=>{if(e.target.dataset.loadView){trainingLoadView=e.target.dataset.loadView;document.querySelectorAll('#trainingLoadViewToggle .sort-btn').forEach(b=>b.classList.toggle('active',b.dataset.loadView===trainingLoadView));updateAcwrCard();updateTrainingLoadDetails();}});
       document.getElementById('recoveryChartNavBack').addEventListener('click',navigateRecoveryChartBack);
       function bindLegendIsolation(legendId,onChange){
         const legend=document.getElementById(legendId);if(!legend)return;
@@ -9012,7 +9046,8 @@ function updateNotificationSettingUI(){
       function hasLocalData(){return tasks.length>0||bgHabits.length>0||totalFocusMinutes>0||Object.keys(dailyHistory).length>0;}
       function applyCloudState(remoteState){
         isApplyingRemoteUpdate=true;
-        loadData(remoteState);
+        const localActivities=importedActivities,localSyncAt=intervalsLastSyncAt;
+        loadData({...remoteState,importedActivities:localActivities,intervalsLastSyncAt:localSyncAt});
         refreshAllUI();
         try{localStorage.setItem('pomodoro-cyberspace-data',JSON.stringify(buildStateSnapshot()));}catch(e){}
         isApplyingRemoteUpdate=false;
@@ -9028,10 +9063,10 @@ function updateNotificationSettingUI(){
         if(!syncUser)return;
         updateSyncStatusDot('syncing');
         onFirebaseReady(()=>{
-          const state=buildStateSnapshot();
+          const state=buildCloudStateSnapshot();
           const stateJSON=JSON.stringify(state);
           const ref=window.fb.doc(window.fb.db,'userStates',syncUser.uid);
-          window.fb.setDoc(ref,{state,updatedAt:window.fb.serverTimestamp(),schemaVersion:SYNC_SCHEMA_VERSION},{merge:true}).then(()=>{lastPushedStateJSON=stateJSON;const currentJSON=JSON.stringify(buildStateSnapshot());hasUnsyncedLocalChanges=currentJSON!==stateJSON;if(hasUnsyncedLocalChanges)scheduleCloudPush();else updateSyncStatusDot('synced');}).catch(err=>{hasUnsyncedLocalChanges=true;console.error(err);showToast('⚠ cloud sync failed — will retry on next change');updateSyncStatusDot('error');});
+          window.fb.setDoc(ref,{state,updatedAt:window.fb.serverTimestamp(),schemaVersion:SYNC_SCHEMA_VERSION},{merge:true}).then(()=>{lastPushedStateJSON=stateJSON;const currentJSON=JSON.stringify(buildCloudStateSnapshot());hasUnsyncedLocalChanges=currentJSON!==stateJSON;if(hasUnsyncedLocalChanges)scheduleCloudPush();else updateSyncStatusDot('synced');}).catch(err=>{hasUnsyncedLocalChanges=true;console.error(err);showToast('⚠ cloud sync failed — will retry on next change');updateSyncStatusDot('error');});
         });
       }
       function scheduleCloudPush(){
