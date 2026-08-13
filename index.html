@@ -1621,9 +1621,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.106</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.107</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.106 fixes Intervals.icu activity durations, running efforts, and heart-rate imports.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.107 unifies Intervals.icu, lifting-history, and manual load without double-counting.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2496,7 +2496,7 @@
             <div class="training-load-strip-wrap">
               <div class="training-call-subheading">last 7 days — where the stress came from</div>
               <div class="training-load-strip" id="trainingLoadStressStrip"></div>
-              <div class="training-load-strip-legend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>other training</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:repeating-linear-gradient(135deg,var(--main-color) 0 3px,var(--text-color) 3px 5px);"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
+              <div class="training-load-strip-legend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:repeating-linear-gradient(135deg,var(--main-color) 0 3px,var(--text-color) 3px 5px);"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
             </div>
             <div class="recovery-acwr-caption" id="chronicTrendCaption" style="display:none;"></div>
             <div class="training-load-warning" id="trainingLoadWarning" style="display:none;"></div>
@@ -2697,7 +2697,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.106';
+      const APP_VERSION='1.107';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -3939,19 +3939,19 @@ function updateNotificationSettingUI(){
         for(let i=1;i<=lookbackDays;i++){
           const d=new Date(refDate);d.setDate(d.getDate()-i);
           const ds=toDateStr(d);
-          const rec=biometrics[ds];
-          if(rec&&rec.load!=null&&rec.load>0){sum+=rec.load;count++;}
+          const load=getEffectiveTrainingLoad(ds);
+          if(load!=null&&load>0){sum+=load;count++;}
         }
         if(count<3)return null;
         return sum/count;
       }
       function getSessionSpikeInfo(dateStr){
-        const rec=biometrics[dateStr];
-        if(!rec||rec.load==null||rec.load<=0)return null;
+        const load=getEffectiveTrainingLoad(dateStr);
+        if(load==null||load<=0)return null;
         const avgSession=getAvgSessionLoad(dateStr,28);
         if(avgSession==null)return null;
-        const ratio=rec.load/avgSession;
-        return{ratio,avgSession,load:rec.load,isSpike:ratio>=1.5};
+        const ratio=load/avgSession;
+        return{ratio,avgSession,load,isSpike:ratio>=1.5};
       }
       function isAcuteHistoryStable(referenceDateStr,lookbackDays){
         const refDate=new Date(referenceDateStr+'T00:00:00');
@@ -4218,8 +4218,8 @@ function updateNotificationSettingUI(){
               if(actualRank===recRank){cls='matched';titleText=`${ds}: ${intensity} — matched the call (${recommended})`;}
               else if(actualRank<recRank){cls='under';titleText=`${ds}: ${intensity} — call was ${recommended}, you took it easier`;}
               else{cls='over';titleText=`${ds}: ${intensity} — call was ${recommended}, you pushed harder`;}
-            }else if(rec&&rec.load!=null&&rec.load>0){
-              cls='unspecified';titleText=`${ds}: workout logged (load ${rec.load}) — intensity not marked`;
+            }else if(getEffectiveTrainingLoad(ds)>0){
+              cls='unspecified';titleText=`${ds}: workout detected (load ${getEffectiveTrainingLoad(ds)}) — intensity not marked`;
             }else{
               cls='none';titleText=`${ds}: not logged`;
             }
@@ -4635,7 +4635,7 @@ function updateNotificationSettingUI(){
           const afterTraining=[];
           if(!normalizeModalityList(rec.modalities).length)afterTraining.push('training modality');
           if(rec.trainingRpe==null)afterTraining.push('session RPE /10');
-          if(rec.load==null)afterTraining.push('workout load');
+          if(getEffectiveTrainingLoad(date)==null)afterTraining.push('workout load');
           if(afterTraining.length)reminders.push(`after training — add ${afterTraining.join(', ')}`);
           if(rec.strain==null)reminders.push('end of day — add WHOOP strain /21');
         }else if(rec.strain==null)reminders.push('end of day — add WHOOP strain /21');
@@ -4665,9 +4665,10 @@ function updateNotificationSettingUI(){
         const strip=document.getElementById('trainingLoadStressStrip');
         if(strip){
           strip.innerHTML='';
-          const trainingVals=days.map(d=>getEffectiveTrainingLoad(d)||0);
-          const liftingVals=days.map(d=>getLiftingLoadForDate(d)||0);
-          const otherTrainingVals=trainingVals.map((total,i)=>Math.max(0,total-liftingVals[i]));
+          const loadBreakdowns=days.map(getTrainingLoadBreakdown);
+          const trainingVals=loadBreakdowns.map(x=>x.total);
+          const liftingVals=loadBreakdowns.map(x=>x.lifting);
+          const otherTrainingVals=loadBreakdowns.map(x=>x.other);
           const workVals=days.map(d=>{const w=getWorkStressData(d);return w.score||0;});
           const tMax=Math.max(1,...trainingVals),wMax=Math.max(1,...workVals);
           days.forEach((d,i)=>{
@@ -4682,7 +4683,8 @@ function updateNotificationSettingUI(){
             bars.appendChild(tb);bars.appendChild(wb);
             const label=document.createElement('div');label.className='training-load-day-label';label.textContent=new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'narrow'});
             const fmtLoad=v=>v?Math.round(v*10)/10:'--';
-            day.title=`${d} — training ${fmtLoad(trainingVals[i])} (other ${fmtLoad(otherTrainingVals[i])}, lifting ${fmtLoad(liftingVals[i])}); work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
+            const sourceText=loadBreakdowns[i].sources.length?` · source: ${loadBreakdowns[i].sources.join(' + ')}`:'';
+            day.title=`${d} — total training ${fmtLoad(trainingVals[i])} (cardio / other ${fmtLoad(otherTrainingVals[i])}, lifting ${fmtLoad(liftingVals[i])})${sourceText}; work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
             day.appendChild(bars);day.appendChild(label);strip.appendChild(day);
           });
         }
@@ -4909,17 +4911,36 @@ function updateNotificationSettingUI(){
       // Legacy slot/cycle fields remain in saved data for backward compatibility but are ignored here.
       function getLiftSetLoad(pct,reps){return Math.round(pct*100*reps/35*10)/10;}
       function getLiftingLoadForDate(dateStr){
-        return Math.round((liftingHistory||[]).filter(h=>h&&h.kind==='exposure'&&h.date===dateStr).reduce((sum,h)=>{
-          if(Number.isFinite(Number(h.loadValue)))return sum+Number(h.loadValue);
+        return Math.round((liftingHistory||[]).filter(h=>h&&h.kind!=='regression'&&h.date===dateStr).reduce((sum,h)=>{
+          if(Number.isFinite(Number(h.loadValue))&&Number(h.loadValue)>0)return sum+Number(h.loadValue);
           const profile=getLiftProfile(h.liftName||'');
           const warmupLoad=LIFTING_WARMUP.slice(0,profile.warmups||0).reduce((n,w)=>n+getLiftSetLoad(w.pct,w.reps),0);
           const workLoad=Math.max(1,Number(h.sets)||1)*getLiftSetLoad(Number(h.pct)||profile.pct,Number(h.actualReps)||Number(h.targetReps)||profile.reps);
           return sum+warmupLoad+workLoad;
         },0)*10)/10;
       }
+      function getImportedLoadForDate(dateStr){
+        return (importedActivities||[]).reduce((out,a)=>{
+          const activityDate=String(a&&a.start_date_local||'').slice(0,10),load=Number(a&&a.training_load);
+          if(activityDate!==dateStr||!Number.isFinite(load)||load<=0)return out;
+          if(/weight|strength|crossfit|lifting/i.test(String(a.type||'')))out.lifting+=load;
+          else out.other+=load;
+          return out;
+        },{lifting:0,other:0});
+      }
+      function getTrainingLoadBreakdown(dateStr){
+        const recorded=biometrics[dateStr]&&biometrics[dateStr].load!=null?Math.max(0,Number(biometrics[dateStr].load)||0):0;
+        const historyLifting=getLiftingLoadForDate(dateStr)||0,intervals=getImportedLoadForDate(dateStr);
+        const lifting=Math.max(historyLifting,intervals.lifting);
+        const other=Math.max(intervals.other,Math.max(0,recorded-lifting));
+        const sources=[];
+        if(intervals.other||intervals.lifting)sources.push('Intervals.icu');
+        if(historyLifting)sources.push('lifting history');
+        if(recorded>lifting)sources.push('manual load');
+        return{total:Math.round((lifting+other)*10)/10,lifting:Math.round(lifting*10)/10,other:Math.round(other*10)/10,sources};
+      }
       function getEffectiveTrainingLoad(dateStr){
-        const recorded=biometrics[dateStr]&&biometrics[dateStr].load!=null?Number(biometrics[dateStr].load):0;
-        return Math.max(recorded||0,getLiftingLoadForDate(dateStr)||0)||null;
+        return getTrainingLoadBreakdown(dateStr).total||null;
       }
       // Strength-first profiles: low rep exposure, conservative RIR, and only enough volume to practice force production.
       // The app is not trying to maximize hypertrophy; minimum-dose work deliberately leaves several reps in reserve.
@@ -5431,7 +5452,7 @@ function updateNotificationSettingUI(){
       }
       function drawLoadStrainChart(days,ctx,w,h,tc,mc,sc){
         const legendEl=document.getElementById('recoveryChartLegend');
-        const loadVals=days.map(d=>{const r=biometrics[d];return r&&r.load!=null?Number(r.load):null;});
+        const loadVals=days.map(d=>getEffectiveTrainingLoad(d));
         const strainVals=days.map(d=>{const r=biometrics[d];return r&&r.strain!=null?Number(r.strain):null;});
         const loadKnown=loadVals.filter(v=>v!=null);
         const strainKnown=strainVals.filter(v=>v!=null);
@@ -5514,7 +5535,7 @@ function updateNotificationSettingUI(){
         const ratioVals=days.map(d=>{const info=getACWR(d);return info?info.ratio:null;});
         const acuteVals=days.map(d=>{const info=getACWR(d);return info?info.acute:null;});
         const chronicVals=days.map(d=>{const info=getACWR(d);return info?info.chronic:null;});
-        const loadVals=days.map(d=>{const r=biometrics[d];return r&&r.load!=null?Number(r.load):null;});
+        const loadVals=days.map(d=>getEffectiveTrainingLoad(d));
         const ratioKnown=ratioVals.filter(v=>v!=null);
         const loadKnown=[...acuteVals,...chronicVals,...loadVals].filter(v=>v!=null);
         if(!ratioKnown.length&&!loadKnown.length){
@@ -5664,7 +5685,7 @@ function updateNotificationSettingUI(){
             {label:'upper',color:'#6ea8d8',vals:days.map(d=>getBodyFatigueData(d).upper),isBar:false}
           ];
         }
-        else if(recoveryChartMetric==='load')series=[{label:'load',color:mc,vals:days.map(d=>{const r=biometrics[d];return r&&r.load!=null?Number(r.load):null;}),isBar:false},{label:'strain',color:sc,vals:days.map(d=>{const r=biometrics[d];return r&&r.strain!=null?Number(r.strain):null;}),isBar:false}];
+        else if(recoveryChartMetric==='load')series=[{label:'load',color:mc,vals:days.map(d=>getEffectiveTrainingLoad(d)),isBar:false},{label:'strain',color:sc,vals:days.map(d=>{const r=biometrics[d];return r&&r.strain!=null?Number(r.strain):null;}),isBar:false}];
         else if(recoveryChartMetric==='sleep'){
           const sleepVals=days.map(d=>{const r=biometrics[d];return r&&r.sleep!=null?Number(r.sleep):null;});
           const recVals=days.map(d=>{const r=biometrics[d];return r&&r.recovery!=null?Number(r.recovery):null;});
