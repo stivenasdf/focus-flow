@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.109 -->
+<!-- Focus::Flow deployment marker: v1.110 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1637,9 +1637,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.109</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.110</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.109 shows how much personal history supports each Training Call.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.110 adds prospective work demand and explicit illness/injury overrides.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2421,6 +2421,8 @@
                   <input type="hidden" id="recoveryHasWorkInput" value="">
                 </div>
                 <div class="recovery-input-grid">
+                  <div class="recovery-input-group"><label>expected work demand</label><select id="recoveryExpectedWorkInput" class="search-input"><option value="">not set</option><option value="light">light</option><option value="normal">normal</option><option value="heavy">heavy</option><option value="unusually-heavy">unusually heavy</option></select></div>
+                  <div class="recovery-input-group"><label>temporary health override</label><select id="recoveryHealthFlagInput" class="search-input"><option value="none">none</option><option value="illness">sick / illness</option><option value="injury">pain / injury</option></select></div>
                   <div class="recovery-input-group"><label>work hours</label><input type="number" id="recoveryWorkHoursInput" class="search-input" placeholder="e.g. 9" inputmode="decimal" min="0" max="18" step="0.5"></div>
                   <div class="recovery-input-group"><label>work effort (1=light, 10=brutal)</label><input type="number" id="recoveryWorkEffortInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
                   <div class="recovery-input-group"><label>systemic fatigue (1=fresh, 10=wrecked)</label><input type="number" id="recoverySystemicFatigueInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
@@ -2428,7 +2430,7 @@
                   <div class="recovery-input-group"><label>back fatigue</label><input type="number" id="recoveryBackFatigueInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
                   <div class="recovery-input-group"><label>upper-body fatigue</label><input type="number" id="recoveryUpperFatigueInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
                 </div>
-                <div class="fatigue-input-note">work stress protects the primary aerobic prescription; body-region fatigue mainly decides whether lifting fits and which movement is cheapest.</div>
+                <div class="fatigue-input-note">expected work demand protects capacity before work happens. illness or injury remains a separate override instead of being averaged into readiness.</div>
               </div>
 
               <div class="recovery-entry-section">
@@ -2714,7 +2716,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.109';
+      const APP_VERSION='1.110';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -4117,12 +4119,20 @@ function updateNotificationSettingUI(){
         else{tier=2;}
         factors.push({label:'freshness',status:freshness.score==null?null:(freshness.label==='fatigued — prioritize recovery'?'red':freshness.label==='showing signs of fatigue'?'yellow':'green'),detail:freshness.score==null?'not enough data logged yet':`${freshness.label} (score ${freshness.score})`,explain:'your composite readiness score (0-100), built from available HRV, sleep, recovery %, load ratio, and how you feel — this is the single biggest input into today\u2019s call.'});
         const todayRec=biometrics[referenceDateStr]||{};
+        const healthFlag=todayRec.healthFlag||'none';
+        if(healthFlag==='illness'){tier=0;reasons.push('illness is flagged today — structured training is held back regardless of an optimistic readiness score');}
+        else if(healthFlag==='injury'){tier=0;reasons.push('pain / injury is flagged today — the app will not prescribe structured training through it');}
+        factors.push({label:'health override',status:healthFlag==='none'?null:'red',detail:healthFlag==='illness'?'sick / illness flagged':healthFlag==='injury'?'pain / injury flagged':'none',explain:'illness and injury stay outside the readiness average. either flag overrides an optimistic score because recovery metrics cannot establish that training is safe.'});
         const todaySleepDuration=getSleepDuration(referenceDateStr);
         const sleepBits=[];
         if(todayRec.sleep!=null&&todayRec.sleep!=='')sleepBits.push(`score ${Math.round(Number(todayRec.sleep))}`);
         if(todaySleepDuration!=null)sleepBits.push(`${todaySleepDuration.toFixed(1)}h / ${sleepTargetHours}h`);
         factors.push({label:'sleep',status:freshness.sleepStatus,detail:sleepBits.length?`sleep ${sleepBits.join(' · ')}`:'sleep data unavailable',explain:todayRec.sleep!=null&&todayRec.sleep!==''?'sleep directly affects freshness through your WHOOP sleep score. logged duration is shown here for context but is not counted a second time.':todaySleepDuration!=null?'no WHOOP sleep score is logged, so sleep duration versus your target is being used as the sleep input to freshness.':'no sleep score or sleep duration is available for today, so sleep is not influencing the call yet.'});
         const workStress=getWorkStressData(referenceDateStr);
+        const expectedWork=todayRec.expectedWorkDemand||'';
+        if(expectedWork==='unusually-heavy'&&tier>0){tier=0;reasons.push('an unusually heavy workday is expected, so structured training gives way to the demand you cannot avoid');}
+        else if(expectedWork==='heavy'&&tier>1){tier=1;reasons.push('a heavy workday is expected, so harder training stays unavailable until the real work cost is known');}
+        factors.push({label:'expected work',status:expectedWork==='unusually-heavy'?'red':expectedWork==='heavy'?'yellow':expectedWork?'green':null,detail:expectedWork?`expected work: ${expectedWork.replace('-',' ')}`:'not forecast',explain:'this is prospective: it protects training capacity before the workday happens. actual hours and effort still replace the forecast with what really occurred.'});
         if(workStress.status==='red'&&tier>1){tier=1;reasons.push('today’s labour load is high enough that training stays easy even if recovery metrics look good');}
         factors.push({label:'labour load',status:workStress.status,detail:workStress.score==null?'not logged':`${workStress.hours??'--'}h × ${workStress.effort??'--'}/10 = ${Math.round(workStress.score)}`,explain:'your work hours multiplied by how hard the day felt. this is deliberately conservative because your job gets first claim on recovery capacity.'});
         const bodyFatigue=getBodyFatigueData(referenceDateStr);
@@ -4479,6 +4489,8 @@ function updateNotificationSettingUI(){
         document.querySelectorAll('#recoveryWorkdayRow .intensity-btn').forEach(b=>b.classList.toggle('active',b.dataset.workday===hasWorkValue));
         document.getElementById('recoveryWorkHoursInput').value=rec.workHours!=null?rec.workHours:'';
         document.getElementById('recoveryWorkEffortInput').value=rec.workEffort!=null?rec.workEffort:'';
+        document.getElementById('recoveryExpectedWorkInput').value=rec.expectedWorkDemand||'';
+        document.getElementById('recoveryHealthFlagInput').value=rec.healthFlag||'none';
         document.getElementById('recoverySystemicFatigueInput').value=rec.systemicFatigue!=null?rec.systemicFatigue:'';
         document.getElementById('recoveryLegFatigueInput').value=rec.legFatigue!=null?rec.legFatigue:'';
         document.getElementById('recoveryBackFatigueInput').value=rec.backFatigue!=null?rec.backFatigue:'';
@@ -4504,7 +4516,7 @@ function updateNotificationSettingUI(){
         const readStr=(id)=>{const v=document.getElementById(id).value;return v===''?null:v;};
         const readModalities=(id)=>normalizeModalityList(document.getElementById(id).value);
         const readWorkday=(id)=>{const v=document.getElementById(id).value;return v==='yes'?true:v==='no'?false:null;};
-        const fieldMap={hrv:['recoveryHrvInput',readVal],bodyweight:['recoveryBodyweightInput',readVal],load:['recoveryLoadInput',readVal],sleep:['recoverySleepInput',readVal],recovery:['recoveryRecoveryInput',readVal],strain:['recoveryStrainInput',readVal],rpe:['recoveryRpeInput',readVal],trainingRpe:['recoveryTrainingRpeInput',readVal],modalities:['recoveryModalityInput',readModalities],hasWork:['recoveryHasWorkInput',readWorkday],workHours:['recoveryWorkHoursInput',readVal],workEffort:['recoveryWorkEffortInput',readVal],systemicFatigue:['recoverySystemicFatigueInput',readVal],legFatigue:['recoveryLegFatigueInput',readVal],backFatigue:['recoveryBackFatigueInput',readVal],upperFatigue:['recoveryUpperFatigueInput',readVal],sleepStart:['recoverySleepStartInput',readTime],sleepEnd:['recoverySleepEndInput',readTime],actualIntensity:['recoveryIntensityInput',readStr],testTime5k:['recoveryTestTimeInput',readStr]};
+        const fieldMap={hrv:['recoveryHrvInput',readVal],bodyweight:['recoveryBodyweightInput',readVal],load:['recoveryLoadInput',readVal],sleep:['recoverySleepInput',readVal],recovery:['recoveryRecoveryInput',readVal],strain:['recoveryStrainInput',readVal],rpe:['recoveryRpeInput',readVal],trainingRpe:['recoveryTrainingRpeInput',readVal],modalities:['recoveryModalityInput',readModalities],hasWork:['recoveryHasWorkInput',readWorkday],workHours:['recoveryWorkHoursInput',readVal],workEffort:['recoveryWorkEffortInput',readVal],expectedWorkDemand:['recoveryExpectedWorkInput',readStr],healthFlag:['recoveryHealthFlagInput',readStr],systemicFatigue:['recoverySystemicFatigueInput',readVal],legFatigue:['recoveryLegFatigueInput',readVal],backFatigue:['recoveryBackFatigueInput',readVal],upperFatigue:['recoveryUpperFatigueInput',readVal],sleepStart:['recoverySleepStartInput',readTime],sleepEnd:['recoverySleepEndInput',readTime],actualIntensity:['recoveryIntensityInput',readStr],testTime5k:['recoveryTestTimeInput',readStr]};
         const existing=biometrics[dateStr]||{};
         const entry={...existing};
         let anyTouched=false;
@@ -4666,6 +4678,8 @@ function updateNotificationSettingUI(){
         if(rec.bodyweight!=null)chips.push(`weight ${rec.bodyweight} lb`);
         if(rec.hasWork===true)chips.push('workday yes');
         else if(rec.hasWork===false)chips.push('workday no');
+        if(rec.expectedWorkDemand)chips.push(`expected work ${rec.expectedWorkDemand.replace('-',' ')}`);
+        if(rec.healthFlag&&rec.healthFlag!=='none')chips.push(rec.healthFlag==='illness'?'illness flag':'pain / injury flag');
         if(rec.workHours!=null||rec.workEffort!=null)chips.push(`work ${rec.workHours??'?'}h @ ${rec.workEffort??'?'} /10`);
         const fats=[['sys',rec.systemicFatigue],['legs',rec.legFatigue],['back',rec.backFatigue],['upper',rec.upperFatigue]].filter(([,v])=>v!=null);
         if(fats.length)chips.push(`fatigue ${fats.map(([n,v])=>`${n} ${v}/10`).join(' · ')}`);
@@ -4687,6 +4701,7 @@ function updateNotificationSettingUI(){
         const reminders=[];
         const workingToday=rec.hasWork===true||(rec.hasWork==null&&Number(rec.workHours)>0);
         if(rec.hasWork==null)reminders.push('now — say whether you are working today so the app knows whether to remind you after work');
+        if(workingToday&&!rec.expectedWorkDemand)reminders.push('before work — forecast whether today looks light, normal, heavy, or unusually heavy');
         if(workingToday){
           const afterWork=[];
           if(rec.workHours==null)afterWork.push('hours');
@@ -6955,6 +6970,7 @@ function updateNotificationSettingUI(){
       ['recoveryHrvInput','recoveryBodyweightInput','recoveryLoadInput','recoverySleepInput','recoveryRecoveryInput','recoveryStrainInput','recoveryRpeInput','recoveryTrainingRpeInput','recoveryWorkHoursInput','recoveryWorkEffortInput','recoverySystemicFatigueInput','recoveryLegFatigueInput','recoveryBackFatigueInput','recoveryUpperFatigueInput','recoverySleepStartInput','recoverySleepEndInput','recoveryTestTimeInput'].forEach(id=>{
         document.getElementById(id).addEventListener('input',()=>recoveryTouchedFields.add(id));
       });
+      ['recoveryExpectedWorkInput','recoveryHealthFlagInput'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{recoveryTouchedFields.add(id);updateRecoveryEntrySummary();}));
       ['recoverySleepStartInput','recoverySleepEndInput'].forEach(id=>{
         document.getElementById(id).addEventListener('input',updateSleepDurationPreview);
       });
