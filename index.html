@@ -1131,6 +1131,15 @@
     .activity-row-date { font-family:'JetBrains Mono',monospace; font-size:.57rem; color:var(--text-color); opacity:.48; white-space:nowrap; }
     .activity-metrics { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.5rem; }
     .activity-metric { font-family:'JetBrains Mono',monospace; font-size:.58rem; border:1px solid var(--border-color); border-radius:.4rem; padding:.17rem .38rem; color:var(--text-color); opacity:.78; }
+    .activity-response-summary { margin-top:.5rem; display:flex; align-items:center; gap:.35rem; flex-wrap:wrap; }
+    .activity-response-chip { font-family:'JetBrains Mono',monospace; font-size:.54rem; border:1px solid var(--border-color); border-radius:999px; padding:.16rem .4rem; color:var(--text-color); opacity:.8; }
+    .activity-response-chip.alert { border-color:#d4a94a; color:#d4a94a; opacity:1; }
+    .activity-response-toggle { margin-left:auto; border:0; background:none; color:var(--main-color); font:600 .58rem 'Lexend Deca',sans-serif; cursor:pointer; padding:.2rem; }
+    .activity-response-form { display:none; margin-top:.55rem; padding-top:.55rem; border-top:1px solid var(--border-color); grid-template-columns:repeat(2,minmax(0,1fr)); gap:.4rem; }
+    .activity-response-form.open { display:grid; }
+    .activity-response-form label { font-size:.55rem; color:var(--text-color); opacity:.65; }
+    .activity-response-form select { width:100%; margin-top:.16rem; font-size:.62rem; }
+    .activity-response-save { grid-column:1/-1; justify-content:center; }
     .activity-source { margin-top:.4rem; font-size:.56rem; color:var(--text-color); opacity:.42; }
     .activity-trend-block { margin-top:.8rem; padding-top:.75rem; border-top:1px solid var(--border-color); }
     .activity-trend-title { font-size:.62rem; color:var(--sub-color); text-transform:uppercase; letter-spacing:.35px; opacity:.78; margin-bottom:.45rem; }
@@ -1621,9 +1630,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.107</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.108</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.107 unifies Intervals.icu, lifting-history, and manual load without double-counting.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.108 adds compact session-response and cardiovascular-anomaly feedback.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2697,7 +2706,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.107';
+      const APP_VERSION='1.108';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -2716,6 +2725,7 @@
       let completionEvents=[];
       let biometrics={};
       let importedActivities=[];
+      let sessionResponses={};
       let intervalsBestRecords={run:{},ride:{},lastSyncAt:null};
       let intervalsLastSyncAt=null;
       let intervalsSyncInFlight=false;
@@ -2869,6 +2879,8 @@
 
       let saveFailureWarned=false;
       function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
+      const buildStateSnapshotCore=buildStateSnapshot;
+      buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;return state;};
       function saveData(){const d=buildStateSnapshot();try{localStorage.setItem('pomodoro-cyberspace-data',JSON.stringify(d));saveFailureWarned=false;}catch(e){if(!saveFailureWarned){saveFailureWarned=true;showToast('⚠ save failed — storage may be full');}}scheduleCloudPush();}
 
       function loadData(sourceData){try{const r=sourceData||JSON.parse(localStorage.getItem('pomodoro-cyberspace-data')||'null');if(!r)return;const d=r,today=getToday();if(d.todayDate!==today){
@@ -2879,6 +2891,7 @@
         }
         todayFocusMinutes=0;todaySessions=0;hourlyFocus={};if(d.lastActiveDate){const ld=new Date(d.lastActiveDate),td=new Date(today),df=Math.floor((td-ld)/(1000*60*60*24));if(df===1)streakDays=(d.streakDays||0)+1;else if(df===0)streakDays=d.streakDays||0;else streakDays=1;}else streakDays=1;}else{todayFocusMinutes=d.todayFocusMinutes||0;todaySessions=d.todaySessions||0;streakDays=d.streakDays||0;hourlyFocus=d.hourlyFocus||{};}
       totalFocusMinutes=d.totalFocusMinutes||0;sessionsCompleted=d.sessionsCompleted||0;tasksCompletedCount=d.tasksCompletedCount||0;taskNameFrequency=d.taskNameFrequency||{};taskLastUsed=d.taskLastUsed||{};lastActiveDate=d.lastActiveDate||null;dailyHistory=d.dailyHistory||{};taskHabitHistory=d.taskHabitHistory||{};librarySort=d.librarySort||'frequent';tasks=d.tasks||[];taskTimeLog=d.taskTimeLog||{};selectedTaskForGraph=d.selectedTaskForGraph||null;soundEnabled=d.soundEnabled!==undefined?d.soundEnabled:true;currentTheme=d.currentTheme||'cyberspace';bgHabits=d.bgHabits||[];totalXP=d.totalXP!==undefined?d.totalXP:(d.totalFocusMinutes||0);dailyGoalBonusDate=d.dailyGoalBonusDate||null;focusPeriod=d.focusPeriod||7;habitCheckPeriod=d.habitCheckPeriod||84;dailyGoal=d.dailyGoal||90;selectedHabitForGraph=d.selectedHabitForGraph||null;focusMode=(d.focusMode==='nudge')?'pause':(d.focusMode||'auto');habitGraphSort=d.habitGraphSort||'frequent';activePanel=d.activePanel||'tasks';notificationsEnabled=d.notificationsEnabled!==undefined?d.notificationsEnabled:false;sessionLog=d.sessionLog||[];lastSessionLogId=d.lastSessionLogId||null;estimateAccuracyLog=d.estimateAccuracyLog||[];tasksAbandonedCount=d.tasksAbandonedCount||0;taskFilter=d.taskFilter||'active';chartOffset=d.chartOffset||0;heatmapOffset=d.heatmapOffset||0;habitCheckOffset=d.habitCheckOffset||0;overviewOffset=d.overviewOffset||0;hasSeenWelcome=d.hasSeenWelcome!==undefined?d.hasSeenWelcome:false;taskSort=d.taskSort||'manual';recurringTasks=d.recurringTasks||{};lastRecapWeek=d.lastRecapWeek||null;taskWeeklyGoal=d.taskWeeklyGoal||10;habitOrderSort=d.habitOrderSort||'manual';xpFromFocus=d.xpFromFocus||0;xpFromTasks=d.xpFromTasks||0;xpFromHabits=d.xpFromHabits||0;xpFromGoals=d.xpFromGoals||0;xpFromChains=d.xpFromChains||0;notepadContent=d.notepadContent||'';notepadPinned=d.notepadPinned||false;notepadPosX=null;notepadPosY=null;todayHabitSort=d.todayHabitSort||'manual';todoSort=d.todoSort||'manual';overviewSort=d.overviewSort||'manual';adaptiveGoalEnabled=d.adaptiveGoalEnabled||false;adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled!==undefined?d.adaptiveFocusGoalEnabled:true;todayDueSort=d.todayDueSort||'date';todayPrioritySort=d.todayPrioritySort||'priority';goals=d.goals||[];taskSchedule=d.taskSchedule||{};scheduleDate=d.scheduleDate||null;viewMode=d.viewMode||'auto';collapsedCardKeys=new Set(d.collapsedCardKeys||[]);todayHubTab=d.todayHubTab||'current';completionEvents=d.completionEvents||[];biometrics=d.biometrics||{};importedActivities=d.importedActivities||[];intervalsBestRecords=d.intervalsBestRecords||{run:{},ride:{},runRanks:{},rideRanks:{},lastSyncAt:null};intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsLastSyncAt=d.intervalsLastSyncAt||null;recoveryChartPeriod=d.recoveryChartPeriod||14;recoveryChartMetric=d.recoveryChartMetric||'freshness';sleepTargetHours=d.sleepTargetHours||8;recoveryChartOffset=d.recoveryChartOffset||0;breakOvertimeLog=d.breakOvertimeLog||[];books=d.books||[];bookStatusFilter=d.bookStatusFilter||'reading';hasSeenGoalsTutorial=d.hasSeenGoalsTutorial!==undefined?d.hasSeenGoalsTutorial:false;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}else{liftingLifts=[];}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;else liftingSequencePosition=0;liftingCycleNumber=d.liftingCycleNumber!==undefined?d.liftingCycleNumber:1;liftingHistory=d.liftingHistory||[];liftingPendingLiftIds=d.liftingPendingLiftIds||[];liftingWarmupChecks=d.liftingWarmupChecks||{};dailyCheckins=d.dailyCheckins||{};currentTaskId=d.currentTaskId!==undefined?d.currentTaskId:null;taskTimeLimits=d.taskTimeLimits||{};taskTimerRemaining=d.taskTimerRemaining||{};
+      sessionResponses=d.sessionResponses||{};
       restoredActiveTimer=false;
       if(!sourceData&&d.activeTimer){
         const at=d.activeTimer;
@@ -3328,6 +3341,24 @@
         if(runs.length){const paces=runs.map(a=>{const d=a.distance/1000;return d>0?a.moving_time/d:null;}).filter(Boolean);const hrs=runs.filter(a=>a.average_heartrate!=null);if(paces.length){const x=paces.reduce((a,b)=>a+b,0)/paces.length,m=Math.floor(x/60),ss=Math.round(x%60);parts.push(metricRow('run avg pace',`${m}:${String(ss).padStart(2,'0')}/km`,68));}if(hrs.length)parts.push(metricRow('run avg HR',`${Math.round(hrs.reduce((x,a)=>x+a.average_heartrate,0)/hrs.length)} bpm`,58));}
         el.innerHTML=parts.length?`<div class="activity-trend-block"><div class="activity-trend-title">recent aerobic snapshot</div>${parts.join('')}</div>`:'';
       }
+      function activityResponseOption(value,label,current){return `<option value="${value}" ${current===value?'selected':''}>${label}</option>`;}
+      function renderActivityResponse(a){
+        const r=sessionResponses[String(a.id)]||{},has=!!r.updatedAt,alert=r.physiology==='high'||r.physiology==='low';
+        const chips=[];
+        if(r.feel)chips.push(`<span class="activity-response-chip">felt ${escapeHtml({easier:'easier than expected',right:'about right',harder:'harder than expected'}[r.feel]||r.feel)}</span>`);
+        if(r.physiology&&r.physiology!=='normal')chips.push(`<span class="activity-response-chip ${alert?'alert':''}">${escapeHtml({high:'HR unusually high',low:'HR unusually low',sensor:'sensor questionable'}[r.physiology]||r.physiology)}</span>`);
+        if(r.outcome&&r.outcome!=='completed')chips.push(`<span class="activity-response-chip">${escapeHtml(r.outcome==='shortened'?'shortened':'stopped early')}</span>`);
+        const id=encodeURIComponent(String(a.id));
+        return `<div class="activity-response-summary">${chips.join('')}${!has?'<span class="activity-response-chip">how did it go?</span>':''}<button class="activity-response-toggle" data-response-id="${id}">${has?'edit response':'add response'}</button></div><div class="activity-response-form" data-response-form="${id}"><label>session feel<select data-field="feel"><option value="">choose…</option>${activityResponseOption('easier','easier than expected',r.feel)}${activityResponseOption('right','about right',r.feel)}${activityResponseOption('harder','harder than expected',r.feel)}</select></label><label>physiological response<select data-field="physiology"><option value="">choose…</option>${activityResponseOption('normal','normal',r.physiology)}${activityResponseOption('high','HR unusually high',r.physiology)}${activityResponseOption('low','HR unusually low',r.physiology)}${activityResponseOption('sensor','sensor questionable',r.physiology)}</select></label><label>outcome<select data-field="outcome">${activityResponseOption('completed','completed',r.outcome||'completed')}${activityResponseOption('shortened','shortened',r.outcome)}${activityResponseOption('stopped','stopped early',r.outcome)}</select></label><label>possible reason<select data-field="reason"><option value="">unknown / not sure</option>${[['normal_high','felt normal, HR just high'],['heat','heat / humidity'],['hydration','dehydrated'],['sleep','poor sleep'],['caffeine','caffeine / stimulant'],['illness','illness coming on'],['stress','stressful day'],['pain','pain / soreness'],['sensor','sensor seemed wrong'],['other','other']].map(([v,l])=>activityResponseOption(v,l,r.reason)).join('')}</select></label><button class="btn small activity-response-save" data-response-id="${id}">save session response</button></div>`;
+      }
+      function renderActivityRow(a){
+        const metrics=[];metrics.push(formatActivityDuration(a.moving_time));if(a.distance)metrics.push(`${(a.distance/1000).toFixed(a.distance>=10000?1:2)} km`);if(/run/i.test(a.type)){const pace=formatRunPace(a);if(pace)metrics.push(pace);}else if(a.average_speed)metrics.push(`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate!=null)metrics.push(`HR ${Math.round(a.average_heartrate)} avg`);if(a.max_heartrate!=null)metrics.push(`${Math.round(a.max_heartrate)} max`);if(a.average_watts!=null)metrics.push(`${Math.round(a.average_watts)} W avg`);if(a.weighted_watts!=null)metrics.push(`${Math.round(a.weighted_watts)} W NP`);if(a.training_load!=null)metrics.push(`load ${Math.round(a.training_load)}`);if(a.session_rpe!=null)metrics.push(`RPE ${Math.round(a.session_rpe)}/10`);if(a.decoupling!=null)metrics.push(`decouple ${a.decoupling.toFixed(1)}%`);
+        return `<div class="activity-row"><div class="activity-row-head"><div><div class="activity-row-name">${escapeHtml(a.name)}</div><div class="activity-source">${escapeHtml(a.type)}${a.source?' · '+escapeHtml(a.source):''}</div></div><div class="activity-row-date">${a.start_date_local?new Date(a.start_date_local).toLocaleDateString(undefined,{month:'short',day:'numeric'}):''}</div></div><div class="activity-metrics">${metrics.map(m=>`<span class="activity-metric">${escapeHtml(m)}</span>`).join('')}</div>${renderActivityResponse(a)}</div>`;
+      }
+      function bindActivityResponseControls(list){
+        list.querySelectorAll('.activity-response-toggle').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`);if(form)form.classList.toggle('open');}));
+        list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'';sessionResponses[id]={activityId:id,activityDate:String(activity?.start_date_local||'').slice(0,10),activityType:activity?.type||'',feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();showToast('session response saved');}));
+      }
       function renderActivitiesPanel(){
         const key=getIntervalsApiKey(),dot=document.getElementById('intervalsStatusDot'),txt=document.getElementById('intervalsStatusText'),form=document.getElementById('intervalsConnectForm'),actions=document.getElementById('intervalsConnectedActions');
         if(dot)dot.classList.toggle('connected',!!key);if(txt&&!intervalsSyncInFlight)txt.textContent=key?'connected':'not connected';if(form)form.style.display=key?'none':'block';if(actions)actions.style.display=key?'block':'none';
@@ -3337,7 +3368,7 @@
         renderActivityTrendSummary();
         renderPersonalBests();renderHeartRateRanges();
         const list=document.getElementById('activityList');if(!list)return;if(!importedActivities.length){list.innerHTML=`<div class="activity-empty">${key?'Connected. Sync will import your recent Intervals.icu activities.':'Connect Intervals.icu once and your recent activities will appear here automatically.'}</div>`;return;}
-        list.innerHTML=importedActivities.slice(0,80).map(a=>{const metrics=[];metrics.push(formatActivityDuration(a.moving_time));if(a.distance)metrics.push(`${(a.distance/1000).toFixed(a.distance>=10000?1:2)} km`);if(/run/i.test(a.type)){const pace=formatRunPace(a);if(pace)metrics.push(pace);}else if(a.average_speed)metrics.push(`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate!=null)metrics.push(`HR ${Math.round(a.average_heartrate)} avg`);if(a.max_heartrate!=null)metrics.push(`${Math.round(a.max_heartrate)} max`);if(a.average_watts!=null)metrics.push(`${Math.round(a.average_watts)} W avg`);if(a.weighted_watts!=null)metrics.push(`${Math.round(a.weighted_watts)} W NP`);if(a.training_load!=null)metrics.push(`load ${Math.round(a.training_load)}`);if(a.session_rpe!=null)metrics.push(`RPE ${Math.round(a.session_rpe)}/10`);if(a.decoupling!=null)metrics.push(`decouple ${a.decoupling.toFixed(1)}%`);return `<div class="activity-row"><div class="activity-row-head"><div><div class="activity-row-name">${escapeHtml(a.name)}</div><div class="activity-source">${escapeHtml(a.type)}${a.source?' · '+escapeHtml(a.source):''}</div></div><div class="activity-row-date">${a.start_date_local?new Date(a.start_date_local).toLocaleDateString(undefined,{month:'short',day:'numeric'}):''}</div></div><div class="activity-metrics">${metrics.map(m=>`<span class="activity-metric">${escapeHtml(m)}</span>`).join('')}</div></div>`;}).join('');
+        list.innerHTML=importedActivities.slice(0,80).map(renderActivityRow).join('');bindActivityResponseControls(list);
       }
       function setupIntervalsImport(){
         document.getElementById('intervalsConnectBtn')?.addEventListener('click',async()=>{const input=document.getElementById('intervalsApiKeyInput'),key=input?.value.trim();if(!key){showToast('paste your Intervals.icu API key first');return;}setIntervalsApiKey(key);if(input)input.value='';renderActivitiesPanel();const ok=await syncIntervalsActivities();if(!ok){setIntervalsApiKey('');renderActivitiesPanel();}});
@@ -4040,6 +4071,10 @@ function updateNotificationSettingUI(){
       function dayHadWorkout(rec){
         return!!(rec&&((rec.load!=null&&rec.load>0)||(rec.actualIntensity&&rec.actualIntensity!=='rest')||normalizeModalityList(rec.modalities).length));
       }
+      function getRecentSessionAnomaly(referenceDateStr){
+        const ref=new Date(referenceDateStr+'T12:00:00');
+        return Object.values(sessionResponses||{}).filter(r=>r&&['high','low'].includes(r.physiology)&&r.reason!=='sensor'&&r.activityDate&&r.activityDate<referenceDateStr).map(r=>({...r,daysAgo:Math.round((ref-new Date(r.activityDate+'T12:00:00'))/86400000)})).filter(r=>r.daysAgo>=1&&r.daysAgo<=2).sort((a,b)=>String(b.activityDate).localeCompare(String(a.activityDate)))[0]||null;
+      }
       function getTrainingCallData(referenceDateStr){
         const refDate=new Date(referenceDateStr+'T00:00:00');
         const dayOfWeek=refDate.getDay();
@@ -4102,6 +4137,9 @@ function updateNotificationSettingUI(){
         const spikeInfo=getSessionSpikeInfo(toDateStr(yesterday));
         if(spikeInfo&&spikeInfo.isSpike&&tier>0){tier=tier-1;reasons.push(`yesterday's session was ${spikeInfo.ratio.toFixed(1)}x your typical load — easing off today gives that a chance to settle`);}
         factors.push({label:'session spike',status:spikeInfo?(spikeInfo.isSpike?'yellow':'green'):null,detail:spikeInfo?`yesterday's load ${spikeInfo.load} vs your typical session ${Math.round(spikeInfo.avgSession)} (${spikeInfo.ratio.toFixed(1)}x)`:'not enough data yet',explain:'compares yesterday\u2019s training load to your typical single session (averaged from training days over the last 28) — a session 1.5x bigger than normal counts as a spike, since a sudden jump in one day\u2019s volume is a known injury risk even when your weekly total still looks fine.'});
+        const sessionAnomaly=getRecentSessionAnomaly(referenceDateStr);
+        if(sessionAnomaly&&tier>1){tier=1;reasons.push(`${sessionAnomaly.daysAgo===1?'yesterday’s':'a recent'} session had an unusual cardiovascular response — monitoring it before another harder effort`);}
+        factors.push({label:'cardiovascular response',status:sessionAnomaly?'yellow':null,detail:sessionAnomaly?`${sessionAnomaly.physiology==='high'?'unusually high':'unusually low'} HR · ${sessionAnomaly.outcome==='stopped'?'stopped early':sessionAnomaly.outcome||'outcome not logged'}`:'no recent anomaly reported',explain:'keeps how the session felt separate from what your cardiovascular system did. one reported anomaly can hold back harder training briefly, but it does not force a rest day or diagnose a cause.'});
         const mediumCount7d=getMediumCountLast7Days(referenceDateStr);
         if(tier===2&&mediumCount7d>=mediumCap7d){tier=1;reasons.push(`already ${mediumCount7d} medium workouts in the last 7 days — your cap is ${mediumCap7d}`);}
         factors.push({label:'medium workouts (7d)',status:mediumCount7d>=mediumCap7d?'yellow':'green',detail:`${mediumCount7d}/${mediumCap7d} in the last 7 days`,explain:`how many medium-intensity days you've done in the last 7 — capped at ${mediumCap7d}, since medium days are meant to stay a minority of your training, not the default.`});
