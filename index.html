@@ -1315,7 +1315,7 @@
     .break-overtime-hint { color: #d4a94a; font-size: 0.62rem; margin-top: 0.6rem; text-align: center; line-height: 1.4; padding: 0.4rem 0.6rem; border: 1px dashed #d4a94a; border-radius: 0.5rem; opacity: 0.85; }
     .recovery-acwr-zone-caption { font-size: 0.58rem; color: var(--text-color); opacity: 0.5; text-align: center; margin-top: 0.4rem; line-height: 1.4; }
     .recovery-daily-summary { grid-column: 1 / -1; padding: 1rem 1.2rem; }
-    .recovery-daily-summary-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.55rem; }
+    .recovery-daily-summary-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.55rem; }
     .recovery-summary-stat { border: 1px solid var(--border-color); border-radius: 0.7rem; padding: 0.55rem 0.65rem; min-width: 0; background: rgba(0,0,0,0.08); }
     .recovery-summary-stat-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.35px; color: var(--text-color); opacity: 0.5; margin-bottom: 0.22rem; font-family: 'JetBrains Mono', monospace; }
     .recovery-summary-stat-value { font-size: 0.78rem; color: var(--text-color); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1418,11 +1418,12 @@
     .wake-schedule { margin-top:.7rem; border-top:1px solid var(--border-color); padding-top:.65rem; }
     .wake-schedule-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.3rem; }
     .wake-day { border:1px solid var(--border-color); border-radius:.5rem; padding:.35rem; min-width:0; }
-    .wake-day-name { font:.55rem 'JetBrains Mono',monospace; opacity:.55; margin-bottom:.25rem; text-transform:uppercase; }
+    .wake-day-name { font:.55rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.55; margin-bottom:.25rem; text-transform:uppercase; }
     .wake-day select,.wake-day input { width:100%; font-size:.55rem; padding:.2rem; margin:0 0 .22rem; border-radius:.35rem; }
     .wake-plan-summary { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.55rem; }
-    .wake-plan-chip { border:1px solid var(--border-color); border-radius:.45rem; padding:.25rem .4rem; font-size:.56rem; }
+    .wake-plan-chip { border:1px solid var(--border-color); border-radius:.45rem; padding:.25rem .4rem; font-size:.56rem; color:var(--text-color); }
     .wake-override { display:grid; grid-template-columns:auto 120px 110px; gap:.35rem; align-items:center; margin-top:.5rem; }
+    .wake-override label { color:var(--text-color); opacity:.65; font-size:.58rem; }
     @media(max-width:700px){.wake-schedule-grid{grid-template-columns:repeat(2,1fr)}.wake-override{grid-template-columns:1fr 1fr}.wake-override label{grid-column:1/-1}}
     @media(max-width:650px){.outlook-scenarios{grid-template-columns:1fr;}}
     .training-call-week-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; }
@@ -1694,7 +1695,7 @@
         <div class="settings-section-title">app</div>
         <div class="settings-desc" style="margin-top:0;"><strong>Version 1.116</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.119 restores a deliberate, compact Recovery card layout and keeps the v1.118 capacity and Intervals.icu improvements.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.119 repairs the Recovery layout and Sleep contrast, adds capacity to Today at a Glance, and introduces personal aerobic baselines.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2399,6 +2400,7 @@
             <h2>today at a glance</h2>
             <div class="recovery-daily-summary-grid">
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">readiness</div><div class="recovery-summary-stat-value" id="summaryReadiness">--</div></div>
+              <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">est. capacity</div><div class="recovery-summary-stat-value" id="summaryCapacity">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">work stress</div><div class="recovery-summary-stat-value" id="summaryWorkStress">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body fatigue</div><div class="recovery-summary-stat-value" id="summaryBodyFatigue">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">primary training</div><div class="recovery-summary-stat-value" id="summaryTrainingCall">--</div></div>
@@ -2700,6 +2702,18 @@
             </div>
             <div class="hr-zone-list" id="hrZoneList"></div>
             <div class="activity-pb-note" id="hrRangeNote">Sync activities with heart-rate data to populate this card.</div>
+          </div>
+
+          <div class="activity-card">
+            <div class="card-header-title">Personal aerobic baselines</div>
+            <div class="goals-intro-note" style="margin-top:.35rem;">Built from your own recent activities. A baseline appears only after at least three sessions have usable HR plus pace or power.</div>
+            <div class="hr-range-grid">
+              <div class="hr-range-stat"><div class="hr-range-value" id="baselineRunPace">—</div><div class="hr-range-label">typical run pace</div></div>
+              <div class="hr-range-stat"><div class="hr-range-value" id="baselineRunHr">—</div><div class="hr-range-label">at typical run HR</div></div>
+              <div class="hr-range-stat"><div class="hr-range-value" id="baselineRidePower">—</div><div class="hr-range-label">typical ride power</div></div>
+              <div class="hr-range-stat"><div class="hr-range-value" id="baselineRideHr">—</div><div class="hr-range-label">at typical ride HR</div></div>
+            </div>
+            <div class="activity-pb-note" id="aerobicBaselineNote">Sync more activities to establish personal baselines.</div>
           </div>
 
           <div class="activity-card">
@@ -3410,6 +3424,18 @@
         renderAchievementFeed();
       }
       function fmtHrRange(vals){vals=vals.filter(v=>Number.isFinite(v));if(!vals.length)return '—';const lo=Math.round(Math.min(...vals)),hi=Math.round(Math.max(...vals));return lo===hi?`${lo}`:`${lo}–${hi}`;}
+      function medianNumber(values){const xs=values.map(Number).filter(Number.isFinite).sort((a,b)=>a-b);if(!xs.length)return null;const m=Math.floor(xs.length/2);return xs.length%2?xs[m]:(xs[m-1]+xs[m])/2;}
+      function renderAerobicBaselines(){
+        const cutoff=Date.now()-120*86400000,recent=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff);
+        const runs=recent.filter(a=>/run/i.test(a.type)&&a.average_heartrate>0&&a.distance>0&&a.moving_time>0);
+        const rides=recent.filter(a=>/ride|cycling|virtualride/i.test(a.type)&&a.average_heartrate>0&&a.average_watts>0);
+        const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+        const runPace=medianNumber(runs.map(a=>a.moving_time/(a.distance/1000))),runHr=medianNumber(runs.map(a=>a.average_heartrate));
+        if(runs.length>=3&&runPace){const m=Math.floor(runPace/60),s=Math.round(runPace%60);set('baselineRunPace',`${m}:${String(s).padStart(2,'0')}/km`);set('baselineRunHr',`${Math.round(runHr)} bpm`);}else{set('baselineRunPace','—');set('baselineRunHr','—');}
+        const ridePower=medianNumber(rides.map(a=>a.average_watts)),rideHr=medianNumber(rides.map(a=>a.average_heartrate));
+        if(rides.length>=3){set('baselineRidePower',`${Math.round(ridePower)} W`);set('baselineRideHr',`${Math.round(rideHr)} bpm`);}else{set('baselineRidePower','—');set('baselineRideHr','—');}
+        const note=document.getElementById('aerobicBaselineNote');if(note){const bits=[runs.length>=3?`running baseline: ${runs.length} sessions`:`running: ${runs.length}/3 usable sessions`,rides.length>=3?`cycling baseline: ${rides.length} sessions`:`cycling: ${rides.length}/3 usable sessions`];note.textContent=`Last 120 days · ${bits.join(' · ')} · medians resist one unusual workout.`;}
+      }
       function renderHeartRateRanges(){
         const cutoff=Date.now()-30*86400000,recent=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff),withHr=recent.filter(a=>a.average_heartrate!=null),runs=withHr.filter(a=>/run/i.test(a.type)),rides=withHr.filter(a=>/ride|cycling|virtualride/i.test(a.type));
         const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
@@ -3475,7 +3501,7 @@
         const cutoff=Date.now()-30*86400000,recent30=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff);
         const c=document.getElementById('activity30Count'),h=document.getElementById('activity30Hours'),l=document.getElementById('activity30Load');if(c)c.textContent=recent30.length||'—';if(h)h.textContent=recent30.length?(recent30.reduce((x,a)=>x+a.moving_time,0)/3600).toFixed(1):'—';if(l){const vals=recent30.filter(a=>a.training_load!=null);l.textContent=vals.length?Math.round(vals.reduce((x,a)=>x+a.training_load,0)):'—';}
         renderActivityTrendSummary();
-        renderPersonalBests();renderHeartRateRanges();
+        renderPersonalBests();renderHeartRateRanges();renderAerobicBaselines();
         const list=document.getElementById('activityList');if(!list)return;if(!importedActivities.length){list.innerHTML=`<div class="activity-empty">${key?'Connected. Sync will import your recent Intervals.icu activities.':'Connect Intervals.icu once and your recent activities will appear here automatically.'}</div>`;return;}
         list.innerHTML=importedActivities.slice(0,80).map(renderActivityRow).join('');bindActivityResponseControls(list);
       }
@@ -4791,6 +4817,9 @@ function updateNotificationSettingUI(){
         const readinessText=freshness.score==null?(yesterdayFreshness.score==null?'pending today':`pending today · yesterday ${yesterdayFreshness.score}/100`):`${freshness.score}/100 · ${readinessBand}`;
         setRecoverySummaryValue('summaryReadiness',readinessText,freshness.score==null?null:freshness.score>=75?'good':freshness.score>=60?'caution':'bad');
         const readinessEl=document.getElementById('summaryReadiness');if(readinessEl&&freshness.score!=null)readinessEl.title=`Composite of ${freshness.dataPoints}/6 available readiness signals. Training Call overrides are evaluated separately.`;
+        const capacity=getEstimatedCapacityData(today);
+        setRecoverySummaryValue('summaryCapacity',capacity.score==null?'pending':`${capacity.score}/100 · ${capacity.status}`,capacity.score==null?null:capacity.score>=70?'good':capacity.score>=45?'caution':'bad');
+        const capacityEl=document.getElementById('summaryCapacity');if(capacityEl)capacityEl.title='Projected reserve after expected/logged work and recommended/logged training. This is a planning estimate, not live physiology.';
         setRecoverySummaryValue('summaryWorkStress',work.score==null?'--':work.status==='red'?'high':work.status==='yellow'?'moderate':'low',work.status==='red'?'bad':work.status==='yellow'?'caution':work.score==null?null:'good');
         setRecoverySummaryValue('summaryBodyFatigue',bodyMax==null?'--':bodyMax>=9?'high':bodyMax>=7?'moderate':'low',bodyMax==null?null:bodyMax>=9?'bad':bodyMax>=7?'caution':'good');
         const level=call&&call.level?call.level:'--';
