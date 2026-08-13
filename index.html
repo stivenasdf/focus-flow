@@ -1621,9 +1621,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.105</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.106</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.105 splits training-load bars into lifting and other training, with a detailed hover breakdown.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.106 fixes Intervals.icu activity durations, running efforts, and heart-rate imports.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2697,7 +2697,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.105';
+      const APP_VERSION='1.106';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -3208,12 +3208,22 @@
       function formatRunPace(activity){const dist=Number(activity.distance)||0,secs=Number(activity.moving_time)||0;if(!dist||!secs)return null;const secPerKm=secs/(dist/1000);if(!isFinite(secPerKm)||secPerKm>3600)return null;const m=Math.floor(secPerKm/60),ss=Math.round(secPerKm%60);return `${m}:${String(ss).padStart(2,'0')}/km`;}
       function normalizeIntervalsActivity(a){
         const power=a.average_watts??a.icu_average_watts??null;
-        const sessionRpe=a.session_rpe??a.icu_rpe??a.rpe??null;
-        return {id:String(a.id),name:a.name||a.type||'activity',type:a.type||'Activity',start_date_local:a.start_date_local||a.start_date||'',distance:Number(a.distance)||0,moving_time:Number(a.moving_time)||0,elapsed_time:Number(a.elapsed_time)||0,elevation:Number(a.total_elevation_gain)||0,average_speed:Number(a.average_speed)||0,average_heartrate:a.average_heartrate!=null?Number(a.average_heartrate):null,max_heartrate:a.max_heartrate!=null?Number(a.max_heartrate):null,average_watts:power!=null?Number(power):null,weighted_watts:a.icu_weighted_avg_watts!=null?Number(a.icu_weighted_avg_watts):null,training_load:a.icu_training_load!=null?Number(a.icu_training_load):null,intensity:a.icu_intensity!=null?Number(a.icu_intensity):null,efficiency:a.icu_efficiency_factor!=null?Number(a.icu_efficiency_factor):null,decoupling:a.decoupling!=null?Number(a.decoupling):null,cadence:a.average_cadence!=null?Number(a.average_cadence):null,session_rpe:sessionRpe!=null?Number(sessionRpe):null,source:a.source||'',device_watts:a.device_watts===true,stream_types:Array.isArray(a.stream_types)?a.stream_types:[],hr_zone_times:Array.isArray(a.icu_hr_zone_times)?a.icu_hr_zone_times.map(x=>Number(x)||0):[]};
+        const sessionRpe=a.session_rpe??a.icu_rpe??a.rpe??a.perceived_exertion??null;
+        const duration=a.moving_time??a.icu_recording_time??a.elapsed_time??a.duration??a.workout_doc?.duration??0;
+        const elapsed=a.elapsed_time??a.icu_recording_time??duration;
+        const avgHr=a.average_heartrate??a.avg_hr??null,maxHr=a.max_heartrate??a.max_hr??null;
+        const zones=a.icu_hr_zone_times??a.hr_zone_times??a.workout_doc?.hrZoneTimes??[];
+        return {id:String(a.id),name:a.name||a.type||'activity',type:a.type||'Activity',start_date_local:a.start_date_local||a.start_date||'',distance:Number(a.icu_distance??a.distance)||0,moving_time:Number(duration)||0,elapsed_time:Number(elapsed)||0,elevation:Number(a.total_elevation_gain)||0,average_speed:Number(a.average_speed)||0,average_heartrate:avgHr!=null?Number(avgHr):null,max_heartrate:maxHr!=null?Number(maxHr):null,average_watts:power!=null?Number(power):null,weighted_watts:a.icu_weighted_avg_watts!=null?Number(a.icu_weighted_avg_watts):null,training_load:a.icu_training_load!=null?Number(a.icu_training_load):null,intensity:a.icu_intensity!=null?Number(a.icu_intensity):null,efficiency:a.icu_efficiency_factor!=null?Number(a.icu_efficiency_factor):null,decoupling:a.decoupling!=null?Number(a.decoupling):null,cadence:a.average_cadence!=null?Number(a.average_cadence):null,session_rpe:sessionRpe!=null?Number(sessionRpe):null,source:a.source||'',device_watts:a.device_watts===true,stream_types:Array.isArray(a.stream_types)?a.stream_types:[],hr_zone_times:Array.isArray(zones)?zones.map(x=>Number(x)||0):[]};
       }
       function mergeImportedActivities(incoming){const map=new Map(importedActivities.map(a=>[String(a.id),a]));incoming.forEach(a=>map.set(String(a.id),a));importedActivities=Array.from(map.values()).sort((a,b)=>String(b.start_date_local).localeCompare(String(a.start_date_local))).slice(0,1200);}
       function fmtPbTime(seconds){seconds=Number(seconds);if(!isFinite(seconds)||seconds<=0)return '—';const h=Math.floor(seconds/3600),m=Math.floor((seconds%3600)/60),ss=Math.round(seconds%60);return h?`${h}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`:`${m}:${String(ss).padStart(2,'0')}`;}
       function nearestCurveValue(curve,bucket){if(!curve)return null;const xs=Array.isArray(curve.secs)?curve.secs:[],ys=Array.isArray(curve.values)?curve.values:[];if(!xs.length||!ys.length)return null;let best=-1,delta=Infinity;for(let i=0;i<Math.min(xs.length,ys.length);i++){const d=Math.abs(Number(xs[i])-bucket);if(d<delta){delta=d;best=i;}}if(best<0)return null;const tolerance=Math.max(1,bucket*0.02);if(delta>tolerance)return null;const v=Number(ys[best]);return isFinite(v)&&v>0?v:null;}
+      function paceEffortsFromSet(data,bucket){
+        const efforts=[],activities=data?.activities||{};
+        if(Array.isArray(data?.list))data.list.forEach(curve=>{const xs=curve.distance||curve.distances||[],ys=curve.values||[];let best=-1,delta=Infinity;for(let i=0;i<Math.min(xs.length,ys.length);i++){const d=Math.abs(Number(xs[i])-bucket);if(d<delta){delta=d;best=i;}}if(best>=0&&delta<=Math.max(2,bucket*.02)){const value=Number(ys[best]),ids=curve.activity_id||curve.activity_ids||[],id=Array.isArray(ids)?ids[best]:ids,activity=activities[id]||{};if(isFinite(value)&&value>0)efforts.push({value,date:curveDate(activity)||curveDate(curve),id:id||null});}});
+        if(Array.isArray(data?.distances)&&Array.isArray(data?.curves)){let best=-1,delta=Infinity;data.distances.forEach((d,i)=>{const x=Math.abs(Number(d)-bucket);if(x<delta){delta=x;best=i;}});if(best>=0&&delta<=Math.max(2,bucket*.02))data.curves.forEach(curve=>{const value=Number(curve.secs?.[best]);if(isFinite(value)&&value>0)efforts.push({value,date:curveDate(curve),id:curve.id||curve.activity_id||null});});}
+        return efforts.sort((a,b)=>a.value-b.value);
+      }
       function firstCurveFromSet(data){if(!data)return null;if(Array.isArray(data.list)&&data.list.length)return data.list[0];if(Array.isArray(data)&&data.length)return data[0];if(data.secs&&data.values)return data;return null;}
       function curveListFromSet(data){
         if(!data)return [];
@@ -3242,10 +3252,9 @@
           const distances=[1000,1609,5000,10000,21097,42195];
           const url=`https://intervals.icu/api/v1/athlete/0/activity-pace-curves.json?oldest=2000-01-01&newest=${today}&distances=${distances.join(',')}&gap=false&type=Run&includeRanks=true`;
           const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok){
-            const data=await r.json(),curves=curveListFromSet(data),next={},ranks={};
+            const data=await r.json(),next={},ranks={};
             [['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]].forEach(([label,d])=>{
-              const efforts=rankEffortsFromCurves(curves,d,true);if(efforts.length){next[label]=efforts[0].value;const all=rankForLatestEffort(efforts),yearEfforts=efforts.filter(x=>String(x.date)>=yearStart),yr=rankForLatestEffort(yearEfforts);ranks[label]={all,year:yr};}
-              else {const curve=firstCurveFromSet(data),v=nearestCurveValue(curve,d);if(v!=null)next[label]=v;}
+              const efforts=paceEffortsFromSet(data,d);if(efforts.length){next[label]=efforts[0].value;const all=rankForLatestEffort(efforts),yearEfforts=efforts.filter(x=>String(x.date)>=yearStart),yr=rankForLatestEffort(yearEfforts);ranks[label]={all,year:yr};}
             });
             if(Object.keys(next).length){intervalsBestRecords.run=next;intervalsBestRecords.runRanks=ranks;changed=true;}
           }
@@ -3297,7 +3306,10 @@
         try{
           const oldest=importedActivities.length?isoDateOffset(-21):isoDateOffset(-120),newest=isoDateOffset(1);
           const auth='Basic '+btoa('API_KEY:'+key);
-          const res=await fetch(`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}`,{headers:{'Authorization':auth,'Accept':'application/json'},cache:'no-store'});
+          const fields=['id','name','type','start_date_local','start_date','distance','icu_distance','moving_time','icu_recording_time','elapsed_time','total_elevation_gain','average_speed','average_heartrate','max_heartrate','average_watts','icu_average_watts','icu_weighted_avg_watts','icu_training_load','icu_intensity','icu_efficiency_factor','decoupling','average_cadence','session_rpe','icu_rpe','rpe','perceived_exertion','source','device_watts','stream_types','icu_hr_zone_times'];
+          const url=`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}&fields=${encodeURIComponent(fields.join(','))}`;
+          let res=await fetch(url,{headers:{'Authorization':auth,'Accept':'application/json'},cache:'no-store'});
+          if(res.status===400)res=await fetch(`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}`,{headers:{'Authorization':auth,'Accept':'application/json'},cache:'no-store'});
           if(!res.ok)throw new Error(res.status===401?'API key was rejected':`Intervals.icu returned ${res.status}`);
           const rows=await res.json();if(!Array.isArray(rows))throw new Error('unexpected response from Intervals.icu');
           mergeImportedActivities(rows.map(normalizeIntervalsActivity));intervalsLastSyncAt=new Date().toISOString();await fetchIntervalsPersonalBests();saveData();renderActivitiesPanel();
