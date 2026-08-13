@@ -1328,7 +1328,10 @@
     .training-load-day { height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:0.18rem; }
     .training-load-bars { height:38px; width:100%; display:flex; gap:2px; align-items:flex-end; justify-content:center; }
     .training-load-bar { width:38%; min-height:2px; border-radius:2px 2px 0 0; }
-    .training-load-bar.training { background:var(--main-color); opacity:0.8; }
+    .training-load-stack { width:38%; min-height:2px; display:flex; flex-direction:column-reverse; overflow:hidden; border-radius:2px 2px 0 0; }
+    .training-load-stack.empty { background:var(--main-color); opacity:0.12; height:4%; }
+    .training-load-segment.other { background:var(--main-color); }
+    .training-load-segment.lifting { background:repeating-linear-gradient(135deg,var(--main-color) 0 3px,var(--text-color) 3px 5px); }
     .training-load-bar.work { background:var(--sub-color); opacity:0.75; }
     .training-load-day-label { font-size:0.48rem; color:var(--text-color); opacity:0.45; font-family:'JetBrains Mono', monospace; }
     .training-load-strip-legend { display:flex; gap:0.8rem; justify-content:center; margin-top:0.35rem; font-size:0.52rem; color:var(--text-color); opacity:0.55; }
@@ -1618,9 +1621,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.104</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.105</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.104 restores lifting load from lift history when a recovery-day record is missing and keeps readiness context visible.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.105 splits training-load bars into lifting and other training, with a detailed hover breakdown.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2493,7 +2496,7 @@
             <div class="training-load-strip-wrap">
               <div class="training-call-subheading">last 7 days — where the stress came from</div>
               <div class="training-load-strip" id="trainingLoadStressStrip"></div>
-              <div class="training-load-strip-legend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>training</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
+              <div class="training-load-strip-legend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>other training</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:repeating-linear-gradient(135deg,var(--main-color) 0 3px,var(--text-color) 3px 5px);"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
             </div>
             <div class="recovery-acwr-caption" id="chronicTrendCaption" style="display:none;"></div>
             <div class="training-load-warning" id="trainingLoadWarning" style="display:none;"></div>
@@ -2694,7 +2697,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.104';
+      const APP_VERSION='1.105';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -4651,16 +4654,23 @@ function updateNotificationSettingUI(){
         if(strip){
           strip.innerHTML='';
           const trainingVals=days.map(d=>getEffectiveTrainingLoad(d)||0);
+          const liftingVals=days.map(d=>getLiftingLoadForDate(d)||0);
+          const otherTrainingVals=trainingVals.map((total,i)=>Math.max(0,total-liftingVals[i]));
           const workVals=days.map(d=>{const w=getWorkStressData(d);return w.score||0;});
           const tMax=Math.max(1,...trainingVals),wMax=Math.max(1,...workVals);
           days.forEach((d,i)=>{
             const day=document.createElement('div');day.className='training-load-day';
             const bars=document.createElement('div');bars.className='training-load-bars';
-            const tb=document.createElement('div');tb.className='training-load-bar training';tb.style.height=(trainingVals[i]?Math.max(8,trainingVals[i]/tMax*100):4)+'%';tb.style.opacity=trainingVals[i]?0.82:0.12;
+            const tb=document.createElement('div');tb.className='training-load-stack'+(trainingVals[i]?'':' empty');tb.style.height=(trainingVals[i]?Math.max(8,trainingVals[i]/tMax*100):4)+'%';
+            if(trainingVals[i]){
+              if(otherTrainingVals[i]){const seg=document.createElement('div');seg.className='training-load-segment other';seg.style.height=(otherTrainingVals[i]/trainingVals[i]*100)+'%';tb.appendChild(seg);}
+              if(liftingVals[i]){const seg=document.createElement('div');seg.className='training-load-segment lifting';seg.style.height=(Math.min(liftingVals[i],trainingVals[i])/trainingVals[i]*100)+'%';tb.appendChild(seg);}
+            }
             const wb=document.createElement('div');wb.className='training-load-bar work';wb.style.height=(workVals[i]?Math.max(8,workVals[i]/wMax*100):4)+'%';wb.style.opacity=workVals[i]?0.78:0.12;
             bars.appendChild(tb);bars.appendChild(wb);
             const label=document.createElement('div');label.className='training-load-day-label';label.textContent=new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'narrow'});
-            day.title=`${d} — training load ${trainingVals[i]||'--'}, work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
+            const fmtLoad=v=>v?Math.round(v*10)/10:'--';
+            day.title=`${d} — training ${fmtLoad(trainingVals[i])} (other ${fmtLoad(otherTrainingVals[i])}, lifting ${fmtLoad(liftingVals[i])}); work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
             day.appendChild(bars);day.appendChild(label);strip.appendChild(day);
           });
         }
