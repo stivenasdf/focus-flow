@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.120 roadmap completion -->
+<!-- Focus::Flow deployment marker: v1.121 clarity and load outlook -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -167,7 +167,7 @@
     .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; padding: 0 0.2rem; }
     .app-title { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-color); opacity: 0.6; letter-spacing: 1.5px; text-transform: uppercase; }
     .header-level-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-color); opacity: 0.65; letter-spacing: 0.04em; white-space: nowrap; }
-    .sync-status-dot { background: none; border: none; font-size: 0.7rem; padding: 0.2rem; cursor: default; color: var(--text-color); opacity: 0.3; transition: color 0.3s ease, opacity 0.3s ease; line-height: 1; }
+    .sync-status-dot { background: none; border: none; font-size: 0.82rem; width:24px; height:24px; padding:0; cursor: help; color: var(--text-color); opacity: 0.3; transition: color 0.3s ease, opacity 0.3s ease; line-height: 1; }
     .sync-status-dot.synced { color: var(--main-color); opacity: 0.9; }
     .sync-status-dot.syncing { color: var(--sub-color); opacity: 0.9; animation: syncPulse 1.6s ease-in-out infinite; }
     .sync-status-dot.error { color: var(--error-color); opacity: 0.9; }
@@ -1319,6 +1319,7 @@
     .recovery-summary-stat { border: 1px solid var(--border-color); border-radius: 0.7rem; padding: 0.55rem 0.65rem; min-width: 0; background: rgba(0,0,0,0.08); }
     .recovery-summary-stat-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.35px; color: var(--text-color); opacity: 0.5; margin-bottom: 0.22rem; font-family: 'JetBrains Mono', monospace; }
     .recovery-summary-stat-value { font-size: 0.78rem; color: var(--text-color); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #summaryCapacity { white-space:normal; overflow:visible; line-height:1.25; }
     #summaryReadiness { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.3; }
     .recovery-summary-stat-value.good { color: #5ec98a; }
     .recovery-summary-stat-value.caution { color: #d4a94a; }
@@ -1428,6 +1429,8 @@
     .wake-plan-chip { border:1px solid var(--border-color); border-radius:.45rem; padding:.25rem .4rem; font-size:.56rem; color:var(--text-color); }
     .wake-override { display:grid; grid-template-columns:auto 120px 110px; gap:.35rem; align-items:center; margin-top:.5rem; }
     .wake-override label { color:var(--text-color); opacity:.65; font-size:.58rem; }
+    .wake-schedule-help { display:grid; grid-template-columns:repeat(3,1fr); gap:.35rem; margin:.45rem 0; }
+    .wake-help-item { color:var(--text-color); border:1px solid var(--border-color); border-radius:.45rem; padding:.35rem .45rem; font-size:.54rem; line-height:1.35; }
     @media(max-width:700px){.wake-schedule-grid{grid-template-columns:repeat(2,1fr)}.wake-override{grid-template-columns:1fr 1fr}.wake-override label{grid-column:1/-1}}
     @media(max-width:650px){.outlook-scenarios{grid-template-columns:1fr;}}
     .training-call-week-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; }
@@ -1699,7 +1702,7 @@
         <div class="settings-section-title">app</div>
         <div class="settings-desc" style="margin-top:0;"><strong>Version 1.116</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.120 completes the recovery roadmap: Body Battery naming, cardio-only chronic load, automatic HR flags, activity-load deduplication, leaner cloud sync, lift classification, and recovery opportunity cues.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.121 clarifies Body Battery, wake scheduling, deload risk, sync/version status, and adds projected safe-load ranges to the 7-day outlook.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -1984,7 +1987,7 @@
       <div class="chart-tooltip" id="chartTooltip" style="display:none;"></div>
       <div class="app-header">
         <div style="display:flex;gap:0.7rem;align-items:center;">
-          <div class="app-title">focus<span>::</span>flow</div>
+          <div class="app-title" id="appTitle" title="Focus::Flow version 1.121">focus<span>::</span>flow</div>
           <div class="header-level-chip" id="headerLevelChip">lv. 1</div>
           <div class="header-xp-ring" id="headerXpRing" title="0 / 15 xp">
             <svg viewBox="0 0 24 24"><circle class="track" cx="12" cy="12" r="10"/><circle class="fill" id="headerXpRingFill" cx="12" cy="12" r="10" stroke-dasharray="62.8" stroke-dashoffset="62.8"/></svg>
@@ -2404,7 +2407,7 @@
             <h2>today at a glance</h2>
             <div class="recovery-daily-summary-grid">
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">recovery signals</div><div class="recovery-summary-stat-value" id="summaryReadiness">--</div></div>
-              <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body battery · est.</div><div class="recovery-summary-stat-value" id="summaryCapacity">--</div></div>
+              <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body battery</div><div class="recovery-summary-stat-value" id="summaryCapacity">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">work stress</div><div class="recovery-summary-stat-value" id="summaryWorkStress">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body fatigue</div><div class="recovery-summary-stat-value" id="summaryBodyFatigue">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">primary training</div><div class="recovery-summary-stat-value" id="summaryTrainingCall">--</div></div>
@@ -2444,7 +2447,7 @@
           </div>
 
           <div class="recovery-card recovery-long-card" id="deloadWatchCard">
-            <div class="recovery-watch-head"><h2>long-term recovery</h2><span class="recovery-watch-badge low" id="deloadWatchBadge">low</span></div>
+            <div class="recovery-watch-head"><h2>long-term recovery</h2><span class="recovery-watch-badge low" id="deloadWatchBadge">deload risk: low</span></div>
             <div class="recovery-signal-grid" id="deloadWatchSignals"></div>
           </div>
 
@@ -2633,8 +2636,9 @@
             </div>
             <div class="wake-schedule">
               <div class="training-call-subheading">weekly wake schedule</div>
+              <div class="wake-schedule-help"><div class="wake-help-item" title="A fixed obligation such as work. The recovery outlook treats this wake time as non-negotiable."><b>Required</b><br>must wake then</div><div class="wake-help-item" title="Your preferred wake time when you have flexibility. It guides sleep planning but can move."><b>Preferred</b><br>your ideal time</div><div class="wake-help-item" title="No wake-time target. Focus::Flow will not plan bedtime backward from a wake time."><b>Open</b><br>no set time</div></div>
               <div class="wake-schedule-grid" id="wakeScheduleGrid"></div>
-              <div class="wake-override"><label>one-off next-day override</label><input type="time" class="search-input" id="wakeOverrideTime"><select class="search-input" id="wakeOverrideType"><option value="">none</option><option value="required">required</option><option value="preferred">preferred</option><option value="open">open</option></select></div>
+              <div class="wake-override"><label title="Temporarily replace tomorrow's normal schedule only. After tomorrow, the weekly schedule applies again.">tomorrow only · replace the normal schedule</label><input type="time" class="search-input" id="wakeOverrideTime" title="Tomorrow's temporary wake time"><select class="search-input" id="wakeOverrideType" title="Choose none to use the normal weekly schedule"><option value="">use normal schedule</option><option value="required">required</option><option value="preferred">preferred</option><option value="open">open</option></select></div>
               <div class="wake-plan-summary" id="wakePlanSummary"></div>
             </div>
             <div class="recovery-acwr-caption" id="sleepDebtCaption"></div>
@@ -2824,7 +2828,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.116';
+      const APP_VERSION='1.121';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -4848,7 +4852,7 @@ function updateNotificationSettingUI(){
         setRecoverySummaryValue('summaryReadiness',readinessText,freshness.score==null?null:freshness.score>=75?'good':freshness.score>=60?'caution':'bad');
         const readinessEl=document.getElementById('summaryReadiness');if(readinessEl&&freshness.score!=null)readinessEl.title=`Composite of ${freshness.dataPoints}/6 available readiness signals. Training Call overrides are evaluated separately.`;
         const capacity=getEstimatedCapacityData(today);
-        setRecoverySummaryValue('summaryCapacity',capacity.score==null?'pending':`${capacity.score}/100 · ${capacity.status}`,capacity.score==null?null:capacity.score>=70?'good':capacity.score>=45?'caution':'bad');
+        setRecoverySummaryValue('summaryCapacity',capacity.score==null?'pending':`${capacity.score}/100`,capacity.score==null?null:capacity.score>=70?'good':capacity.score>=45?'caution':'bad');
         const capacityEl=document.getElementById('summaryCapacity');if(capacityEl)capacityEl.title='Projected reserve after expected/logged work and recommended/logged training. This is a planning estimate, not live physiology.';
         setRecoverySummaryValue('summaryWorkStress',work.score==null?'--':work.status==='red'?'high':work.status==='yellow'?'moderate':'low',work.status==='red'?'bad':work.status==='yellow'?'caution':work.score==null?null:'good');
         setRecoverySummaryValue('summaryBodyFatigue',bodyMax==null?'--':bodyMax>=9?'high':bodyMax>=7?'moderate':'low',bodyMax==null?null:bodyMax>=9?'bad':bodyMax>=7?'caution':'good');
@@ -5158,7 +5162,7 @@ function updateNotificationSettingUI(){
       function shiftClock(time,minutes){if(!time)return'';const [h,m]=time.split(':').map(Number),n=(h*60+m+minutes+1440*3)%1440;return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;}
       function formatClock(time){if(!time)return'open';const [h,m]=time.split(':').map(Number),suffix=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(m).padStart(2,'0')} ${suffix}`;}
       function getWakePlanForDate(dateStr){const d=new Date(dateStr+'T12:00:00'),base=wakeSchedule[d.getDay()]||{type:'open',time:''};if(wakeOverride.date===dateStr&&wakeOverride.type)return{type:wakeOverride.type,time:wakeOverride.type==='open'?'':wakeOverride.time,override:true};return{...base,override:false};}
-      function renderWakeSchedule(){const grid=document.getElementById('wakeScheduleGrid'),summary=document.getElementById('wakePlanSummary');if(!grid||!summary)return;const names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];grid.innerHTML='';wakeSchedule.forEach((x,i)=>{const el=document.createElement('div');el.className='wake-day';el.innerHTML=`<div class="wake-day-name">${names[i]}</div><select class="search-input" data-wake-type="${i}"><option value="required" ${x.type==='required'?'selected':''}>required</option><option value="preferred" ${x.type==='preferred'?'selected':''}>preferred</option><option value="open" ${x.type==='open'?'selected':''}>open</option></select><input type="time" class="search-input" data-wake-time="${i}" value="${x.time||''}" ${x.type==='open'?'disabled':''}>`;grid.appendChild(el);});
+      function renderWakeSchedule(){const grid=document.getElementById('wakeScheduleGrid'),summary=document.getElementById('wakePlanSummary');if(!grid||!summary)return;const names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],mondayFirst=[1,2,3,4,5,6,0];grid.innerHTML='';mondayFirst.forEach(i=>{const x=wakeSchedule[i],el=document.createElement('div');el.className='wake-day';el.innerHTML=`<div class="wake-day-name">${names[i]}</div><select class="search-input" data-wake-type="${i}" title="Required = fixed obligation; Preferred = ideal but flexible; Open = no set wake time"><option value="required" ${x.type==='required'?'selected':''}>required</option><option value="preferred" ${x.type==='preferred'?'selected':''}>preferred</option><option value="open" ${x.type==='open'?'selected':''}>open</option></select><input type="time" class="search-input" data-wake-time="${i}" value="${x.time||''}" title="Wake time for ${names[i]}" ${x.type==='open'?'disabled':''}>`;grid.appendChild(el);});
         const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);const ds=toDateStr(tomorrow);if(wakeOverride.date&&wakeOverride.date<ds)wakeOverride={date:'',type:'',time:''};const typeEl=document.getElementById('wakeOverrideType'),timeEl=document.getElementById('wakeOverrideTime');if(typeEl)typeEl.value=wakeOverride.date===ds?wakeOverride.type:'';if(timeEl)timeEl.value=wakeOverride.date===ds?wakeOverride.time:'';
         const plan=getWakePlanForDate(ds);if(plan.type==='open'||!plan.time)summary.innerHTML='<span class="wake-plan-chip">tomorrow · open wake time</span>';else{const asleep=shiftClock(plan.time,-Math.round(sleepTargetHours*60)),wind=shiftClock(asleep,-45);summary.innerHTML=`<span class="wake-plan-chip">${formatClock(wind)} wind-down</span><span class="wake-plan-chip">${formatClock(asleep)} target asleep</span><span class="wake-plan-chip">${formatClock(plan.time)} ${plan.type} wake${plan.override?' · override':''}</span>`;}}
       function updateSleepCard(){
@@ -5733,19 +5737,20 @@ function updateNotificationSettingUI(){
         return{level,score,known,signals,block,action};
       }
       function renderDeloadWatch(){
-        const badge=document.getElementById('deloadWatchBadge'),el=document.getElementById('deloadWatchSignals');if(!badge||!el)return;const data=getLongTermRecoveryData(getToday());badge.className=`recovery-watch-badge ${data.level}`;badge.textContent=`watch: ${data.level}`;
+        const badge=document.getElementById('deloadWatchBadge'),el=document.getElementById('deloadWatchSignals');if(!badge||!el)return;const data=getLongTermRecoveryData(getToday());badge.className=`recovery-watch-badge ${data.level}`;badge.textContent=`deload risk: ${data.level}`;badge.title='Long-term likelihood that reduced structured training may be useful. Low means no deload pattern is currently detected.';
         const visible=data.signals.filter(s=>s.status&&s.status!=='green').slice(0,6);const rows=visible.length?visible:[{label:'status',value:data.known<3?'building enough history for a long-term view':'no multi-signal concern detected'}];rows.push({label:'suggested response',value:data.block},{label:'action',value:data.action});el.innerHTML=rows.map(s=>`<div class="recovery-signal-item"><div class="recovery-signal-label">${escapeHtml(s.label)}</div><div class="recovery-signal-value">${escapeHtml(s.value)}</div></div>`).join('');
       }
       function renderTrainingOutlook(){
         const current=document.getElementById('outlookCurrent'),optimal=document.getElementById('outlookOptimal');if(!current||!optimal)return;const today=getToday(),call=getTrainingCallData(today),watch=getLongTermRecoveryData(today),health=(biometrics[today]||{}).healthFlag||'none';
+        const loadBase=(getACWR(today)||{}).chronic||null,loadRange=text=>{if(!loadBase)return'load range pending';const mult=/recovery|rest/.test(text)?[0,.35]:/easy/.test(text)?[.4,.75]:/quality/.test(text)?[.9,1.25]:[.65,1.0];return`projected safe load ${Math.round(loadBase*mult[0])}–${Math.round(loadBase*mult[1])}`;};
         const row=(date,callText,why)=>`<div class="outlook-day"><div class="outlook-date">${new Date(date+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</div><div><div class="outlook-call">${escapeHtml(callText)}</div><div class="outlook-why">${escapeHtml(why)}</div></div></div>`;
         const a=[],b=[];for(let i=1;i<=7;i++){const d=new Date(today+'T12:00:00');d.setDate(d.getDate()+i);const ds=toDateStr(d),early=i<=2;
           let cur=watch.level==='high'?'recovery-biased':watch.level==='moderate'?(early?'easy likely':'moderate opportunity: low'):(call.level==='rest'&&early?'easy possible':'moderate opportunity: possible');
           const wakePlan=getWakePlanForDate(ds),wakeNote=wakePlan.type==='required'&&wakePlan.time?` · ${formatClock(wakePlan.time)} required wake`:wakePlan.type==='preferred'&&wakePlan.time?` · ${formatClock(wakePlan.time)} preferred wake`:'';
-          let why=(watch.level==='low'?'depends on daily recovery and accumulated load':`${watch.level} deload watch keeps structured stress conservative`)+wakeNote;
+          let why=(watch.level==='low'?'depends on daily recovery and accumulated load':`${watch.level} deload risk keeps structured stress conservative`)+wakeNote;
           if(health!=='none'){cur='recovery-biased';why='health override must clear before training opportunity returns';}
           const opt=i<=2?'easy / minimum-dose lift possible':i<=4?'moderate aerobic opportunity':'quality opportunity: possible';
-          const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep target is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,why));b.push(row(ds,opt,optWhy));}
+          const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep target is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,`${why} · ${loadRange(cur)}`));b.push(row(ds,opt,`${optWhy} · ${loadRange(opt)}`));}
         current.innerHTML=a.join('');optimal.innerHTML=b.join('');
         const path=document.getElementById('recoveryOpportunityPath');if(path){const f=getFreshnessData(today),body=getBodyFatigueData(today),sleep=getSleepDuration(today),steps=[];if(sleep==null||sleep<sleepTargetHours)steps.push(`sleep target · improves the next opportunity`);if(body.legs>=7)steps.push('easy mobility / leg recovery · supports the next quality day');if(body.systemic>=7)steps.push('reduce optional stress · protect tomorrow’s reserve');if(!steps.length)steps.push('maintain sleep and hydration · keep the next opportunity open');path.innerHTML=steps.slice(0,3).map(x=>`<div class="recovery-path-chip">${escapeHtml(x)}</div>`).join('');}
       }
