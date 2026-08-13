@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.111 ready -->
+<!-- Focus::Flow deployment marker: v1.115 batch -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1370,6 +1370,19 @@
     .training-call-confidence-level.medium { color:#7ba3d0; border-color:#7ba3d0; }
     .training-call-confidence-level.high { color:#5ec98a; border-color:#5ec98a; }
     .training-call-confidence-detail { opacity:.55; }
+    .recovery-long-card { grid-column:1/-1; }
+    .recovery-watch-head { display:flex; justify-content:space-between; align-items:center; gap:.6rem; margin-bottom:.65rem; }
+    .recovery-watch-badge { font:600 .6rem 'JetBrains Mono',monospace; border:1px solid var(--border-color); border-radius:999px; padding:.18rem .48rem; text-transform:uppercase; }
+    .recovery-watch-badge.low { color:#5ec98a; border-color:#5ec98a; }.recovery-watch-badge.moderate { color:#d4a94a;border-color:#d4a94a;}.recovery-watch-badge.high {color:#e05a5a;border-color:#e05a5a;}
+    .recovery-signal-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.45rem; }
+    .recovery-signal-item { border:1px solid var(--border-color); border-radius:.55rem; padding:.48rem .55rem; }
+    .recovery-signal-label { font:500 .55rem 'JetBrains Mono',monospace; opacity:.5; text-transform:uppercase; }
+    .recovery-signal-value { font-size:.64rem; margin-top:.18rem; line-height:1.35; }
+    .outlook-scenarios { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+    .outlook-column { border:1px solid var(--border-color); border-radius:.6rem; padding:.55rem; }
+    .outlook-day { display:grid; grid-template-columns:54px 1fr; gap:.4rem; padding:.35rem 0; border-bottom:1px solid var(--border-color); }
+    .outlook-day:last-child {border-bottom:0}.outlook-date{font:.56rem 'JetBrains Mono',monospace;opacity:.55}.outlook-call{font-size:.62rem}.outlook-why{font-size:.55rem;opacity:.5;margin-top:.1rem}
+    @media(max-width:650px){.outlook-scenarios{grid-template-columns:1fr;}}
     .training-call-week-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; }
     .training-call-week-row span { font-size: 0.6rem; color: var(--text-color); opacity: 0.5; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
     .training-call-week-track { flex: 1; height: 6px; border-radius: 3px; background: rgba(0,0,0,0.2); position: relative; overflow: hidden; }
@@ -1637,9 +1650,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.111</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.115</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.111 adds a three-tap subjective morning readiness check.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.115 adds prediction learning, Deload Watch, recovery blocks, and a conditional 7-day outlook.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2382,6 +2395,16 @@
             </div>
           </div>
 
+          <div class="recovery-card recovery-long-card" id="deloadWatchCard">
+            <div class="recovery-watch-head"><h2>long-term recovery</h2><span class="recovery-watch-badge low" id="deloadWatchBadge">low</span></div>
+            <div class="recovery-signal-grid" id="deloadWatchSignals"></div>
+          </div>
+
+          <div class="recovery-card recovery-long-card" id="trainingOutlookCard">
+            <div class="recovery-watch-head"><h2>7-day training outlook</h2><span class="training-call-confidence-detail">possibilities, not prescriptions</span></div>
+            <div class="outlook-scenarios"><div class="outlook-column"><div class="training-call-subheading">current trend</div><div id="outlookCurrent"></div></div><div class="outlook-column"><div class="training-call-subheading">if recovery improves</div><div id="outlookOptimal"></div></div></div>
+          </div>
+
           <div class="recovery-card recovery-entry-card">
             <div class="recovery-entry-header-row">
               <div>
@@ -2721,7 +2744,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.111';
+      const APP_VERSION='1.115';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -2741,6 +2764,7 @@
       let biometrics={};
       let importedActivities=[];
       let sessionResponses={};
+      let trainingCallSnapshots={};
       let intervalsBestRecords={run:{},ride:{},lastSyncAt:null};
       let intervalsLastSyncAt=null;
       let intervalsSyncInFlight=false;
@@ -2895,7 +2919,7 @@
       let saveFailureWarned=false;
       function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
       const buildStateSnapshotCore=buildStateSnapshot;
-      buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;return state;};
+      buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.trainingCallSnapshots=trainingCallSnapshots;return state;};
       function saveData(){const d=buildStateSnapshot();try{localStorage.setItem('pomodoro-cyberspace-data',JSON.stringify(d));saveFailureWarned=false;}catch(e){if(!saveFailureWarned){saveFailureWarned=true;showToast('⚠ save failed — storage may be full');}}scheduleCloudPush();}
 
       function loadData(sourceData){try{const r=sourceData||JSON.parse(localStorage.getItem('pomodoro-cyberspace-data')||'null');if(!r)return;const d=r,today=getToday();if(d.todayDate!==today){
@@ -2907,6 +2931,7 @@
         todayFocusMinutes=0;todaySessions=0;hourlyFocus={};if(d.lastActiveDate){const ld=new Date(d.lastActiveDate),td=new Date(today),df=Math.floor((td-ld)/(1000*60*60*24));if(df===1)streakDays=(d.streakDays||0)+1;else if(df===0)streakDays=d.streakDays||0;else streakDays=1;}else streakDays=1;}else{todayFocusMinutes=d.todayFocusMinutes||0;todaySessions=d.todaySessions||0;streakDays=d.streakDays||0;hourlyFocus=d.hourlyFocus||{};}
       totalFocusMinutes=d.totalFocusMinutes||0;sessionsCompleted=d.sessionsCompleted||0;tasksCompletedCount=d.tasksCompletedCount||0;taskNameFrequency=d.taskNameFrequency||{};taskLastUsed=d.taskLastUsed||{};lastActiveDate=d.lastActiveDate||null;dailyHistory=d.dailyHistory||{};taskHabitHistory=d.taskHabitHistory||{};librarySort=d.librarySort||'frequent';tasks=d.tasks||[];taskTimeLog=d.taskTimeLog||{};selectedTaskForGraph=d.selectedTaskForGraph||null;soundEnabled=d.soundEnabled!==undefined?d.soundEnabled:true;currentTheme=d.currentTheme||'cyberspace';bgHabits=d.bgHabits||[];totalXP=d.totalXP!==undefined?d.totalXP:(d.totalFocusMinutes||0);dailyGoalBonusDate=d.dailyGoalBonusDate||null;focusPeriod=d.focusPeriod||7;habitCheckPeriod=d.habitCheckPeriod||84;dailyGoal=d.dailyGoal||90;selectedHabitForGraph=d.selectedHabitForGraph||null;focusMode=(d.focusMode==='nudge')?'pause':(d.focusMode||'auto');habitGraphSort=d.habitGraphSort||'frequent';activePanel=d.activePanel||'tasks';notificationsEnabled=d.notificationsEnabled!==undefined?d.notificationsEnabled:false;sessionLog=d.sessionLog||[];lastSessionLogId=d.lastSessionLogId||null;estimateAccuracyLog=d.estimateAccuracyLog||[];tasksAbandonedCount=d.tasksAbandonedCount||0;taskFilter=d.taskFilter||'active';chartOffset=d.chartOffset||0;heatmapOffset=d.heatmapOffset||0;habitCheckOffset=d.habitCheckOffset||0;overviewOffset=d.overviewOffset||0;hasSeenWelcome=d.hasSeenWelcome!==undefined?d.hasSeenWelcome:false;taskSort=d.taskSort||'manual';recurringTasks=d.recurringTasks||{};lastRecapWeek=d.lastRecapWeek||null;taskWeeklyGoal=d.taskWeeklyGoal||10;habitOrderSort=d.habitOrderSort||'manual';xpFromFocus=d.xpFromFocus||0;xpFromTasks=d.xpFromTasks||0;xpFromHabits=d.xpFromHabits||0;xpFromGoals=d.xpFromGoals||0;xpFromChains=d.xpFromChains||0;notepadContent=d.notepadContent||'';notepadPinned=d.notepadPinned||false;notepadPosX=null;notepadPosY=null;todayHabitSort=d.todayHabitSort||'manual';todoSort=d.todoSort||'manual';overviewSort=d.overviewSort||'manual';adaptiveGoalEnabled=d.adaptiveGoalEnabled||false;adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled!==undefined?d.adaptiveFocusGoalEnabled:true;todayDueSort=d.todayDueSort||'date';todayPrioritySort=d.todayPrioritySort||'priority';goals=d.goals||[];taskSchedule=d.taskSchedule||{};scheduleDate=d.scheduleDate||null;viewMode=d.viewMode||'auto';collapsedCardKeys=new Set(d.collapsedCardKeys||[]);todayHubTab=d.todayHubTab||'current';completionEvents=d.completionEvents||[];biometrics=d.biometrics||{};importedActivities=d.importedActivities||[];intervalsBestRecords=d.intervalsBestRecords||{run:{},ride:{},runRanks:{},rideRanks:{},lastSyncAt:null};intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsLastSyncAt=d.intervalsLastSyncAt||null;recoveryChartPeriod=d.recoveryChartPeriod||14;recoveryChartMetric=d.recoveryChartMetric||'freshness';sleepTargetHours=d.sleepTargetHours||8;recoveryChartOffset=d.recoveryChartOffset||0;breakOvertimeLog=d.breakOvertimeLog||[];books=d.books||[];bookStatusFilter=d.bookStatusFilter||'reading';hasSeenGoalsTutorial=d.hasSeenGoalsTutorial!==undefined?d.hasSeenGoalsTutorial:false;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}else{liftingLifts=[];}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;else liftingSequencePosition=0;liftingCycleNumber=d.liftingCycleNumber!==undefined?d.liftingCycleNumber:1;liftingHistory=d.liftingHistory||[];liftingPendingLiftIds=d.liftingPendingLiftIds||[];liftingWarmupChecks=d.liftingWarmupChecks||{};dailyCheckins=d.dailyCheckins||{};currentTaskId=d.currentTaskId!==undefined?d.currentTaskId:null;taskTimeLimits=d.taskTimeLimits||{};taskTimerRemaining=d.taskTimerRemaining||{};
       sessionResponses=d.sessionResponses||{};
+      trainingCallSnapshots=d.trainingCallSnapshots||{};
       restoredActiveTimer=false;
       if(!sourceData&&d.activeTimer){
         const at=d.activeTimer;
@@ -3363,8 +3388,9 @@
         if(r.feel)chips.push(`<span class="activity-response-chip">felt ${escapeHtml({easier:'easier than expected',right:'about right',harder:'harder than expected'}[r.feel]||r.feel)}</span>`);
         if(r.physiology&&r.physiology!=='normal')chips.push(`<span class="activity-response-chip ${alert?'alert':''}">${escapeHtml({high:'HR unusually high',low:'HR unusually low',sensor:'sensor questionable'}[r.physiology]||r.physiology)}</span>`);
         if(r.outcome&&r.outcome!=='completed')chips.push(`<span class="activity-response-chip">${escapeHtml(r.outcome==='shortened'?'shortened':'stopped early')}</span>`);
+        if(r.predictedLevel)chips.push(`<span class="activity-response-chip">call was ${escapeHtml(r.predictedLevel)}</span>`);
         const id=encodeURIComponent(String(a.id));
-        return `<div class="activity-response-summary">${chips.join('')}${!has?'<span class="activity-response-chip">how did it go?</span>':''}<button class="activity-response-toggle" data-response-id="${id}">${has?'edit response':'add response'}</button></div><div class="activity-response-form" data-response-form="${id}"><label>session feel<select data-field="feel"><option value="">choose…</option>${activityResponseOption('easier','easier than expected',r.feel)}${activityResponseOption('right','about right',r.feel)}${activityResponseOption('harder','harder than expected',r.feel)}</select></label><label>physiological response<select data-field="physiology"><option value="">choose…</option>${activityResponseOption('normal','normal',r.physiology)}${activityResponseOption('high','HR unusually high',r.physiology)}${activityResponseOption('low','HR unusually low',r.physiology)}${activityResponseOption('sensor','sensor questionable',r.physiology)}</select></label><label>outcome<select data-field="outcome">${activityResponseOption('completed','completed',r.outcome||'completed')}${activityResponseOption('shortened','shortened',r.outcome)}${activityResponseOption('stopped','stopped early',r.outcome)}</select></label><label>possible reason<select data-field="reason"><option value="">unknown / not sure</option>${[['normal_high','felt normal, HR just high'],['heat','heat / humidity'],['hydration','dehydrated'],['sleep','poor sleep'],['caffeine','caffeine / stimulant'],['illness','illness coming on'],['stress','stressful day'],['pain','pain / soreness'],['sensor','sensor seemed wrong'],['other','other']].map(([v,l])=>activityResponseOption(v,l,r.reason)).join('')}</select></label><button class="btn small activity-response-save" data-response-id="${id}">save session response</button></div>`;
+        return `<div class="activity-response-summary">${chips.join('')}${!has?'<span class="activity-response-chip">how did it go?</span>':''}<button class="activity-response-toggle" data-response-id="${id}">${has?'edit response':'add response'}</button></div><div class="activity-response-form" data-response-form="${id}"><label>session feel<select data-field="feel"><option value="">choose…</option>${activityResponseOption('easier','easier than expected',r.feel)}${activityResponseOption('right','about right',r.feel)}${activityResponseOption('harder','harder than expected',r.feel)}</select></label><label>physiological response<select data-field="physiology"><option value="">choose…</option>${activityResponseOption('normal','normal',r.physiology)}${activityResponseOption('high','HR unusually high',r.physiology)}${activityResponseOption('low','HR unusually low',r.physiology)}${activityResponseOption('sensor','sensor questionable',r.physiology)}</select></label><label>outcome<select data-field="outcome">${activityResponseOption('completed','completed',r.outcome||'completed')}${activityResponseOption('shortened','shortened',r.outcome)}${activityResponseOption('stopped','stopped early',r.outcome)}</select></label><label>possible anomaly reason<select data-field="reason"><option value="">unknown / not sure</option>${[['normal_high','felt normal, HR just high'],['heat','heat / humidity'],['hydration','dehydrated'],['sleep','poor sleep'],['caffeine','caffeine / stimulant'],['illness','illness coming on'],['stress','stressful day'],['pain','pain / soreness'],['sensor','sensor seemed wrong'],['other','other']].map(([v,l])=>activityResponseOption(v,l,r.reason)).join('')}</select></label><label style="grid-column:1/-1;">if the call missed, what changed?<select data-field="mismatchReason"><option value="">no mismatch / unknown</option>${[['sleep','sleep felt worse than its score'],['work','work was harder than expected'],['body','body deteriorated during the day'],['illness','illness / stress'],['fueling','fueling / hydration'],['pain','pain / soreness'],['better','felt better than the caution suggested'],['other','other']].map(([v,l])=>activityResponseOption(v,l,r.mismatchReason)).join('')}</select></label><button class="btn small activity-response-save" data-response-id="${id}">save session response</button></div>`;
       }
       function renderActivityRow(a){
         const metrics=[];metrics.push(formatActivityDuration(a.moving_time));if(a.distance)metrics.push(`${(a.distance/1000).toFixed(a.distance>=10000?1:2)} km`);if(/run/i.test(a.type)){const pace=formatRunPace(a);if(pace)metrics.push(pace);}else if(a.average_speed)metrics.push(`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate!=null)metrics.push(`HR ${Math.round(a.average_heartrate)} avg`);if(a.max_heartrate!=null)metrics.push(`${Math.round(a.max_heartrate)} max`);if(a.average_watts!=null)metrics.push(`${Math.round(a.average_watts)} W avg`);if(a.weighted_watts!=null)metrics.push(`${Math.round(a.weighted_watts)} W NP`);if(a.training_load!=null)metrics.push(`load ${Math.round(a.training_load)}`);if(a.session_rpe!=null)metrics.push(`RPE ${Math.round(a.session_rpe)}/10`);if(a.decoupling!=null)metrics.push(`decouple ${a.decoupling.toFixed(1)}%`);
@@ -3372,7 +3398,7 @@
       }
       function bindActivityResponseControls(list){
         list.querySelectorAll('.activity-response-toggle').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`);if(form)form.classList.toggle('open');}));
-        list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'';sessionResponses[id]={activityId:id,activityDate:String(activity?.start_date_local||'').slice(0,10),activityType:activity?.type||'',feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();showToast('session response saved');}));
+        list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),activityDate=String(activity?.start_date_local||'').slice(0,10),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'',previous=sessionResponses[id]||{};let predictedLevel=previous.predictedLevel||trainingCallSnapshots[activityDate]?.level||'';if(!predictedLevel&&activityDate){try{predictedLevel=getTrainingCallData(activityDate).level;}catch(e){}}sessionResponses[id]={activityId:id,activityDate,activityType:activity?.type||'',predictedLevel,feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),mismatchReason:value('mismatchReason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();renderDeloadWatch();renderTrainingOutlook();showToast('session response saved');}));
       }
       function renderActivitiesPanel(){
         const key=getIntervalsApiKey(),dot=document.getElementById('intervalsStatusDot'),txt=document.getElementById('intervalsStatusText'),form=document.getElementById('intervalsConnectForm'),actions=document.getElementById('intervalsConnectedActions');
@@ -4090,6 +4116,9 @@ function updateNotificationSettingUI(){
         const ref=new Date(referenceDateStr+'T12:00:00');
         return Object.values(sessionResponses||{}).filter(r=>r&&['high','low'].includes(r.physiology)&&r.reason!=='sensor'&&r.activityDate&&r.activityDate<referenceDateStr).map(r=>({...r,daysAgo:Math.round((ref-new Date(r.activityDate+'T12:00:00'))/86400000)})).filter(r=>r.daysAgo>=1&&r.daysAgo<=2).sort((a,b)=>String(b.activityDate).localeCompare(String(a.activityDate)))[0]||null;
       }
+      function getLearnedMismatchPattern(referenceDateStr){
+        const recent=Object.values(sessionResponses||{}).filter(r=>r&&r.activityDate<referenceDateStr&&r.mismatchReason).sort((a,b)=>String(b.activityDate).localeCompare(String(a.activityDate))).slice(0,10),counts={};recent.forEach(r=>counts[r.mismatchReason]=(counts[r.mismatchReason]||0)+1);const ranked=Object.entries(counts).sort((a,b)=>b[1]-a[1]);if(!ranked.length||ranked[0][1]<2)return null;return{reason:ranked[0][0],count:ranked[0][1],total:recent.length};
+      }
       function getTrainingCallData(referenceDateStr){
         const refDate=new Date(referenceDateStr+'T00:00:00');
         const dayOfWeek=refDate.getDay();
@@ -4168,6 +4197,9 @@ function updateNotificationSettingUI(){
         const sessionAnomaly=getRecentSessionAnomaly(referenceDateStr);
         if(sessionAnomaly&&tier>1){tier=1;reasons.push(`${sessionAnomaly.daysAgo===1?'yesterday’s':'a recent'} session had an unusual cardiovascular response — monitoring it before another harder effort`);}
         factors.push({label:'cardiovascular response',status:sessionAnomaly?'yellow':null,detail:sessionAnomaly?`${sessionAnomaly.physiology==='high'?'unusually high':'unusually low'} HR · ${sessionAnomaly.outcome==='stopped'?'stopped early':sessionAnomaly.outcome||'outcome not logged'}`:'no recent anomaly reported',explain:'keeps how the session felt separate from what your cardiovascular system did. one reported anomaly can hold back harder training briefly, but it does not force a rest day or diagnose a cause.'});
+        const learnedPattern=getLearnedMismatchPattern(referenceDateStr),patternLabels={sleep:'sleep has under-predicted difficulty',work:'work has under-predicted difficulty',body:'later-day body fatigue matters',illness:'illness / stress has caused misses',fueling:'fueling / hydration has caused misses',pain:'pain / soreness has caused misses',better:'caution has sometimes been too conservative',other:'a repeated mismatch is emerging'};
+        if(learnedPattern&&learnedPattern.reason!=='better'&&tier>1){tier=1;reasons.push(`${patternLabels[learnedPattern.reason]} in ${learnedPattern.count} recent responses — applying a modest conservative adjustment`);}
+        factors.push({label:'learned response',status:learnedPattern?(learnedPattern.reason==='better'?'green':'yellow'):null,detail:learnedPattern?`${patternLabels[learnedPattern.reason]} · ${learnedPattern.count}×`:'no repeated mismatch yet',explain:'only repeated explanations change weighting. a single mismatch is recorded but does not teach the model a new rule by itself.'});
         const mediumCount7d=getMediumCountLast7Days(referenceDateStr);
         if(tier===2&&mediumCount7d>=mediumCap7d){tier=1;reasons.push(`already ${mediumCount7d} medium workouts in the last 7 days — your cap is ${mediumCap7d}`);}
         factors.push({label:'medium workouts (7d)',status:mediumCount7d>=mediumCap7d?'yellow':'green',detail:`${mediumCount7d}/${mediumCap7d} in the last 7 days`,explain:`how many medium-intensity days you've done in the last 7 — capped at ${mediumCap7d}, since medium days are meant to stay a minority of your training, not the default.`});
@@ -4239,6 +4271,7 @@ function updateNotificationSettingUI(){
         const weekFill=document.getElementById('trainingCallWeekFill');
         if(!badge||!reasonsEl||!weekText||!weekFill)return;
         const data=getTrainingCallData(getToday());
+        const snapshotDate=getToday();if(!trainingCallSnapshots[snapshotDate])trainingCallSnapshots[snapshotDate]={level:data.level,reasons:(data.reasons||[]).slice(0,3),capturedAt:new Date().toISOString()};
         badge.className='training-call-badge '+data.level;
         badge.textContent=data.level==='test'?'fitness test':data.level;
         reasonsEl.innerHTML='';
@@ -5503,6 +5536,44 @@ function updateNotificationSettingUI(){
         renderLiftingHistory();
         renderLiftingRecords();
       }
+      function getLongTermRecoveryData(referenceDateStr){
+        const ref=new Date(referenceDateStr+'T12:00:00'),signals=[];
+        const debt=getSleepDebt(referenceDateStr,14);
+        signals.push({label:'sleep debt',status:debt&&debt.daysWithData>=5?(debt.hours>=10?'red':debt.hours>=5?'yellow':'green'):null,value:debt?`${debt.hours.toFixed(1)}h across ${debt.daysWithData} nights`:'not enough sleep windows'});
+        let hrvSuppressed=0,hrvKnown=0,fatigueHigh=0,fatigueKnown=0,combined=[];
+        for(let i=0;i<14;i++){const d=new Date(ref);d.setDate(d.getDate()-i);const ds=toDateStr(d),rec=biometrics[ds]||{},hs=getHrvStatus(ds);if(hs){hrvKnown++;if(hs!=='green')hrvSuppressed++;}const vals=[rec.systemicFatigue,rec.legFatigue,rec.backFatigue,rec.upperFatigue].filter(v=>v!=null).map(Number);if(vals.length){fatigueKnown++;if(Math.max(...vals)>=7)fatigueHigh++;}const training=getEffectiveTrainingLoad(ds)||0,work=getWorkStressData(ds).score||0;if(training||work)combined.push({i,value:training+work});}
+        signals.push({label:'HRV',status:hrvKnown>=5?(hrvSuppressed>=6?'red':hrvSuppressed>=3?'yellow':'green'):null,value:hrvKnown?`${hrvSuppressed}/${hrvKnown} recent readings suppressed`:'not enough baseline data'});
+        signals.push({label:'body fatigue',status:fatigueKnown>=5?(fatigueHigh>=5?'red':fatigueHigh>=3?'yellow':'green'):null,value:fatigueKnown?`${fatigueHigh}/${fatigueKnown} logged days high`:'not enough check-ins'});
+        const responses=Object.values(sessionResponses||{}).filter(r=>r&&r.activityDate&&Math.round((ref-new Date(r.activityDate+'T12:00:00'))/86400000)>=0&&Math.round((ref-new Date(r.activityDate+'T12:00:00'))/86400000)<=21);
+        const harder=responses.filter(r=>r.feel==='harder').length,anomalies=responses.filter(r=>['high','low'].includes(r.physiology)&&r.reason!=='sensor').length,misses=responses.filter(r=>r.mismatchReason).length;
+        signals.push({label:'session response',status:responses.length>=3?(harder>=3?'red':harder>=2?'yellow':'green'):null,value:responses.length?`${harder}/${responses.length} harder than expected`:'no responses yet'});
+        signals.push({label:'cardio anomalies',status:anomalies>=2?'red':anomalies===1?'yellow':responses.length?'green':null,value:responses.length?`${anomalies} reported in 21 days`:'no responses yet'});
+        const recent=combined.filter(x=>x.i<7).map(x=>x.value),older=combined.filter(x=>x.i>=7).map(x=>x.value),avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0,recentAvg=avg(recent),olderAvg=avg(older),loadRatio=olderAvg?recentAvg/olderAvg:null;
+        signals.push({label:'work + training',status:recent.length>=4&&older.length>=4?(loadRatio>=1.35?'red':loadRatio>=1.15?'yellow':'green'):null,value:loadRatio?`${Math.round((loadRatio-1)*100)}% vs prior week`:'building combined-load history'});
+        signals.push({label:'prediction misses',status:responses.length>=3?(misses>=3?'red':misses>=1?'yellow':'green'):null,value:responses.length?`${misses}/${responses.length} explained mismatches`:'no responses yet'});
+        const score=signals.reduce((n,s)=>n+(s.status==='red'?2:s.status==='yellow'?1:0),0),known=signals.filter(s=>s.status).length;
+        const level=known<3?'low':score>=6?'high':score>=3?'moderate':'low';
+        const evidenceDates=[...Object.keys(biometrics||{}),...responses.map(r=>r.activityDate)].filter(Boolean).sort(),historySpan=evidenceDates.length?Math.round((ref-new Date(evidenceDates[0]+'T12:00:00'))/86400000)+1:0;
+        let block='normal training',action='No longer-term downshift indicated.';
+        if(level==='moderate'){block='deload · 4–7 days';action='Reduce structured volume and progression pressure.';}
+        if(level==='high'){block=score>=10&&historySpan>=42?'transition block · 2–3 weeks':score>=8&&responses.length>=3?'recovery block · 7–14 days':'deload · 4–7 days';action='Sharply reduce structured stress; work remains the fixed demand.';}
+        return{level,score,known,signals,block,action};
+      }
+      function renderDeloadWatch(){
+        const badge=document.getElementById('deloadWatchBadge'),el=document.getElementById('deloadWatchSignals');if(!badge||!el)return;const data=getLongTermRecoveryData(getToday());badge.className=`recovery-watch-badge ${data.level}`;badge.textContent=`watch: ${data.level}`;
+        const visible=data.signals.filter(s=>s.status&&s.status!=='green').slice(0,6);const rows=visible.length?visible:[{label:'status',value:data.known<3?'building enough history for a long-term view':'no multi-signal concern detected'}];rows.push({label:'suggested response',value:data.block},{label:'action',value:data.action});el.innerHTML=rows.map(s=>`<div class="recovery-signal-item"><div class="recovery-signal-label">${escapeHtml(s.label)}</div><div class="recovery-signal-value">${escapeHtml(s.value)}</div></div>`).join('');
+      }
+      function renderTrainingOutlook(){
+        const current=document.getElementById('outlookCurrent'),optimal=document.getElementById('outlookOptimal');if(!current||!optimal)return;const today=getToday(),call=getTrainingCallData(today),watch=getLongTermRecoveryData(today),health=(biometrics[today]||{}).healthFlag||'none';
+        const row=(date,callText,why)=>`<div class="outlook-day"><div class="outlook-date">${new Date(date+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</div><div><div class="outlook-call">${escapeHtml(callText)}</div><div class="outlook-why">${escapeHtml(why)}</div></div></div>`;
+        const a=[],b=[];for(let i=1;i<=7;i++){const d=new Date(today+'T12:00:00');d.setDate(d.getDate()+i);const ds=toDateStr(d),early=i<=2;
+          let cur=watch.level==='high'?'recovery-biased':watch.level==='moderate'?(early?'easy likely':'moderate opportunity: low'):(call.level==='rest'&&early?'easy possible':'moderate opportunity: possible');
+          let why=watch.level==='low'?'depends on daily recovery and accumulated load':`${watch.level} deload watch keeps structured stress conservative`;
+          if(health!=='none'){cur='recovery-biased';why='health override must clear before training opportunity returns';}
+          const opt=i<=2?'easy / minimum-dose lift possible':i<=4?'moderate aerobic opportunity':'quality opportunity: possible';
+          const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep target is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,why));b.push(row(ds,opt,optWhy));}
+        current.innerHTML=a.join('');optimal.innerHTML=b.join('');
+      }
       function renderRecoveryTab(){
         const dateInput=document.getElementById('recoveryDateInput');
         if(dateInput){dateInput.max=getToday();if(!dateInput.value)dateInput.value=getToday();}
@@ -5517,6 +5588,8 @@ function updateNotificationSettingUI(){
         updateHrvDot();
         updateSleepCard();
         updateTrainingCallCard();
+        renderDeloadWatch();
+        renderTrainingOutlook();
         updateRecoveryColdStart();
         drawRecoveryChart();
       }
