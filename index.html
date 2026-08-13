@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.123 Recovery guide -->
+<!-- Focus::Flow deployment marker: v1.124 sleep plan visibility -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1713,7 +1713,7 @@
         <div class="settings-section-title">app</div>
         <div class="settings-desc" style="margin-top:0;"><strong>Version 1.116</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.123 adds a complete Recovery explainer and flowchart, moves the collapsed daily entry upward, and removes obsolete timer navigation.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.124 surfaces tonight's wind-down and target-asleep plan, alongside the Recovery explainer and improved daily-entry layout.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2019,7 +2019,7 @@
       <div class="chart-tooltip" id="chartTooltip" style="display:none;"></div>
       <div class="app-header">
         <div style="display:flex;gap:0.7rem;align-items:center;">
-          <div class="app-title" id="appTitle" title="Focus::Flow version 1.123">focus<span>::</span>flow</div>
+          <div class="app-title" id="appTitle" title="Focus::Flow version 1.124">focus<span>::</span>flow</div>
           <div class="header-level-chip" id="headerLevelChip">lv. 1</div>
           <div class="header-xp-ring" id="headerXpRing" title="0 / 15 xp">
             <svg viewBox="0 0 24 24"><circle class="track" cx="12" cy="12" r="10"/><circle class="fill" id="headerXpRingFill" cx="12" cy="12" r="10" stroke-dasharray="62.8" stroke-dashoffset="62.8"/></svg>
@@ -2443,6 +2443,8 @@
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body fatigue</div><div class="recovery-summary-stat-value" id="summaryBodyFatigue">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">primary training</div><div class="recovery-summary-stat-value" id="summaryTrainingCall">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">lifting</div><div class="recovery-summary-stat-value" id="summaryLifting">--</div></div>
+              <div class="recovery-summary-stat" title="When to begin settling down tonight, 45 minutes before your target asleep time."><div class="recovery-summary-stat-label">wind-down tonight</div><div class="recovery-summary-stat-value" id="summaryWindDown">--</div></div>
+              <div class="recovery-summary-stat" title="Calculated backward from tomorrow's wake plan using your nightly sleep target."><div class="recovery-summary-stat-label">target asleep</div><div class="recovery-summary-stat-value" id="summaryTargetAsleep">--</div></div>
             </div>
             <div class="recovery-summary-guidance" id="summaryGuidance">log today's recovery and work data to build the daily picture.</div>
           </div>
@@ -2859,7 +2861,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.123';
+      const APP_VERSION='1.124';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -4886,6 +4888,20 @@ function updateNotificationSettingUI(){
         const capacity=getEstimatedCapacityData(today);
         setRecoverySummaryValue('summaryCapacity',capacity.score==null?'pending':`${capacity.score}/100`,capacity.score==null?null:capacity.score>=70?'good':capacity.score>=45?'caution':'bad');
         const capacityEl=document.getElementById('summaryCapacity');if(capacityEl)capacityEl.title='Projected reserve after expected/logged work and recommended/logged training. This is a planning estimate, not live physiology.';
+        const tomorrowDate=new Date(today+'T00:00:00');tomorrowDate.setDate(tomorrowDate.getDate()+1);
+        const tomorrowPlan=getWakePlanForDate(toDateStr(tomorrowDate));
+        if(tomorrowPlan.type==='open'||!tomorrowPlan.time){
+          setRecoverySummaryValue('summaryWindDown','open',null);
+          setRecoverySummaryValue('summaryTargetAsleep','open',null);
+        }else{
+          const targetAsleep=shiftClock(tomorrowPlan.time,-Math.round(sleepTargetHours*60));
+          const windDown=shiftClock(targetAsleep,-45);
+          setRecoverySummaryValue('summaryWindDown',formatClock(windDown),'good');
+          setRecoverySummaryValue('summaryTargetAsleep',formatClock(targetAsleep),'good');
+          const windEl=document.getElementById('summaryWindDown'),asleepEl=document.getElementById('summaryTargetAsleep');
+          if(windEl)windEl.title=`45 minutes before target asleep · tomorrow's ${tomorrowPlan.type} wake is ${formatClock(tomorrowPlan.time)}`;
+          if(asleepEl)asleepEl.title=`Based on a ${sleepTargetHours} hour sleep target before tomorrow's ${formatClock(tomorrowPlan.time)} wake`;
+        }
         setRecoverySummaryValue('summaryWorkStress',work.score==null?'--':work.status==='red'?'high':work.status==='yellow'?'moderate':'low',work.status==='red'?'bad':work.status==='yellow'?'caution':work.score==null?null:'good');
         setRecoverySummaryValue('summaryBodyFatigue',bodyMax==null?'--':bodyMax>=9?'high':bodyMax>=7?'moderate':'low',bodyMax==null?null:bodyMax>=9?'bad':bodyMax>=7?'caution':'good');
         const level=call&&call.level?call.level:'--';
