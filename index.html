@@ -1363,6 +1363,12 @@
     .training-call-info { flex: 1; min-width: 0; }
     .training-call-reasons { font-size: 0.68rem; color: var(--text-color); opacity: 0.75; line-height: 1.5; }
     .training-call-reasons div { margin-bottom: 0.15rem; }
+    .training-call-confidence { display:flex; align-items:center; gap:.45rem; margin:.4rem 0 .15rem; font-family:'JetBrains Mono',monospace; font-size:.56rem; color:var(--text-color); }
+    .training-call-confidence-level { border:1px solid var(--border-color); border-radius:999px; padding:.15rem .42rem; text-transform:uppercase; letter-spacing:.35px; }
+    .training-call-confidence-level.low { color:#d4a94a; border-color:#d4a94a; }
+    .training-call-confidence-level.medium { color:#7ba3d0; border-color:#7ba3d0; }
+    .training-call-confidence-level.high { color:#5ec98a; border-color:#5ec98a; }
+    .training-call-confidence-detail { opacity:.55; }
     .training-call-week-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; }
     .training-call-week-row span { font-size: 0.6rem; color: var(--text-color); opacity: 0.5; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
     .training-call-week-track { flex: 1; height: 6px; border-radius: 3px; background: rgba(0,0,0,0.2); position: relative; overflow: hidden; }
@@ -1630,9 +1636,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.108</strong></div>
+        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.109</strong></div>
         <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.108 adds compact session-response and cardiovascular-anomaly feedback.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.109 shows how much personal history supports each Training Call.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2351,6 +2357,7 @@
               <div class="training-call-badge" id="trainingCallBadge">--</div>
               <div class="training-call-info">
                 <div class="training-call-reasons" id="trainingCallReasons"></div>
+                <div class="training-call-confidence" id="trainingCallConfidence"></div>
                 <div class="training-call-factors" id="trainingCallFactors"></div>
                 <div class="training-call-lifting-suggestion" id="trainingCallLiftingSuggestion" style="display:none;"></div>
                 <div class="training-call-lifting-suggestion" id="trainingCallRaceWindow" style="display:none;"></div>
@@ -2706,7 +2713,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.108';
+      const APP_VERSION='1.109';
       const APP_RELEASE_DATE='2026-08-12';
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
@@ -4188,6 +4195,22 @@ function updateNotificationSettingUI(){
         const p=recommendation.prescription;
         return{status:trainingCallLevel==='medium'?'ok':'good',text:`lift: ${recommendation.lift.name} — ${p.sets} × ${p.repLabel} @ ${p.weight}lb, stop with ${p.targetRir}+ RIR. one useful exposure is enough.`};
       }
+      function getTrainingCallConfidence(referenceDateStr){
+        const recoveryKeys=['sleep','hrv','rhr','recovery','rpe','systemicFatigue','legFatigue','backFatigue','upperFatigue'];
+        const recoveryDates=Object.keys(biometrics||{}).filter(d=>d<=referenceDateStr&&recoveryKeys.some(k=>biometrics[d]&&biometrics[d][k]!=null));
+        const workDates=Object.keys(biometrics||{}).filter(d=>d<=referenceDateStr&&biometrics[d]&&(biometrics[d].workHours!=null||biometrics[d].workEffort!=null));
+        const activities=(importedActivities||[]).filter(a=>String(a.start_date_local||'').slice(0,10)<=referenceDateStr);
+        const lifts=(liftingHistory||[]).filter(h=>h&&h.kind!=='regression'&&h.date<=referenceDateStr);
+        const responses=Object.values(sessionResponses||{}).filter(r=>r&&r.activityDate<=referenceDateStr&&r.updatedAt);
+        const dated=[...recoveryDates,...workDates,...activities.map(a=>String(a.start_date_local||'').slice(0,10)),...lifts.map(h=>h.date)].filter(Boolean).sort();
+        const spanDays=dated.length?Math.max(1,Math.round((new Date(referenceDateStr+'T12:00:00')-new Date(dated[0]+'T12:00:00'))/86400000)+1):0;
+        const sessionCount=activities.length+lifts.length;
+        let level='low',detail='limited personal history';
+        if(spanDays>=42&&recoveryDates.length>=30&&sessionCount>=20&&responses.length>=5){level='high';detail='established recovery and session-response history';}
+        else if(spanDays>=14&&recoveryDates.length>=7&&sessionCount>=5){level='medium';detail='personal patterns are beginning to form';}
+        const evidence=`${recoveryDates.length} recovery day${recoveryDates.length===1?'':'s'} · ${sessionCount} session${sessionCount===1?'':'s'} · ${responses.length} response${responses.length===1?'':'s'}`;
+        return{level,detail,evidence,spanDays};
+      }
       function updateTrainingCallCard(){
         const badge=document.getElementById('trainingCallBadge');
         const reasonsEl=document.getElementById('trainingCallReasons');
@@ -4199,6 +4222,8 @@ function updateNotificationSettingUI(){
         badge.textContent=data.level==='test'?'fitness test':data.level;
         reasonsEl.innerHTML='';
         data.reasons.forEach(r=>{const div=document.createElement('div');div.textContent=r;reasonsEl.appendChild(div);});
+        const confidenceEl=document.getElementById('trainingCallConfidence');
+        if(confidenceEl){const c=getTrainingCallConfidence(getToday());confidenceEl.innerHTML=`<span class="training-call-confidence-level ${c.level}">confidence: ${c.level}</span><span class="training-call-confidence-detail">${escapeHtml(c.detail)} · ${escapeHtml(c.evidence)}</span>`;confidenceEl.title='Confidence describes how much personal history supports the call. It does not change a caution signal or claim medical certainty.';}
         const factorsEl=document.getElementById('trainingCallFactors');
         if(factorsEl){
           factorsEl.innerHTML='';
