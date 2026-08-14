@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.127 sleep opportunity and forecast clarity -->
+<!-- Focus::Flow deployment marker: v1.128 lifting exposure undo -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1724,7 +1724,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.127 adds recovery-aware sleep opportunity, recent-deficit wording, forecast confidence, clearer capacity versus suggested load, and streamlined Settings.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.128 adds safe undo and history removal for mistaken lifting exposures, including reversal of calculated lifting load.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2891,7 +2891,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.127';
+      const APP_VERSION='1.128';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -5563,7 +5563,8 @@ function updateNotificationSettingUI(){
         let loadAdd=0;
         rx.warmups.forEach(w=>{loadAdd+=getLiftSetLoad(w.pct,w.reps);});
         loadAdd+=rx.sets*getLiftSetLoad(rx.pct,rx.reps);
-        liftingHistory.push({id:generateId(),kind:'exposure',date:today,liftId,liftName:lift.name,week:'minimum-dose',weight:rx.weight,targetReps:rx.reps,actualReps:rx.reps,sets:rx.sets,rir:r,success:r>=3,e1rm:null,pct:rx.pct,tmAtTime:lift.trainingMax,fatigueCost:rx.profile.fatigue,loadValue:Math.round(loadAdd*10)/10});
+        const recBefore=biometrics[today]||{},addedWeightsModality=!normalizeModalityList(recBefore.modalities).includes('weights'),exposureId=generateId();
+        liftingHistory.push({id:exposureId,kind:'exposure',date:today,liftId,liftName:lift.name,week:'minimum-dose',weight:rx.weight,targetReps:rx.reps,actualReps:rx.reps,sets:rx.sets,rir:r,success:r>=3,e1rm:null,pct:rx.pct,tmAtTime:lift.trainingMax,fatigueCost:rx.profile.fatigue,loadValue:Math.round(loadAdd*10)/10,addedWeightsModality});
         const rec=biometrics[today]||{};
         rec.load=(rec.load||0)+Math.round(loadAdd*10)/10;
         rec.modalities=Array.from(new Set([...normalizeModalityList(rec.modalities),'weights']));
@@ -5583,9 +5584,18 @@ function updateNotificationSettingUI(){
         lift.allTimeMax=roundToLoadStep(Math.max(Number(lift.allTimeMax)||0,Number(lift.trainingMax)||0,Number(logged&&logged.tmAtTime)||0));
         liftingRecommendationOffset=0;
         saveData();renderLiftingTab();updateTrainingCallCard();renderRecoveryTab();
-        if(progressed)showToast(`${lift.name}: 4 easy exposures at 4+ RIR — TM nudged to ${formatLb(lift.trainingMax)}lb`);
-        else if(r<=2)showToast(`${lift.name} logged — harder than intended, so the app will be more conservative next time`);
-        else showToast(`${lift.name} logged — useful exposure, done for today`);
+        const message=progressed?`${lift.name}: exposure logged · TM nudged to ${formatLb(lift.trainingMax)}lb`:r<=2?`${lift.name} logged · harder than intended`:`${lift.name} exposure logged`;
+        showUndoToast(message,()=>undoLiftingExposure(exposureId,true));
+      }
+      function undoLiftingExposure(exposureId,quiet){
+        const entry=liftingHistory.find(h=>h.id===exposureId&&h.kind==='exposure');if(!entry)return;
+        const lift=liftingLifts.find(l=>l.id===entry.liftId);liftingHistory=liftingHistory.filter(h=>h.id!==exposureId);
+        const rec=biometrics[entry.date]||{};rec.load=Math.max(0,Math.round(((Number(rec.load)||0)-(Number(entry.loadValue)||0))*10)/10);
+        const otherLiftThatDay=liftingHistory.some(h=>h.kind==='exposure'&&h.date===entry.date);
+        if(entry.addedWeightsModality&&!otherLiftThatDay)rec.modalities=normalizeModalityList(rec.modalities).filter(m=>m!=='weights');
+        biometrics[entry.date]=rec;
+        if(lift&&entry.tmAfter!=null&&entry.tmAtTime!=null&&Number(lift.trainingMax)===Number(entry.tmAfter)&&Number(entry.tmAfter)!==Number(entry.tmAtTime))lift.trainingMax=roundToLoadStep(entry.tmAtTime);
+        saveData();renderLiftingTab();renderRecoveryTab();updateTrainingCallCard();if(!quiet)showToast(`${entry.liftName} exposure removed`);
       }
       function getMostRecentBodyweight(){
         for(let i=0;i<=90;i++){
@@ -5765,6 +5775,7 @@ function updateNotificationSettingUI(){
           }else{
             head.innerHTML=`<span class="session-log-date">${h.date}</span><span class="session-log-task">${h.liftName} — ${h.week||'legacy'}${h.weight!=null?` — ${h.weight}lb × ${h.actualReps??''}`:''}${h.e1rm?` <span style="opacity:0.5;">(e1RM ~${h.e1rm})</span>`:''}</span><span class="session-log-min" style="color:${h.success===false?'#e05a5a':'#5ec98a'};">${h.success===false?'✗':'✓'}</span>`;
           }
+          if(h.kind==='exposure'){const remove=document.createElement('button');remove.className='delete-task-btn';remove.textContent='×';remove.title='remove mistaken exposure and subtract its lifting load';remove.addEventListener('click',()=>showConfirm(`Remove the ${h.liftName} exposure from ${h.date}? Its calculated lifting load will also be subtracted.`,()=>undoLiftingExposure(h.id,false),'remove'));head.appendChild(remove);}
           li.appendChild(head);list.appendChild(li);
         });
       }
