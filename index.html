@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.125 Today agenda foundation -->
+<!-- Focus::Flow deployment marker: v1.126 quiet cloud sync -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1612,7 +1612,8 @@
         </div>
         <div id="syncSignedInView" style="display:none;">
           <div class="settings-desc" id="syncEmailDisplay" style="margin-bottom:0.6rem;"></div>
-          <button class="btn small" id="syncSignOutBtn">sign out</button>
+          <div class="settings-desc" id="syncLastSyncDisplay" style="margin-bottom:0.6rem;">last sync · checking</div>
+          <div class="sync-btn-row"><button type="button" class="btn small primary" id="syncNowBtn">sync now</button><button class="btn small" id="syncSignOutBtn">sign out</button></div>
           <button type="button" class="btn small" id="syncChangePasswordToggleBtn" style="margin-top:0.5rem;">change password</button>
           <form id="syncChangePasswordForm" style="display:none;margin-top:0.6rem;">
             <div class="password-wrap">
@@ -1727,7 +1728,7 @@
         <div class="settings-section-title">app</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.125 rebuilds Today around Now, Today and Later; separates Focus Queue from To Do; and adds plain-language scheduling.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.126 makes signed-in cloud sync automatic and quiet, adds last-sync status and Sync Now, and only interrupts for genuine two-device conflicts.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2892,7 +2893,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.125';
+      const APP_VERSION='1.126';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -7623,6 +7624,7 @@ function updateNotificationSettingUI(){
       document.getElementById('syncAuthForm').addEventListener('submit',(e)=>{e.preventDefault();handleSyncSignIn();});
       document.getElementById('syncSignUpBtn').addEventListener('click',handleSyncSignUp);
       document.getElementById('syncSignOutBtn').addEventListener('click',handleSyncSignOut);
+      document.getElementById('syncNowBtn').addEventListener('click',()=>{if(!syncUser){showToast('sign in first');return;}showToast('checking cloud sync…');startCloudSync(syncUser.uid);});
       document.getElementById('syncForgotBtn').addEventListener('click',handleSyncForgotPassword);
       function wirePasswordToggle(inputId,btnId){
         const inp=document.getElementById(inputId),btn=document.getElementById(btnId);
@@ -9110,6 +9112,27 @@ function updateNotificationSettingUI(){
         if(code.includes('admin-restricted-operation'))return'sign-in isn\'t enabled for this project yet — check Firebase Console → Authentication → Sign-in method';
         return code?`something went wrong (${code})`:'something went wrong — try again';
       }
+      function stableSyncString(value){
+        if(value===null||typeof value!=='object')return JSON.stringify(value);
+        if(Array.isArray(value))return'['+value.map(stableSyncString).join(',')+']';
+        return'{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+stableSyncString(value[k])).join(',')+'}';
+      }
+      function syncBaselineKey(uid){return`focus-flow-sync-baseline-${uid}`;}
+      function syncTimeKey(uid){return`focus-flow-sync-time-${uid}`;}
+      function getSyncBaseline(uid){try{return localStorage.getItem(syncBaselineKey(uid));}catch(e){return null;}}
+      function recordSyncSuccess(stateOrJSON){
+        if(!syncUser)return;
+        const json=typeof stateOrJSON==='string'?stateOrJSON:stableSyncString(stateOrJSON),now=new Date().toISOString();
+        try{localStorage.setItem(syncBaselineKey(syncUser.uid),json);localStorage.setItem(syncTimeKey(syncUser.uid),now);}catch(e){}
+        renderLastSyncTime();
+      }
+      function renderLastSyncTime(){
+        const el=document.getElementById('syncLastSyncDisplay');if(!el||!syncUser)return;
+        let raw='';try{raw=localStorage.getItem(syncTimeKey(syncUser.uid))||'';}catch(e){}
+        if(!raw){el.textContent='last sync · first sync pending';return;}
+        const mins=Math.max(0,Math.floor((Date.now()-new Date(raw).getTime())/60000));
+        el.textContent=mins<1?'last sync · just now':mins===1?'last sync · 1 min ago':mins<60?`last sync · ${mins} min ago`:`last sync · ${new Date(raw).toLocaleString()}`;
+      }
       function updateSyncStatusDot(status){
         const dot=document.getElementById('syncStatusDot');
         if(!dot)return;
@@ -9126,7 +9149,7 @@ function updateNotificationSettingUI(){
         if(syncUser){
           signedOutView.style.display='none';signedInView.style.display='block';
           document.getElementById('syncEmailDisplay').textContent=`signed in as ${syncUser.email}`;
-          statusText.textContent='synced across your devices';
+          statusText.textContent='cloud sync · on';renderLastSyncTime();
         }else{
           signedOutView.style.display='block';signedInView.style.display='none';
           statusText.textContent='not signed in — your data stays on this device only';
@@ -9182,6 +9205,7 @@ function updateNotificationSettingUI(){
         refreshAllUI();
         try{localStorage.setItem('pomodoro-cyberspace-data',JSON.stringify(buildStateSnapshot()));}catch(e){}
         isApplyingRemoteUpdate=false;
+        recordSyncSuccess(remoteState);
         updateSyncStatusDot('synced');
       }
       function promptSyncConflict(remoteState){pendingConflictRemoteState=remoteState;document.getElementById('syncConflictOverlay').classList.add('open');}
@@ -9195,9 +9219,9 @@ function updateNotificationSettingUI(){
         updateSyncStatusDot('syncing');
         onFirebaseReady(()=>{
           const state=buildCloudStateSnapshot();
-          const stateJSON=JSON.stringify(state);
+          const stateJSON=stableSyncString(state);
           const ref=window.fb.doc(window.fb.db,'userStates',syncUser.uid);
-          window.fb.setDoc(ref,{state,updatedAt:window.fb.serverTimestamp(),schemaVersion:SYNC_SCHEMA_VERSION},{merge:true}).then(()=>{lastPushedStateJSON=stateJSON;const currentJSON=JSON.stringify(buildCloudStateSnapshot());hasUnsyncedLocalChanges=currentJSON!==stateJSON;if(hasUnsyncedLocalChanges)scheduleCloudPush();else updateSyncStatusDot('synced');}).catch(err=>{hasUnsyncedLocalChanges=true;console.error(err);showToast('⚠ cloud sync failed — will retry on next change');updateSyncStatusDot('error');});
+          window.fb.setDoc(ref,{state,updatedAt:window.fb.serverTimestamp(),schemaVersion:SYNC_SCHEMA_VERSION},{merge:true}).then(()=>{lastPushedStateJSON=stateJSON;recordSyncSuccess(stateJSON);const currentJSON=stableSyncString(buildCloudStateSnapshot());hasUnsyncedLocalChanges=currentJSON!==stateJSON;if(hasUnsyncedLocalChanges)scheduleCloudPush();else updateSyncStatusDot('synced');}).catch(err=>{hasUnsyncedLocalChanges=true;console.error(err);showToast('⚠ cloud sync failed — will retry on next change');updateSyncStatusDot('error');});
         });
       }
       function scheduleCloudPush(){
@@ -9227,7 +9251,7 @@ function updateNotificationSettingUI(){
             if(hasUnsyncedLocalChanges)return;
             const remote=snap.data();
             const remoteState=remote.state||{};
-            if(lastPushedStateJSON!==null&&JSON.stringify(remoteState)===lastPushedStateJSON)return;
+            if(lastPushedStateJSON!==null&&stableSyncString(remoteState)===lastPushedStateJSON)return;
             applyCloudState(remoteState);
           },(err)=>{console.error(err);});
         });
@@ -9249,8 +9273,12 @@ function updateNotificationSettingUI(){
             if(snap.exists){
               const remote=snap.data(),remoteState=remote.state||{};
               const remoteHasData=Object.keys(remoteState).length>0;
-              if(hasLocalData()&&remoteHasData){promptSyncConflict(remoteState);}
-              else if(remoteHasData){applyCloudState(remoteState);showToast('pulled your saved data');checkWeeklyRecap();}
+              const localState=buildCloudStateSnapshot(),localJSON=stableSyncString(localState),remoteJSON=stableSyncString(remoteState),baseline=getSyncBaseline(uid);
+              if(localJSON===remoteJSON){recordSyncSuccess(remoteJSON);updateSyncStatusDot('synced');checkWeeklyRecap();}
+              else if(baseline&&localJSON===baseline&&remoteJSON!==baseline){applyCloudState(remoteState);checkWeeklyRecap();}
+              else if(baseline&&remoteJSON===baseline&&localJSON!==baseline){pushToCloud();checkWeeklyRecap();}
+              else if(hasLocalData()&&remoteHasData){promptSyncConflict(remoteState);}
+              else if(remoteHasData){applyCloudState(remoteState);checkWeeklyRecap();}
               else{pushToCloud();checkWeeklyRecap();}
             }else{pushToCloud();checkWeeklyRecap();}
             attachRealtimeListener(uid);
