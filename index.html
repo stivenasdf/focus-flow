@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.137 progressive disclosure, activity curves, and calmer surfaces -->
+<!-- Focus::Flow deployment marker: v1.138 complete Intervals history, coverage diagnostics, and daily-first Recovery -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -242,13 +242,13 @@
     #panel-recovery .recovery-daily-summary { order:1; }
     #panel-recovery .recovery-entry-card { order:2; grid-column:1 / -1; }
     #panel-recovery .training-call-card { order:3; }
-    #panel-recovery #deloadWatchCard { order:4; }
-    #panel-recovery #trainingOutlookCard { order:5; }
-    #panel-recovery .recovery-snapshot-card { order:6; }
-    #panel-recovery .capacity-card { order:7; }
-    #panel-recovery .recovery-load-card { order:8; }
-    #panel-recovery .recovery-sleep-card { order:9; }
-    #panel-recovery .recovery-trend-card { order:10; }
+    #panel-recovery .recovery-snapshot-card { order:4; }
+    #panel-recovery .capacity-card { order:4; }
+    #panel-recovery .recovery-sleep-card { order:5; grid-column:1 / -1; }
+    #panel-recovery #trainingOutlookCard { order:6; }
+    #panel-recovery .recovery-load-card { order:7; grid-column:1 / -1; }
+    #panel-recovery .recovery-trend-card { order:8; }
+    #panel-recovery #deloadWatchCard { order:9; }
     [data-view-mode="mobile"] .recovery-grid { grid-template-columns: 1fr; }
     .recovery-card { background: var(--sub-alt-color); border: 1px solid var(--border-color); border-radius: 1rem; padding: 1.2rem; }
     .recovery-trend-card { grid-column: 1 / -1; }
@@ -1158,6 +1158,7 @@
     /* Activity import + aerobic history */
     .activities-grid { display:grid; grid-template-columns: 340px minmax(0,1fr); gap:1.25rem; align-items:start; }
     [data-view-mode="mobile"] .activities-grid { grid-template-columns:1fr; }
+    [data-view-mode="mobile"] .activity-coverage { grid-template-columns:repeat(2,minmax(0,1fr)); }
     .activity-card { background:var(--sub-alt-color); border:1px solid var(--border-color); border-radius:1rem; padding:1.15rem; color:var(--text-color); }
     .activity-card .card-header-title { color:var(--sub-color); }
     .activity-connect-status { display:flex; align-items:center; gap:.45rem; font-size:.68rem; color:var(--text-color); margin:.55rem 0; }
@@ -1166,10 +1167,17 @@
     .activity-api-row { display:flex; gap:.45rem; margin-top:.55rem; }
     .activity-api-row input { flex:1; min-width:0; }
     .activity-summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.55rem; margin:.75rem 0; }
+    .activity-coverage { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.45rem; margin:.7rem 0 0; }
+    .activity-coverage-stat { min-width:0; padding:.58rem .62rem; border:1px solid var(--border-color); border-radius:.65rem; background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); }
+    .activity-coverage-value { color:var(--text-color); font:650 .73rem 'JetBrains Mono',monospace; overflow-wrap:anywhere; }
+    .activity-coverage-label { margin-top:.18rem; color:var(--text-color); opacity:.48; font-size:.5rem; line-height:1.3; text-transform:uppercase; letter-spacing:.04em; }
+    .activity-coverage-note { margin-top:.55rem; color:var(--text-color); opacity:.58; font-size:.58rem; line-height:1.5; }
+    .activity-sync-actions { display:flex; gap:.45rem; margin-top:.65rem; flex-wrap:wrap; }
     .activity-summary-stat { border:1px solid var(--border-color); border-radius:.65rem; padding:.55rem .6rem; background:var(--bg-color); color:var(--text-color); }
     .activity-summary-value { font-family:'JetBrains Mono',monospace; font-size:1rem; font-weight:700; color:var(--text-color); }
     .activity-summary-label { font-size:.55rem; color:var(--text-color); opacity:.52; text-transform:uppercase; margin-top:.18rem; }
-    .activity-list { display:flex; flex-direction:column; gap:.55rem; max-height:720px; overflow:auto; padding-right:.15rem; scrollbar-width:thin; scrollbar-color:var(--border-color) transparent; }
+    #activityHistoryCard { grid-column:1/-1; }
+    .activity-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; max-height:720px; overflow:auto; padding-right:.15rem; scrollbar-width:thin; scrollbar-color:var(--border-color) transparent; }
     .activity-list::-webkit-scrollbar { width:3px; }
     .activity-list::-webkit-scrollbar-track { background:transparent; }
     .activity-list::-webkit-scrollbar-thumb { background:var(--border-color); border-radius:10px; }
@@ -1207,6 +1215,7 @@
     .activity-pb-note { font-size:.58rem; color:var(--text-color); opacity:.55; line-height:1.45; margin-top:.55rem; }
     [data-view-mode="mobile"] .activity-pb-groups { grid-template-columns:1fr; }
     [data-view-mode="mobile"] .activity-pb-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    [data-view-mode="mobile"] .activity-list { grid-template-columns:1fr; }
     .activity-pb-ranks { margin-top:.28rem; display:flex; flex-wrap:wrap; gap:.22rem; }
     .activity-rank-chip { font-family:'JetBrains Mono',monospace; font-size:.52rem; line-height:1.2; border:1px solid var(--border-color); border-radius:.35rem; padding:.12rem .28rem; color:var(--text-color); opacity:.72; white-space:nowrap; }
     .activity-rank-chip.year { border-color:var(--sub-color); color:var(--sub-color); opacity:.95; }
@@ -2080,7 +2089,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.137 makes the Training Call easier to scan, quiets Recovery surfaces, moves detailed inputs behind disclosure controls, adds progressive milestones and a longer desktop focus heatmap, streamlines Tasks and Activities, and adds date-range personal bests with W/kg and a power-duration curve.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.138 repairs Intervals.icu history coverage, duration and heart-rate imports, adds a one-time full-history backfill with visible coverage diagnostics, improves running effort parsing, and reorders Recovery around daily decisions first.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -3141,7 +3150,7 @@
         <div class="activities-grid">
           <div class="activity-card" id="intervalsSyncCard">
             <div class="card-header-title">Activity connection</div>
-            <div class="goals-intro-note" style="margin-top:.35rem;">This setup lives at the bottom because your history and records are the useful part. Connect once per browser/device; the key stays local and sync then runs automatically.</div>
+            <div class="goals-intro-note" style="margin-top:.35rem;">Connect once per browser/device. The first sync backfills your training history; later automatic syncs only check recent activity.</div>
             <details class="activity-connection-details">
               <summary><span>Intervals.icu settings</span><span class="activity-connection-summary"><span class="activity-status-dot" id="intervalsStatusDot"></span><span id="intervalsStatusText">not connected</span></span></summary>
               <div class="activity-connection-body">
@@ -3151,13 +3160,13 @@
               <div class="goals-intro-note" style="margin-top:.5rem;">Find it near the bottom of Intervals.icu Settings. Paste it once on this browser/device. It is excluded from Focus::Flow backups and cloud sync, so a different device needs its own one-time paste.</div>
             </div>
             <div id="intervalsConnectedActions" style="display:none;">
-              <div style="display:flex;gap:.45rem;margin-top:.65rem;"><button class="btn primary small" id="intervalsSyncBtn">sync now</button><button class="btn small" id="intervalsDisconnectBtn">disconnect</button></div>
+              <div class="activity-sync-actions"><button class="btn primary small" id="intervalsSyncBtn">sync recent</button><button class="btn small" id="intervalsFullSyncBtn">sync all history</button><button class="btn small" id="intervalsDisconnectBtn">disconnect</button></div>
               <div class="goals-intro-note" id="intervalsLastSync" style="margin-top:.5rem;">not synced yet</div>
               <div class="goals-intro-note" style="margin-top:.35rem;">Auto-sync runs when Focus::Flow opens and about every 30 minutes while it stays open.</div>
             </div>
             <div class="activity-trend-block">
               <div class="activity-trend-title">what gets imported</div>
-              <div class="goals-intro-note">sport · duration · distance · training load · average/max heart rate · average/normalized power · pace/speed · cadence · elevation · efficiency/decoupling, plus date-range pace and power best-effort curves when available.</div>
+              <div class="goals-intro-note">Complete activity summaries: sport · duration · distance · training load · average/max heart rate · average/normalized power · pace/speed · cadence · elevation · efficiency/decoupling, plus date-range pace and power best-effort curves when available.</div>
             </div>
               </div>
             </details>
@@ -3210,8 +3219,15 @@
             <div class="activity-pb-note" id="aerobicBaselineNote">Sync more activities to establish personal baselines.</div>
           </div>
 
-          <div class="activity-card">
+          <div class="activity-card" id="activityHistoryCard">
             <div class="card-header-title">Activity history</div>
+            <div class="activity-coverage" id="activityCoverage">
+              <div class="activity-coverage-stat"><div class="activity-coverage-value" id="activityCoverageCount">—</div><div class="activity-coverage-label">stored activities</div></div>
+              <div class="activity-coverage-stat"><div class="activity-coverage-value" id="activityCoverageSpan">—</div><div class="activity-coverage-label">history span</div></div>
+              <div class="activity-coverage-stat"><div class="activity-coverage-value" id="activityCoverageDuration">—</div><div class="activity-coverage-label">with duration</div></div>
+              <div class="activity-coverage-stat"><div class="activity-coverage-value" id="activityCoverageHr">—</div><div class="activity-coverage-label">with heart rate</div></div>
+            </div>
+            <div class="activity-coverage-note" id="activityCoverageNote">Connect Intervals.icu to check import coverage.</div>
             <div class="activity-summary-grid">
               <div class="activity-summary-stat"><div class="activity-summary-value" id="activity30Count">—</div><div class="activity-summary-label">30d activities</div></div>
               <div class="activity-summary-stat"><div class="activity-summary-value" id="activity30Hours">—</div><div class="activity-summary-label">30d hours</div></div>
@@ -3313,7 +3329,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.137';
+      const APP_VERSION='1.138';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3854,29 +3870,35 @@
       }
       // ---- Intervals.icu activity import + personal bests (v1.98) ----
       function getIntervalsApiKey(){try{return localStorage.getItem('focus-flow-intervals-api-key')||'';}catch(e){return'';}}
-      function setIntervalsApiKey(v){try{if(v)localStorage.setItem('focus-flow-intervals-api-key',v);else localStorage.removeItem('focus-flow-intervals-api-key');}catch(e){}}
+      function setIntervalsApiKey(v){try{const previous=localStorage.getItem('focus-flow-intervals-api-key')||'';if(v)localStorage.setItem('focus-flow-intervals-api-key',v);else localStorage.removeItem('focus-flow-intervals-api-key');if(v&&v!==previous)localStorage.removeItem('focus-flow-intervals-full-history-v1');}catch(e){}}
+      function getIntervalsHistoryBackfillAt(){try{return localStorage.getItem('focus-flow-intervals-full-history-v1')||'';}catch(e){return'';}}
+      function setIntervalsHistoryBackfillAt(value){try{if(value)localStorage.setItem('focus-flow-intervals-full-history-v1',value);else localStorage.removeItem('focus-flow-intervals-full-history-v1');}catch(e){}}
       function isoDateOffset(days){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+days);return d.toISOString().slice(0,10);}
-      function formatActivityDuration(sec){sec=Number(sec)||0;const h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return h?`${h}h ${m}m`:`${m}m`;}
+      function formatActivityDuration(sec){sec=Number(sec)||0;if(sec<=0)return 'duration unavailable';const h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return h?`${h}h ${m}m`:`${Math.max(1,m)}m`;}
       function formatRunPace(activity){const dist=Number(activity.distance)||0,secs=Number(activity.moving_time)||0;if(!dist||!secs)return null;const secPerKm=secs/(dist/1000);if(!isFinite(secPerKm)||secPerKm>3600)return null;const m=Math.floor(secPerKm/60),ss=Math.round(secPerKm%60);return `${m}:${String(ss).padStart(2,'0')}/km`;}
       function firstPositiveNumber(...values){for(const v of values){const n=Number(v);if(Number.isFinite(n)&&n>0)return n;}return 0;}
       function normalizeZoneTimes(zones){if(!Array.isArray(zones))return[];return zones.map(x=>{if(x&&typeof x==='object')return Number(x.secs??x.seconds??x.time??x.value)||0;return Number(x)||0;});}
       function normalizeIntervalsActivity(a){
         const power=a.average_watts??a.icu_average_watts??null;
         const sessionRpe=a.session_rpe??a.icu_rpe??a.rpe??a.perceived_exertion??null;
-        // Some list responses contain moving_time: 0 while recording/elapsed time is valid. Zero is not a useful preferred value.
-        const duration=firstPositiveNumber(a.moving_time,a.icu_recording_time,a.elapsed_time,a.duration,a.workout_doc?.duration);
-        const elapsed=firstPositiveNumber(a.elapsed_time,a.icu_recording_time,duration);
-        const avgHr=a.average_heartrate??a.avg_hr??null,maxHr=a.max_heartrate??a.max_hr??null;
-        const zones=a.icu_hr_zone_times??a.hr_zone_times??a.hrZoneTimes??a.workout_doc?.hrZoneTimes??[];
-        return {id:String(a.id),name:a.name||a.type||'activity',type:a.type||a.sport||'Activity',start_date_local:a.start_date_local||a.start_date||'',distance:firstPositiveNumber(a.icu_distance,a.distance),moving_time:duration,elapsed_time:elapsed,elevation:Number(a.total_elevation_gain)||0,average_speed:Number(a.average_speed)||0,average_heartrate:avgHr!=null?Number(avgHr):null,max_heartrate:maxHr!=null?Number(maxHr):null,average_watts:power!=null?Number(power):null,weighted_watts:(a.icu_weighted_avg_watts??a.weighted_average_watts)!=null?Number(a.icu_weighted_avg_watts??a.weighted_average_watts):null,training_load:(a.icu_training_load??a.training_load)!=null?Number(a.icu_training_load??a.training_load):null,intensity:a.icu_intensity!=null?Number(a.icu_intensity):null,efficiency:a.icu_efficiency_factor!=null?Number(a.icu_efficiency_factor):null,decoupling:a.decoupling!=null?Number(a.decoupling):null,cadence:a.average_cadence!=null?Number(a.average_cadence):null,session_rpe:sessionRpe!=null?Number(sessionRpe):null,source:a.source||'',device_watts:a.device_watts===true,stream_types:Array.isArray(a.stream_types)?a.stream_types:[],hr_zone_times:normalizeZoneTimes(zones)};
+        const distance=firstPositiveNumber(a.icu_distance,a.distance),averageSpeed=firstPositiveNumber(a.average_speed,a.icu_average_speed);
+        // Intervals summaries are not identical for every source. Prefer recorded time, then derive it from distance/speed only when both are usable.
+        const duration=firstPositiveNumber(a.moving_time,a.icu_recording_time,a.recording_time,a.elapsed_time,a.icu_elapsed_time,a.duration,a.workout_doc?.duration)||((distance&&averageSpeed)?distance/averageSpeed:0);
+        const elapsed=firstPositiveNumber(a.elapsed_time,a.icu_elapsed_time,a.icu_recording_time,a.recording_time,duration);
+        const avgHr=a.average_heartrate??a.avg_heartrate??a.average_hr??a.avg_hr??a.icu_average_heartrate??null,maxHr=a.max_heartrate??a.maximum_heartrate??a.max_hr??a.icu_max_heartrate??null;
+        const zones=a.icu_hr_zone_times??a.hr_zone_times??a.hrZoneTimes??a.workout_doc?.hrZoneTimes??a.workout_doc?.hr_zone_times??[];
+        const streamTypes=Array.isArray(a.stream_types)?a.stream_types:[];
+        return {id:String(a.id),name:a.name||a.type||a.sport||'activity',type:a.type||a.sport||a.sport_type||'Activity',start_date_local:a.start_date_local||a.start_date||a.start_date_utc||'',distance,moving_time:duration,elapsed_time:elapsed,elevation:Number(a.total_elevation_gain??a.elevation_gain)||0,average_speed:averageSpeed,average_heartrate:avgHr!=null&&Number.isFinite(Number(avgHr))?Number(avgHr):null,max_heartrate:maxHr!=null&&Number.isFinite(Number(maxHr))?Number(maxHr):null,has_heartrate:a.has_heartrate===true||avgHr!=null||maxHr!=null||streamTypes.some(x=>/heartrate|heart_rate|hr/i.test(String(x))),average_watts:power!=null?Number(power):null,weighted_watts:(a.icu_weighted_avg_watts??a.weighted_average_watts)!=null?Number(a.icu_weighted_avg_watts??a.weighted_average_watts):null,training_load:(a.icu_training_load??a.training_load)!=null?Number(a.icu_training_load??a.training_load):null,intensity:a.icu_intensity!=null?Number(a.icu_intensity):null,efficiency:a.icu_efficiency_factor!=null?Number(a.icu_efficiency_factor):null,decoupling:a.decoupling!=null?Number(a.decoupling):null,cadence:a.average_cadence!=null?Number(a.average_cadence):null,session_rpe:sessionRpe!=null?Number(sessionRpe):null,source:a.source||'',device_watts:a.device_watts===true,stream_types:streamTypes,hr_zone_times:normalizeZoneTimes(zones)};
       }
-      function mergeImportedActivities(incoming){const map=new Map(importedActivities.map(a=>[String(a.id),a]));incoming.forEach(a=>map.set(String(a.id),a));importedActivities=Array.from(map.values()).sort((a,b)=>String(b.start_date_local).localeCompare(String(a.start_date_local))).slice(0,1200);}
+      function mergeImportedActivities(incoming){const map=new Map(importedActivities.map(a=>[String(a.id),a]));incoming.forEach(a=>{const old=map.get(String(a.id))||{},merged={...old,...a};['moving_time','elapsed_time','distance','average_speed'].forEach(k=>{if(!(Number(a[k])>0)&&Number(old[k])>0)merged[k]=old[k];});['average_heartrate','max_heartrate','average_watts','weighted_watts','training_load','session_rpe'].forEach(k=>{if(a[k]==null&&old[k]!=null)merged[k]=old[k];});if((!a.hr_zone_times||!a.hr_zone_times.some(Number))&&old.hr_zone_times?.some(Number))merged.hr_zone_times=old.hr_zone_times;map.set(String(a.id),merged);});importedActivities=Array.from(map.values()).sort((a,b)=>String(b.start_date_local).localeCompare(String(a.start_date_local))).slice(0,5000);}
       function fmtPbTime(seconds){seconds=Number(seconds);if(!isFinite(seconds)||seconds<=0)return '—';const h=Math.floor(seconds/3600),m=Math.floor((seconds%3600)/60),ss=Math.round(seconds%60);return h?`${h}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`:`${m}:${String(ss).padStart(2,'0')}`;}
       function nearestCurveValue(curve,bucket){if(!curve)return null;const xs=Array.isArray(curve.secs)?curve.secs:[],ys=Array.isArray(curve.values)?curve.values:[];if(!xs.length||!ys.length)return null;let best=-1,delta=Infinity;for(let i=0;i<Math.min(xs.length,ys.length);i++){const d=Math.abs(Number(xs[i])-bucket);if(d<delta){delta=d;best=i;}}if(best<0)return null;const tolerance=Math.max(1,bucket*0.02);if(delta>tolerance)return null;const v=Number(ys[best]);return isFinite(v)&&v>0?v:null;}
       function paceEffortsFromSet(data,bucket){
-        const efforts=[],activities=data?.activities||{};
-        if(Array.isArray(data?.list))data.list.forEach(curve=>{const xs=curve.distance||curve.distances||[],ys=curve.values||[];let best=-1,delta=Infinity;for(let i=0;i<Math.min(xs.length,ys.length);i++){const d=Math.abs(Number(xs[i])-bucket);if(d<delta){delta=d;best=i;}}if(best>=0&&delta<=Math.max(2,bucket*.02)){const value=Number(ys[best]),ids=curve.activity_id||curve.activity_ids||[],id=Array.isArray(ids)?ids[best]:ids,activity=activities[id]||{};if(isFinite(value)&&value>0)efforts.push({value,date:curveDate(activity)||curveDate(curve),id:id||null});}});
-        if(Array.isArray(data?.distances)&&Array.isArray(data?.curves)){let best=-1,delta=Infinity;data.distances.forEach((d,i)=>{const x=Math.abs(Number(d)-bucket);if(x<delta){delta=x;best=i;}});if(best>=0&&delta<=Math.max(2,bucket*.02))data.curves.forEach(curve=>{const value=Number(curve.secs?.[best]);if(isFinite(value)&&value>0)efforts.push({value,date:curveDate(curve),id:curve.id||curve.activity_id||null});});}
+        const efforts=[],activityRows=Array.isArray(data?.activities)?data.activities:Object.values(data?.activities||{}),activities={};activityRows.forEach(a=>{if(a?.id!=null)activities[String(a.id)]=a;});if(data?.activities&&!Array.isArray(data.activities))Object.entries(data.activities).forEach(([id,a])=>activities[String(id)]=a||{});
+        const lists=[];if(Array.isArray(data))lists.push(...data);if(Array.isArray(data?.list))lists.push(...data.list);if(Array.isArray(data?.curves))lists.push(...data.curves);
+        const inspect=(curve,topDistances)=>{const xs=curve?.distances||curve?.distance||curve?.meters||topDistances||[],ys=curve?.values||curve?.times||curve?.pace||curve?.secs||[];if(!Array.isArray(xs)||!Array.isArray(ys))return;let best=-1,delta=Infinity;for(let i=0;i<Math.min(xs.length,ys.length);i++){const d=Math.abs(Number(xs[i])-bucket);if(d<delta){delta=d;best=i;}}if(best<0||delta>Math.max(2,bucket*.02))return;const value=Number(ys[best]),ids=curve.activity_ids||curve.activity_id||curve.ids||[],id=Array.isArray(ids)?ids[best]:ids,activity=activities[String(id)]||curve.activity||{};if(Number.isFinite(value)&&value>0)efforts.push({value,date:curveDate(activity)||curveDate(curve),id:id||null});};
+        lists.forEach(curve=>inspect(curve,data?.distances));
+        if(Array.isArray(data?.distances)&&(Array.isArray(data?.secs)||Array.isArray(data?.values)||Array.isArray(data?.times)))inspect(data,data.distances);
         return efforts.sort((a,b)=>a.value-b.value);
       }
       function firstCurveFromSet(data){if(!data)return null;if(Array.isArray(data.list)&&data.list.length)return data.list[0];if(Array.isArray(data)&&data.length)return data[0];if(data.secs&&data.values)return data;return null;}
@@ -3918,7 +3940,7 @@
         for(const spec of specs){
           const range={run:{...(previous[spec.key]?.run||{})},ride:{...(previous[spec.key]?.ride||{})},rideCurve:previous[spec.key]?.rideCurve||null};
           try{
-            const url=`https://intervals.icu/api/v1/athlete/0/activity-pace-curves.json?oldest=${spec.oldest}&newest=${today}&distances=${distances.join(',')}&gap=false&type=Run&includeRanks=true`;
+            const url=`https://intervals.icu/api/v1/athlete/0/activity-pace-curves.json?oldest=${spec.oldest}&newest=${today}&distances=${distances.join(',')}&gap=false&includeRanks=true`;
             const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok){const data=await r.json(),run={};[['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]].forEach(([label,d])=>{const efforts=paceEffortsFromSet(data,d);if(efforts.length){run[label]=efforts[0].value;if(spec.key==='all'){const all=rankForLatestEffort(efforts),yr=rankForLatestEffort(efforts.filter(x=>String(x.date)>=yearStart));allRanks[label]={all,year:yr};}}});if(Object.keys(run).length){range.run=run;changed=true;}}
           }catch(e){}
           try{
@@ -4017,20 +4039,18 @@
         const n=Math.max(...zoneRows.map(a=>a.hr_zone_times.length)),sums=Array(n).fill(0);zoneRows.forEach(a=>a.hr_zone_times.forEach((x,i)=>sums[i]+=Number(x)||0));const total=sums.reduce((a,b)=>a+b,0)||1;
         zoneEl.innerHTML=sums.map((sec,i)=>{const pct=sec/total*100,h=Math.floor(sec/3600),m=Math.round((sec%3600)/60),time=h?`${h}h ${m}m`:`${m}m`;return `<div class="hr-zone-row"><div class="hr-zone-name">Z${i+1}</div><div class="hr-zone-track"><div class="hr-zone-fill" style="width:${pct.toFixed(1)}%"></div></div><div class="hr-zone-time">${time}</div></div>`;}).join('');note.textContent=`30-day HR-zone distribution from ${zoneRows.length} activit${zoneRows.length===1?'y':'ies'} · zone definitions remain the ones Intervals.icu used when each activity was analyzed.`;
       }
+      function fullHistoryWindows(){const newest=isoDateOffset(1),lastYear=Number(newest.slice(0,4)),windows=[];for(let year=2000;year<=lastYear;year+=5)windows.push({oldest:`${year}-01-01`,newest:year+4>=lastYear?newest:`${year+4}-12-31`});return windows;}
+      async function fetchIntervalsActivityWindow(auth,oldest,newest){const url=`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}`,res=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(!res.ok)throw new Error(res.status===401?'API key was rejected':`Intervals.icu returned ${res.status}`);const rows=await res.json();if(!Array.isArray(rows))throw new Error('unexpected response from Intervals.icu');return rows;}
+      async function enrichIncompleteIntervalRows(auth,rows,limit=18){const candidates=rows.map(normalizeIntervalsActivity).filter(a=>a.id&&(!(a.moving_time>0)||(a.has_heartrate&&a.average_heartrate==null))).sort((a,b)=>String(b.start_date_local).localeCompare(String(a.start_date_local))).slice(0,limit),enriched=[];for(let i=0;i<candidates.length;i+=4){const batch=candidates.slice(i,i+4);const details=await Promise.all(batch.map(async a=>{try{const r=await fetch(`https://intervals.icu/api/v1/activity/${encodeURIComponent(a.id)}`,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});return r.ok?normalizeIntervalsActivity(await r.json()):a;}catch(e){return a;}}));enriched.push(...details);}return enriched;}
       async function syncIntervalsActivities(opts={}){
         const key=getIntervalsApiKey();if(!key){renderActivitiesPanel();return false;}if(intervalsSyncInFlight)return false;intervalsSyncInFlight=true;
-        const status=document.getElementById('intervalsStatusText');if(status)status.textContent='syncing…';
+        const full=opts.full===true||!getIntervalsHistoryBackfillAt(),status=document.getElementById('intervalsStatusText');if(status)status.textContent=full?'importing all history…':'syncing recent…';
         try{
-          const oldest=importedActivities.length?isoDateOffset(-21):isoDateOffset(-120),newest=isoDateOffset(1);
-          const auth='Basic '+btoa('API_KEY:'+key);
-          const fields=['id','name','type','start_date_local','start_date','distance','icu_distance','moving_time','icu_recording_time','elapsed_time','total_elevation_gain','average_speed','average_heartrate','max_heartrate','average_watts','icu_average_watts','icu_weighted_avg_watts','weighted_average_watts','icu_training_load','training_load','icu_intensity','icu_efficiency_factor','decoupling','average_cadence','session_rpe','icu_rpe','rpe','perceived_exertion','source','device_watts','stream_types','icu_hr_zone_times','hrZoneTimes'];
-          const url=`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}&fields=${encodeURIComponent(fields.join(','))}`;
-          let res=await fetch(url,{headers:{'Authorization':auth,'Accept':'application/json'},cache:'no-store'});
-          if(res.status===400)res=await fetch(`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}`,{headers:{'Authorization':auth,'Accept':'application/json'},cache:'no-store'});
-          if(!res.ok)throw new Error(res.status===401?'API key was rejected':`Intervals.icu returned ${res.status}`);
-          const rows=await res.json();if(!Array.isArray(rows))throw new Error('unexpected response from Intervals.icu');
-          mergeImportedActivities(rows.map(normalizeIntervalsActivity));intervalsLastSyncAt=new Date().toISOString();await fetchIntervalsPersonalBests();saveData();renderActivitiesPanel();
-          if(!opts.silent)showToast(`Intervals.icu synced · ${rows.length} activit${rows.length===1?'y':'ies'} checked`);return true;
+          const auth='Basic '+btoa('API_KEY:'+key),windows=full?fullHistoryWindows():[{oldest:isoDateOffset(-45),newest:isoDateOffset(1)}],allRows=[];
+          for(let i=0;i<windows.length;i++){if(status&&full)status.textContent=`history ${i+1}/${windows.length}…`;const rows=await fetchIntervalsActivityWindow(auth,windows[i].oldest,windows[i].newest);allRows.push(...rows);mergeImportedActivities(rows.map(normalizeIntervalsActivity));if(full)renderActivitiesPanel();}
+          const enriched=await enrichIncompleteIntervalRows(auth,allRows,full?24:18);if(enriched.length)mergeImportedActivities(enriched);
+          intervalsLastSyncAt=new Date().toISOString();if(full)setIntervalsHistoryBackfillAt(intervalsLastSyncAt);await fetchIntervalsPersonalBests();saveData();renderActivitiesPanel();
+          if(!opts.silent)showToast(full?`Intervals.icu history imported · ${importedActivities.length} activities stored`:`Intervals.icu synced · ${allRows.length} recent activities checked`);return true;
         }catch(err){
           const msg=String(err&&err.message||err);const status=document.getElementById('intervalsStatusText');if(status)status.textContent='sync failed';
           if(!opts.silent)showToast(`Intervals.icu sync failed — ${msg.includes('Failed to fetch')?'browser/network blocked the direct connection':msg}`);return false;
@@ -4065,20 +4085,26 @@
         list.querySelectorAll('.activity-response-toggle').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`);if(form)form.classList.toggle('open');}));
         list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),activityDate=String(activity?.start_date_local||'').slice(0,10),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'',previous=sessionResponses[id]||{};let predictedLevel=previous.predictedLevel||trainingCallSnapshots[activityDate]?.level||'';if(!predictedLevel&&activityDate){try{predictedLevel=getTrainingCallData(activityDate).level;}catch(e){}}sessionResponses[id]={...previous,activityId:id,activityDate,activityType:activity?.type||'',predictedLevel,feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),mismatchReason:value('mismatchReason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();renderDeloadWatch();renderTrainingOutlook();showToast('session response saved');}));
       }
+      function renderActivityCoverage(){
+        const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;},rows=importedActivities.filter(a=>a?.start_date_local),count=importedActivities.length,durationCount=importedActivities.filter(a=>Number(a.moving_time)>0).length,hrCount=importedActivities.filter(a=>Number(a.average_heartrate)>0||Number(a.max_heartrate)>0).length,runs=importedActivities.filter(a=>/run/i.test(a.type)).length;
+        set('activityCoverageCount',count||'—');const dates=rows.map(a=>String(a.start_date_local).slice(0,10)).filter(Boolean).sort();set('activityCoverageSpan',dates.length?`${dates[0].slice(0,4)}–${dates[dates.length-1].slice(0,4)}`:'—');set('activityCoverageDuration',count?`${Math.round(durationCount/count*100)}%`:'—');set('activityCoverageHr',count?`${Math.round(hrCount/count*100)}%`:'—');
+        const note=document.getElementById('activityCoverageNote');if(!note)return;const completed=getIntervalsHistoryBackfillAt();if(!count){note.textContent=getIntervalsApiKey()?'Connected. The first sync will backfill your complete Intervals.icu history.':'Connect Intervals.icu to check import coverage.';return;}const cap=count>=5000?' · local history limit reached (newest 5,000 kept)':'';note.textContent=`${runs} run${runs===1?'':'s'} stored · ${durationCount}/${count} include duration · ${hrCount}/${count} include recorded HR${completed?` · full-history pass ${new Date(completed).toLocaleDateString()}`:' · full-history pass pending'}${cap} · newest 80 shown below`;
+      }
       function renderActivitiesPanel(){
         const key=getIntervalsApiKey(),dot=document.getElementById('intervalsStatusDot'),txt=document.getElementById('intervalsStatusText'),form=document.getElementById('intervalsConnectForm'),actions=document.getElementById('intervalsConnectedActions');
         if(dot)dot.classList.toggle('connected',!!key);if(txt&&!intervalsSyncInFlight)txt.textContent=key?'connected':'not connected';if(form)form.style.display=key?'none':'block';if(actions)actions.style.display=key?'block':'none';
         const last=document.getElementById('intervalsLastSync');if(last)last.textContent=intervalsLastSyncAt?`last sync ${new Date(intervalsLastSyncAt).toLocaleString()}`:'connected · first sync pending';
         const cutoff=Date.now()-30*86400000,recent30=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff);
         const c=document.getElementById('activity30Count'),h=document.getElementById('activity30Hours'),l=document.getElementById('activity30Load');if(c)c.textContent=recent30.length||'—';if(h)h.textContent=recent30.length?(recent30.reduce((x,a)=>x+a.moving_time,0)/3600).toFixed(1):'—';if(l){const vals=recent30.filter(a=>a.training_load!=null);l.textContent=vals.length?Math.round(vals.reduce((x,a)=>x+a.training_load,0)):'—';}
-        renderActivityTrendSummary();
+        renderActivityCoverage();renderActivityTrendSummary();
         renderPersonalBests();renderHeartRateRanges();renderAerobicBaselines();
-        const list=document.getElementById('activityList');if(!list)return;if(!importedActivities.length){list.innerHTML=`<div class="activity-empty">${key?'Connected. Sync will import your recent Intervals.icu activities.':'Connect Intervals.icu once and your recent activities will appear here automatically.'}</div>`;return;}
+        const list=document.getElementById('activityList');if(!list)return;if(!importedActivities.length){list.innerHTML=`<div class="activity-empty">${key?'Connected. Sync will import your Intervals.icu training history.':'Connect Intervals.icu once and your activities will appear here automatically.'}</div>`;return;}
         list.innerHTML=importedActivities.slice(0,80).map(renderActivityRow).join('');bindActivityResponseControls(list);
       }
       function setupIntervalsImport(){
         document.getElementById('intervalsConnectBtn')?.addEventListener('click',async()=>{const input=document.getElementById('intervalsApiKeyInput'),key=input?.value.trim();if(!key){showToast('paste your Intervals.icu API key first');return;}setIntervalsApiKey(key);if(input)input.value='';renderActivitiesPanel();const ok=await syncIntervalsActivities();if(!ok){setIntervalsApiKey('');renderActivitiesPanel();}});
         document.getElementById('intervalsSyncBtn')?.addEventListener('click',()=>syncIntervalsActivities());
+        document.getElementById('intervalsFullSyncBtn')?.addEventListener('click',()=>syncIntervalsActivities({full:true}));
         document.getElementById('intervalsDisconnectBtn')?.addEventListener('click',()=>{setIntervalsApiKey('');renderActivitiesPanel();showToast('Intervals.icu disconnected — imported history stays in Focus::Flow');});
         document.getElementById('pbRangeTabs')?.addEventListener('click',e=>{const btn=e.target.closest('[data-pb-range]');if(!btn)return;personalBestRange=btn.dataset.pbRange;renderPersonalBests();});
         document.getElementById('powerUnitToggle')?.addEventListener('click',e=>{const btn=e.target.closest('[data-power-unit]');if(!btn)return;if(btn.dataset.powerUnit==='wkg'&&!getMostRecentBodyweight()){showToast('log bodyweight in Recovery first — W/kg needs your weight');return;}powerDisplayUnit=btn.dataset.powerUnit;renderPersonalBests();});
