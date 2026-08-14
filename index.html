@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.130 goals and task intelligence -->
+<!-- Focus::Flow deployment marker: v1.131 forecast and session ordering -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -239,7 +239,7 @@
     .today-later-card { grid-column:1/-1; }
     .recovery-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 1.5rem; align-items:start; }
     .recovery-snapshot-card { align-self: start; }
-    #panel-recovery…202229 tokens truncated…){const diff=data.recovery.secondHalfAvg-data.recovery.firstHalfAvg;recInsights.push(['freshness',Math.abs(diff)<8?'freshness stayed fairly steady through the week.':`freshness moved ${Math.abs(diff)} points ${diff>0?'up':'down'} from the first half of the week to the second.`]);}
+    #panel-recove…203686 tokens truncated…){const diff=data.recovery.secondHalfAvg-data.recovery.firstHalfAvg;recInsights.push(['freshness',Math.abs(diff)<8?'freshness stayed fairly steady through the week.':`freshness moved ${Math.abs(diff)} points ${diff>0?'up':'down'} from the first half of the week to the second.`]);}
         if(data.sleepDebt)recInsights.push(['recent sleep deficit',`${data.sleepDebt.hours.toFixed(1)}h below target across ${data.sleepDebt.daysWithData} logged nights; not a literal balance to repay.`]);
         if(data.sleepConsistency)recInsights.push(['sleep timing',`consistency ${data.sleepConsistency.score}/100; average timing swing about ${Math.round(data.sleepConsistency.avgStdDevMinutes)} min.`]);
         if(recInsights.length)html+=`<div class="retro-insight-list">${recInsights.map(([k,t])=>`<div class="retro-insight"><div class="retro-insight-key">${k}</div><div class="retro-insight-text">${t}</div></div>`).join('')}</div>`;
