@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.136 supportive habits and weekly reflection -->
+<!-- Focus::Flow deployment marker: v1.137 progressive disclosure, activity curves, and calmer surfaces -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1833,6 +1833,63 @@
     #habitCheckWrap .heatmap-cell { width:100%; max-width:46px; align-self:center; aspect-ratio:1; height:auto; min-height:18px; }
     .hrv-gradient-dot { background:linear-gradient(90deg,#e05a5a,#d4a94a,#5ec98a) !important; width:30px !important; border-radius:999px !important; }
 
+    /* v1.137: calmer decision surfaces, compact controls, and richer activity records. */
+    select { color-scheme:dark; background-color:var(--sub-alt-color); color:var(--text-color); border-color:var(--border-color); }
+    select option, select optgroup { background:var(--sub-alt-color); color:var(--text-color); }
+    [data-theme="nord"] select,[data-theme="sand"] select,[data-theme="dial"] select,[data-theme="sakura"] select,[data-theme="monochrome"] select { color-scheme:light; }
+    .glance-tile .mini-ring-fill { filter:none !important; stroke-width:3.5; }
+
+    .training-prescription-card,.training-prescription-card.cardio,.training-prescription-card.strength { background:transparent; box-shadow:none; }
+    .training-prescription-card.cardio { border-left:3px solid #d4a94a; }
+    .training-prescription-card.strength { border-left:3px solid var(--main-color); }
+    .training-evidence { margin-top:.75rem; border:1px solid var(--border-color); border-radius:.72rem; overflow:hidden; }
+    .training-evidence-toggle { width:100%; display:flex; align-items:center; justify-content:space-between; gap:.7rem; padding:.62rem .72rem; border:0; background:transparent; color:var(--text-color); cursor:pointer; text-align:left; }
+    .training-evidence-counts { display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; font:.58rem 'JetBrains Mono',monospace; }
+    .training-evidence-count { border:1px solid var(--border-color); border-radius:999px; padding:.16rem .4rem; }
+    .training-evidence-count.good { color:#5ec98a; border-color:rgba(94,201,138,.45); }
+    .training-evidence-count.caution { color:#d4a94a; border-color:rgba(212,169,74,.48); }
+    .training-evidence-count.stop { color:#e05a5a; border-color:rgba(224,90,90,.48); }
+    .training-evidence-count.missing { opacity:.5; }
+    .training-evidence-label { font-size:.58rem; opacity:.58; white-space:nowrap; }
+    .training-evidence-body { display:none; padding:.7rem; border-top:1px solid var(--border-color); }
+    .training-evidence.open .training-evidence-body { display:block; }
+    .training-evidence .training-call-explainer { margin-top:.65rem; }
+    .outlook-column,.outlook-column.improved { background:transparent; box-shadow:none; }
+    .outlook-load-chip { background:transparent; }
+
+    .task-controls-details,.activity-connection-details { border:1px solid var(--border-color); border-radius:.65rem; margin:.55rem 0; color:var(--text-color); }
+    .task-controls-details > summary,.activity-connection-details > summary { cursor:pointer; list-style:none; padding:.55rem .65rem; display:flex; align-items:center; justify-content:space-between; gap:.6rem; font-size:.63rem; color:var(--text-color); }
+    .task-controls-details > summary::-webkit-details-marker,.activity-connection-details > summary::-webkit-details-marker { display:none; }
+    .task-controls-details > summary::after,.activity-connection-details > summary::after { content:'+'; font:700 .75rem 'JetBrains Mono',monospace; color:var(--main-color); }
+    .task-controls-details[open] > summary::after,.activity-connection-details[open] > summary::after { content:'−'; }
+    .task-controls-body,.activity-connection-body { padding:.1rem .65rem .65rem; border-top:1px solid var(--border-color); }
+    .task-controls-details .sort-tabs,.task-controls-details .quick-timer-presets { margin-top:.55rem; }
+    .task-controls-details #collapseAllTasksBtn { margin-top:.55rem; margin-bottom:0 !important; }
+    #intervalsSyncCard { grid-column:1/-1; order:20; }
+    .activity-connection-summary { display:flex; align-items:center; gap:.45rem; }
+
+    .pb-toolbar { display:flex; align-items:center; justify-content:space-between; gap:.7rem; flex-wrap:wrap; margin-top:.65rem; }
+    .pb-toolbar .sort-tabs { margin:0; }
+    .power-unit-toggle { border:1px solid var(--border-color); border-radius:999px; display:flex; padding:2px; }
+    .power-unit-btn { border:0; background:transparent; color:var(--text-color); opacity:.55; cursor:pointer; border-radius:999px; padding:.22rem .48rem; font:.56rem 'JetBrains Mono',monospace; }
+    .power-unit-btn.active { background:var(--main-color); color:var(--bg-color); opacity:1; }
+    .power-curve-card { margin-top:.75rem; border:1px solid var(--border-color); border-radius:.72rem; padding:.65rem; }
+    .power-curve-head { display:flex; align-items:baseline; justify-content:space-between; gap:.6rem; margin-bottom:.4rem; }
+    .power-curve-title { font-size:.62rem; color:var(--sub-color); text-transform:uppercase; letter-spacing:.35px; }
+    .power-curve-note { font-size:.54rem; color:var(--text-color); opacity:.5; }
+    .power-curve-svg { width:100%; height:180px; display:block; overflow:visible; }
+    .power-curve-grid { stroke:var(--border-color); stroke-width:1; vector-effect:non-scaling-stroke; }
+    .power-curve-path { fill:none; stroke:var(--main-color); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+    .power-curve-label { fill:var(--text-color); opacity:.55; font:9px 'JetBrains Mono',monospace; }
+    .power-curve-empty { color:var(--text-color); opacity:.5; font-size:.62rem; padding:1rem 0; text-align:center; }
+
+    .habit-week-row { background:color-mix(in srgb,var(--sub-alt-color) 98%,var(--main-color) 2%); }
+    .habit-week-row:hover { background:color-mix(in srgb,var(--sub-alt-color) 94%,var(--main-color) 6%); }
+    .habit-overview-card #habitOverviewGrid > .overview-row:first-child { padding:0 .62rem; box-sizing:border-box; }
+    .habit-overview-card #habitOverviewGrid > .overview-row:first-child > .overview-label-cell { width:220px; }
+    [data-view-mode="mobile"] .habit-overview-card #habitOverviewGrid > .overview-row:first-child > .overview-label-cell { width:160px; }
+    .focus-heatmap-note { margin-top:-.25rem; color:var(--text-color); opacity:.5; font-size:.56rem; text-align:center; }
+
     @media(max-width:760px){
       .weekly-checkin-preview { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .weekly-checkin-status { align-items:flex-start; flex-direction:column; }
@@ -1840,6 +1897,9 @@
       .habit-week-row .overview-row-header { width:160px; }
       .habit-history-reasons { grid-template-columns:1fr; }
       #habitCheckWrap .heatmap-cell { min-height:16px; }
+      .training-evidence-toggle { align-items:flex-start; }
+      .training-evidence-label { white-space:normal; text-align:right; }
+      .power-curve-svg { height:150px; }
     }
   </style>
 </head>
@@ -2020,7 +2080,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.136 makes habits supportive instead of all-or-nothing, turns the heavy daily check-in into a 60-second weekly reflection, adds reasons and actions to habit history, fixes HRV trend colors, and adds subtle weekday context to sleep.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.137 makes the Training Call easier to scan, quiets Recovery surfaces, moves detailed inputs behind disclosure controls, adds progressive milestones and a longer desktop focus heatmap, streamlines Tasks and Activities, and adds date-range personal bests with W/kg and a power-duration curve.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2459,7 +2519,7 @@
             </div>
           </div>
           <div class="today-card">
-            <div class="recovery-guide-head"><h2>today at a glance</h2><button class="recovery-entry-toggle" id="recoveryGuideOpen">how Recovery works</button></div>
+            <h2>today at a glance</h2>
             <div class="glance-grid">
               <div class="glance-tile"><div class="glance-value" id="glanceTasksValue">0/0</div><div class="glance-label">tasks</div></div>
               <div class="glance-tile">
@@ -2536,12 +2596,17 @@
             <h2>tasks</h2>
             <button class="btn small" id="viewCurrentNextBtn" style="width:100%;justify-content:center;margin-bottom:0.6rem;">view current &amp; next →</button>
             <div class="task-input-group"><input type="text" id="taskInput" class="task-input" placeholder="add task..." autocomplete="off" /><button id="addTaskBtn" class="add-btn">+</button></div>
-            <div class="sort-tabs" id="newTaskTypeTabs" aria-label="Does this task need focused work?"><span class="preset-label">needs focused work?</span><button class="sort-btn active" data-type="focus">yes · can use timer</button><button class="sort-btn" data-type="todo">no · regular to-do</button></div>
             <datalist id="taskSuggestions"></datalist>
-            <div class="quick-timer-presets"><span class="preset-label">timer</span><button class="preset-btn" data-minutes="5">5m</button><button class="preset-btn" data-minutes="10">10m</button><button class="preset-btn" data-minutes="15">15m</button><button class="preset-btn" data-minutes="25">25m</button><button class="preset-btn" data-minutes="30">30m</button><button class="preset-btn" data-minutes="45">45m</button></div>
-            <div class="sort-tabs" id="taskFilterTabs"><button class="sort-btn active" data-filter="active">active</button><button class="sort-btn" data-filter="completed">completed</button></div>
-            <div class="sort-tabs" id="taskSortTabs"><button class="sort-btn active" data-sort="manual">manual</button><button class="sort-btn" data-sort="due">due date</button><button class="sort-btn" data-sort="priority">priority</button></div>
-            <button class="btn small" id="collapseAllTasksBtn" style="width:100%;justify-content:center;margin-bottom:0.5rem;font-size:0.65rem;opacity:0.75;">▾ collapse all expanded</button>
+            <details class="task-controls-details">
+              <summary><span>task options &amp; list view</span><span class="preset-label" id="taskControlsSummaryState">focus · active · manual</span></summary>
+              <div class="task-controls-body">
+                <div class="sort-tabs" id="newTaskTypeTabs" aria-label="Does this task need focused work?"><span class="preset-label">new task</span><button class="sort-btn active" data-type="focus">focus · can use timer</button><button class="sort-btn" data-type="todo">regular to-do</button></div>
+                <div class="quick-timer-presets"><span class="preset-label">timer</span><button class="preset-btn" data-minutes="5">5m</button><button class="preset-btn" data-minutes="10">10m</button><button class="preset-btn" data-minutes="15">15m</button><button class="preset-btn" data-minutes="25">25m</button><button class="preset-btn" data-minutes="30">30m</button><button class="preset-btn" data-minutes="45">45m</button></div>
+                <div class="sort-tabs" id="taskFilterTabs"><span class="preset-label">show</span><button class="sort-btn active" data-filter="active">active</button><button class="sort-btn" data-filter="completed">completed</button></div>
+                <div class="sort-tabs" id="taskSortTabs"><span class="preset-label">order</span><button class="sort-btn active" data-sort="manual">manual</button><button class="sort-btn" data-sort="due">due date</button><button class="sort-btn" data-sort="priority">priority</button></div>
+                <button class="btn small" id="collapseAllTasksBtn" style="width:100%;justify-content:center;font-size:0.65rem;opacity:0.75;">▾ collapse all expanded</button>
+              </div>
+            </details>
             <ul class="task-list" id="taskList"><li class="empty-tasks">no tasks yet</li></ul>
           </div>
 
@@ -2696,7 +2761,8 @@
           </div>
 
           <div class="heatmap-card">
-            <h2>focus heatmap (12 weeks)</h2>
+            <h2 id="focusHeatmapTitle">focus heatmap (24 weeks)</h2>
+            <div class="focus-heatmap-note" id="focusHeatmapNote">six months on desktop · twelve weeks on mobile</div>
             <div class="chart-nav-row"><button class="chart-nav-btn" id="heatmapNavBack" title="previous period">◀</button><span class="chart-range-label" id="heatmapRangeLabel"></span><button class="chart-nav-btn" id="heatmapNavForward" title="next period">▶</button></div>
             <div class="heatmap-wrap" id="heatmapWrap"></div>
             <div class="heatmap-legend"><span>less</span><span class="heatmap-legend-cell" style="background:var(--heat-0);"></span><span class="heatmap-legend-cell" style="background:var(--heat-1);"></span><span class="heatmap-legend-cell" style="background:var(--heat-2);"></span><span class="heatmap-legend-cell" style="background:var(--heat-3);"></span><span class="heatmap-legend-cell" style="background:var(--heat-4);"></span><span>more</span></div>
@@ -2777,7 +2843,7 @@
         <div class="recovery-grid">
 
           <div class="recovery-card recovery-daily-summary">
-            <h2>today at a glance</h2>
+            <div class="recovery-guide-head"><h2>today at a glance</h2><button class="recovery-entry-toggle" id="recoveryGuideOpen">how Recovery works</button></div>
             <div class="recovery-daily-summary-grid">
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">recovery signals</div><div class="recovery-summary-stat-value" id="summaryReadiness">--</div></div>
               <div class="recovery-summary-stat"><div class="recovery-summary-stat-label">body battery</div><div class="recovery-summary-stat-value" id="summaryCapacity">--</div></div>
@@ -2800,8 +2866,6 @@
                   <div class="training-call-badge" id="trainingCallBadge">--</div>
                   <div class="training-call-info">
                     <div class="training-call-reasons" id="trainingCallReasons"></div>
-                    <div class="training-call-confidence" id="trainingCallConfidence"></div>
-                    <div class="training-call-factors" id="trainingCallFactors"></div>
                     <div class="training-call-lifting-suggestion" id="trainingCallRaceWindow" style="display:none;"></div>
                   </div>
                 </div>
@@ -2812,9 +2876,19 @@
                 <div class="training-strength-context">Strength is evaluated separately so an easy cardio call does not automatically mean “lift,” and a valid lift never hides the primary cardio prescription.</div>
               </section>
             </div>
+            <div class="training-evidence" id="trainingEvidence">
+              <button type="button" class="training-evidence-toggle" id="trainingEvidenceToggle" aria-expanded="false">
+                <span class="training-evidence-counts" id="trainingSignalSummary"><span class="training-evidence-count missing">waiting for signals</span></span>
+                <span class="training-evidence-label">view the inputs</span>
+              </button>
+              <div class="training-evidence-body" id="trainingEvidenceBody">
+                <div class="training-call-confidence" id="trainingCallConfidence"></div>
+                <div class="training-call-factors" id="trainingCallFactors"></div>
+                <div class="training-call-explainer">Green means an available signal looks fine, yellow is caution, and red is a stop signal. The call is conservative: one meaningful caution can change the prescription instead of being averaged away.</div>
+              </div>
+            </div>
             <div class="training-call-support">
               <div class="session-order-card" id="sessionOrderCard" style="display:none;"></div>
-              <div class="training-call-explainer">each chip above is one input into today's call — green means that signal looks fine, yellow means it's pulling the call toward something easier. the badge is the most conservative reading across all of them, not an average, so one yellow chip can be enough to change it.</div>
               <div class="training-call-week-row">
                 <span id="trainingCallWeekText">0 / 5 this week</span>
                 <div class="training-call-week-track"><div class="training-call-week-fill" id="trainingCallWeekFill"></div></div>
@@ -3065,14 +3139,16 @@
       <!-- Books Panel -->
       <div class="panel" id="panel-activities">
         <div class="activities-grid">
-          <div class="activity-card">
-            <div class="card-header-title">Intervals.icu sync</div>
-            <div class="goals-intro-note" style="margin-top:.35rem;">Activities are imported automatically — no workout metrics are entered by hand. Focus::Flow keeps a local summary for trends while Intervals.icu remains the source of truth.</div>
-            <div class="activity-connect-status"><span class="activity-status-dot" id="intervalsStatusDot"></span><span id="intervalsStatusText">not connected</span></div>
+          <div class="activity-card" id="intervalsSyncCard">
+            <div class="card-header-title">Activity connection</div>
+            <div class="goals-intro-note" style="margin-top:.35rem;">This setup lives at the bottom because your history and records are the useful part. Connect once per browser/device; the key stays local and sync then runs automatically.</div>
+            <details class="activity-connection-details">
+              <summary><span>Intervals.icu settings</span><span class="activity-connection-summary"><span class="activity-status-dot" id="intervalsStatusDot"></span><span id="intervalsStatusText">not connected</span></span></summary>
+              <div class="activity-connection-body">
             <div id="intervalsConnectForm">
               <label class="recovery-input-group" style="display:block;"><span style="font-size:.58rem;opacity:.55;text-transform:uppercase;">personal API key</span></label>
               <div class="activity-api-row"><input class="search-input" id="intervalsApiKeyInput" type="password" autocomplete="off" placeholder="paste Intervals.icu API key"><button class="btn primary small" id="intervalsConnectBtn">connect</button></div>
-              <div class="goals-intro-note" style="margin-top:.5rem;">Find it near the bottom of Intervals.icu Settings. The key is stored only in this browser/device and is excluded from Focus::Flow backups and cloud sync.</div>
+              <div class="goals-intro-note" style="margin-top:.5rem;">Find it near the bottom of Intervals.icu Settings. Paste it once on this browser/device. It is excluded from Focus::Flow backups and cloud sync, so a different device needs its own one-time paste.</div>
             </div>
             <div id="intervalsConnectedActions" style="display:none;">
               <div style="display:flex;gap:.45rem;margin-top:.65rem;"><button class="btn primary small" id="intervalsSyncBtn">sync now</button><button class="btn small" id="intervalsDisconnectBtn">disconnect</button></div>
@@ -3081,17 +3157,27 @@
             </div>
             <div class="activity-trend-block">
               <div class="activity-trend-title">what gets imported</div>
-              <div class="goals-intro-note">sport · duration · distance · training load · average/max heart rate · average/normalized power · pace/speed · cadence · elevation · efficiency/decoupling, plus all-time pace and power best-effort curves when available.</div>
+              <div class="goals-intro-note">sport · duration · distance · training load · average/max heart rate · average/normalized power · pace/speed · cadence · elevation · efficiency/decoupling, plus date-range pace and power best-effort curves when available.</div>
             </div>
+              </div>
+            </details>
           </div>
           <div class="activity-card activity-pb-card">
             <div class="card-header-title">Personal bests</div>
-            <div class="goals-intro-note" style="margin-top:.35rem;">All-time records are pulled from Intervals.icu best-effort curves. They are never overwritten by a slower period or a break from training.</div>
+            <div class="goals-intro-note" style="margin-top:.35rem;">Best efforts come from Intervals.icu curves. Choose a time window to compare your current form with your all-time history; changing the view never overwrites the all-time record.</div>
+            <div class="pb-toolbar">
+              <div class="sort-tabs" id="pbRangeTabs"><button class="sort-btn active" data-pb-range="all">all time</button><button class="sort-btn" data-pb-range="365">1 year</button><button class="sort-btn" data-pb-range="90">90 days</button><button class="sort-btn" data-pb-range="30">30 days</button></div>
+              <div class="power-unit-toggle" id="powerUnitToggle" aria-label="Power display units"><button class="power-unit-btn active" data-power-unit="watts">watts</button><button class="power-unit-btn" data-power-unit="wkg">W/kg</button></div>
+            </div>
             <div class="activity-pb-groups">
               <div class="activity-pb-group"><div class="activity-pb-title">running · best efforts</div><div class="activity-pb-grid" id="runPbGrid"></div><div class="activity-pb-note">1 km · 1 mile · 5 km · 10 km · half marathon · marathon, when Intervals.icu has enough pace data.</div></div>
               <div class="activity-pb-group"><div class="activity-pb-title">cycling · power records</div><div class="activity-pb-grid" id="ridePbGrid"></div><div class="activity-pb-note">5 sec · 1 min · 5 min · 20 min · 60 min mean-maximal power, when power data is available.</div></div>
             </div>
             <div class="activity-pb-note" id="pbSyncStatus">Connect Intervals.icu to load all-time records automatically.</div>
+            <div class="power-curve-card">
+              <div class="power-curve-head"><div class="power-curve-title">cycling power-duration curve</div><div class="power-curve-note" id="powerCurveNote">selected range · logarithmic time axis</div></div>
+              <div id="powerCurveWrap"><div class="power-curve-empty">Sync power activities to draw the curve.</div></div>
+            </div>
             <div class="activity-trend-block" id="achievementFeedBlock" style="display:none;">
               <div class="activity-trend-title">near-best awards</div>
               <div class="goals-intro-note">Not every good effort has to be a PB. Focus::Flow also calls out high-ranking efforts such as “6th best 5K this year” or “10th best all time” when Intervals.icu supplies enough effort history.</div>
@@ -3227,7 +3313,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.136';
+      const APP_VERSION='1.137';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3252,7 +3338,8 @@
       let sessionResponses={};
       let manualTrainingSessions={};
       let trainingCallSnapshots={};
-      let intervalsBestRecords={run:{},ride:{},lastSyncAt:null};
+      let intervalsBestRecords={run:{},ride:{},ranges:{},lastSyncAt:null};
+      let personalBestRange='all',powerDisplayUnit='watts';
       let intervalsLastSyncAt=null;
       let intervalsSyncInFlight=false;
       let intervalsAutoSyncTimer=null;
@@ -3516,12 +3603,13 @@
       updateLevelDisplay=function(){
         const workouts=(importedActivities||[]).length+(liftingHistory||[]).filter(h=>h.kind==='exposure').length,finishedBooks=(books||[]).filter(b=>b.status==='finished').length,focusedHours=Math.floor(totalFocusMinutes/60);
         const lifetimeUnits=focusedHours+Math.floor(tasksCompletedCount/2)+Math.floor(sessionsCompleted/4)+finishedBooks*5+Math.floor(workouts/5),lifetimeLevel=1+Math.floor(lifetimeUnits/100);
-        const milestones=[['100 focus sessions',sessionsCompleted,100],['50 focused hours',focusedHours,50],['100 tasks completed',tasksCompletedCount,100],['12 books finished',finishedBooks,12],['100 workouts recorded',workouts,100]];
+        const ladder=(value,targets)=>{let next=targets.find(x=>x>value);if(!next){next=targets[targets.length-1];while(next<=value)next*=2;}const reached=targets.filter(x=>x<=value).pop()||0,previous=next>targets[targets.length-1]?next/2:reached,progress=Math.max(0,Math.min(100,(value-previous)/Math.max(1,next-previous)*100));return{next,reached,progress};};
+        const milestones=[['focus sessions',sessionsCompleted,[10,25,50,100,250,500,1000,2500]],['focused hours',focusedHours,[10,25,50,100,250,500,1000,2500]],['tasks completed',tasksCompletedCount,[25,50,100,250,500,1000,2500,5000]],['books finished',finishedBooks,[1,3,6,12,24,50,100]],['workouts recorded',workouts,[10,25,50,100,250,500,1000,2500]]].map(([name,value,targets])=>({name,value,...ladder(value,targets)}));
         const readout=document.getElementById('levelInfoReadout');if(readout)readout.textContent=`lifetime level ${lifetimeLevel} · ${focusedHours} focused hours · ${tasksCompletedCount} tasks finished`;
         const headerChip=document.getElementById('headerLevelChip');if(headerChip)headerChip.innerHTML=`<b>lifetime ${lifetimeLevel}</b>`;
-        const next=milestones.filter(m=>m[1]<m[2]).sort((a,b)=>(b[1]/b[2])-(a[1]/a[2]))[0],progress=next?Math.min(100,next[1]/next[2]*100):100,ringFill=document.getElementById('headerXpRingFill'),ringWrap=document.getElementById('headerXpRing');
-        if(ringFill){const circumference=62.8;ringFill.style.strokeDashoffset=circumference-(progress/100)*circumference;}if(ringWrap)ringWrap.title=next?`next milestone: ${next[0]} · ${next[1]}/${next[2]}`:'all current milestones achieved';
-        const list=document.getElementById('milestoneList');if(list)list.innerHTML=milestones.map(([name,value,target])=>`<div class="milestone-row${value>=target?' achieved':''}"><div><div class="milestone-name">${name}</div><div class="milestone-detail">${Math.min(value,target)} / ${target}</div></div><div class="milestone-state">${value>=target?'achieved':'in progress'}</div></div>`).join('');
+        const next=milestones.slice().sort((a,b)=>b.progress-a.progress)[0],progress=next?.progress||0,ringFill=document.getElementById('headerXpRingFill'),ringWrap=document.getElementById('headerXpRing');
+        if(ringFill){const circumference=62.8;ringFill.style.strokeDashoffset=circumference-(progress/100)*circumference;}if(ringWrap)ringWrap.title=next?`next milestone: ${next.next} ${next.name} · ${next.value}/${next.next}`:'lifetime progress';
+        const list=document.getElementById('milestoneList');if(list)list.innerHTML=milestones.map(m=>`<div class="milestone-row${m.reached?' achieved':''}"><div><div class="milestone-name">${escapeHtml(m.name)}</div><div class="milestone-detail">${m.value} lifetime${m.reached?` · last milestone ${m.reached}`:' · first milestone ahead'}</div></div><div class="milestone-state">next ${m.next}</div></div>`).join('');
         const section=readout&&readout.closest('.settings-section');if(section&&!section.dataset.modernized){section.dataset.modernized='1';section.querySelector('.settings-section-title').textContent='lifetime progress';section.querySelectorAll('.settings-desc').forEach(e=>e.remove());const d=document.createElement('div');d.className='settings-desc';d.style.cssText='max-width:none;line-height:1.55;';d.textContent='A quiet historical marker based on focus, completed tasks, books and recorded training. It never resets, unlocks nothing important, and has no multipliers or prestige. Milestones tell the useful story.';section.appendChild(d);}
       };
       function getPrestigeXPBonus(prestige){return 1+prestige*0.04;}
@@ -3812,26 +3900,40 @@
         const rank=efforts.findIndex(x=>x===latest)+1;
         return latest&&rank?{...latest,rank,total:efforts.length}:null;
       }
+      function compactPowerCurve(curve){
+        if(!curve||!Array.isArray(curve.secs)||!Array.isArray(curve.values))return null;
+        const n=Math.min(curve.secs.length,curve.values.length);if(!n)return null;
+        const wanted=new Set([0,n-1]);
+        const anchors=[5,15,30,60,120,300,600,1200,1800,3600,7200,14400];
+        anchors.forEach(sec=>{let bi=0,bd=Infinity;for(let i=0;i<n;i++){const d=Math.abs(Number(curve.secs[i])-sec);if(d<bd){bd=d;bi=i;}}wanted.add(bi);});
+        const samples=Math.min(96,n);for(let i=0;i<samples;i++)wanted.add(Math.round((Math.exp(i/(samples-1)*Math.log(n))-1)/(n-1)*(n-1)));
+        const rows=Array.from(wanted).filter(i=>i>=0&&i<n).sort((a,b)=>a-b).map(i=>[Number(curve.secs[i]),Number(curve.values[i])]).filter(x=>Number.isFinite(x[0])&&x[0]>0&&Number.isFinite(x[1])&&x[1]>0);
+        return rows.length?{secs:rows.map(x=>x[0]),values:rows.map(x=>x[1])}:null;
+      }
       async function fetchIntervalsPersonalBests(){
-        const key=getIntervalsApiKey();if(!key)return false;const auth='Basic '+btoa('API_KEY:'+key),today=isoDateOffset(1),year=new Date().getFullYear(),yearStart=`${year}-01-01`;let changed=false;
-        intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};
-        try{
-          const distances=[1000,1609,5000,10000,21097,42195];
-          const url=`https://intervals.icu/api/v1/athlete/0/activity-pace-curves.json?oldest=2000-01-01&newest=${today}&distances=${distances.join(',')}&gap=false&type=Run&includeRanks=true`;
-          const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok){
-            const data=await r.json(),next={},ranks={};
-            [['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]].forEach(([label,d])=>{
-              const efforts=paceEffortsFromSet(data,d);if(efforts.length){next[label]=efforts[0].value;const all=rankForLatestEffort(efforts),yearEfforts=efforts.filter(x=>String(x.date)>=yearStart),yr=rankForLatestEffort(yearEfforts);ranks[label]={all,year:yr};}
-            });
-            if(Object.keys(next).length){intervalsBestRecords.run=next;intervalsBestRecords.runRanks=ranks;changed=true;}
-          }
-        }catch(e){}
-        try{
-          const durations=[5,60,300,1200,3600];
-          const requests=[['all','all'],['year',`r.${yearStart}.${today}`]];const curvesBy={};
-          for(const [keyName,curveSpec] of requests){const url=`https://intervals.icu/api/v1/athlete/0/power-curves.json?curves=${encodeURIComponent(curveSpec)}&type=Ride&includeRanks=true`;const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok)curvesBy[keyName]=firstCurveFromSet(await r.json());}
-          const next={},ranks={};[['5 sec',5],['1 min',60],['5 min',300],['20 min',1200],['60 min',3600]].forEach(([label,d])=>{const v=nearestCurveValue(curvesBy.all,d);if(v!=null)next[label]=Math.round(v);const yearV=nearestCurveValue(curvesBy.year,d);ranks[label]={yearValue:yearV!=null?Math.round(yearV):null};});if(Object.keys(next).length){intervalsBestRecords.ride=next;intervalsBestRecords.rideRanks=ranks;changed=true;}
-        }catch(e){}
+        const key=getIntervalsApiKey();if(!key)return false;
+        const auth='Basic '+btoa('API_KEY:'+key),today=isoDateOffset(1),yearStart=`${new Date().getFullYear()}-01-01`,distances=[1000,1609,5000,10000,21097,42195],durations=[['5 sec',5],['1 min',60],['5 min',300],['20 min',1200],['60 min',3600]];
+        const specs=[{key:'all',oldest:'2000-01-01',curve:'all'},{key:'365',oldest:isoDateOffset(-365),curve:'1y'},{key:'90',oldest:isoDateOffset(-90),curve:'90d'},{key:'30',oldest:isoDateOffset(-30),curve:'30d'}];
+        const previous=intervalsBestRecords.ranges||{},nextRanges={};let changed=false,allRanks={};
+        for(const spec of specs){
+          const range={run:{...(previous[spec.key]?.run||{})},ride:{...(previous[spec.key]?.ride||{})},rideCurve:previous[spec.key]?.rideCurve||null};
+          try{
+            const url=`https://intervals.icu/api/v1/athlete/0/activity-pace-curves.json?oldest=${spec.oldest}&newest=${today}&distances=${distances.join(',')}&gap=false&type=Run&includeRanks=true`;
+            const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok){const data=await r.json(),run={};[['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]].forEach(([label,d])=>{const efforts=paceEffortsFromSet(data,d);if(efforts.length){run[label]=efforts[0].value;if(spec.key==='all'){const all=rankForLatestEffort(efforts),yr=rankForLatestEffort(efforts.filter(x=>String(x.date)>=yearStart));allRanks[label]={all,year:yr};}}});if(Object.keys(run).length){range.run=run;changed=true;}}
+          }catch(e){}
+          try{
+            const url=`https://intervals.icu/api/v1/athlete/0/power-curves.json?curves=${encodeURIComponent(spec.curve)}&type=Ride&includeRanks=true`;
+            const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok){const curve=firstCurveFromSet(await r.json()),ride={};durations.forEach(([label,d])=>{const v=nearestCurveValue(curve,d);if(v!=null)ride[label]=Math.round(v);});if(Object.keys(ride).length){range.ride=ride;range.rideCurve=compactPowerCurve(curve);changed=true;}}
+          }catch(e){}
+          nextRanges[spec.key]=range;
+        }
+        if(changed){
+          intervalsBestRecords.ranges=nextRanges;
+          intervalsBestRecords.run=nextRanges.all?.run||intervalsBestRecords.run||{};
+          intervalsBestRecords.ride=nextRanges.all?.ride||intervalsBestRecords.ride||{};
+          intervalsBestRecords.runRanks=allRanks;
+          const yearRide=nextRanges['365']?.ride||{};intervalsBestRecords.rideRanks={};durations.forEach(([label])=>intervalsBestRecords.rideRanks[label]={yearValue:yearRide[label]??null});
+        }
         if(changed){intervalsBestRecords.lastSyncAt=new Date().toISOString();saveData();}return changed;
       }
       function rankChips(rankInfo){
@@ -3845,14 +3947,38 @@
         const block=document.getElementById('achievementFeedBlock'),feed=document.getElementById('activityAchievementFeed');if(!block||!feed)return;
         const rows=[];
         Object.entries(intervalsBestRecords.runRanks||{}).forEach(([label,r])=>{if(r?.year?.rank&&r.year.rank<=10)rows.push({name:`${ordinal(r.year.rank)} best ${label} this year`,value:fmtPbTime(r.year.value),rank:r.year.rank});if(r?.all?.rank&&r.all.rank>1&&r.all.rank<=10)rows.push({name:`${ordinal(r.all.rank)} best ${label} all time`,value:fmtPbTime(r.all.value),rank:r.all.rank});});
-        rows.sort((a,b)=>a.rank-b.rank);feed.innerHTML=rows.slice(0,8).map(x=>`<div class="activity-achievement-row"><div class="activity-achievement-name">${escapeHtml(x.name)}</div><div class="activity-achievement-value">${escapeHtml(x.value)}</div></div>`).join('');block.style.display=rows.length?'block':'none';
+        rows.sort((a,b)=>a.rank-b.rank);feed.innerHTML=rows.slice(0,8).map(x=>`<div class="activity-achievement-row"><div class="activity-achievement-name">${escapeHtml(x.name)}</div><div class="activity-achievement-value">${escapeHtml(x.value)}</div></div>`).join('');block.style.display=rows.length&&personalBestRange==='all'?'block':'none';
+      }
+      function getSelectedPersonalBestData(){
+        const ranges=intervalsBestRecords.ranges||{};
+        if(ranges[personalBestRange])return ranges[personalBestRange];
+        return personalBestRange==='all'?{run:intervalsBestRecords.run||{},ride:intervalsBestRecords.ride||{},rideCurve:null}:{run:{},ride:{},rideCurve:null};
+      }
+      function getPowerDisplayContext(){
+        const bw=getMostRecentBodyweight(),kg=bw&&Number(bw.weight)>0?Number(bw.weight)*0.45359237:null;
+        return{kg,bw,factor:powerDisplayUnit==='wkg'&&kg?1/kg:1,unit:powerDisplayUnit==='wkg'&&kg?'W/kg':'W'};
+      }
+      function renderPowerDurationCurve(rangeData){
+        const wrap=document.getElementById('powerCurveWrap'),note=document.getElementById('powerCurveNote');if(!wrap)return;
+        const curve=rangeData?.rideCurve,ctx=getPowerDisplayContext(),rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[personalBestRange]||personalBestRange;
+        if(note)note.textContent=`${rangeLabel} · ${ctx.unit}${ctx.unit==='W/kg'?' from latest bodyweight':''} · logarithmic time axis`;
+        if(!curve||!Array.isArray(curve.secs)||curve.secs.length<2){wrap.innerHTML='<div class="power-curve-empty">No power curve is available for this range yet.</div>';return;}
+        const rows=curve.secs.map((sec,i)=>({sec:Number(sec),value:Number(curve.values[i])*ctx.factor})).filter(x=>x.sec>0&&x.value>0).sort((a,b)=>a.sec-b.sec);if(rows.length<2){wrap.innerHTML='<div class="power-curve-empty">No power curve is available for this range yet.</div>';return;}
+        const W=720,H=190,L=48,R=16,T=12,B=28,x0=Math.log(rows[0].sec),x1=Math.log(rows[rows.length-1].sec),maxV=Math.max(...rows.map(x=>x.value))*1.08,minV=Math.max(0,Math.min(...rows.map(x=>x.value))*.82);
+        const x=s=>L+(Math.log(s)-x0)/(x1-x0)*(W-L-R),y=v=>T+(maxV-v)/(maxV-minV)*(H-T-B),path=rows.map((p,i)=>`${i?'L':'M'}${x(p.sec).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
+        const xTicks=[5,60,300,1200,3600,14400].filter(s=>s>=rows[0].sec&&s<=rows[rows.length-1].sec),xLabels={5:'5s',60:'1m',300:'5m',1200:'20m',3600:'1h',14400:'4h'};
+        const yTicks=[0,.5,1].map(f=>minV+(maxV-minV)*f);
+        wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cycling power-duration curve for ${escapeHtml(rangeLabel)}">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${ctx.unit==='W/kg'?v.toFixed(1):Math.round(v)}</text>`).join('')}${xTicks.map(s=>`<line class="power-curve-grid" x1="${x(s)}" x2="${x(s)}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${x(s)}" y="${H-8}" text-anchor="middle">${xLabels[s]}</text>`).join('')}<path class="power-curve-path" d="${path}"></path></svg>`;
       }
       function renderPersonalBests(){
         const run=document.getElementById('runPbGrid'),ride=document.getElementById('ridePbGrid'),status=document.getElementById('pbSyncStatus');if(!run||!ride)return;
-        const runOrder=['1k','1 mile','5k','10k','half','marathon'],rideOrder=['5 sec','1 min','5 min','20 min','60 min'];
-        run.innerHTML=runOrder.map(k=>`<div class="activity-pb-item"><div class="activity-pb-value">${intervalsBestRecords.run?.[k]?fmtPbTime(intervalsBestRecords.run[k]):'—'}</div><div class="activity-pb-label">${escapeHtml(k)}</div>${rankChips(intervalsBestRecords.runRanks?.[k])}</div>`).join('');
-        ride.innerHTML=rideOrder.map(k=>`<div class="activity-pb-item"><div class="activity-pb-value">${intervalsBestRecords.ride?.[k]!=null?Math.round(intervalsBestRecords.ride[k])+' W':'—'}</div><div class="activity-pb-label">${escapeHtml(k)}</div>${intervalsBestRecords.rideRanks?.[k]?.yearValue!=null&&intervalsBestRecords.ride?.[k]!=null&&intervalsBestRecords.rideRanks[k].yearValue===Math.round(intervalsBestRecords.ride[k])?'<div class="activity-pb-ranks"><span class="activity-rank-chip year top">year best = all-time best</span></div>':''}</div>`).join('');
-        if(status)status.textContent=getIntervalsApiKey()?(intervalsBestRecords.lastSyncAt?`records + ranking context synced ${new Date(intervalsBestRecords.lastSyncAt).toLocaleString()} · refreshed with activity sync`:'connected · personal-best sync pending'):'Connect Intervals.icu to load all-time records automatically.';
+        const rangeData=getSelectedPersonalBestData(),ctx=getPowerDisplayContext(),runOrder=['1k','1 mile','5k','10k','half','marathon'],rideOrder=['5 sec','1 min','5 min','20 min','60 min'];
+        run.innerHTML=runOrder.map(k=>`<div class="activity-pb-item"><div class="activity-pb-value">${rangeData.run?.[k]?fmtPbTime(rangeData.run[k]):'—'}</div><div class="activity-pb-label">${escapeHtml(k)}</div>${personalBestRange==='all'?rankChips(intervalsBestRecords.runRanks?.[k]):''}</div>`).join('');
+        ride.innerHTML=rideOrder.map(k=>{const value=rangeData.ride?.[k],display=value!=null?(ctx.unit==='W/kg'?(Number(value)*ctx.factor).toFixed(2):Math.round(value))+` ${ctx.unit}`:'—';return `<div class="activity-pb-item"><div class="activity-pb-value">${display}</div><div class="activity-pb-label">${escapeHtml(k)}</div>${personalBestRange==='all'&&intervalsBestRecords.rideRanks?.[k]?.yearValue!=null&&value!=null&&intervalsBestRecords.rideRanks[k].yearValue===Math.round(value)?'<div class="activity-pb-ranks"><span class="activity-rank-chip year top">year best = all-time best</span></div>':''}</div>`;}).join('');
+        const rangeLabel={all:'all-time',365:'one-year',90:'90-day',30:'30-day'}[personalBestRange];
+        if(status){if(!getIntervalsApiKey())status.textContent='Connect Intervals.icu to load personal records automatically.';else if(!intervalsBestRecords.lastSyncAt)status.textContent='connected · personal-best sync pending';else status.textContent=`${rangeLabel} records synced ${new Date(intervalsBestRecords.lastSyncAt).toLocaleString()}${ctx.unit==='W/kg'?(ctx.kg?' · W/kg uses your latest logged bodyweight':' · log bodyweight in Recovery to use W/kg'):''}`;}
+        document.querySelectorAll('#pbRangeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b.dataset.pbRange===personalBestRange));document.querySelectorAll('#powerUnitToggle .power-unit-btn').forEach(b=>b.classList.toggle('active',b.dataset.powerUnit===powerDisplayUnit));
+        renderPowerDurationCurve(rangeData);
         renderAchievementFeed();
       }
       function fmtHrRange(vals){vals=vals.filter(v=>Number.isFinite(v));if(!vals.length)return '—';const lo=Math.round(Math.min(...vals)),hi=Math.round(Math.max(...vals));return lo===hi?`${lo}`:`${lo}–${hi}`;}
@@ -3954,6 +4080,8 @@
         document.getElementById('intervalsConnectBtn')?.addEventListener('click',async()=>{const input=document.getElementById('intervalsApiKeyInput'),key=input?.value.trim();if(!key){showToast('paste your Intervals.icu API key first');return;}setIntervalsApiKey(key);if(input)input.value='';renderActivitiesPanel();const ok=await syncIntervalsActivities();if(!ok){setIntervalsApiKey('');renderActivitiesPanel();}});
         document.getElementById('intervalsSyncBtn')?.addEventListener('click',()=>syncIntervalsActivities());
         document.getElementById('intervalsDisconnectBtn')?.addEventListener('click',()=>{setIntervalsApiKey('');renderActivitiesPanel();showToast('Intervals.icu disconnected — imported history stays in Focus::Flow');});
+        document.getElementById('pbRangeTabs')?.addEventListener('click',e=>{const btn=e.target.closest('[data-pb-range]');if(!btn)return;personalBestRange=btn.dataset.pbRange;renderPersonalBests();});
+        document.getElementById('powerUnitToggle')?.addEventListener('click',e=>{const btn=e.target.closest('[data-power-unit]');if(!btn)return;if(btn.dataset.powerUnit==='wkg'&&!getMostRecentBodyweight()){showToast('log bodyweight in Recovery first — W/kg needs your weight');return;}powerDisplayUnit=btn.dataset.powerUnit;renderPersonalBests();});
         renderActivitiesPanel();
         setTimeout(()=>{if(getIntervalsApiKey())syncIntervalsActivities({silent:true});},2400);
         if(intervalsAutoSyncTimer)clearInterval(intervalsAutoSyncTimer);intervalsAutoSyncTimer=setInterval(()=>{if(getIntervalsApiKey()&&!document.hidden)syncIntervalsActivities({silent:true});},30*60*1000);
@@ -4156,7 +4284,7 @@ function updateNotificationSettingUI(){
         });
       }
 
-      function drawHeatmap(){drawHeatmapGrid('heatmapWrap',84,(day)=>dailyHistory[day]?.focusMinutes||0,1,true,heatmapOffset);updateHeatmapNavUI('heatmapNavBack','heatmapNavForward','heatmapRangeLabel',heatmapOffset,84,getFirstRecordedDay(dailyHistory));}
+      function drawHeatmap(){const mobile=document.body.dataset.viewMode==='mobile'||(document.body.dataset.viewMode!=='desktop'&&window.innerWidth<760),period=mobile?84:168,title=document.getElementById('focusHeatmapTitle'),note=document.getElementById('focusHeatmapNote');if(title)title.textContent=`focus heatmap (${mobile?'12':'24'} weeks)`;if(note)note.textContent=mobile?'twelve weeks · use arrows for earlier history':'six months at a glance · use arrows for earlier history';drawHeatmapGrid('heatmapWrap',period,(day)=>dailyHistory[day]?.focusMinutes||0,1,true,heatmapOffset);updateHeatmapNavUI('heatmapNavBack','heatmapNavForward','heatmapRangeLabel',heatmapOffset,period,getFirstRecordedDay(dailyHistory));}
       function drawHabitCheckGraph(){
         const habit=bgHabits.find(h=>h.id===selectedHabitForGraph),summary=document.getElementById('habitHistorySummary'),insight=document.getElementById('habitHistoryInsight');
         if(!habit){habitCheckWrap.innerHTML='';habitGraphName.textContent='select a habit';if(summary)summary.textContent='Choose one of the suggested habits to see why its pattern matters.';if(insight)insight.style.display='none';updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',0,parseInt(habitCheckPeriod),getToday());return;}
@@ -4911,10 +5039,15 @@ function updateNotificationSettingUI(){
         badge.className='training-call-badge '+data.level;
         badge.textContent=data.level==='test'?'fitness test':data.level;
         reasonsEl.innerHTML='';
-        data.reasons.forEach(r=>{const div=document.createElement('div');div.textContent=r;reasonsEl.appendChild(div);});
+        data.reasons.slice(0,2).forEach(r=>{const div=document.createElement('div');div.textContent=r;reasonsEl.appendChild(div);});
         const confidenceEl=document.getElementById('trainingCallConfidence');
         if(confidenceEl){const c=getTrainingCallConfidence(getToday());confidenceEl.innerHTML=`<span class="training-call-confidence-level ${c.level}">confidence: ${c.level}</span><span class="training-call-confidence-detail">${escapeHtml(c.detail)} · ${escapeHtml(c.evidence)}</span>`;confidenceEl.title='Confidence describes how much personal history supports the call. It does not change a caution signal or claim medical certainty.';}
         const factorsEl=document.getElementById('trainingCallFactors');
+        const signalSummary=document.getElementById('trainingSignalSummary');
+        if(signalSummary){
+          const available=(data.factors||[]).filter(f=>f.status),good=available.filter(f=>f.status==='green').length,caution=available.filter(f=>f.status==='yellow').length,stop=available.filter(f=>f.status==='red').length,total=available.length;
+          signalSummary.innerHTML=total?`<span class="training-evidence-count good">${good} of ${total} good</span>${caution?`<span class="training-evidence-count caution">${caution} caution</span>`:''}${stop?`<span class="training-evidence-count stop">${stop} stop</span>`:''}`:'<span class="training-evidence-count missing">waiting for available signals</span>';
+        }
         if(factorsEl){
           factorsEl.innerHTML='';
           (data.factors||[]).forEach(f=>{
@@ -7907,6 +8040,7 @@ function updateNotificationSettingUI(){
       document.getElementById('recoverySaveBtn').addEventListener('click',saveRecoveryEntry);
       document.getElementById('addManualSessionBtn').addEventListener('click',addManualTrainingSession);
       document.getElementById('outlookMobileMore').addEventListener('click',e=>{const card=document.getElementById('trainingOutlookCard'),expanded=card.classList.toggle('expanded-mobile');e.currentTarget.textContent=expanded?'show first 3 days':'show all 7 days';});
+      document.getElementById('trainingEvidenceToggle').addEventListener('click',e=>{const wrap=document.getElementById('trainingEvidence'),open=wrap.classList.toggle('open');e.currentTarget.setAttribute('aria-expanded',String(open));const label=e.currentTarget.querySelector('.training-evidence-label');if(label)label.textContent=open?'hide the inputs':'view the inputs';});
       document.getElementById('recoveryGuideOpen').addEventListener('click',()=>document.getElementById('recoveryGuideOverlay').classList.add('open'));
       document.getElementById('recoveryGuideClose').addEventListener('click',()=>document.getElementById('recoveryGuideOverlay').classList.remove('open'));
       document.getElementById('recoveryGuideOverlay').addEventListener('click',e=>{if(e.target.id==='recoveryGuideOverlay')e.currentTarget.classList.remove('open');});
@@ -8018,9 +8152,11 @@ function updateNotificationSettingUI(){
       goalInput.addEventListener('change',()=>{dailyGoal=parseInt(goalInput.value)||90;if(dailyGoal<1)dailyGoal=1;goalInput.value=dailyGoal;saveData();updateDashboard();});
       document.getElementById('habitGraphSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){habitGraphSort=e.target.dataset.sort;document.querySelectorAll('#habitGraphSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderHabitGraphList();saveData();}});
       document.getElementById('habitGraphPicker').addEventListener('change',e=>{selectedHabitForGraph=e.target.value||null;habitCheckOffset=0;renderHabitGraphList();drawHabitCheckGraph();saveData();});
-      document.getElementById('taskFilterTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskFilter=e.target.dataset.filter;document.querySelectorAll('#taskFilterTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();saveData();}});
-      document.getElementById('taskSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskSort=e.target.dataset.sort;document.querySelectorAll('#taskSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();saveData();}});
-      document.getElementById('newTaskTypeTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn'))document.querySelectorAll('#newTaskTypeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b===e.target));});
+      function updateTaskControlsSummary(){const el=document.getElementById('taskControlsSummaryState'),type=document.querySelector('#newTaskTypeTabs .sort-btn.active')?.dataset.type||'focus';if(el)el.textContent=`${type==='todo'?'to-do':'focus'} · ${taskFilter} · ${taskSort}`;}
+      document.getElementById('taskFilterTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskFilter=e.target.dataset.filter;document.querySelectorAll('#taskFilterTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();updateTaskControlsSummary();saveData();}});
+      document.getElementById('taskSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskSort=e.target.dataset.sort;document.querySelectorAll('#taskSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();updateTaskControlsSummary();saveData();}});
+      document.getElementById('newTaskTypeTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){document.querySelectorAll('#newTaskTypeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b===e.target));updateTaskControlsSummary();}});
+      updateTaskControlsSummary();
       document.getElementById('habitSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){habitOrderSort=e.target.dataset.sort;document.querySelectorAll('#habitSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderBgHabits();saveData();}});
       document.getElementById('libSearchInput').addEventListener('input',e=>{libSearchQuery=e.target.value;renderLibrary();});
       document.getElementById('habitSearchInput').addEventListener('input',e=>{habitSearchQuery=e.target.value;renderBgHabits();});
@@ -8608,7 +8744,7 @@ function updateNotificationSettingUI(){
         const habitPct=bgHabits.length>0?Math.round(metHabits/bgHabits.length*100):0;
         const ring=document.getElementById('glanceHabitRing');
         const pctText=document.getElementById('glanceHabitPct');
-        if(ring){const circumference=94.2;ring.style.strokeDashoffset=circumference-(habitPct/100)*circumference;const progColor=getProgressColor(habitPct);ring.style.stroke=progColor;ring.style.filter=`drop-shadow(0 0 1.5px ${progColor})`;}
+        if(ring){const circumference=94.2;ring.style.strokeDashoffset=circumference-(habitPct/100)*circumference;ring.style.stroke=getProgressColor(habitPct);ring.style.filter='none';}
         if(pctText)pctText.textContent=habitPct+'%';
         const focusValue=document.getElementById('glanceFocusValue');
         if(focusValue)focusValue.textContent=todayFocusMinutes+'m';
