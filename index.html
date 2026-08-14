@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.133 personal pattern intelligence -->
+<!-- Focus::Flow deployment marker: v1.134 habits and daily interface cleanup -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -185,8 +185,8 @@
     [data-theme="cyberspace"] .settings-gear, [data-theme="midnight"] .settings-gear, [data-theme="cadence"] .settings-gear, [data-theme="slate"] .settings-gear, [data-theme="ocean"] .settings-gear { background: rgba(0, 0, 0, 0.32); }
     .settings-gear:hover { border-color: var(--main-color); color: var(--main-color); box-shadow: 0 0 15px var(--main-glow); opacity: 1; transform: rotate(45deg); }
 
-    .hero-timer-card { padding: 2rem 1.5rem 1.6rem; margin-bottom: 1.5rem; }
-    .hero-timer-card .timer-display { font-size: clamp(3.5rem, 11vw, 6.5rem); margin: 0.9rem 0; padding: 0.7rem 2.2rem; letter-spacing: 4px; }
+    .hero-timer-card { padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .hero-timer-card .timer-display { font-size: clamp(3.5rem, 9vw, 5.6rem); margin: 0.45rem 0; padding: 0.45rem 1.4rem; letter-spacing: 4px; }
     .hero-timer-card .control-buttons { margin: 0.6rem 0; }
     .hero-timer-card .control-buttons .btn { font-size: 0.85rem; padding: 0.6rem 1.4rem; }
     .hero-timer-card .control-buttons .btn.primary { font-size: 1rem; padding: 0.75rem 2rem; }
@@ -429,8 +429,10 @@
     .book-vocab-del { background: transparent; border: none; color: var(--text-color); opacity: 0.4; cursor: pointer; font-size: 0.8rem; flex-shrink: 0; }
     .book-vocab-del:hover { opacity: 1; }
     .book-vocab-add-row { display: flex; gap: 0.4rem; margin-top: 0.5rem; }
-    .book-notes-toggle { background: none; border: 1px solid var(--border-color); color: var(--text-color); border-radius: 0.4rem; padding: 0.15rem 0.4rem; font-size: 0.6rem; cursor: pointer; opacity: 0.75; }
-    .book-notes-toggle:hover { opacity: 1; }
+    .book-notes-toggle { background: none; border: 1px solid var(--border-color); color: var(--text-color); border-radius: 0.5rem; padding: 0.35rem 0.65rem; font-size: 0.62rem; cursor: pointer; opacity: 0.82; font-weight:600; }
+    .book-notes-toggle:hover { opacity: 1; border-color:var(--main-color); color:var(--main-color); }
+    .book-notes-toggle.reflect-needed { background:var(--main-color); border-color:var(--main-color); color:var(--bg-color); opacity:1; box-shadow:none; }
+    .book-notes-toggle.reflect-needed:hover { filter:brightness(1.08); color:var(--bg-color); }
     .book-notes-area { width: 100%; min-height: 70px; background: rgba(0,0,0,0.15); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.5rem 0.6rem; color: var(--text-color); font-size: 0.7rem; outline: none; font-family: 'Lexend Deca', sans-serif; resize: vertical; margin-top: 0.5rem; }
     .book-prompts-wrap { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border-color); }
     .book-prompt-group { margin-bottom: 0.6rem; }
@@ -1640,6 +1642,83 @@
     [data-view-mode="mobile"] .toast { max-width:100%; }
     @media (prefers-reduced-motion:reduce) { *, *::before, *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
 
+    /* v1.134: quieter, crisper habits and daily surfaces. */
+    .hero-timer-card { display:grid !important; grid-template-columns:minmax(0,1.15fr) minmax(245px,.65fr); column-gap:1.2rem; row-gap:.55rem; align-items:center; }
+    body:not([data-active-panel="today"]) .hero-timer-card { display:none !important; }
+    .hero-timer-core, .hero-timer-side { width:100%; min-width:0; display:flex; flex-direction:column; align-items:center; }
+    .hero-timer-side { justify-content:center; padding:.45rem .25rem .25rem; border-left:1px solid var(--border-color); }
+    .hero-timer-card .chain-dots-row { margin:.15rem 0 .55rem; }
+    .hero-timer-card .progress-indicator { margin:.15rem 0 .4rem; }
+    .hero-timer-card .status-badge { margin:.15rem 0 .35rem; }
+    .hero-timer-card .control-buttons { margin:.35rem 0; }
+    .hero-timer-card .total-focus-display { margin-top:.25rem; }
+    .hero-timer-card .session-note-row, .hero-timer-card .chain-summary-row, .hero-timer-card .chain-editor { grid-column:1/-1; }
+    .hero-timer-card .chain-summary-row { margin-top:.25rem; padding-top:.55rem; border-top:1px solid var(--border-color); width:100%; }
+    .hero-timer-card .chain-editor { max-width:none; }
+
+    .habits-panel-grid { grid-template-columns:minmax(300px,.82fr) minmax(0,1.18fr); gap:1.1rem; }
+    .habits-panel-grid .habit-overview-card { grid-column:1/-1; }
+    .habits-panel-grid > div { box-shadow:none; }
+    .habits-panel-grid > div:hover { transform:none; box-shadow:none; }
+    .habit-card-intro { width:100%; color:var(--text-color); opacity:.58; font-size:.64rem; line-height:1.45; margin:-.18rem 0 .75rem; }
+    .habit-library-card, .habit-graph-card { min-height:0 !important; max-height:none !important; align-self:start; }
+    .habit-library-card .task-input-group { margin-bottom:.5rem; }
+    .habit-library-card .habit-list { max-height:520px; padding-right:.2rem; }
+    .habit-library-card .habit-item { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.7rem; padding:.75rem; margin-bottom:.5rem; border-radius:.75rem; cursor:default; align-items:center; }
+    .habit-library-card .habit-item.done { background:color-mix(in srgb,var(--bg-color) 91%,var(--main-color) 9%); border-color:color-mix(in srgb,var(--border-color) 55%,var(--main-color) 45%); }
+    .habit-library-card .habit-item:hover { background:rgba(0,206,124,.025); }
+    .habit-library-card .lib-info { gap:.25rem; }
+    .habit-library-card .lib-name { font-size:.8rem; font-weight:650; }
+    .habit-library-card .lib-meta { opacity:.58; font-size:.58rem; line-height:1.45; flex-wrap:wrap; }
+    .habit-today-btn { width:66px; min-height:48px; border:1px solid var(--border-hover); border-radius:.65rem; background:transparent; color:var(--main-color); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.12rem; cursor:pointer; font-family:'Lexend Deca',sans-serif; transition:border-color .15s ease,background .15s ease; }
+    .habit-today-btn:hover { border-color:var(--main-color); background:rgba(0,206,124,.08); }
+    .habit-today-btn.done { background:var(--main-color); border-color:var(--main-color); color:var(--bg-color); }
+    .habit-today-btn.partial { background:rgba(0,206,124,.1); border-color:var(--main-color); }
+    .habit-today-icon { font:700 .8rem 'JetBrains Mono',monospace; line-height:1; }
+    .habit-today-label { font-size:.5rem; text-transform:uppercase; letter-spacing:.04em; }
+    .habit-settings { margin-top:.15rem; }
+    .habit-settings summary { width:max-content; list-style:none; color:var(--text-color); opacity:.48; font-size:.56rem; cursor:pointer; border:1px solid transparent; border-radius:.4rem; padding:.16rem .35rem; }
+    .habit-settings summary::-webkit-details-marker { display:none; }
+    .habit-settings summary:hover { opacity:.9; border-color:var(--border-color); }
+    .habit-settings-body { display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; padding:.45rem 0 .1rem; }
+    .habit-settings-body .habit-controls-row { margin:0; }
+    .habit-setting-field { display:flex; flex-direction:column; gap:.14rem; color:var(--text-color); font:500 .48rem 'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.04em; opacity:.78; }
+    .habit-setting-field .habit-freq-select { margin:0; min-width:78px; }
+    .habit-settings-body .edit-btn, .habit-settings-body .delete-habit-btn, .habit-settings-body .reorder-buttons { align-self:flex-end; }
+    .habit-library-help { color:var(--text-color); opacity:.42; font-size:.56rem; text-align:center; margin-top:.45rem; line-height:1.4; }
+    .habit-overview-card .reorder-buttons { display:none; }
+
+    .habit-graph-card { align-items:stretch; }
+    .habit-graph-header { align-items:flex-start; margin-bottom:.65rem; }
+    .habit-history-toolbar { display:grid; grid-template-columns:minmax(180px,260px) minmax(0,1fr); gap:.8rem; align-items:end; padding:.65rem; border:1px solid var(--border-color); border-radius:.7rem; background:rgba(0,0,0,.05); margin-bottom:.8rem; }
+    .habit-history-picker-label { display:flex; flex-direction:column; gap:.25rem; color:var(--text-color); font:600 .53rem 'JetBrains Mono',monospace; letter-spacing:.05em; text-transform:uppercase; }
+    .habit-history-picker { margin:0 !important; min-height:36px; }
+    .habit-history-summary { color:var(--text-color); opacity:.62; font-size:.6rem; line-height:1.45; text-align:right; }
+    .habit-graph-main { align-items:stretch; justify-content:flex-start; }
+    .habit-graph-main .habit-graph-name { align-self:center; font-size:.68rem; margin-bottom:.45rem; }
+    .habit-graph-main .chart-nav-row, .habit-graph-main .heatmap-legend { align-self:center; }
+    .habit-graph-main .heatmap-wrap { width:100%; align-items:flex-start; }
+
+    .daily-checkin-card .checkin-header-row .btn { flex-shrink:0; }
+    .daily-checkin-card .checkin-done-wrap-actions { display:flex; gap:.45rem; flex-wrap:wrap; }
+    .recovery-snapshot-card > h2 { margin-bottom:1rem; }
+    .recovery-snapshot-card .recovery-ring-row { gap:1.4rem; padding:.15rem 0 .8rem; }
+    .recovery-snapshot-card .freshness-meaning { margin:.5rem 0 .75rem; max-width:48ch; }
+    .recovery-snapshot-card .recovery-flags-row { margin-top:.1rem; }
+    .lifting-load-note { margin-top:.65rem; padding:.55rem .65rem; border:1px solid var(--border-color); border-radius:.55rem; color:var(--text-color); opacity:.62; font-size:.57rem; line-height:1.45; }
+
+    @media(max-width:760px) {
+      .hero-timer-card { grid-template-columns:minmax(0,1fr); padding:.8rem; }
+      .hero-timer-side { border-left:0; border-top:1px solid var(--border-color); padding-top:.65rem; }
+      .hero-timer-card .timer-display { font-size:clamp(3.1rem,18vw,4.6rem); padding:.35rem .8rem; }
+      .habits-panel-grid { grid-template-columns:minmax(0,1fr); }
+      .habits-panel-grid .habit-overview-card { grid-column:1; }
+      .habit-library-card .habit-item { grid-template-columns:58px minmax(0,1fr); padding:.65rem; }
+      .habit-today-btn { width:58px; min-height:46px; }
+      .habit-history-toolbar { grid-template-columns:1fr; }
+      .habit-history-summary { text-align:left; }
+      .recovery-snapshot-card .recovery-ring-row { gap:.85rem; align-items:flex-start; }
+    }
   </style>
 </head>
 <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
@@ -1819,7 +1898,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.133 turns Stats into personal pattern intelligence with evidence thresholds, confidence labels and cautious recovery/productivity associations.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.134 makes Habits calmer and crisper, brings reflection forward in Books, compacts Today’s timer, and recalibrates lifting stress as a conservative fatigue estimate.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2167,17 +2246,21 @@
 
       <!-- Hero Timer -->
       <div class="timer-card hero-timer-card">
-        <div class="chain-dots-row" id="chainDotsRow"></div>
-        <div class="mode-tabs" id="modeTabs"><button id="modePomodoro" class="mode-btn active">focus</button><button id="modeShortBreak" class="mode-btn">break</button><button id="modeLongBreak" class="mode-btn">rest</button></div>
-        <div class="timer-display" id="timerDisplay">25:00</div>
-        <div class="task-timer-display" id="taskTimerDisplay" style="display:none;">task timer <span id="taskTimerValue">15:00</span></div>
-        <div class="current-task-display" id="currentTaskDisplay">no task selected</div>
-        <div class="progress-indicator" id="chainProgress">chain 0 / 4</div>
-        <div class="status-badge" id="statusBadge"><span>○</span> <span id="statusText">ready</span></div>
-        <button class="memory-game-btn" id="memoryGameBtn" style="display:none;">memory game (rest only)</button>
-        <div class="control-buttons"><button id="startPauseBtn" class="btn primary">▸ start</button><button id="resetBtn" class="btn">↺ reset</button><button id="skipBtn" class="btn small">» skip</button></div>
-        <div class="shame-timer" id="shameTimer" style="display:none;"></div>
-        <div class="total-focus-display">total focus <span id="totalFocusTime">0</span> min</div>
+        <div class="hero-timer-core">
+          <div class="mode-tabs" id="modeTabs"><button id="modePomodoro" class="mode-btn active">focus</button><button id="modeShortBreak" class="mode-btn">break</button><button id="modeLongBreak" class="mode-btn">rest</button></div>
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="task-timer-display" id="taskTimerDisplay" style="display:none;">task timer <span id="taskTimerValue">15:00</span></div>
+          <div class="current-task-display" id="currentTaskDisplay">no task selected</div>
+        </div>
+        <div class="hero-timer-side">
+          <div class="chain-dots-row" id="chainDotsRow"></div>
+          <div class="progress-indicator" id="chainProgress">chain 0 / 4</div>
+          <div class="status-badge" id="statusBadge"><span>○</span> <span id="statusText">ready</span></div>
+          <button class="memory-game-btn" id="memoryGameBtn" style="display:none;">memory game (rest only)</button>
+          <div class="control-buttons"><button id="startPauseBtn" class="btn primary">▸ start</button><button id="resetBtn" class="btn">↺ reset</button><button id="skipBtn" class="btn small">» skip</button></div>
+          <div class="shame-timer" id="shameTimer" style="display:none;"></div>
+          <div class="total-focus-display">total focus <span id="totalFocusTime">0</span> min</div>
+        </div>
 
         <div class="session-note-row" id="sessionNoteRow" style="display:none;">
           <label class="session-note-label" id="sessionNoteLabel">note</label>
@@ -2289,7 +2372,7 @@
           <div class="today-card daily-checkin-card today-later-card" style="grid-column:1/-1;" id="dailyCheckinCard">
             <div class="checkin-header-row">
               <h2>daily check-in</h2>
-              <button class="book-flashcard-btn" id="checkinReviewBtn">review past entries</button>
+              <button class="btn small" id="checkinReviewBtn">review past entries</button>
             </div>
             <div class="checkin-on-this-day" id="checkinOnThisDay" style="display:none;"></div>
             <div id="checkinFormWrap">
@@ -2312,7 +2395,7 @@
             <div id="checkinDoneWrap" style="display:none;">
               <div class="checkin-done-badge">✓ checked in today</div>
               <div class="checkin-done-summary" id="checkinDoneSummary"></div>
-              <button class="book-flashcard-btn" id="checkinEditBtn">edit today's answers</button>
+              <div class="checkin-done-wrap-actions"><button class="btn small" id="checkinEditBtn">edit today's answers</button></div>
             </div>
           </div>
         </div>
@@ -2349,37 +2432,39 @@
       <div class="panel" id="panel-habits">
         <div class="habits-panel-grid">
           <div class="habit-overview-card">
-            <h2>habit overview</h2>
+            <h2>this week</h2>
+            <div class="habit-card-intro">A fast seven-day check-in. Tap a day to correct it; today is outlined.</div>
             <div class="chart-nav-row"><button class="chart-nav-btn" id="overviewNavBack" title="previous week">◀</button><span class="chart-range-label" id="overviewRangeLabel"></span><button class="chart-nav-btn" id="overviewNavForward" title="next week">▶</button></div>
-            <div class="sort-tabs" id="overviewSortTabs"><button class="sort-btn active" data-sort="manual">manual (drag)</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="streak">streak</button></div>
+            <div class="sort-tabs" id="overviewSortTabs"><button class="sort-btn active" data-sort="manual">my order</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="consistency">consistency</button></div>
             <div class="overview-grid" id="habitOverviewGrid"></div>
           </div>
           <div class="habit-library-card">
-            <h2>habit library</h2>
-            <div class="task-input-group"><input type="text" id="habitInput" class="task-input" placeholder="add habit..." style="font-size:0.7rem;" autocomplete="off" /><button id="addHabitBtn" class="add-btn" style="font-size:0.7rem;padding:0.4rem 0.8rem;">+</button></div>
+            <h2>today's habits</h2>
+            <div class="habit-card-intro">Check in first. Frequency, editing and reordering stay under each habit's settings.</div>
+            <div class="task-input-group"><input type="text" id="habitInput" class="task-input" placeholder="add a habit..." style="font-size:0.7rem;" autocomplete="off" /><button id="addHabitBtn" class="add-btn" style="font-size:0.7rem;padding:0.4rem 0.8rem;">+</button></div>
             <datalist id="habitSuggestions"></datalist>
             <input type="text" class="search-input" id="habitSearchInput" placeholder="search habit library...">
             <div class="sort-tabs" id="habitSortTabs"><button class="sort-btn active" data-sort="manual">manual</button><button class="sort-btn" data-sort="incomplete">incomplete first</button><button class="sort-btn" data-sort="complete">complete first</button></div>
             <ul class="habit-list" id="habitList"><li class="empty-habits">no habits yet</li></ul>
-            <div style="color:var(--text-color);opacity:0.3;font-size:0.55rem;text-align:center;margin-top:0.2rem;">click ○ to check off · ✎ edit · × delete</div>
+            <div class="habit-library-help">A completed check-in can be tapped again to undo it.</div>
           </div>
 
           <div class="habit-graph-card">
             <div class="habit-graph-header">
-              <h2 style="margin-bottom:0;">habit check-ins</h2>
+              <div><h2 style="margin-bottom:.2rem;">check-in history</h2><div class="habit-card-intro" style="margin:0;">Choose one habit, then scan its longer pattern without the library controls competing for attention.</div></div>
               <div class="graph-period-tabs" id="habitCheckPeriodTabs"><button class="period-btn active" data-period="84">12w</button><button class="period-btn" data-period="168">24w</button><button class="period-btn" data-period="365">1y</button></div>
             </div>
-            <div class="habit-graph-body">
-              <div class="habit-graph-sidebar">
-                <div class="sort-tabs" id="habitGraphSortTabs"><button class="sort-btn active" data-sort="frequent">most used</button><button class="sort-btn" data-sort="recent">recent</button><button class="sort-btn" data-sort="name">a-z</button></div>
-                <ul class="library-list habit-graph-list" id="habitGraphList"><li class="empty-library">no habits yet</li></ul>
-              </div>
-              <div class="habit-graph-main">
-                <div class="habit-graph-name" id="habitGraphName">select a habit</div>
-                <div class="chart-nav-row"><button class="chart-nav-btn" id="habitCheckNavBack" title="previous period">◀</button><span class="chart-range-label" id="habitCheckRangeLabel"></span><button class="chart-nav-btn" id="habitCheckNavForward" title="next period">▶</button></div>
-                <div class="heatmap-wrap" id="habitCheckWrap"></div>
-                <div class="heatmap-legend"><span>missed</span><span class="heatmap-legend-cell" style="background:var(--heat-0);"></span><span class="heatmap-legend-cell checked"></span><span>done</span></div>
-              </div>
+            <div class="habit-history-toolbar">
+              <label class="habit-history-picker-label">habit<select class="search-input habit-history-picker" id="habitGraphPicker"><option value="">select a habit</option></select></label>
+              <div class="habit-history-summary" id="habitHistorySummary">Choose a habit to see its check-in history.</div>
+            </div>
+            <div class="sort-tabs" id="habitGraphSortTabs" style="display:none;"><button class="sort-btn active" data-sort="frequent">most used</button><button class="sort-btn" data-sort="recent">recent</button><button class="sort-btn" data-sort="name">a-z</button></div>
+            <ul class="library-list habit-graph-list" id="habitGraphList" style="display:none;"><li class="empty-library">no habits yet</li></ul>
+            <div class="habit-graph-main">
+              <div class="habit-graph-name" id="habitGraphName">select a habit</div>
+              <div class="chart-nav-row"><button class="chart-nav-btn" id="habitCheckNavBack" title="previous period">◀</button><span class="chart-range-label" id="habitCheckRangeLabel"></span><button class="chart-nav-btn" id="habitCheckNavForward" title="next period">▶</button></div>
+              <div class="heatmap-wrap" id="habitCheckWrap"></div>
+              <div class="heatmap-legend"><span>missed</span><span class="heatmap-legend-cell" style="background:var(--heat-0);"></span><span class="heatmap-legend-cell checked"></span><span>done</span></div>
             </div>
           </div>
         </div>
@@ -2753,6 +2838,7 @@
           <div class="recovery-card recovery-load-card">
             <h2>training load</h2>
             <div class="training-load-view-toggle" id="trainingLoadViewToggle"><button class="sort-btn active" data-load-view="all">all training</button><button class="sort-btn" data-load-view="cardio">cardio only</button></div>
+            <div class="lifting-load-note">Lifting is shown as estimated strength stress: a conservative fatigue contribution based on the prescribed sets, relative load and final-set RIR. It is useful beside cardio load, but it is not a direct TSS conversion. Use “cardio only” when you want the endurance chronic-load view.</div>
             <div class="recovery-acwr-row">
               <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="acuteLoadValue">--</div><div class="recovery-acwr-label">acute (7d avg)</div></div>
               <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="chronicLoadValue">--</div><div class="recovery-acwr-label">chronic (28d avg)</div></div>
@@ -2990,7 +3076,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.133';
+      const APP_VERSION='1.134';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3168,7 +3254,7 @@
       }
 
       let saveFailureWarned=false;
-      function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
+      function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingLoadModelVersion,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
       function buildCloudStateSnapshot(){const state=buildStateSnapshot();delete state.importedActivities;delete state.intervalsLastSyncAt;return state;}
       const buildStateSnapshotCore=buildStateSnapshot;
       buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.trainingCallSnapshots=trainingCallSnapshots;state.wakeSchedule=wakeSchedule;state.wakeOverride=wakeOverride;state.weeklyReviews=weeklyReviews;return state;};
@@ -3182,6 +3268,8 @@
         }
         todayFocusMinutes=0;todaySessions=0;hourlyFocus={};if(d.lastActiveDate){const ld=new Date(d.lastActiveDate),td=new Date(today),df=Math.floor((td-ld)/(1000*60*60*24));if(df===1)streakDays=(d.streakDays||0)+1;else if(df===0)streakDays=d.streakDays||0;else streakDays=1;}else streakDays=1;}else{todayFocusMinutes=d.todayFocusMinutes||0;todaySessions=d.todaySessions||0;streakDays=d.streakDays||0;hourlyFocus=d.hourlyFocus||{};}
       totalFocusMinutes=d.totalFocusMinutes||0;sessionsCompleted=d.sessionsCompleted||0;tasksCompletedCount=d.tasksCompletedCount||0;taskNameFrequency=d.taskNameFrequency||{};taskLastUsed=d.taskLastUsed||{};lastActiveDate=d.lastActiveDate||null;dailyHistory=d.dailyHistory||{};taskHabitHistory=d.taskHabitHistory||{};librarySort=d.librarySort||'frequent';tasks=d.tasks||[];taskTimeLog=d.taskTimeLog||{};selectedTaskForGraph=d.selectedTaskForGraph||null;soundEnabled=d.soundEnabled!==undefined?d.soundEnabled:true;currentTheme=d.currentTheme||'cyberspace';bgHabits=d.bgHabits||[];totalXP=d.totalXP!==undefined?d.totalXP:(d.totalFocusMinutes||0);dailyGoalBonusDate=d.dailyGoalBonusDate||null;focusPeriod=d.focusPeriod||7;habitCheckPeriod=d.habitCheckPeriod||84;dailyGoal=d.dailyGoal||90;selectedHabitForGraph=d.selectedHabitForGraph||null;focusMode=(d.focusMode==='nudge')?'pause':(d.focusMode||'auto');habitGraphSort=d.habitGraphSort||'frequent';activePanel=d.activePanel||'tasks';notificationsEnabled=d.notificationsEnabled!==undefined?d.notificationsEnabled:false;sessionLog=d.sessionLog||[];lastSessionLogId=d.lastSessionLogId||null;estimateAccuracyLog=d.estimateAccuracyLog||[];tasksAbandonedCount=d.tasksAbandonedCount||0;taskFilter=d.taskFilter||'active';chartOffset=d.chartOffset||0;heatmapOffset=d.heatmapOffset||0;habitCheckOffset=d.habitCheckOffset||0;overviewOffset=d.overviewOffset||0;hasSeenWelcome=d.hasSeenWelcome!==undefined?d.hasSeenWelcome:false;taskSort=d.taskSort||'manual';recurringTasks=d.recurringTasks||{};lastRecapWeek=d.lastRecapWeek||null;taskWeeklyGoal=d.taskWeeklyGoal||10;habitOrderSort=d.habitOrderSort||'manual';xpFromFocus=d.xpFromFocus||0;xpFromTasks=d.xpFromTasks||0;xpFromHabits=d.xpFromHabits||0;xpFromGoals=d.xpFromGoals||0;xpFromChains=d.xpFromChains||0;notepadContent=d.notepadContent||'';notepadPinned=d.notepadPinned||false;notepadPosX=null;notepadPosY=null;todayHabitSort=d.todayHabitSort||'manual';todoSort=d.todoSort||'manual';overviewSort=d.overviewSort||'manual';adaptiveGoalEnabled=d.adaptiveGoalEnabled||false;adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled!==undefined?d.adaptiveFocusGoalEnabled:true;todayDueSort=d.todayDueSort||'date';todayPrioritySort=d.todayPrioritySort||'priority';goals=d.goals||[];taskSchedule=d.taskSchedule||{};scheduleDate=d.scheduleDate||null;viewMode=d.viewMode||'auto';collapsedCardKeys=new Set(d.collapsedCardKeys||[]);todayHubTab=d.todayHubTab||'current';completionEvents=d.completionEvents||[];biometrics=d.biometrics||{};importedActivities=d.importedActivities||[];intervalsBestRecords=d.intervalsBestRecords||{run:{},ride:{},runRanks:{},rideRanks:{},lastSyncAt:null};intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsLastSyncAt=d.intervalsLastSyncAt||null;recoveryChartPeriod=d.recoveryChartPeriod||14;recoveryChartMetric=d.recoveryChartMetric||'freshness';sleepTargetHours=d.sleepTargetHours||8;recoveryChartOffset=d.recoveryChartOffset||0;breakOvertimeLog=d.breakOvertimeLog||[];books=d.books||[];bookStatusFilter=d.bookStatusFilter||'reading';hasSeenGoalsTutorial=d.hasSeenGoalsTutorial!==undefined?d.hasSeenGoalsTutorial:false;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}else{liftingLifts=[];}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;else liftingSequencePosition=0;liftingCycleNumber=d.liftingCycleNumber!==undefined?d.liftingCycleNumber:1;liftingHistory=d.liftingHistory||[];liftingPendingLiftIds=d.liftingPendingLiftIds||[];liftingWarmupChecks=d.liftingWarmupChecks||{};dailyCheckins=d.dailyCheckins||{};currentTaskId=d.currentTaskId!==undefined?d.currentTaskId:null;taskTimeLimits=d.taskTimeLimits||{};taskTimerRemaining=d.taskTimerRemaining||{};
+      liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;
+      migrateLiftingLoadModel();
       sessionResponses=d.sessionResponses||{};
       trainingCallSnapshots=d.trainingCallSnapshots||{};
       weeklyReviews=d.weeklyReviews||{};
@@ -3213,6 +3301,7 @@
       document.querySelectorAll('#overviewSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#overviewSortTabs .sort-btn[data-sort="${overviewSort}"]`)?.classList.add('active');
       document.querySelectorAll('#focusPeriodTabs .period-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#focusPeriodTabs .period-btn[data-period="${focusPeriod}"]`)?.classList.add('active');
       document.querySelectorAll('#habitCheckPeriodTabs .period-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#habitCheckPeriodTabs .period-btn[data-period="${habitCheckPeriod}"]`)?.classList.add('active');
+      if(overviewSort==='streak'){overviewSort='consistency';document.querySelectorAll('#overviewSortTabs .sort-btn').forEach(b=>b.classList.toggle('active',b.dataset.sort===overviewSort));}
       applyTheme(currentTheme);if(!soundEnabled){soundToggle.classList.add('muted');soundToggle.textContent='🔕';}
       goalInput.value=dailyGoal;
       if(!selectedHabitForGraph&&bgHabits.length>0){let best=bgHabits[0];bgHabits.forEach(h=>{if(Object.keys(h.history).length>Object.keys(best.history).length)best=h;});selectedHabitForGraph=best.id;}
@@ -3240,6 +3329,7 @@
         if(validationError){showToast(`invalid backup file — ${validationError}`);return;}
         try{
           if(d.totalFocusMinutes!==undefined)totalFocusMinutes=d.totalFocusMinutes;if(d.todayFocusMinutes!==undefined)todayFocusMinutes=d.todayFocusMinutes;if(d.todaySessions!==undefined)todaySessions=d.todaySessions;if(d.sessionsCompleted!==undefined)sessionsCompleted=d.sessionsCompleted;if(d.tasksCompletedCount!==undefined)tasksCompletedCount=d.tasksCompletedCount;if(d.taskNameFrequency)taskNameFrequency=d.taskNameFrequency;if(d.taskLastUsed)taskLastUsed=d.taskLastUsed;if(d.streakDays!==undefined)streakDays=d.streakDays;if(d.lastActiveDate)lastActiveDate=d.lastActiveDate;if(d.dailyHistory)dailyHistory=d.dailyHistory;if(d.taskHabitHistory)taskHabitHistory=d.taskHabitHistory;if(d.tasks)tasks=d.tasks;if(d.taskTimeLog)taskTimeLog=d.taskTimeLog;if(d.chainConfig){chainConfig=d.chainConfig;document.getElementById('chainWorkCount').value=chainConfig.workCount;document.getElementById('chainWorkMinutes').value=chainConfig.workMinutes;document.getElementById('chainShortBreak').value=chainConfig.shortBreak;document.getElementById('chainLongBreak').value=chainConfig.longBreak;}if(d.chainActive!==undefined)chainActive=d.chainActive;if(d.chainSessionIndex!==undefined)chainSessionIndex=d.chainSessionIndex;if(d.soundEnabled!==undefined){soundEnabled=d.soundEnabled;if(!soundEnabled){soundToggle.classList.add('muted');soundToggle.textContent='🔕';}else{soundToggle.classList.remove('muted');soundToggle.textContent='🔔';}}if(d.currentTheme)applyTheme(d.currentTheme);if(d.bgHabits)bgHabits=d.bgHabits;if(d.totalXP!==undefined)totalXP=d.totalXP;else if(d.totalFocusMinutes!==undefined)totalXP=d.totalFocusMinutes;if(d.dailyGoalBonusDate!==undefined)dailyGoalBonusDate=d.dailyGoalBonusDate;if(d.focusPeriod)focusPeriod=d.focusPeriod;if(d.habitCheckPeriod)habitCheckPeriod=d.habitCheckPeriod;if(d.dailyGoal!==undefined){dailyGoal=d.dailyGoal;goalInput.value=dailyGoal;}if(d.hourlyFocus)hourlyFocus=d.hourlyFocus;if(d.selectedHabitForGraph!==undefined)selectedHabitForGraph=d.selectedHabitForGraph;if(d.focusMode)focusMode=(d.focusMode==='nudge')?'pause':d.focusMode;if(d.habitGraphSort)habitGraphSort=d.habitGraphSort;if(d.activePanel){activePanel=d.activePanel;switchPanel(activePanel);}if(d.notificationsEnabled!==undefined){notificationsEnabled=d.notificationsEnabled;updateNotificationSettingUI();}if(d.sessionLog)sessionLog=d.sessionLog;if(d.lastSessionLogId!==undefined)lastSessionLogId=d.lastSessionLogId;if(d.estimateAccuracyLog)estimateAccuracyLog=d.estimateAccuracyLog;if(d.tasksAbandonedCount!==undefined)tasksAbandonedCount=d.tasksAbandonedCount;if(d.taskFilter)taskFilter=d.taskFilter;if(d.chartOffset!==undefined)chartOffset=d.chartOffset;if(d.heatmapOffset!==undefined)heatmapOffset=d.heatmapOffset;if(d.habitCheckOffset!==undefined)habitCheckOffset=d.habitCheckOffset;if(d.overviewOffset!==undefined)overviewOffset=d.overviewOffset;if(d.hasSeenWelcome!==undefined)hasSeenWelcome=d.hasSeenWelcome;if(d.taskSort)taskSort=d.taskSort;if(d.recurringTasks)recurringTasks=d.recurringTasks;if(d.lastRecapWeek!==undefined)lastRecapWeek=d.lastRecapWeek;if(d.taskWeeklyGoal!==undefined)taskWeeklyGoal=d.taskWeeklyGoal;if(d.habitOrderSort)habitOrderSort=d.habitOrderSort;if(d.xpFromFocus!==undefined)xpFromFocus=d.xpFromFocus;if(d.xpFromTasks!==undefined)xpFromTasks=d.xpFromTasks;if(d.xpFromHabits!==undefined)xpFromHabits=d.xpFromHabits;if(d.xpFromGoals!==undefined)xpFromGoals=d.xpFromGoals;if(d.xpFromChains!==undefined)xpFromChains=d.xpFromChains;if(d.notepadContent!==undefined)notepadContent=d.notepadContent;if(d.notepadPinned!==undefined)notepadPinned=d.notepadPinned;if(d.todayHabitSort)todayHabitSort=d.todayHabitSort;if(d.todoSort)todoSort=d.todoSort;if(d.overviewSort)overviewSort=d.overviewSort;if(d.adaptiveGoalEnabled!==undefined)adaptiveGoalEnabled=d.adaptiveGoalEnabled;if(d.adaptiveFocusGoalEnabled!==undefined)adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled;if(d.todayDueSort)todayDueSort=d.todayDueSort;if(d.todayPrioritySort)todayPrioritySort=d.todayPrioritySort;if(d.goals)goals=d.goals;if(d.taskSchedule)taskSchedule=d.taskSchedule;if(d.scheduleDate!==undefined)scheduleDate=d.scheduleDate;if(d.viewMode){viewMode=d.viewMode;applyViewMode();}if(d.collapsedCardKeys)collapsedCardKeys=new Set(d.collapsedCardKeys);if(d.todayHubTab)todayHubTab=d.todayHubTab;if(d.completionEvents)completionEvents=d.completionEvents;if(d.biometrics)biometrics=d.biometrics;if(d.recoveryChartPeriod)recoveryChartPeriod=d.recoveryChartPeriod;if(d.recoveryChartMetric)recoveryChartMetric=d.recoveryChartMetric;if(d.sleepTargetHours!==undefined)sleepTargetHours=d.sleepTargetHours;if(d.recoveryChartOffset!==undefined)recoveryChartOffset=d.recoveryChartOffset;if(d.breakOvertimeLog)breakOvertimeLog=d.breakOvertimeLog;if(d.books)books=d.books;if(d.bookStatusFilter)bookStatusFilter=d.bookStatusFilter;if(d.hasSeenGoalsTutorial!==undefined)hasSeenGoalsTutorial=d.hasSeenGoalsTutorial;if(d.librarySort)librarySort=d.librarySort;if(d.selectedTaskForGraph!==undefined)selectedTaskForGraph=d.selectedTaskForGraph;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;if(d.liftingCycleNumber!==undefined)liftingCycleNumber=d.liftingCycleNumber;if(d.liftingHistory)liftingHistory=d.liftingHistory;if(d.liftingPendingLiftIds)liftingPendingLiftIds=d.liftingPendingLiftIds;if(d.liftingWarmupChecks)liftingWarmupChecks=d.liftingWarmupChecks;if(d.dailyCheckins)dailyCheckins=d.dailyCheckins;if(d.currentTaskId!==undefined)currentTaskId=d.currentTaskId;if(d.taskTimeLimits)taskTimeLimits=d.taskTimeLimits;if(d.taskTimerRemaining)taskTimerRemaining=d.taskTimerRemaining;
+          liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;migrateLiftingLoadModel();
           saveData();updateStats();renderTasks();renderLibrary();renderBgHabits();updateLevelDisplay();renderHabitGraphList();updateFocusModeUI();updateSessionNoteUI();renderSessionLog();drawFocusChart();drawHeatmap();drawHabitCheckGraph();showToast('data imported successfully');
         }catch(err){showToast('import failed while applying backup — no changes were saved');}
       };r.readAsText(file);}
@@ -3912,7 +4002,15 @@ function updateNotificationSettingUI(){
       }
 
       function drawHeatmap(){drawHeatmapGrid('heatmapWrap',84,(day)=>dailyHistory[day]?.focusMinutes||0,1,true,heatmapOffset);updateHeatmapNavUI('heatmapNavBack','heatmapNavForward','heatmapRangeLabel',heatmapOffset,84,getFirstRecordedDay(dailyHistory));}
-      function drawHabitCheckGraph(){const habit=bgHabits.find(h=>h.id===selectedHabitForGraph);if(!habit){habitCheckWrap.innerHTML='';habitGraphName.textContent='select a habit';updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',0,parseInt(habitCheckPeriod),getToday());return;}habitGraphName.textContent=habit.name;drawHeatmapGrid('habitCheckWrap',habitCheckPeriod,(day)=>getHabitDayCount(habit,day),getHabitDayTarget(habit),false,habitCheckOffset);updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',habitCheckOffset,parseInt(habitCheckPeriod),getFirstRecordedDay(habit.history));}
+      function drawHabitCheckGraph(){
+        const habit=bgHabits.find(h=>h.id===selectedHabitForGraph),summary=document.getElementById('habitHistorySummary');
+        if(!habit){habitCheckWrap.innerHTML='';habitGraphName.textContent='select a habit';if(summary)summary.textContent='Choose a habit to see its check-in history.';updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',0,parseInt(habitCheckPeriod),getToday());return;}
+        habitGraphName.textContent=habit.name;
+        const consistency=getHabitConsistency30d(habit),weekCount=getWeekCheckinCount(habit),weeklyTarget=habit.targetPerWeek||7;
+        if(summary)summary.textContent=`${weekCount}/${weeklyTarget} days this week · ${consistency}% consistency over 30 days`;
+        drawHeatmapGrid('habitCheckWrap',habitCheckPeriod,(day)=>getHabitDayCount(habit,day),getHabitDayTarget(habit),false,habitCheckOffset);
+        updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',habitCheckOffset,parseInt(habitCheckPeriod),getFirstRecordedDay(habit.history));
+      }
       function updateHeatmapNavUI(backId,fwdId,labelId,offset,windowDays,firstDay){
         const backBtn=document.getElementById(backId),fwdBtn=document.getElementById(fwdId),label=document.getElementById(labelId);
         if(!backBtn||!fwdBtn||!label)return;
@@ -3938,6 +4036,8 @@ function updateNotificationSettingUI(){
       function renderHabitGraphList(){
         habitGraphList.innerHTML='';
         const list=getSortedHabitsForGraph();
+        const picker=document.getElementById('habitGraphPicker');
+        if(picker){picker.innerHTML='<option value="">select a habit</option>';list.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(h=>{const opt=document.createElement('option');opt.value=h.id;opt.textContent=h.name;opt.selected=selectedHabitForGraph===h.id;picker.appendChild(opt);});}
         if(!list.length){habitGraphList.innerHTML='<li class="empty-library">no habits yet</li>';syncHabitGraphListHeight();return;}
         list.forEach(h=>{
           const li=document.createElement('li');li.className='library-item';
@@ -4696,6 +4796,7 @@ function updateNotificationSettingUI(){
       let liftingSequencePosition=0;
       let liftingCycleNumber=1;
       let liftingHistory=[];
+      let liftingLoadModelVersion=2;
       let liftingWarmupChecks={};
       let dailyCheckins={};
       function getDateStrDaysAgo(daysAgo){
@@ -5437,14 +5538,42 @@ function updateNotificationSettingUI(){
       function formatLb(w){const n=roundToLoadStep(w);return Number.isInteger(n)?String(n):n.toFixed(1);}
       // Opportunistic minimum-dose lifting: no A/B/C split, no required weekly frequency.
       // Legacy slot/cycle fields remain in saved data for backward compatibility but are ignored here.
-      function getLiftSetLoad(pct,reps){return Math.round(pct*100*reps/35*10)/10;}
+      // Strength stress is deliberately a conservative fatigue estimate, not a claim that a lift
+      // is physiologically identical to the same number of cycling/running load points.
+      function getLiftSetLoad(pct,reps){return Math.max(0,Number(pct)||0)*100*Math.max(0,Number(reps)||0)/50;}
+      function getLiftWarmupsForLoad(profile,pct){
+        const warmups=[];
+        if(profile.warmups>=1)warmups.push({pct:Math.min(.40,pct*.60),reps:profile.region==='arms'?6:5});
+        if(profile.warmups>=2)warmups.push({pct:Math.min(.55,pct*.78),reps:3});
+        if(profile.warmups>=3)warmups.push({pct:Math.min(.65,pct*.90),reps:1});
+        return warmups;
+      }
+      function getLiftingExposureLoad(profile,warmups,sets,pct,reps,rir){
+        const warmupStress=(warmups||[]).reduce((sum,w)=>sum+getLiftSetLoad(w.pct,w.reps)*.25,0);
+        const workStress=Math.max(1,Number(sets)||1)*getLiftSetLoad(pct,reps);
+        const fatigueFactor=.72+Math.min(5,Math.max(1,Number(profile.fatigue)||2.5))*.075;
+        const rirFactor=rir==null?1:Math.max(.72,Math.min(1.12,1+(4-Number(rir))*.08));
+        return Math.round((warmupStress+workStress)*fatigueFactor*rirFactor*10)/10;
+      }
+      function getStoredLiftingExposureLoad(h){
+        const profile=getLiftProfile(h.liftName||''),pct=Number(h.pct)||profile.pct,reps=Number(h.actualReps)||Number(h.targetReps)||profile.reps;
+        return getLiftingExposureLoad(profile,getLiftWarmupsForLoad(profile,pct),Number(h.sets)||1,pct,reps,h.rir);
+      }
+      function migrateLiftingLoadModel(){
+        if(liftingLoadModelVersion>=2)return false;
+        const deltas={};
+        (liftingHistory||[]).forEach(h=>{
+          if(!h||h.kind!=='exposure'||!h.date)return;
+          const oldLoad=Math.max(0,Number(h.loadValue)||0),newLoad=getStoredLiftingExposureLoad(h);
+          deltas[h.date]=(deltas[h.date]||0)+(newLoad-oldLoad);h.loadValue=newLoad;h.loadModelVersion=2;
+        });
+        Object.entries(deltas).forEach(([date,delta])=>{const rec=biometrics[date]||{};rec.load=Math.max(0,Math.round(((Number(rec.load)||0)+delta)*10)/10);biometrics[date]=rec;});
+        liftingLoadModelVersion=2;return Object.keys(deltas).length>0;
+      }
       function getLiftingLoadForDate(dateStr){
         return Math.round((liftingHistory||[]).filter(h=>h&&h.kind!=='regression'&&h.date===dateStr).reduce((sum,h)=>{
           if(Number.isFinite(Number(h.loadValue))&&Number(h.loadValue)>0)return sum+Number(h.loadValue);
-          const profile=getLiftProfile(h.liftName||'');
-          const warmupLoad=LIFTING_WARMUP.slice(0,profile.warmups||0).reduce((n,w)=>n+getLiftSetLoad(w.pct,w.reps),0);
-          const workLoad=Math.max(1,Number(h.sets)||1)*getLiftSetLoad(Number(h.pct)||profile.pct,Number(h.actualReps)||Number(h.targetReps)||profile.reps);
-          return sum+warmupLoad+workLoad;
+          return sum+getStoredLiftingExposureLoad(h);
         },0)*10)/10;
       }
       function getImportedLoadForDate(dateStr){
@@ -5689,11 +5818,9 @@ function updateNotificationSettingUI(){
         const rx=getLiftingPrescription(lift,today,level);
         const r=Number(rir);
         if(!Number.isFinite(r)||r<0||r>6){showToast('log the final-set RIR first');return;}
-        let loadAdd=0;
-        rx.warmups.forEach(w=>{loadAdd+=getLiftSetLoad(w.pct,w.reps);});
-        loadAdd+=rx.sets*getLiftSetLoad(rx.pct,rx.reps);
+        const loadAdd=getLiftingExposureLoad(rx.profile,rx.warmups,rx.sets,rx.pct,rx.reps,r);
         const recBefore=biometrics[today]||{},addedWeightsModality=!normalizeModalityList(recBefore.modalities).includes('weights'),exposureId=generateId();
-        liftingHistory.push({id:exposureId,kind:'exposure',date:today,liftId,liftName:lift.name,week:'minimum-dose',weight:rx.weight,targetReps:rx.reps,actualReps:rx.reps,sets:rx.sets,rir:r,success:r>=3,e1rm:null,pct:rx.pct,tmAtTime:lift.trainingMax,fatigueCost:rx.profile.fatigue,loadValue:Math.round(loadAdd*10)/10,addedWeightsModality});
+        liftingHistory.push({id:exposureId,kind:'exposure',date:today,liftId,liftName:lift.name,week:'minimum-dose',weight:rx.weight,targetReps:rx.reps,actualReps:rx.reps,sets:rx.sets,rir:r,success:r>=3,e1rm:null,pct:rx.pct,tmAtTime:lift.trainingMax,fatigueCost:rx.profile.fatigue,loadValue:Math.round(loadAdd*10)/10,loadModelVersion:2,addedWeightsModality});
         const rec=biometrics[today]||{};
         rec.load=(rec.load||0)+Math.round(loadAdd*10)/10;
         rec.modalities=Array.from(new Set([...normalizeModalityList(rec.modalities),'weights']));
@@ -6431,7 +6558,12 @@ function updateNotificationSettingUI(){
       function createHabitReorderButtons(index){const c=document.createElement('div');c.className='reorder-buttons';const up=document.createElement('button');up.className='reorder-btn';up.textContent='▲';up.disabled=index===0;up.addEventListener('click',e=>{e.stopPropagation();moveHabit(index,-1);});const down=document.createElement('button');down.className='reorder-btn';down.textContent='▼';down.disabled=index===bgHabits.length-1;down.addEventListener('click',e=>{e.stopPropagation();moveHabit(index,1);});c.appendChild(up);c.appendChild(down);return c;}
       function createHabitFreqSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';[1,2,3,4,5,6,7].forEach(n=>{const opt=document.createElement('option');opt.value=n;opt.textContent=n===7?'daily':`${n}x/wk`;if((h.targetPerWeek||7)===n)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitFrequency(h.id,parseInt(sel.value));});return sel;}
       function createHabitDailyTargetSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';[1,2].forEach(n=>{const opt=document.createElement('option');opt.value=n;opt.textContent=n===1?'1x/day':'2x/day';if((h.timesPerDay||1)===n)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitDailyTarget(h.id,parseInt(sel.value));});return sel;}
-      function createHabitControlsRow(h){const row=document.createElement('div');row.className='habit-controls-row';row.appendChild(createHabitFreqSelect(h));row.appendChild(createHabitDailyTargetSelect(h));return row;}
+      function createHabitControlsRow(h){
+        const row=document.createElement('div');row.className='habit-controls-row';
+        const weekly=document.createElement('label');weekly.className='habit-setting-field';weekly.textContent='days / week';weekly.appendChild(createHabitFreqSelect(h));
+        const daily=document.createElement('label');daily.className='habit-setting-field';daily.textContent='times / day';daily.appendChild(createHabitDailyTargetSelect(h));
+        row.appendChild(weekly);row.appendChild(daily);return row;
+      }
       let habitOverviewRefreshTimer=null;
       function scheduleHabitOverviewRefresh(){if(habitOverviewRefreshTimer)clearTimeout(habitOverviewRefreshTimer);habitOverviewRefreshTimer=setTimeout(()=>{habitOverviewRefreshTimer=null;renderBgHabits();renderHabitGraphList();if(selectedHabitForGraph)drawHabitCheckGraph();},600);}
 
@@ -6457,7 +6589,7 @@ function updateNotificationSettingUI(){
         grid.appendChild(headerRow);
         let displayHabitsOv=bgHabits;
         if(overviewSort==='az')displayHabitsOv=bgHabits.slice().sort((a,b)=>a.name.localeCompare(b.name));
-        else if(overviewSort==='streak')displayHabitsOv=bgHabits.slice().sort((a,b)=>getHabitStreak(b)-getHabitStreak(a));
+        else if(overviewSort==='streak'||overviewSort==='consistency')displayHabitsOv=bgHabits.slice().sort((a,b)=>getHabitConsistency30d(b)-getHabitConsistency30d(a));
         displayHabitsOv.forEach(h=>{
           const index=bgHabits.indexOf(h);
           const row=document.createElement('div');row.className='overview-row';
@@ -6547,19 +6679,34 @@ function updateNotificationSettingUI(){
         dl.innerHTML='';
         bgHabits.forEach(h=>{const opt=document.createElement('option');opt.value=h.name;dl.appendChild(opt);});
       }
-      function renderBgHabits(){updateHabitSuggestions();renderHabitOverview();renderTodayPanel();habitList.innerHTML='';
-      let displayHabits=bgHabits;
-      if(habitSearchQuery.trim())displayHabits=displayHabits.filter(h=>h.name.toLowerCase().includes(habitSearchQuery.trim().toLowerCase()));
-      if(!displayHabits.length){habitList.innerHTML=`<li class="empty-habits">${habitSearchQuery.trim()?'no matches':'no habits yet'}</li>`;return;}
-      const todayStr0=getToday();
-      const isHabitDone=(h)=>{const t=getHabitDayTarget(h),c=getHabitDayCount(h,todayStr0);return c>=t;};
-      if(habitOrderSort==='incomplete')displayHabits=displayHabits.slice().sort((a,b)=>(isHabitDone(a)?1:0)-(isHabitDone(b)?1:0));
-      else if(habitOrderSort==='complete')displayHabits=displayHabits.slice().sort((a,b)=>(isHabitDone(b)?1:0)-(isHabitDone(a)?1:0));
-      displayHabits.forEach((h)=>{const index=bgHabits.indexOf(h);const today=getToday(),target=getHabitDayTarget(h),count=getHabitDayCount(h,today),done=count>=target,partial=count>0&&!done,streak=getHabitStreak(h),freq=h.targetPerWeek||7;const li=document.createElement('li');li.className='habit-item';if(done)li.classList.add('done');const reorder=habitOrderSort==='manual'?createHabitReorderButtons(index):null;
-      const ratePct=getHabitConsistency30d(h);const ringCircumference=75.4;const ringOffset=ringCircumference-(ratePct/100)*ringCircumference;const ringColor=getProgressColor(ratePct);
-      const btn=document.createElement('button');btn.className='today-habit-ring-btn habit-lib-ring-btn';btn.title=`${ratePct}% of last 30 days consistent · `+(target>1?`${count}/${target} today — click to advance`:(done?'done today':'click to mark done'));
-      btn.innerHTML=`<svg viewBox="0 0 28 28"><circle class="track" cx="14" cy="14" r="12"/><circle class="fill" cx="14" cy="14" r="12" stroke-dasharray="${ringCircumference}" stroke-dashoffset="${ringOffset}" style="stroke:${ringColor};filter:drop-shadow(0 0 1.5px ${ringColor})"/></svg>`;
-      btn.addEventListener('click',(e)=>{e.stopPropagation();toggleBgHabit(h.id);});const info=document.createElement('div');info.className='lib-info';const name=document.createElement('span');name.className='lib-name';name.textContent=(h.linkedTask?'🔗 ':'')+h.name;if(h.linkedTask)name.title='linked to task: '+h.linkedTask;const meta=document.createElement('span');meta.className='lib-meta';let metaHtml;if(freq>=7){metaHtml=`streak: <span class="lib-count">${streak}d</span> · total: ${Object.keys(h.history).length}d`;}else{const weekCount=getWeekCheckinCount(h);const metGoal=weekCount>=freq;metaHtml=`this week: <span class="lib-count${metGoal?' goal-met':''}">${weekCount}/${freq}</span> · total: ${Object.keys(h.history).length}d`;}if(target>1)metaHtml=`today: <span class="lib-count${done?' goal-met':''}">${count}/${target}</span> · `+metaHtml;meta.innerHTML=metaHtml;info.appendChild(name);info.appendChild(meta);info.appendChild(createHabitControlsRow(h));const editBtn=document.createElement('button');editBtn.className='edit-btn';editBtn.textContent='✎';editBtn.addEventListener('click',e=>{e.stopPropagation();startEditHabit(h.id,li,name);});const del=document.createElement('button');del.className='delete-habit-btn';del.textContent='×';del.addEventListener('click',e=>{e.stopPropagation();deleteBgHabit(h.id);});const habitActionsRow=document.createElement('div');habitActionsRow.className='lib-actions-row';habitActionsRow.appendChild(editBtn);habitActionsRow.appendChild(del);const titleRow=document.createElement('div');titleRow.className='task-title-row';titleRow.appendChild(name);titleRow.appendChild(habitActionsRow);info.insertBefore(titleRow,info.firstChild);if(reorder)li.appendChild(reorder);li.appendChild(btn);li.appendChild(info);li.addEventListener('click',()=>{toggleBgHabit(h.id);});habitList.appendChild(li);});}
+      function renderBgHabits(){
+        updateHabitSuggestions();renderHabitOverview();renderTodayPanel();habitList.innerHTML='';
+        let displayHabits=bgHabits;
+        if(habitSearchQuery.trim())displayHabits=displayHabits.filter(h=>h.name.toLowerCase().includes(habitSearchQuery.trim().toLowerCase()));
+        if(!displayHabits.length){habitList.innerHTML=`<li class="empty-habits">${habitSearchQuery.trim()?'no matches':'no habits yet'}</li>`;return;}
+        const todayStr0=getToday();
+        const isHabitDone=(h)=>{const t=getHabitDayTarget(h),c=getHabitDayCount(h,todayStr0);return c>=t;};
+        if(habitOrderSort==='incomplete')displayHabits=displayHabits.slice().sort((a,b)=>(isHabitDone(a)?1:0)-(isHabitDone(b)?1:0));
+        else if(habitOrderSort==='complete')displayHabits=displayHabits.slice().sort((a,b)=>(isHabitDone(b)?1:0)-(isHabitDone(a)?1:0));
+        displayHabits.forEach(h=>{
+          const index=bgHabits.indexOf(h),target=getHabitDayTarget(h),count=getHabitDayCount(h,todayStr0),done=count>=target,partial=count>0&&!done,freq=h.targetPerWeek||7;
+          const li=document.createElement('li');li.className='habit-item';if(done)li.classList.add('done');
+          const btn=document.createElement('button');btn.className='habit-today-btn'+(done?' done':'')+(partial?' partial':'');btn.title=target>1?`${count}/${target} today — tap to advance`:(done?'done today — tap to undo':'mark done today');
+          const icon=document.createElement('span');icon.className='habit-today-icon';icon.textContent=done?'✓':(partial?`${count}/${target}`:'+');
+          const action=document.createElement('span');action.className='habit-today-label';action.textContent=done?'done':(partial?'continue':'check in');btn.appendChild(icon);btn.appendChild(action);
+          btn.addEventListener('click',e=>{e.stopPropagation();toggleBgHabit(h.id);});
+          const info=document.createElement('div');info.className='lib-info';
+          const name=document.createElement('span');name.className='lib-name';name.textContent=(h.linkedTask?'🔗 ':'')+h.name;if(h.linkedTask)name.title='linked to task: '+h.linkedTask;
+          const weekCount=getWeekCheckinCount(h),ratePct=getHabitConsistency30d(h),meta=document.createElement('span');meta.className='lib-meta';
+          meta.innerHTML=`this week <span class="lib-count${weekCount>=freq?' goal-met':''}">${weekCount}/${freq}</span> · 30-day consistency <span class="lib-count">${ratePct}%</span>`+(target>1?` · today ${count}/${target}`:'');
+          const details=document.createElement('details');details.className='habit-settings';const summary=document.createElement('summary');summary.textContent='settings';details.appendChild(summary);
+          const settingsBody=document.createElement('div');settingsBody.className='habit-settings-body';settingsBody.appendChild(createHabitControlsRow(h));
+          const editBtn=document.createElement('button');editBtn.className='edit-btn';editBtn.textContent='edit';editBtn.addEventListener('click',e=>{e.stopPropagation();startEditHabit(h.id,li,name);});
+          const del=document.createElement('button');del.className='delete-habit-btn';del.textContent='delete';del.addEventListener('click',e=>{e.stopPropagation();deleteBgHabit(h.id);});
+          settingsBody.appendChild(editBtn);settingsBody.appendChild(del);if(habitOrderSort==='manual')settingsBody.appendChild(createHabitReorderButtons(index));details.appendChild(settingsBody);
+          info.appendChild(name);info.appendChild(meta);info.appendChild(details);li.appendChild(btn);li.appendChild(info);habitList.appendChild(li);
+        });
+      }
       function startEditHabit(id,li,nameSpan){const origName=nameSpan.textContent;const inp=document.createElement('input');inp.className='edit-input';inp.value=origName;nameSpan.replaceWith(inp);inp.focus();inp.select();const commit=()=>{const newName=inp.value.trim();if(newName&&newName!==origName){renameBgHabit(id,newName);}else{renderBgHabits();}};inp.addEventListener('blur',commit);inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}if(e.key==='Escape'){inp.value=origName;commit();}});}
 
       function getLibraryTasks(){const map={};Object.entries(taskNameFrequency).forEach(([n,c])=>{map[n]={name:n,count:c,lastUsed:taskLastUsed[n]||'never'};});tasks.forEach(t=>{if(!map[t.text])map[t.text]={name:t.text,count:taskNameFrequency[t.text]||0,lastUsed:taskLastUsed[t.text]||'never'};});let lib=Object.values(map);if(librarySort==='frequent')lib.sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name));else if(librarySort==='recent')lib.sort((a,b)=>{if(a.lastUsed==='never'&&b.lastUsed==='never')return a.name.localeCompare(b.name);if(a.lastUsed==='never')return 1;if(b.lastUsed==='never')return-1;const cmp=b.lastUsed.localeCompare(a.lastUsed);return cmp!==0?cmp:a.name.localeCompare(b.name);});else lib.sort((a,b)=>a.name.localeCompare(b.name));return lib;}
@@ -7219,8 +7366,6 @@ function updateNotificationSettingUI(){
         if(!chainEditorEl||!toggleBtn)return;
         if(isRunning){
           chainEditorEl.style.display='none';toggleBtn.textContent='✎ edit';
-        }else if(atFull){
-          chainEditorEl.style.display='block';toggleBtn.textContent='▾ minimize';
         }
       }
       function updateStatus(){Object.keys(modeButtons).forEach(m=>modeButtons[m].classList.remove('active'));modeButtons[currentMode].classList.add('active');const l={pomodoro:'focus',shortBreak:'break',longBreak:'rest'};statusBadgeDot.textContent=isRunning?'●':'○';statusBadgeDot.style.color=isRunning?'var(--main-color)':'';statusText.textContent=isRunning?`${l[currentMode]} running`:`${l[currentMode]} paused`;startPauseBtn.innerHTML=isRunning?'‖ pause':'▸ start';document.getElementById('modeTabs').classList.toggle('locked',isRunning);syncChainEditorForRunningState();updateChainProgress();updateTabTitle();updateMemoryGameButtonVisibility();updateFocusModeVisibility();}
@@ -7585,6 +7730,7 @@ function updateNotificationSettingUI(){
       goalUp.addEventListener('click',()=>adjustGoal(5));goalDown.addEventListener('click',()=>adjustGoal(-5));
       goalInput.addEventListener('change',()=>{dailyGoal=parseInt(goalInput.value)||90;if(dailyGoal<1)dailyGoal=1;goalInput.value=dailyGoal;saveData();updateDashboard();});
       document.getElementById('habitGraphSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){habitGraphSort=e.target.dataset.sort;document.querySelectorAll('#habitGraphSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderHabitGraphList();saveData();}});
+      document.getElementById('habitGraphPicker').addEventListener('change',e=>{selectedHabitForGraph=e.target.value||null;habitCheckOffset=0;renderHabitGraphList();drawHabitCheckGraph();saveData();});
       document.getElementById('taskFilterTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskFilter=e.target.dataset.filter;document.querySelectorAll('#taskFilterTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();saveData();}});
       document.getElementById('taskSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskSort=e.target.dataset.sort;document.querySelectorAll('#taskSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();saveData();}});
       document.getElementById('newTaskTypeTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn'))document.querySelectorAll('#newTaskTypeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b===e.target));});
@@ -8695,7 +8841,11 @@ function updateNotificationSettingUI(){
           });
           metaRow.appendChild(pagesEl);
           const hasContent=book.notes||(book.promptAnswers&&Object.values(book.promptAnswers).some(v=>v&&v.trim()));
-          const notesToggle=document.createElement('button');notesToggle.className='book-notes-toggle';notesToggle.textContent=book.notesOpen?'hide notes':(hasContent?'notes':'+ reflect on it');
+          const notesToggle=document.createElement('button');notesToggle.className='book-notes-toggle';
+          if(!hasContent)notesToggle.classList.add('reflect-needed');
+          const reflectionName=book.status==='finished'?'finish-book reflection':'reflect on this book';
+          notesToggle.textContent=book.notesOpen?'hide reflection':(hasContent?'view reflections':reflectionName);
+          notesToggle.title=hasContent?'Review or add to what you want to remember.':'Capture the idea that mattered before it fades.';
           notesToggle.addEventListener('click',()=>toggleBookNotesOpen(book.id));
           metaRow.appendChild(notesToggle);
           li.appendChild(metaRow);
