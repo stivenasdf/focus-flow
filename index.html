@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.126 quiet cloud sync -->
+<!-- Focus::Flow deployment marker: v1.127 sleep opportunity and forecast clarity -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1594,7 +1594,7 @@
       </div>
 
       <div class="settings-section">
-        <div class="settings-section-title">account</div>
+        <div class="settings-section-title">account &amp; sync</div>
         <div class="sync-status" id="syncStatusText">not signed in — your data stays on this device only</div>
         <div id="syncSignedOutView">
           <form id="syncAuthForm" autocomplete="on">
@@ -1666,7 +1666,7 @@
       </div>
 
       <div class="settings-section">
-        <div class="settings-section-title">planning &amp; targets</div>
+        <div class="settings-section-title">focus &amp; planning</div>
         <div class="settings-row">
           <div><div class="settings-label">daily focus target</div><div class="settings-desc">adaptive uses the median of your recent active focus days, then nudges it for recovery, work load, and systemic fatigue. switch to manual whenever you want a fixed target.</div></div>
           <button class="focus-mode-toggle" id="settingsAdaptiveFocusToggle">adaptive</button>
@@ -1674,10 +1674,6 @@
         <div class="settings-row" id="settingsManualFocusRow" style="display:none;">
           <div><div class="settings-label">manual focus target</div><div class="settings-desc">center of the focus range shown on Today</div></div>
           <input type="number" class="search-input settings-number-input" id="settingsDailyGoalInput" min="1" max="600" step="5" value="90" aria-label="manual daily focus target in minutes">
-        </div>
-        <div class="settings-row">
-          <div><div class="settings-label">sleep target</div><div class="settings-desc">used by Recovery to calculate rolling sleep debt</div></div>
-          <input type="number" class="search-input settings-number-input" id="settingsSleepTargetInput" min="4" max="12" step="0.5" value="8" aria-label="sleep target in hours per night">
         </div>
         <div class="settings-row">
           <div><div class="settings-label">timer chain</div><div class="settings-desc">the repeating focus / break pattern configured under the main timer</div><div class="settings-inline-summary" id="settingsChainSummary"></div></div>
@@ -1705,7 +1701,7 @@
       </div>
 
       <div class="settings-section">
-        <div class="settings-section-title">help &amp; feature guide</div>
+        <div class="settings-section-title">help</div>
         <div class="settings-desc" style="margin-top:0;margin-bottom:0.7rem;max-width:none;line-height:1.5;">newer features now have contextual ? tips in the app. this guide keeps the longer explanations in one place so the main screens do not get crowded.</div>
         <div class="settings-action-stack">
           <button class="btn small" id="openFeatureGuideBtn" style="width:100%;justify-content:center;">open feature guide</button>
@@ -1716,7 +1712,7 @@
       </div>
 
       <div class="settings-section">
-        <div class="settings-section-title">data</div>
+        <div class="settings-section-title">data &amp; backup</div>
         <div class="export-row" style="margin-top:0;">
           <button id="exportBtn" class="btn small">export</button>
           <button id="importBtn" class="btn small">import</button>
@@ -1725,10 +1721,10 @@
       </div>
 
       <div class="settings-section">
-        <div class="settings-section-title">app</div>
+        <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.126 makes signed-in cloud sync automatic and quiet, adds last-sync status and Sync Now, and only interrupts for genuine two-device conflicts.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.127 adds recovery-aware sleep opportunity, recent-deficit wording, forecast confidence, clearer capacity versus suggested load, and streamlined Settings.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2518,6 +2514,7 @@
 
           <div class="recovery-card recovery-long-card" id="trainingOutlookCard">
             <div class="recovery-watch-head"><h2>7-day training outlook</h2><span class="training-call-confidence-detail">possibilities, not prescriptions</span></div>
+            <div class="training-call-confidence" id="outlookConfidence"></div>
             <div class="outlook-scenarios"><div class="outlook-column"><div class="training-call-subheading">current trend</div><div id="outlookCurrent"></div></div><div class="outlook-column"><div class="training-call-subheading">if recovery improves</div><div id="outlookOptimal"></div></div></div><div class="recovery-path" id="recoveryOpportunityPath"></div>
           </div>
 
@@ -2682,7 +2679,7 @@
           <div class="recovery-card recovery-sleep-card">
             <h2>sleep</h2>
             <div class="recovery-acwr-row">
-              <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="sleepDebtValue">--</div><div class="recovery-acwr-label">debt (14d)</div></div>
+              <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="sleepDebtValue">--</div><div class="recovery-acwr-label">recent deficit (14d)</div></div>
               <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="sleepConsistencyValue">--</div><div class="recovery-acwr-label">consistency (7d)</div></div>
             </div>
             <div class="graph-container recovery-sleep-graph-container"><canvas id="sleepDurationChart"></canvas></div>
@@ -2695,6 +2692,7 @@
               <div class="sleep-summary-item"><div class="sleep-summary-value" id="sleepDurationTrendValue">--</div><div class="sleep-summary-label">vs previous 7d</div></div>
             </div>
             <div class="sleep-insights" id="sleepInsights"></div>
+            <div class="recovery-signal-grid" id="sleepOpportunitySummary" style="margin-top:.7rem;"></div>
             <div class="recovery-sleep-target-row">
               <label for="sleepTargetInput">target sleep, hrs/night</label>
               <input type="number" id="sleepTargetInput" class="search-input" value="8" step="0.5" min="4" max="12">
@@ -2893,7 +2891,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.126';
+      const APP_VERSION='1.127';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3689,12 +3687,11 @@
           '#recoveryUpperFatigueInput':'Local upper-body fatigue mainly affects pressing, rows, and arm work.',
           '#recoveryLoadInput':'Workout load from Intervals.icu. Used for 7-day / 28-day load trends and session-spike checks.',
           '#recoveryStrainInput':'WHOOP strain is stored and graphed but does not replace Intervals.icu workout load in the load-ratio calculation.',
-          '#sleepTargetInput':'Hours per night used when calculating rolling 14-day sleep debt.',
+          '#sleepTargetInput':'Your normal nightly target. Recent short sleep may temporarily add a conservative recovery opportunity.',
           '#liftingNewLiftMax':'Training max is the current working number used to calculate prescriptions; it can regress after long layoffs while historical highs stay preserved.',
           '#liftingNewLiftIncrementPreview':'Automatic training-max step based on lift type and your 1.25lb smallest plates. Small/upper lifts use +2.5lb; large lower-body/posterior lifts use +5lb.',
           '#settingsAdaptiveFocusToggle':'Mirrors the adaptive/manual focus-target control on Today.',
-          '#settingsSleepTargetInput':'Mirrors the sleep target on Recovery.',
-          '#hubPanelCurrent':'Current & next is the ordered focus-task queue; the first item is the current task.',
+          '#hubPanelCurrent':'Focus Queue contains deliberate-work tasks that can use the timer; the first item becomes Focus Now.',
           '#hubPanelTodo':'Todos are quick items that do not need a focus timer.',
           '#hubPanelDue':'A filtered view of active tasks with a due date today.',
           '#hubPanelPriority':'A filtered view emphasizing tasks marked with higher priority.'
@@ -4038,6 +4035,18 @@ function updateNotificationSettingUI(){
         }
         if(!daysWithData)return null;
         return{hours:debt,daysWithData};
+      }
+      function getSleepRecoveryOpportunity(referenceDateStr){
+        const deficit=getSleepDebt(referenceDateStr,14);
+        let bufferMinutes=0,reason='normal target · no recovery buffer needed';
+        if(deficit&&deficit.daysWithData>=3){
+          const avg=deficit.hours/deficit.daysWithData;
+          if(avg>=1.5&&deficit.daysWithData>=5){bufferMinutes=60;reason='substantial recent short sleep';}
+          else if(avg>=.85||deficit.hours>=8){bufferMinutes=45;reason='recent sleep has been well below target';}
+          else if(avg>=.45||deficit.hours>=4){bufferMinutes=30;reason='moderate recent sleep deficit';}
+          else if(avg>=.2||deficit.hours>=2){bufferMinutes=15;reason='small recent sleep deficit';}
+        }else if(deficit)reason='building enough sleep history before adding a buffer';
+        return{normalHours:sleepTargetHours,bufferMinutes,opportunityHours:sleepTargetHours+bufferMinutes/60,deficit,reason};
       }
       function timeToNoonShiftedMinutes(timeStr){
         const[h,m]=timeStr.split(':').map(Number);
@@ -4929,13 +4938,14 @@ function updateNotificationSettingUI(){
           setRecoverySummaryValue('summaryWindDown','open',null);
           setRecoverySummaryValue('summaryTargetAsleep','open',null);
         }else{
-          const targetAsleep=shiftClock(tomorrowPlan.time,-Math.round(sleepTargetHours*60));
+          const sleepOpportunity=getSleepRecoveryOpportunity(today);
+          const targetAsleep=shiftClock(tomorrowPlan.time,-Math.round(sleepOpportunity.opportunityHours*60));
           const windDown=shiftClock(targetAsleep,-45);
           setRecoverySummaryValue('summaryWindDown',formatClock(windDown),'good');
           setRecoverySummaryValue('summaryTargetAsleep',formatClock(targetAsleep),'good');
           const windEl=document.getElementById('summaryWindDown'),asleepEl=document.getElementById('summaryTargetAsleep');
           if(windEl)windEl.title=`45 minutes before target asleep · tomorrow's ${tomorrowPlan.type} wake is ${formatClock(tomorrowPlan.time)}`;
-          if(asleepEl)asleepEl.title=`Based on a ${sleepTargetHours} hour sleep target before tomorrow's ${formatClock(tomorrowPlan.time)} wake`;
+          if(asleepEl)asleepEl.title=`Based on ${formatDurationHours(sleepOpportunity.opportunityHours)} tonight (${sleepTargetHours}h normal target${sleepOpportunity.bufferMinutes?` + ${sleepOpportunity.bufferMinutes}m recovery buffer`:''}) before tomorrow's ${formatClock(tomorrowPlan.time)} wake`;
         }
         setRecoverySummaryValue('summaryWorkStress',work.score==null?'--':work.status==='red'?'high':work.status==='yellow'?'moderate':'low',work.status==='red'?'bad':work.status==='yellow'?'caution':work.score==null?null:'good');
         setRecoverySummaryValue('summaryBodyFatigue',bodyMax==null?'--':bodyMax>=9?'high':bodyMax>=7?'moderate':'low',bodyMax==null?null:bodyMax>=9?'bad':bodyMax>=7?'caution':'good');
@@ -5247,7 +5257,7 @@ function updateNotificationSettingUI(){
       function getWakePlanForDate(dateStr){const d=new Date(dateStr+'T12:00:00'),base=wakeSchedule[d.getDay()]||{type:'open',time:''};if(wakeOverride.date===dateStr&&wakeOverride.type)return{type:wakeOverride.type,time:wakeOverride.type==='open'?'':wakeOverride.time,override:true};return{...base,override:false};}
       function renderWakeSchedule(){const grid=document.getElementById('wakeScheduleGrid'),summary=document.getElementById('wakePlanSummary');if(!grid||!summary)return;const names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],mondayFirst=[1,2,3,4,5,6,0];grid.innerHTML='';mondayFirst.forEach(i=>{const x=wakeSchedule[i],el=document.createElement('div');el.className='wake-day';el.innerHTML=`<div class="wake-day-name">${names[i]}</div><select class="search-input" data-wake-type="${i}" title="Required = fixed obligation; Preferred = ideal but flexible; Open = no set wake time"><option value="required" ${x.type==='required'?'selected':''}>required</option><option value="preferred" ${x.type==='preferred'?'selected':''}>preferred</option><option value="open" ${x.type==='open'?'selected':''}>open</option></select><input type="time" class="search-input" data-wake-time="${i}" value="${x.time||''}" title="Wake time for ${names[i]}" ${x.type==='open'?'disabled':''}>`;grid.appendChild(el);});
         const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);const ds=toDateStr(tomorrow);if(wakeOverride.date&&wakeOverride.date<ds)wakeOverride={date:'',type:'',time:''};const typeEl=document.getElementById('wakeOverrideType'),timeEl=document.getElementById('wakeOverrideTime');if(typeEl)typeEl.value=wakeOverride.date===ds?wakeOverride.type:'';if(timeEl)timeEl.value=wakeOverride.date===ds?wakeOverride.time:'';
-        const plan=getWakePlanForDate(ds);if(plan.type==='open'||!plan.time)summary.innerHTML='<span class="wake-plan-chip">tomorrow · open wake time</span>';else{const asleep=shiftClock(plan.time,-Math.round(sleepTargetHours*60)),wind=shiftClock(asleep,-45);summary.innerHTML=`<span class="wake-plan-chip">${formatClock(wind)} wind-down</span><span class="wake-plan-chip">${formatClock(asleep)} target asleep</span><span class="wake-plan-chip">${formatClock(plan.time)} ${plan.type} wake${plan.override?' · override':''}</span>`;}}
+        const plan=getWakePlanForDate(ds),opportunity=getSleepRecoveryOpportunity(getToday());if(plan.type==='open'||!plan.time)summary.innerHTML=`<span class="wake-plan-chip">tomorrow · open wake time</span><span class="wake-plan-chip">aim for ${formatDurationHours(opportunity.opportunityHours)} sleep opportunity</span>`;else{const asleep=shiftClock(plan.time,-Math.round(opportunity.opportunityHours*60)),wind=shiftClock(asleep,-45);summary.innerHTML=`<span class="wake-plan-chip">${formatClock(wind)} wind-down</span><span class="wake-plan-chip">${formatClock(asleep)} target asleep</span><span class="wake-plan-chip">${formatClock(plan.time)} ${plan.type} wake${plan.override?' · override':''}</span>${opportunity.bufferMinutes?`<span class="wake-plan-chip">+${opportunity.bufferMinutes}m recovery buffer</span>`:''}`;}}
       function updateSleepCard(){
         const targetInput=document.getElementById('sleepTargetInput');
         if(targetInput&&document.activeElement!==targetInput)targetInput.value=sleepTargetHours;
@@ -5255,6 +5265,7 @@ function updateNotificationSettingUI(){
         const debtEl=document.getElementById('sleepDebtValue'),consistencyEl=document.getElementById('sleepConsistencyValue'),caption=document.getElementById('sleepDebtCaption');
         if(!debtEl||!consistencyEl||!caption)return;
         const debt=getSleepDebt(todayStr),consistency=getSleepConsistency(todayStr);
+        const opportunity=getSleepRecoveryOpportunity(todayStr);
         const current=getSleepWindowSummary(todayStr,7);
         const priorDate=new Date(todayStr+'T00:00:00');priorDate.setDate(priorDate.getDate()-7);
         const prior=getSleepWindowSummary(toDateStr(priorDate),7);
@@ -5281,13 +5292,15 @@ function updateNotificationSettingUI(){
         if(current.avgScore!=null)insights.push(['recovery',`WHOOP sleep score averaged ${Math.round(current.avgScore)} across ${current.scoreDays} logged night${current.scoreDays===1?'':'s'}.`]);
         if(debt){
           let action='keep the recent schedule and watch the rolling average.';
-          if(debt.hours>2&&current.avgStart!=null){const shift=Math.min(60,Math.max(15,Math.round((debt.hours*60)/7/5)*5));action=`the clearest lever is roughly ${shift} min more sleep opportunity per night until the 14-day debt starts falling.`;}
+          if(debt.hours>2&&current.avgStart!=null){action=`tonight adds a conservative ${opportunity.bufferMinutes||15} min recovery opportunity; the 14-day deficit is context, not something to repay hour-for-hour.`;}
           else if(consistency&&consistency.score<60)action='quantity is only part of the picture; tightening bedtime and wake-time variation is the clearest next lever.';
           insights.push(['next move',action]);
         }
         const insightsEl=document.getElementById('sleepInsights');
         if(insightsEl)insightsEl.innerHTML=insights.length?insights.map(([k,t])=>`<div class="sleep-insight-row"><div class="sleep-insight-key">${k}</div><div class="sleep-insight-text">${t}</div></div>`).join(''):`<div class="sleep-insight-row"><div class="sleep-insight-key">data</div><div class="sleep-insight-text">log sleep start and end times for a few nights to build this summary.</div></div>`;
-        caption.textContent=debt?`${debt.daysWithData} logged night${debt.daysWithData===1?'':'s'} in the 14-day debt window · target ${sleepTargetHours}h/night`:'sleep debt appears once sleep start/end times are logged.';
+        const opportunityEl=document.getElementById('sleepOpportunitySummary');
+        if(opportunityEl)opportunityEl.innerHTML=`<div class="recovery-signal-item"><div class="recovery-signal-label">normal target</div><div class="recovery-signal-value">${formatDurationHours(opportunity.normalHours)}</div></div><div class="recovery-signal-item"><div class="recovery-signal-label">recovery buffer</div><div class="recovery-signal-value">${opportunity.bufferMinutes?`+${opportunity.bufferMinutes} min`:'none'}</div></div><div class="recovery-signal-item"><div class="recovery-signal-label">tonight's opportunity</div><div class="recovery-signal-value">${formatDurationHours(opportunity.opportunityHours)} · ${escapeHtml(opportunity.reason)}</div></div>`;
+        caption.textContent=debt?`${debt.daysWithData} logged night${debt.daysWithData===1?'':'s'} in the 14-day recent-deficit window · this is context, not a balance to repay hour-for-hour.`:'recent sleep deficit appears once sleep start/end times are logged.';
         renderWakeSchedule();
         drawSleepDurationChart();
       }
@@ -5799,7 +5812,7 @@ function updateNotificationSettingUI(){
       function getLongTermRecoveryData(referenceDateStr){
         const ref=new Date(referenceDateStr+'T12:00:00'),signals=[];
         const debt=getSleepDebt(referenceDateStr,14);
-        signals.push({label:'sleep debt',status:debt&&debt.daysWithData>=5?(debt.hours>=10?'red':debt.hours>=5?'yellow':'green'):null,value:debt?`${debt.hours.toFixed(1)}h across ${debt.daysWithData} nights`:'not enough sleep windows'});
+        signals.push({label:'recent sleep deficit',status:debt&&debt.daysWithData>=5?(debt.hours>=10?'red':debt.hours>=5?'yellow':'green'):null,value:debt?`${debt.hours.toFixed(1)}h below target across ${debt.daysWithData} nights`:'not enough sleep windows'});
         let hrvSuppressed=0,hrvKnown=0,fatigueHigh=0,fatigueKnown=0,combined=[];
         for(let i=0;i<14;i++){const d=new Date(ref);d.setDate(d.getDate()-i);const ds=toDateStr(d),rec=biometrics[ds]||{},hs=getHrvStatus(ds);if(hs){hrvKnown++;if(hs!=='green')hrvSuppressed++;}const vals=[rec.systemicFatigue,rec.legFatigue,rec.backFatigue,rec.upperFatigue].filter(v=>v!=null).map(Number);if(vals.length){fatigueKnown++;if(Math.max(...vals)>=7)fatigueHigh++;}const training=getEffectiveTrainingLoad(ds)||0,work=getWorkStressData(ds).score||0;if(training||work)combined.push({i,value:training+work});}
         signals.push({label:'HRV',status:hrvKnown>=5?(hrvSuppressed>=6?'red':hrvSuppressed>=3?'yellow':'green'):null,value:hrvKnown?`${hrvSuppressed}/${hrvKnown} recent readings suppressed`:'not enough baseline data'});
@@ -5825,7 +5838,9 @@ function updateNotificationSettingUI(){
       }
       function renderTrainingOutlook(){
         const current=document.getElementById('outlookCurrent'),optimal=document.getElementById('outlookOptimal');if(!current||!optimal)return;const today=getToday(),call=getTrainingCallData(today),watch=getLongTermRecoveryData(today),health=(biometrics[today]||{}).healthFlag||'none';
-        const loadBase=(getACWR(today)||{}).chronic||null,loadRange=text=>{if(!loadBase)return'load range pending';const mult=/recovery|rest/.test(text)?[0,.35]:/easy/.test(text)?[.4,.75]:/quality/.test(text)?[.9,1.25]:[.65,1.0];return`projected safe load ${Math.round(loadBase*mult[0])}–${Math.round(loadBase*mult[1])}`;};
+        const loadBase=(getACWR(today)||{}).chronic||null,loadGuidance=(text,improved)=>{if(!loadBase)return'capacity and suggested load pending';const capacity=improved?[.75,1.15]:[.65,1],suggest=/recovery|rest/.test(text)?[0,.35]:/easy/.test(text)?[.4,.75]:/quality/.test(text)?[.9,1.25]:[.65,1],cap=[Math.round(loadBase*capacity[0]),Math.round(loadBase*capacity[1])],suggested=[Math.round(loadBase*Math.min(suggest[0],capacity[1])),Math.round(loadBase*Math.min(suggest[1],capacity[1]))];return`capacity ${cap[0]}–${cap[1]} · suggested ${suggested[0]}–${suggested[1]}${suggested[1]<cap[1]?' (intentionally conservative)':''}`;};
+        const rec=biometrics[today]||{},bodyLogged=[rec.systemicFatigue,rec.legFatigue,rec.backFatigue,rec.upperFatigue].some(v=>v!=null),workLogged=rec.workHours!=null&&rec.workEffort!=null,trainingLogged=!!rec.actualIntensity,confidence=document.getElementById('outlookConfidence'),partial=!(bodyLogged&&workLogged&&trainingLogged);
+        if(confidence)confidence.innerHTML=`<span class="training-call-confidence-level ${partial?'medium':'high'}">forecast confidence: ${partial?'partial':'updated'}</span><span class="training-call-confidence-detail">${partial?'Morning or incomplete-day data only · after-work fatigue and training outcome can change this outlook.':'Work, body-fatigue and training outcome are logged for today.'}</span>`;
         const row=(date,callText,why)=>`<div class="outlook-day"><div class="outlook-date">${new Date(date+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</div><div><div class="outlook-call">${escapeHtml(callText)}</div><div class="outlook-why">${escapeHtml(why)}</div></div></div>`;
         const a=[],b=[];for(let i=1;i<=7;i++){const d=new Date(today+'T12:00:00');d.setDate(d.getDate()+i);const ds=toDateStr(d),early=i<=2;
           let cur=watch.level==='high'?'recovery-biased':watch.level==='moderate'?(early?'easy likely':'moderate opportunity: low'):(call.level==='rest'&&early?'easy possible':'moderate opportunity: possible');
@@ -5833,7 +5848,7 @@ function updateNotificationSettingUI(){
           let why=(watch.level==='low'?'depends on daily recovery and accumulated load':`${watch.level} deload risk keeps structured stress conservative`)+wakeNote;
           if(health!=='none'){cur='recovery-biased';why='health override must clear before training opportunity returns';}
           const opt=i<=2?'easy / minimum-dose lift possible':i<=4?'moderate aerobic opportunity':'quality opportunity: possible';
-          const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep target is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,`${why} · ${loadRange(cur)}`));b.push(row(ds,opt,`${optWhy} · ${loadRange(opt)}`));}
+          const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep opportunity is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,`${why} · ${loadGuidance(cur,false)}`));b.push(row(ds,opt,`${optWhy} · ${loadGuidance(opt,true)}`));}
         current.innerHTML=a.join('');optimal.innerHTML=b.join('');
         const path=document.getElementById('recoveryOpportunityPath');if(path){const f=getFreshnessData(today),body=getBodyFatigueData(today),sleep=getSleepDuration(today),steps=[];if(sleep==null||sleep<sleepTargetHours)steps.push(`sleep target · improves the next opportunity`);if(body.legs>=7)steps.push('easy mobility / leg recovery · supports the next quality day');if(body.systemic>=7)steps.push('reduce optional stress · protect tomorrow’s reserve');if(!steps.length)steps.push('maintain sleep and hydration · keep the next opportunity open');path.innerHTML=steps.slice(0,3).map(x=>`<div class="recovery-path-chip">${escapeHtml(x)}</div>`).join('');}
       }
@@ -7325,10 +7340,10 @@ function updateNotificationSettingUI(){
       });
       document.getElementById('recoveryDateInput').addEventListener('change',e=>{loadRecoveryEntryForDate(e.target.value);updateRecoveryEntrySummary();});
       document.getElementById('recoveryDateInput').addEventListener('click',e=>{e.preventDefault();try{e.target.showPicker();}catch(err){}});
-      document.getElementById('sleepTargetInput').addEventListener('change',e=>{sleepTargetHours=Math.max(4,Math.min(12,Number(e.target.value)||8));saveData();updateSleepCard();updateSettingsPlanningUI();});
-      document.getElementById('wakeScheduleGrid').addEventListener('change',e=>{const ti=e.target.dataset.wakeType,wi=e.target.dataset.wakeTime;if(ti!=null){wakeSchedule[Number(ti)].type=e.target.value;if(e.target.value!=='open'&&!wakeSchedule[Number(ti)].time)wakeSchedule[Number(ti)].time='06:00';}if(wi!=null)wakeSchedule[Number(wi)].time=e.target.value;saveData();renderWakeSchedule();renderTrainingOutlook();});
-      document.getElementById('wakeOverrideType').addEventListener('change',e=>{const d=new Date();d.setDate(d.getDate()+1);wakeOverride={date:e.target.value?toDateStr(d):'',type:e.target.value,time:e.target.value==='open'?'':(document.getElementById('wakeOverrideTime').value||'06:00')};saveData();renderWakeSchedule();renderTrainingOutlook();});
-      document.getElementById('wakeOverrideTime').addEventListener('change',e=>{const d=new Date();d.setDate(d.getDate()+1);const type=document.getElementById('wakeOverrideType').value||'preferred';wakeOverride={date:toDateStr(d),type,time:e.target.value};saveData();renderWakeSchedule();renderTrainingOutlook();});
+      document.getElementById('sleepTargetInput').addEventListener('change',e=>{sleepTargetHours=Math.max(4,Math.min(12,Number(e.target.value)||8));saveData();updateSleepCard();updateRecoveryDailySummary();renderTrainingOutlook();updateSettingsPlanningUI();showToast('normal sleep target updated');});
+      document.getElementById('wakeScheduleGrid').addEventListener('change',e=>{const ti=e.target.dataset.wakeType,wi=e.target.dataset.wakeTime;if(ti!=null){wakeSchedule[Number(ti)].type=e.target.value;if(e.target.value!=='open'&&!wakeSchedule[Number(ti)].time)wakeSchedule[Number(ti)].time='06:00';}if(wi!=null)wakeSchedule[Number(wi)].time=e.target.value;saveData();renderWakeSchedule();renderTrainingOutlook();showToast('wake schedule updated');});
+      document.getElementById('wakeOverrideType').addEventListener('change',e=>{const d=new Date();d.setDate(d.getDate()+1);wakeOverride={date:e.target.value?toDateStr(d):'',type:e.target.value,time:e.target.value==='open'?'':(document.getElementById('wakeOverrideTime').value||'06:00')};saveData();renderWakeSchedule();renderTrainingOutlook();showToast(e.target.value?'tomorrow-only wake updated':'using normal schedule tomorrow');});
+      document.getElementById('wakeOverrideTime').addEventListener('change',e=>{const d=new Date();d.setDate(d.getDate()+1);const type=document.getElementById('wakeOverrideType').value||'preferred';wakeOverride={date:toDateStr(d),type,time:e.target.value};saveData();renderWakeSchedule();renderTrainingOutlook();showToast('tomorrow-only wake updated');});
       ['recoveryHrvInput','recoveryBodyweightInput','recoveryLoadInput','recoverySleepInput','recoveryRecoveryInput','recoveryStrainInput','recoveryRpeInput','recoveryTrainingRpeInput','recoveryWorkHoursInput','recoveryWorkEffortInput','recoverySystemicFatigueInput','recoveryLegFatigueInput','recoveryBackFatigueInput','recoveryUpperFatigueInput','recoverySleepStartInput','recoverySleepEndInput','recoveryTestTimeInput'].forEach(id=>{
         document.getElementById(id).addEventListener('input',()=>recoveryTouchedFields.add(id));
       });
@@ -7475,7 +7490,6 @@ function updateNotificationSettingUI(){
       document.getElementById('showGoalsGuideBtn').addEventListener('click',()=>{closeSettings();openGoalsTutorial();});
       document.getElementById('settingsAdaptiveFocusToggle').addEventListener('click',()=>{adaptiveFocusGoalEnabled=!adaptiveFocusGoalEnabled;if(!adaptiveFocusGoalEnabled)dailyGoal=Math.max(1,dailyGoal);updateFocusTargetUI();updateGoalRing();updateSettingsPlanningUI();saveData();});
       document.getElementById('settingsDailyGoalInput').addEventListener('change',e=>{dailyGoal=Math.max(1,Math.min(600,Number(e.target.value)||90));if(goalInput)goalInput.value=dailyGoal;updateFocusTargetUI();updateGoalRing();updateSettingsPlanningUI();saveData();});
-      document.getElementById('settingsSleepTargetInput').addEventListener('change',e=>{sleepTargetHours=Math.max(4,Math.min(12,Number(e.target.value)||8));const recoveryInput=document.getElementById('sleepTargetInput');if(recoveryInput)recoveryInput.value=sleepTargetHours;updateSleepCard();updateSettingsPlanningUI();saveData();});
       document.getElementById('settingsEditChainBtn').addEventListener('click',()=>{closeSettings();switchPanel('today');const editor=document.getElementById('chainEditor');if(editor&&editor.style.display==='none')toggleChainEditor();setTimeout(()=>document.getElementById('chainEditor')?.scrollIntoView({behavior:'smooth',block:'center'}),0);});
       function setupOverlayDismiss(overlayId,closeFn){
         const overlay=document.getElementById(overlayId);
@@ -9058,7 +9072,7 @@ function updateNotificationSettingUI(){
         html+=`</div>`;
         const recInsights=[];
         if(data.recovery&&data.recovery.firstHalfAvg!=null&&data.recovery.secondHalfAvg!=null){const diff=data.recovery.secondHalfAvg-data.recovery.firstHalfAvg;recInsights.push(['freshness',Math.abs(diff)<8?'freshness stayed fairly steady through the week.':`freshness moved ${Math.abs(diff)} points ${diff>0?'up':'down'} from the first half of the week to the second.`]);}
-        if(data.sleepDebt)recInsights.push(['sleep debt',`${data.sleepDebt.hours.toFixed(1)}h rolling debt across ${data.sleepDebt.daysWithData} logged nights.`]);
+        if(data.sleepDebt)recInsights.push(['recent sleep deficit',`${data.sleepDebt.hours.toFixed(1)}h below target across ${data.sleepDebt.daysWithData} logged nights; not a literal balance to repay.`]);
         if(data.sleepConsistency)recInsights.push(['sleep timing',`consistency ${data.sleepConsistency.score}/100; average timing swing about ${Math.round(data.sleepConsistency.avgStdDevMinutes)} min.`]);
         if(recInsights.length)html+=`<div class="retro-insight-list">${recInsights.map(([k,t])=>`<div class="retro-insight"><div class="retro-insight-key">${k}</div><div class="retro-insight-text">${t}</div></div>`).join('')}</div>`;
         html+=`</div>`;
