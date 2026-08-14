@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.139 aerobic adaptation, broad activity awards, and expandable history · pages refresh -->
+<!-- Focus::Flow deployment marker: v1.140 adaptive scheduling and cross-app next move -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -236,6 +236,11 @@
     .today-now-signal-label { font:600 .53rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.5; text-transform:uppercase; letter-spacing:.08em; }
     .today-now-signal-value { margin-top:.22rem; color:var(--text-color); font-size:.76rem; font-weight:650; line-height:1.35; }
     .today-now-signal-note { margin-top:.16rem; color:var(--text-color); opacity:.55; font-size:.58rem; line-height:1.35; }
+    .today-best-move { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.7rem; align-items:center; margin-top:.1rem; padding:.72rem .8rem; border:1px solid color-mix(in srgb,var(--main-color) 45%,var(--border-color)); border-radius:.72rem; background:color-mix(in srgb,var(--bg-color) 95%,var(--main-color) 5%); }
+    .today-best-move-kicker { color:var(--main-color); font:650 .53rem 'JetBrains Mono',monospace; letter-spacing:.1em; text-transform:uppercase; }
+    .today-best-move-title { margin-top:.22rem; color:var(--text-color); font-size:.84rem; font-weight:700; line-height:1.3; }
+    .today-best-move-why { margin-top:.2rem; color:var(--text-color); opacity:.58; font-size:.59rem; line-height:1.45; }
+    .today-best-move-confidence { display:inline-block; margin-left:.35rem; padding:.1rem .3rem; border:1px solid var(--border-color); border-radius:999px; color:var(--text-color); opacity:.62; font-size:.48rem; letter-spacing:0; }
     .today-later-card { grid-column:1/-1; }
     .recovery-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 1.5rem; align-items:start; }
     .recovery-snapshot-card { align-self: start; }
@@ -314,7 +319,9 @@
     .fatigue-map-fill { height: 100%; width: 0%; border-radius: 8px; transition: width 0.25s ease; }
     .fatigue-input-note { grid-column: 1 / -1; font-size: 0.61rem; line-height: 1.4; color: var(--text-color); opacity: 0.58; margin-top: -0.1rem; }
     [data-view-mode="mobile"] .today-panel-grid { grid-template-columns: 1fr; }
-    [data-view-mode="mobile"] .today-now-card { grid-template-columns:1fr; }
+    [data-view-mode="mobile"] .today-now-card { grid-template-columns:1fr; max-height:none; overflow:visible; }
+    [data-view-mode="mobile"] .today-best-move { grid-template-columns:1fr; }
+    [data-view-mode="mobile"] .today-best-move .btn { width:100%; justify-content:center; }
     .quick-add-row { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; position: relative; }
     .goals-intro-note { font-size: 0.65rem; color: var(--text-color); opacity: 0.55; line-height: 1.5; flex: 1; min-width: 0; }
     .goal-new-btn { width: 100%; background: transparent; border: 1px dashed var(--border-color); color: var(--text-color); border-radius: 0.6rem; padding: 0.5rem; font-size: 0.7rem; cursor: pointer; transition: all 0.2s ease; opacity: 0.75; margin-bottom: 0.6rem; font-family: 'Lexend Deca', sans-serif; }
@@ -454,7 +461,7 @@
     .autocomplete-dropdown { position: absolute; top: 100%; left: 0; right: 0; margin-top: 3px; background: var(--sub-alt-color); border: 1px solid var(--main-color); border-radius: 0.6rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4), 0 0 15px var(--main-glow); z-index: 550; max-height: 200px; overflow-y: auto; }
     .autocomplete-item { padding: 0.55rem 0.7rem; font-size: 0.75rem; color: var(--text-color); cursor: pointer; }
     .autocomplete-item:hover, .autocomplete-item.highlighted { background: rgba(0, 206, 124, 0.12); }
-    .quick-add-row .search-input { flex: 1; }
+    .quick-add-row .search-input { flex: 1; min-width:0; }
     .quick-add-row .add-btn { flex-shrink: 0; }
     .current-task-item { border-left: 3px solid var(--main-color); }
 
@@ -960,6 +967,31 @@
     .today-panel-grid .schedule-card { margin-top: 0; grid-column: 1 / -1; }
     .today-panel-grid .today-habits-card { grid-column: 1 / -1; }
     .schedule-desc { font-size: 0.65rem; color: var(--text-color); opacity: 0.5; margin: 0.3rem 0 0.8rem; line-height: 1.4; }
+    .schedule-understood { min-height:1.25rem; margin:.35rem 0 .55rem; color:var(--main-color); font:.56rem 'JetBrains Mono',monospace; opacity:.8; }
+    .schedule-recovery-list { display:grid; gap:.42rem; margin:.55rem 0; }
+    .schedule-recovery-item { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.55rem; align-items:center; padding:.58rem .65rem; border:1px solid rgba(212,169,74,.38); border-radius:.62rem; background:rgba(212,169,74,.045); }
+    .schedule-recovery-title { color:var(--text-color); font-size:.68rem; font-weight:650; }
+    .schedule-recovery-note { margin-top:.16rem; color:var(--text-color); opacity:.52; font-size:.54rem; }
+    .schedule-recovery-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:.3rem; }
+    .schedule-recovery-actions button { border:1px solid var(--border-color); border-radius:.42rem; background:transparent; color:var(--text-color); padding:.26rem .4rem; font:.52rem 'JetBrains Mono',monospace; cursor:pointer; }
+    .schedule-upcoming { display:grid; gap:.38rem; margin:.65rem 0; }
+    .schedule-upcoming:empty { display:none; }
+    .schedule-upcoming-label { color:var(--text-color); opacity:.46; font:.53rem 'JetBrains Mono',monospace; text-transform:uppercase; }
+    .schedule-upcoming-item { display:grid; grid-template-columns:76px minmax(0,1fr) auto; gap:.55rem; align-items:center; padding:.5rem .6rem; border:1px solid var(--border-color); border-radius:.56rem; }
+    .schedule-upcoming-day { color:var(--sub-color); font:.57rem 'JetBrains Mono',monospace; }
+    .schedule-upcoming-title { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-color); font-size:.65rem; }
+    .schedule-upcoming-time { color:var(--main-color); font:.56rem 'JetBrains Mono',monospace; white-space:nowrap; }
+    .schedule-timeline-details { margin-top:.7rem; border-top:1px solid var(--border-color); padding-top:.6rem; }
+    .schedule-timeline-details > summary { color:var(--text-color); opacity:.58; font-size:.6rem; cursor:pointer; list-style:none; }
+    .schedule-timeline-details > summary::-webkit-details-marker { display:none; }
+    .schedule-timeline-details > summary::after { content:' +'; color:var(--main-color); }
+    .schedule-timeline-details[open] > summary::after { content:' −'; }
+    .schedule-timeline-details .schedule-grid-scroll { margin-top:.6rem; }
+    .schedule-block.commitment { border-style:dashed; background:color-mix(in srgb,var(--bg-color) 90%,var(--sub-color) 10%); }
+    [data-view-mode="mobile"] .schedule-recovery-item { grid-template-columns:1fr; }
+    [data-view-mode="mobile"] .schedule-recovery-actions { justify-content:flex-start; }
+    [data-view-mode="mobile"] .schedule-upcoming-item { grid-template-columns:62px minmax(0,1fr); }
+    [data-view-mode="mobile"] .schedule-upcoming-time { grid-column:2; }
     .checkin-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
     .checkin-header-row h2 { margin-bottom: 0; }
     .checkin-on-this-day { background: rgba(0,0,0,0.15); border: 1px solid var(--sub-color); border-radius: 0.6rem; padding: 0.7rem 0.9rem; margin-bottom: 1rem; font-size: 0.68rem; line-height: 1.6; color: var(--text-color); }
@@ -2134,7 +2166,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.139 keeps Training Call confidence visible, explains incomplete Strava-sourced imports, expands activity history into detailed cards, adds pace/HR, power/HR and decoupling analysis, and awards top-10 efforts across a broad set of activity metrics.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.140 understands plans across days and recurring workweeks, rescues missed plans without creating overdue clutter, and combines time, priorities, habits, recovery and training into one Best Next Move.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2543,6 +2575,10 @@
               <div class="today-now-signal"><div class="today-now-signal-label">next up</div><div class="today-now-signal-value" id="todayNextUpValue">day is open</div><div class="today-now-signal-note" id="todayFreeUntilValue">no scheduled constraint ahead</div></div>
               <div class="today-now-signal"><div class="today-now-signal-label">body + training</div><div class="today-now-signal-value" id="todayRecoveryCall">waiting for recovery signals</div><div class="today-now-signal-note" id="todayRecoveryWhy">Recovery will refine what fits today.</div></div>
             </div>
+            <div class="today-best-move" id="todayBestMove">
+              <div><div class="today-best-move-kicker">best next move <span class="today-best-move-confidence" id="todayBestMoveConfidence">building context</span></div><div class="today-best-move-title" id="todayBestMoveTitle">Choose one useful action</div><div class="today-best-move-why" id="todayBestMoveWhy">Focus::Flow will combine available time, priorities, habits, recovery and training.</div></div>
+              <button class="btn small primary" id="todayBestMoveAction">show me</button>
+            </div>
           </div>
           <div class="today-section-label">TODAY</div>
           <div class="today-card today-tasks-hub">
@@ -2596,13 +2632,14 @@
             <ul class="habit-list" id="todayHabitList"><li class="empty-habits">no habits yet</li></ul>
           </div>
           <div class="schedule-card">
-            <h2>today's schedule</h2>
-            <div class="schedule-desc">Add a plan in normal language, such as “dentist 3 PM” or “gym after work.” Focus timers also place themselves here automatically.</div>
-            <div class="quick-add-row"><input type="text" class="search-input" id="scheduleQuickInput" placeholder="add today: dentist 3 PM, gym after work..." autocomplete="off" style="margin-bottom:0;"><button class="add-btn" id="scheduleQuickBtn">+</button></div>
+            <h2>schedule</h2>
+            <div class="schedule-desc">Write the plan normally: “dentist tomorrow 3 PM,” “gym after work,” or “work 7–4 Monday–Friday.” Focus::Flow handles the structure.</div>
+            <div class="quick-add-row"><input type="text" class="search-input" id="scheduleQuickInput" placeholder="dentist tomorrow 3 PM, work 7–4 Monday–Friday..." autocomplete="off" style="margin-bottom:0;"><button class="add-btn" id="scheduleQuickBtn">+</button></div>
+            <div class="schedule-understood" id="scheduleUnderstood" aria-live="polite"></div>
+            <div class="schedule-recovery-list" id="scheduleRecoveryList"></div>
             <div class="schedule-agenda" id="scheduleAgenda"></div>
-            <div class="schedule-grid-scroll">
-              <div class="schedule-grid" id="scheduleGrid"></div>
-            </div>
+            <div class="schedule-upcoming" id="scheduleUpcoming"></div>
+            <details class="schedule-timeline-details"><summary>adjust today’s timeline</summary><div class="schedule-grid-scroll"><div class="schedule-grid" id="scheduleGrid"></div></div></details>
           </div>
           <div class="today-section-label">LATER</div>
           <div class="today-card weekly-checkin-card today-later-card" id="dailyCheckinCard">
@@ -3374,6 +3411,8 @@
       let viewMode='auto';
       let taskSchedule={};
       let scheduleDate=null;
+      let scheduleCommitments=[];
+      let lastBestNextMove=null;
       const SCHEDULE_START_HOUR=6,SCHEDULE_END_HOUR=24,SCHEDULE_HOUR_HEIGHT=60;
       let goalLinkPopoverGoalId=null;
       const GOAL_CHECKIN_DAYS={short:7,medium:30,long:90};
@@ -3388,7 +3427,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.139';
+      const APP_VERSION='1.140';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3570,7 +3609,7 @@
       }
 
       let saveFailureWarned=false;
-      function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingLoadModelVersion,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
+      function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,scheduleCommitments,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingLoadModelVersion,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
       function buildCloudStateSnapshot(){const state=buildStateSnapshot();delete state.importedActivities;delete state.intervalsLastSyncAt;return state;}
       const buildStateSnapshotCore=buildStateSnapshot;
       buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.manualTrainingSessions=manualTrainingSessions;state.trainingCallSnapshots=trainingCallSnapshots;state.wakeSchedule=wakeSchedule;state.wakeOverride=wakeOverride;state.weeklyReviews=weeklyReviews;return state;};
@@ -3584,6 +3623,8 @@
         }
         todayFocusMinutes=0;todaySessions=0;hourlyFocus={};if(d.lastActiveDate){const ld=new Date(d.lastActiveDate),td=new Date(today),df=Math.floor((td-ld)/(1000*60*60*24));if(df===1)streakDays=(d.streakDays||0)+1;else if(df===0)streakDays=d.streakDays||0;else streakDays=1;}else streakDays=1;}else{todayFocusMinutes=d.todayFocusMinutes||0;todaySessions=d.todaySessions||0;streakDays=d.streakDays||0;hourlyFocus=d.hourlyFocus||{};}
       totalFocusMinutes=d.totalFocusMinutes||0;sessionsCompleted=d.sessionsCompleted||0;tasksCompletedCount=d.tasksCompletedCount||0;taskNameFrequency=d.taskNameFrequency||{};taskLastUsed=d.taskLastUsed||{};lastActiveDate=d.lastActiveDate||null;dailyHistory=d.dailyHistory||{};taskHabitHistory=d.taskHabitHistory||{};librarySort=d.librarySort||'frequent';tasks=d.tasks||[];taskTimeLog=d.taskTimeLog||{};selectedTaskForGraph=d.selectedTaskForGraph||null;soundEnabled=d.soundEnabled!==undefined?d.soundEnabled:true;currentTheme=d.currentTheme||'cyberspace';bgHabits=d.bgHabits||[];totalXP=d.totalXP!==undefined?d.totalXP:(d.totalFocusMinutes||0);dailyGoalBonusDate=d.dailyGoalBonusDate||null;focusPeriod=d.focusPeriod||7;habitCheckPeriod=d.habitCheckPeriod||84;dailyGoal=d.dailyGoal||90;selectedHabitForGraph=d.selectedHabitForGraph||null;focusMode=(d.focusMode==='nudge')?'pause':(d.focusMode||'auto');habitGraphSort=d.habitGraphSort||'frequent';activePanel=d.activePanel||'tasks';notificationsEnabled=d.notificationsEnabled!==undefined?d.notificationsEnabled:false;sessionLog=d.sessionLog||[];lastSessionLogId=d.lastSessionLogId||null;estimateAccuracyLog=d.estimateAccuracyLog||[];tasksAbandonedCount=d.tasksAbandonedCount||0;taskFilter=d.taskFilter||'active';chartOffset=d.chartOffset||0;heatmapOffset=d.heatmapOffset||0;habitCheckOffset=d.habitCheckOffset||0;overviewOffset=d.overviewOffset||0;hasSeenWelcome=d.hasSeenWelcome!==undefined?d.hasSeenWelcome:false;taskSort=d.taskSort||'manual';recurringTasks=d.recurringTasks||{};lastRecapWeek=d.lastRecapWeek||null;taskWeeklyGoal=d.taskWeeklyGoal||10;habitOrderSort=d.habitOrderSort||'manual';xpFromFocus=d.xpFromFocus||0;xpFromTasks=d.xpFromTasks||0;xpFromHabits=d.xpFromHabits||0;xpFromGoals=d.xpFromGoals||0;xpFromChains=d.xpFromChains||0;notepadContent=d.notepadContent||'';notepadPinned=d.notepadPinned||false;notepadPosX=null;notepadPosY=null;todayHabitSort=d.todayHabitSort||'manual';todoSort=d.todoSort||'manual';overviewSort=d.overviewSort||'manual';adaptiveGoalEnabled=d.adaptiveGoalEnabled||false;adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled!==undefined?d.adaptiveFocusGoalEnabled:true;todayDueSort=d.todayDueSort||'date';todayPrioritySort=d.todayPrioritySort||'priority';goals=d.goals||[];taskSchedule=d.taskSchedule||{};scheduleDate=d.scheduleDate||null;viewMode=d.viewMode||'auto';collapsedCardKeys=new Set(d.collapsedCardKeys||[]);todayHubTab=d.todayHubTab||'current';completionEvents=d.completionEvents||[];biometrics=d.biometrics||{};importedActivities=d.importedActivities||[];intervalsBestRecords=d.intervalsBestRecords||{run:{},ride:{},runRanks:{},rideRanks:{},lastSyncAt:null};intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsLastSyncAt=d.intervalsLastSyncAt||null;recoveryChartPeriod=d.recoveryChartPeriod||14;recoveryChartMetric=d.recoveryChartMetric||'freshness';sleepTargetHours=d.sleepTargetHours||8;recoveryChartOffset=d.recoveryChartOffset||0;breakOvertimeLog=d.breakOvertimeLog||[];books=d.books||[];bookStatusFilter=d.bookStatusFilter||'reading';hasSeenGoalsTutorial=d.hasSeenGoalsTutorial!==undefined?d.hasSeenGoalsTutorial:false;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}else{liftingLifts=[];}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;else liftingSequencePosition=0;liftingCycleNumber=d.liftingCycleNumber!==undefined?d.liftingCycleNumber:1;liftingHistory=d.liftingHistory||[];liftingPendingLiftIds=d.liftingPendingLiftIds||[];liftingWarmupChecks=d.liftingWarmupChecks||{};dailyCheckins=d.dailyCheckins||{};currentTaskId=d.currentTaskId!==undefined?d.currentTaskId:null;taskTimeLimits=d.taskTimeLimits||{};taskTimerRemaining=d.taskTimerRemaining||{};
+      scheduleCommitments=Array.isArray(d.scheduleCommitments)?d.scheduleCommitments:[];
+      Object.values(taskSchedule).forEach(s=>{if(s&&!s.date)s.date=scheduleDate||getToday();});
       intervalsBestRecords.runTopEfforts=intervalsBestRecords.runTopEfforts||{};
       liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;
       migrateLiftingLoadModel();
@@ -3647,6 +3688,7 @@
         if(validationError){showToast(`invalid backup file — ${validationError}`);return;}
         try{
           if(d.totalFocusMinutes!==undefined)totalFocusMinutes=d.totalFocusMinutes;if(d.todayFocusMinutes!==undefined)todayFocusMinutes=d.todayFocusMinutes;if(d.todaySessions!==undefined)todaySessions=d.todaySessions;if(d.sessionsCompleted!==undefined)sessionsCompleted=d.sessionsCompleted;if(d.tasksCompletedCount!==undefined)tasksCompletedCount=d.tasksCompletedCount;if(d.taskNameFrequency)taskNameFrequency=d.taskNameFrequency;if(d.taskLastUsed)taskLastUsed=d.taskLastUsed;if(d.streakDays!==undefined)streakDays=d.streakDays;if(d.lastActiveDate)lastActiveDate=d.lastActiveDate;if(d.dailyHistory)dailyHistory=d.dailyHistory;if(d.taskHabitHistory)taskHabitHistory=d.taskHabitHistory;if(d.tasks)tasks=d.tasks;if(d.taskTimeLog)taskTimeLog=d.taskTimeLog;if(d.chainConfig){chainConfig=d.chainConfig;document.getElementById('chainWorkCount').value=chainConfig.workCount;document.getElementById('chainWorkMinutes').value=chainConfig.workMinutes;document.getElementById('chainShortBreak').value=chainConfig.shortBreak;document.getElementById('chainLongBreak').value=chainConfig.longBreak;}if(d.chainActive!==undefined)chainActive=d.chainActive;if(d.chainSessionIndex!==undefined)chainSessionIndex=d.chainSessionIndex;if(d.soundEnabled!==undefined){soundEnabled=d.soundEnabled;if(!soundEnabled){soundToggle.classList.add('muted');soundToggle.textContent='🔕';}else{soundToggle.classList.remove('muted');soundToggle.textContent='🔔';}}if(d.currentTheme)applyTheme(d.currentTheme);if(d.bgHabits)bgHabits=d.bgHabits;if(d.totalXP!==undefined)totalXP=d.totalXP;else if(d.totalFocusMinutes!==undefined)totalXP=d.totalFocusMinutes;if(d.dailyGoalBonusDate!==undefined)dailyGoalBonusDate=d.dailyGoalBonusDate;if(d.focusPeriod)focusPeriod=d.focusPeriod;if(d.habitCheckPeriod)habitCheckPeriod=d.habitCheckPeriod;if(d.dailyGoal!==undefined){dailyGoal=d.dailyGoal;goalInput.value=dailyGoal;}if(d.hourlyFocus)hourlyFocus=d.hourlyFocus;if(d.selectedHabitForGraph!==undefined)selectedHabitForGraph=d.selectedHabitForGraph;if(d.focusMode)focusMode=(d.focusMode==='nudge')?'pause':d.focusMode;if(d.habitGraphSort)habitGraphSort=d.habitGraphSort;if(d.activePanel){activePanel=d.activePanel;switchPanel(activePanel);}if(d.notificationsEnabled!==undefined){notificationsEnabled=d.notificationsEnabled;updateNotificationSettingUI();}if(d.sessionLog)sessionLog=d.sessionLog;if(d.lastSessionLogId!==undefined)lastSessionLogId=d.lastSessionLogId;if(d.estimateAccuracyLog)estimateAccuracyLog=d.estimateAccuracyLog;if(d.tasksAbandonedCount!==undefined)tasksAbandonedCount=d.tasksAbandonedCount;if(d.taskFilter)taskFilter=d.taskFilter;if(d.chartOffset!==undefined)chartOffset=d.chartOffset;if(d.heatmapOffset!==undefined)heatmapOffset=d.heatmapOffset;if(d.habitCheckOffset!==undefined)habitCheckOffset=d.habitCheckOffset;if(d.overviewOffset!==undefined)overviewOffset=d.overviewOffset;if(d.hasSeenWelcome!==undefined)hasSeenWelcome=d.hasSeenWelcome;if(d.taskSort)taskSort=d.taskSort;if(d.recurringTasks)recurringTasks=d.recurringTasks;if(d.lastRecapWeek!==undefined)lastRecapWeek=d.lastRecapWeek;if(d.taskWeeklyGoal!==undefined)taskWeeklyGoal=d.taskWeeklyGoal;if(d.habitOrderSort)habitOrderSort=d.habitOrderSort;if(d.xpFromFocus!==undefined)xpFromFocus=d.xpFromFocus;if(d.xpFromTasks!==undefined)xpFromTasks=d.xpFromTasks;if(d.xpFromHabits!==undefined)xpFromHabits=d.xpFromHabits;if(d.xpFromGoals!==undefined)xpFromGoals=d.xpFromGoals;if(d.xpFromChains!==undefined)xpFromChains=d.xpFromChains;if(d.notepadContent!==undefined)notepadContent=d.notepadContent;if(d.notepadPinned!==undefined)notepadPinned=d.notepadPinned;if(d.todayHabitSort)todayHabitSort=d.todayHabitSort;if(d.todoSort)todoSort=d.todoSort;if(d.overviewSort)overviewSort=d.overviewSort;if(d.adaptiveGoalEnabled!==undefined)adaptiveGoalEnabled=d.adaptiveGoalEnabled;if(d.adaptiveFocusGoalEnabled!==undefined)adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled;if(d.todayDueSort)todayDueSort=d.todayDueSort;if(d.todayPrioritySort)todayPrioritySort=d.todayPrioritySort;if(d.goals)goals=d.goals;if(d.taskSchedule)taskSchedule=d.taskSchedule;if(d.scheduleDate!==undefined)scheduleDate=d.scheduleDate;if(d.viewMode){viewMode=d.viewMode;applyViewMode();}if(d.collapsedCardKeys)collapsedCardKeys=new Set(d.collapsedCardKeys);if(d.todayHubTab)todayHubTab=d.todayHubTab;if(d.completionEvents)completionEvents=d.completionEvents;if(d.biometrics)biometrics=d.biometrics;if(d.recoveryChartPeriod)recoveryChartPeriod=d.recoveryChartPeriod;if(d.recoveryChartMetric)recoveryChartMetric=d.recoveryChartMetric;if(d.sleepTargetHours!==undefined)sleepTargetHours=d.sleepTargetHours;if(d.recoveryChartOffset!==undefined)recoveryChartOffset=d.recoveryChartOffset;if(d.breakOvertimeLog)breakOvertimeLog=d.breakOvertimeLog;if(d.books)books=d.books;if(d.bookStatusFilter)bookStatusFilter=d.bookStatusFilter;if(d.hasSeenGoalsTutorial!==undefined)hasSeenGoalsTutorial=d.hasSeenGoalsTutorial;if(d.librarySort)librarySort=d.librarySort;if(d.selectedTaskForGraph!==undefined)selectedTaskForGraph=d.selectedTaskForGraph;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;if(d.liftingCycleNumber!==undefined)liftingCycleNumber=d.liftingCycleNumber;if(d.liftingHistory)liftingHistory=d.liftingHistory;if(d.liftingPendingLiftIds)liftingPendingLiftIds=d.liftingPendingLiftIds;if(d.liftingWarmupChecks)liftingWarmupChecks=d.liftingWarmupChecks;if(d.dailyCheckins)dailyCheckins=d.dailyCheckins;if(d.currentTaskId!==undefined)currentTaskId=d.currentTaskId;if(d.taskTimeLimits)taskTimeLimits=d.taskTimeLimits;if(d.taskTimerRemaining)taskTimerRemaining=d.taskTimerRemaining;
+          if(Array.isArray(d.scheduleCommitments))scheduleCommitments=d.scheduleCommitments;Object.values(taskSchedule).forEach(s=>{if(s&&!s.date)s.date=scheduleDate||getToday();});
           if(Array.isArray(d.importedActivities))importedActivities=d.importedActivities;if(d.intervalsBestRecords){intervalsBestRecords=d.intervalsBestRecords;intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsBestRecords.runTopEfforts=intervalsBestRecords.runTopEfforts||{};}if(d.intervalsLastSyncAt!==undefined)intervalsLastSyncAt=d.intervalsLastSyncAt;
           liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;migrateLiftingLoadModel();if(d.sessionResponses)sessionResponses=d.sessionResponses;if(d.manualTrainingSessions)manualTrainingSessions=d.manualTrainingSessions;
           saveData();updateStats();renderTasks();renderLibrary();renderBgHabits();updateLevelDisplay();renderHabitGraphList();updateFocusModeUI();updateSessionNoteUI();renderSessionLog();drawFocusChart();drawHeatmap();drawHabitCheckGraph();renderActivitiesPanel();showToast('data imported successfully');
@@ -8460,6 +8502,7 @@ function updateNotificationSettingUI(){
       document.getElementById('scheduleQuickInput').addEventListener('keydown',e=>{if(e.key==='Enter')quickAddSchedule();});
       document.getElementById('todayNowChooseBtn').addEventListener('click',()=>{switchTodayHubTab('current');document.querySelector('.today-tasks-hub')?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('todayCurrentQuickAdd')?.focus();});
       document.getElementById('todayNowStartBtn').addEventListener('click',()=>{const current=tasks.find(t=>t.id===currentTaskId&&!t.completed&&t.taskType!=='todo');if(!current){showToast('add or choose a Focus Queue task first');return;}if(currentMode!=='pomodoro')switchMode('pomodoro');if(!isRunning)startTimer();else showToast('focus is already running');updateTodayNowCard();});
+      document.getElementById('todayBestMoveAction').addEventListener('click',executeBestNextMove);
       document.getElementById('welcomeCloseBtn').addEventListener('click',closeWelcome);
       document.getElementById('goalsTutorialBtn').addEventListener('click',openGoalsTutorial);
       document.getElementById('goalsTutorialCloseBtn').addEventListener('click',closeGoalsTutorial);
@@ -8781,21 +8824,31 @@ function updateNotificationSettingUI(){
         tasks.push(nt);taskTimeLog[nt.id]=0;
         inp.value='';renderTasks();renderLibrary();saveData();showToast(`added: ${tx} (todo)`);
       }
+      function scheduleDateOffset(dateStr,days){const d=new Date(dateStr+'T12:00:00');d.setDate(d.getDate()+days);return toDateStr(d);}
+      function scheduleDateLabel(dateStr){const today=getToday(),tomorrow=scheduleDateOffset(today,1);if(dateStr===today)return'today';if(dateStr===tomorrow)return'tomorrow';return new Date(dateStr+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});}
+      function nextWeekdayDate(target,forceNext=false){const now=new Date(getToday()+'T12:00:00'),delta=(target-now.getDay()+7)%7|| (forceNext?7:0);now.setDate(now.getDate()+delta);return toDateStr(now);}
+      function parseScheduleClock(hour,minute,meridiem){let h=Number(hour),m=Number(minute||0),ap=String(meridiem||'').toLowerCase();if(ap){if(h===12)h=0;if(ap.startsWith('p'))h+=12;}return h*60+m;}
       function parseSimpleScheduleEntry(raw){
-        let text=(raw||'').trim(),start=null,matched='';
-        const clock=text.match(/\b(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(a\.?m\.?|p\.?m\.?)\b/i)||text.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);
-        if(clock){let h=Number(clock[1]),m=Number(clock[2]||0);const ap=(clock[3]||'').toLowerCase();if(ap){if(h===12)h=0;if(ap.startsWith('p'))h+=12;}start=h*60+m;matched=clock[0];}
-        if(start==null){const periods=[[/\bafter work\b/i,17*60],[/\btonight\b/i,19*60],[/\bevening\b/i,19*60],[/\bbefore bed\b/i,21*60],[/\bafternoon\b/i,14*60],[/\bmorning\b/i,9*60]];for(const [re,min] of periods){const m=text.match(re);if(m){start=min;matched=m[0];break;}}}
-        let title=text.replace(matched,'').replace(/\b(today|at)\b/ig,'').replace(/\s+/g,' ').trim().replace(/[·,\-]+$/,'').trim();
-        return{title,start};
+        let text=(raw||'').trim(),start=null,durationMinutes=45,matchedTime='';
+        const weekdayNames=['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],shortNames=['sun','mon','tue','wed','thu','fri','sat'];
+        let date=getToday(),dateMatch='',repeatWeekdays=[];
+        const range=text.match(/\b(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(a\.?m\.?|p\.?m\.?)?\s*(?:-|–|to)\s*(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(a\.?m\.?|p\.?m\.?)?\b/i);
+        if(range){let firstAp=range[3]||'',secondAp=range[6]||'',first=parseScheduleClock(range[1],range[2],firstAp),second=parseScheduleClock(range[4],range[5],secondAp);if(!firstAp&&!secondAp&&second<=first)second+=12*60;if(!firstAp&&secondAp&&secondAp.toLowerCase().startsWith('p')&&first>=12*60)first-=12*60;if(second<=first)second+=12*60;start=first;durationMinutes=Math.max(15,Math.min(16*60,second-first));matchedTime=range[0];}
+        if(start==null){const clock=text.match(/\b(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(a\.?m\.?|p\.?m\.?)\b/i)||text.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);if(clock){start=parseScheduleClock(clock[1],clock[2],clock[3]);matchedTime=clock[0];}}
+        if(start==null){const periods=[[/\bafter work\b/i,17*60],[/\btonight\b/i,19*60],[/\bevening\b/i,19*60],[/\bbefore bed\b/i,21*60],[/\bafternoon\b/i,14*60],[/\bmorning\b/i,9*60]];for(const [re,min] of periods){const m=text.match(re);if(m){start=min;matchedTime=m[0];break;}}}
+        const repeat=text.match(/\b(?:every\s+)?(?:monday|mon)\s*(?:-|–|to)\s*(?:friday|fri)\b|\bweekdays\b/i);if(repeat){repeatWeekdays=[1,2,3,4,5];dateMatch=repeat[0];}
+        if(!repeatWeekdays.length){const every=text.match(/\bevery\s+(sunday|monday|tuesday|wednesday|thursday|friday|saturday|sun|mon|tue|wed|thu|fri|sat)\b/i);if(every){const token=every[1].toLowerCase(),idx=weekdayNames.indexOf(token)>=0?weekdayNames.indexOf(token):shortNames.indexOf(token);repeatWeekdays=[idx];dateMatch=every[0];}}
+        if(!repeatWeekdays.length){if(/\btomorrow\b/i.test(text)){date=scheduleDateOffset(getToday(),1);dateMatch='tomorrow';}else{const day=text.match(/\b(next\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday|sun|mon|tue|wed|thu|fri|sat)\b/i);if(day){const token=day[2].toLowerCase(),idx=weekdayNames.indexOf(token)>=0?weekdayNames.indexOf(token):shortNames.indexOf(token);date=nextWeekdayDate(idx,!!day[1]);dateMatch=day[0];}}}
+        let title=text.replace(matchedTime,'').replace(dateMatch,'').replace(/\b(today|at)\b/ig,'').replace(/\s+/g,' ').trim().replace(/[·,\-–]+$/,'').trim();
+        return{title,start,durationMinutes,date,repeatWeekdays};
       }
       function quickAddSchedule(){
-        const inp=document.getElementById('scheduleQuickInput'),parsed=parseSimpleScheduleEntry(inp.value);
+        const inp=document.getElementById('scheduleQuickInput'),parsed=parseSimpleScheduleEntry(inp.value),understood=document.getElementById('scheduleUnderstood');
         if(!parsed.title){showToast('add what the plan is');return;}
-        if(parsed.start==null){showToast('include a time, or say morning, afternoon, after work, evening, or before bed');return;}
-        const nt={id:generateId(),text:parsed.title,completed:false,dueDate:getToday(),priority:'none',subtasks:[],notes:'',taskType:'todo'};
-        tasks.push(nt);taskTimeLog[nt.id]=0;taskSchedule[nt.id]={startMinutes:parsed.start,durationMinutes:45};scheduleDate=getToday();
-        inp.value='';renderTasks();renderLibrary();saveData();showToast(`scheduled ${parsed.title} · ${formatScheduleTime(parsed.start)}`);
+        if(parsed.start==null){showToast('include a time, time range, or say morning, afternoon, after work, evening, or before bed');return;}
+        if(parsed.repeatWeekdays.length){scheduleCommitments.push({id:generateId(),title:parsed.title,startMinutes:parsed.start,durationMinutes:parsed.durationMinutes,weekdays:parsed.repeatWeekdays,createdAt:getToday()});if(understood)understood.textContent=`understood · ${parsed.title} · weekdays · ${formatScheduleTime(parsed.start)}–${formatScheduleTime(parsed.start+parsed.durationMinutes)}`;showToast(`recurring schedule added · ${parsed.title}`);}
+        else{const nt={id:generateId(),text:parsed.title,completed:false,dueDate:parsed.date,priority:'none',subtasks:[],notes:'',taskType:'todo'};tasks.push(nt);taskTimeLog[nt.id]=0;taskSchedule[nt.id]={date:parsed.date,startMinutes:parsed.start,durationMinutes:parsed.durationMinutes};if(understood)understood.textContent=`understood · ${parsed.title} · ${scheduleDateLabel(parsed.date)} · ${formatScheduleTime(parsed.start)}`;showToast(`scheduled ${parsed.title} · ${scheduleDateLabel(parsed.date)} ${formatScheduleTime(parsed.start)}`);}
+        scheduleDate=getToday();inp.value='';renderTasks();renderLibrary();renderSchedule();renderTodayPanel();saveData();
       }
       function renderTodayTodos(){
         const el=document.getElementById('todayTodoList');if(!el)return;
@@ -8824,6 +8877,25 @@ function updateNotificationSettingUI(){
           el.appendChild(li);
         });
       }
+      function getBestNextMove(){
+        const today=getToday(),now=new Date(),nowMin=now.getHours()*60+now.getMinutes(),schedule=getScheduleItemsForDate(today),active=schedule.find(x=>x.startMinutes<=nowMin&&x.startMinutes+x.durationMinutes>nowMin),upcoming=schedule.find(x=>x.startMinutes>=nowMin),freeMinutes=upcoming?Math.max(0,upcoming.startMinutes-nowMin):Math.max(0,22*60-nowMin),candidates=[];
+        const add=x=>candidates.push(x),missed=schedule.filter(x=>x.kind==='task'&&x.startMinutes+x.durationMinutes<nowMin-10);
+        if(active)add({score:130,title:active.title,why:`It is the current schedule constraint until ${formatScheduleTime(active.startMinutes+active.durationMinutes)}.`,confidence:'direct',action:'schedule',label:'open schedule'});
+        else if(missed.length)add({score:122,title:`Resolve the missed plan: ${missed[0].title}`,why:'Move it, find a lighter day, or drop it so the rest of today is based on reality.',confidence:'direct',action:'schedule',label:'resolve plan'});
+        else if(upcoming&&freeMinutes<=20)add({score:118,title:`Prepare for ${upcoming.title}`,why:`It starts in ${freeMinutes} minutes; starting something larger now would create avoidable switching cost.`,confidence:'direct',action:'schedule',label:'see schedule'});
+        const tomorrowDate=scheduleDateOffset(today,1),wakePlan=getWakePlanForDate(tomorrowDate),sleepOpportunity=getSleepRecoveryOpportunity(today);if(wakePlan.time){const asleepClock=shiftClock(wakePlan.time,-Math.round(sleepOpportunity.opportunityHours*60)),windClock=shiftClock(asleepClock,-45),[windHour,windMinute]=windClock.split(':').map(Number),windMinutes=windHour*60+windMinute;if(nowMin>=windMinutes-15)add({score:120,title:'Begin the wind-down',why:`Tomorrow's ${formatClock(wakePlan.time)} ${wakePlan.type} wake points to ${formatClock(asleepClock)} asleep. Protecting that opportunity is the useful move now.`,confidence:'direct',action:'none',label:'settle down'});}
+        const focusTasks=tasks.filter(t=>!t.completed&&t.taskType!=='todo'&&t.outcome!=='blocked'),rankTask=t=>(PRIORITY_WEIGHT[t.priority||'none']||0)*16+(t.dueDate&&t.dueDate<=today?24:0)+(t.id===currentTaskId?8:0)-(t.deferCount||0)*2,focus=focusTasks.slice().sort((a,b)=>rankTask(b)-rankTask(a))[0];
+        if(focus){const learned=getLearnedTaskEstimate(focus.text),estimate=Math.max(15,Math.round((taskTimeLimits[focus.id]?taskTimeLimits[focus.id]/60:learned?.minutes||25)/5)*5),fits=freeMinutes>=Math.min(estimate,25),next=focus.nextAction||(focus.subtasks||[]).find(s=>!s.completed)?.text;if(fits)add({score:88+rankTask(focus),title:focus.text,why:`${next?`Start with “${next}.” `:''}${upcoming?`${freeMinutes} minutes are open before ${upcoming.title}.`:`The schedule is open and this is the strongest available focus priority.`}`,confidence:focus.dueDate||focus.priority==='high'?'direct':'guided',action:'focus',taskId:focus.id,label:'start focus'});else if(freeMinutes>=10)add({score:82+rankTask(focus),title:`Do a ${Math.min(15,freeMinutes)}-minute first step on ${focus.text}`,why:`The full estimate is about ${estimate} minutes, but a small concrete start fits the available window.`,confidence:'guided',action:'focus',taskId:focus.id,label:'start small'});}
+        const fresh=getFreshnessData(today),call=getTrainingCallData(today),trained=getTrainingSessionsForDate(today).length>0;
+        if(fresh.score==null)add({score:86,title:'Add two Recovery signals',why:'Freshness needs two available inputs, such as sleep/recovery plus feel or body fatigue. The quick morning answers still inform Training Call.',confidence:'direct',action:'recovery',label:'log recovery'});
+        else if(!trained&&call.level!=='rest'&&nowMin>=15*60&&freeMinutes>=45)add({score:84+(call.level==='test'?8:0),title:call.level==='test'?'Use the fitness-test window':`${call.level} training fits the open window`,why:`Recovery currently supports ${call.level} training and at least ${freeMinutes} minutes are available. Check the prescription before starting.`,confidence:getTrainingCallConfidence(today).level,action:'training',label:'see training call'});
+        const incompleteHabits=bgHabits.filter(h=>getHabitDayCount(h,today)<getHabitDayTarget(h));if(incompleteHabits.length&&nowMin>=18*60)add({score:76,title:`Keep the minimum version of ${incompleteHabits[0].name}`,why:`It is still open today. A small completion is more useful than carrying vague pressure into bedtime.`,confidence:'direct',action:'habit',label:'check in'});
+        const todo=tasks.filter(t=>!t.completed&&t.taskType==='todo').sort((a,b)=>rankTask(b)-rankTask(a))[0],todoUrgent=todo&&(todo.dueDate&&todo.dueDate<=today||todo.priority==='high');if(todo&&(todoUrgent||nowMin<20*60+30))add({score:62+rankTask(todo),title:todo.text,why:todoUrgent?'This To Do is due now or marked high priority.':'This is the strongest ordinary To Do that does not require a focus session.',confidence:todoUrgent?'direct':'guided',action:'todo',label:'open to do'});
+        if(!candidates.length)add({score:1,title:'Leave the space open',why:'There is no urgent scheduled, training, habit, or task signal competing for attention right now.',confidence:'limited',action:'none',label:'nothing required'});
+        return candidates.sort((a,b)=>b.score-a.score)[0];
+      }
+      function renderBestNextMove(){lastBestNextMove=getBestNextMove();const title=document.getElementById('todayBestMoveTitle'),why=document.getElementById('todayBestMoveWhy'),confidence=document.getElementById('todayBestMoveConfidence'),action=document.getElementById('todayBestMoveAction');if(title)title.textContent=lastBestNextMove.title;if(why)why.textContent=lastBestNextMove.why;if(confidence)confidence.textContent=`${lastBestNextMove.confidence} confidence`;if(action){action.textContent=lastBestNextMove.label;action.disabled=lastBestNextMove.action==='none';}}
+      function executeBestNextMove(){const move=lastBestNextMove||getBestNextMove();if(move.action==='focus'){currentTaskId=move.taskId;renderTasks();saveData();document.getElementById('todayNowStartBtn')?.click();}else if(move.action==='schedule'){document.querySelector('.schedule-card')?.scrollIntoView({behavior:'smooth',block:'start'});}else if(move.action==='recovery'||move.action==='training'){switchPanel('recovery');setTimeout(()=>document.querySelector(move.action==='training'?'.training-call-card':'.recovery-entry-card')?.scrollIntoView({behavior:'smooth',block:'start'}),0);}else if(move.action==='habit'){switchPanel('habits');}else if(move.action==='todo'){switchTodayHubTab('todo');document.querySelector('.today-tasks-hub')?.scrollIntoView({behavior:'smooth',block:'start'});}}
       function updateTodayNowCard(){
         const taskEl=document.getElementById('todayNowTask'),actionEl=document.getElementById('todayNowNextAction'),startBtn=document.getElementById('todayNowStartBtn');
         const activeFocus=tasks.filter(t=>!t.completed&&t.taskType!=='todo');
@@ -8836,21 +8908,22 @@ function updateNotificationSettingUI(){
         }
         if(startBtn){startBtn.disabled=!current;startBtn.textContent=isRunning&&currentMode==='pomodoro'?'focus running':'start focus';}
         const now=new Date(),nowMin=now.getHours()*60+now.getMinutes();
-        const upcoming=Object.entries(taskSchedule||{}).map(([id,s])=>({task:tasks.find(t=>String(t.id)===String(id)),...s})).filter(x=>x.task&&!x.task.completed&&Number(x.startMinutes)>=nowMin).sort((a,b)=>a.startMinutes-b.startMinutes)[0];
+        const upcoming=getScheduleItemsForDate(getToday()).filter(x=>Number(x.startMinutes)>=nowMin).sort((a,b)=>a.startMinutes-b.startMinutes)[0];
         const nextEl=document.getElementById('todayNextUpValue'),freeEl=document.getElementById('todayFreeUntilValue');
-        if(upcoming){if(nextEl)nextEl.textContent=`${upcoming.task.text} · ${formatScheduleTime(upcoming.startMinutes)}`;if(freeEl){const free=Math.max(0,upcoming.startMinutes-nowMin);freeEl.textContent=free?`free for ${free} min before this`:'starts now';}}
+        if(upcoming){if(nextEl)nextEl.textContent=`${upcoming.title} · ${formatScheduleTime(upcoming.startMinutes)}`;if(freeEl){const free=Math.max(0,upcoming.startMinutes-nowMin);freeEl.textContent=free?`free for ${free} min before this`:'starts now';}}
         else{if(nextEl)nextEl.textContent='day is open';if(freeEl)freeEl.textContent='no scheduled constraint ahead';}
         const fresh=getFreshnessData(getToday()),call=getTrainingCallData(getToday());
         const recoveryEl=document.getElementById('todayRecoveryCall'),whyEl=document.getElementById('todayRecoveryWhy');
         if(fresh.score==null){if(recoveryEl)recoveryEl.textContent='recovery pending';if(whyEl)whyEl.textContent='Log at least two morning signals for a training call.';}
         else{const band=fresh.score>=75?'ready':fresh.score>=60?'caution':'low';if(recoveryEl)recoveryEl.textContent=`${band} · ${call.level||'review'} training`;if(whyEl)whyEl.textContent=(call.reasons&&call.reasons[0])||'Open Recovery for the detailed reasoning.';}
+        renderBestNextMove();
       }
       function renderDailyRhythm(){
         const today=getToday(),fresh=getFreshnessData(today),call=getTrainingCallData(today),opportunity=getSleepRecoveryOpportunity(today),rec=biometrics[today]||{},work=getWorkStressData(today),body=getBodyFatigueData(today),current=tasks.find(t=>t.id===currentTaskId&&!t.completed)||tasks.find(t=>!t.completed&&t.taskType!=='todo');
         const row=(k,v)=>`<div class="rhythm-row"><div class="rhythm-key">${escapeHtml(k)}</div><div class="rhythm-value">${escapeHtml(v)}</div></div>`,morning=document.getElementById('morningBriefList'),evening=document.getElementById('eveningShutdownList');
         const recovery=fresh.score==null?'pending morning signals':fresh.score>=75?'ready':fresh.score>=60?'caution':'low';
-        const scheduleItems=Object.entries(taskSchedule||{}).map(([id,s])=>({task:tasks.find(t=>String(t.id)===String(id)),...s})).filter(x=>x.task&&!x.task.completed).sort((a,b)=>a.startMinutes-b.startMinutes),next=scheduleItems[0];
-        if(morning)morning.innerHTML=[row('recovery',recovery),row('training',call.level||'pending'),row('sleep',opportunity.bufferMinutes?`${formatDurationHours(opportunity.opportunityHours)} opportunity · +${opportunity.bufferMinutes}m recovery`:`${formatDurationHours(opportunity.normalHours)} normal target`),row('work',work.score==null?(rec.expectedWorkDemand?`${rec.expectedWorkDemand.replace('-',' ')} expected`:'not forecast'):`${work.hours}h · effort ${work.effort}/10`),row('priority',current?current.text:'choose a Focus Queue task'),row('schedule',next?`${formatScheduleTime(next.startMinutes)} · ${next.task.text}`:'day is open')].join('');
+        const scheduleItems=getScheduleItemsForDate(today),next=scheduleItems[0];
+        if(morning)morning.innerHTML=[row('recovery',recovery),row('training',call.level||'pending'),row('sleep',opportunity.bufferMinutes?`${formatDurationHours(opportunity.opportunityHours)} opportunity · +${opportunity.bufferMinutes}m recovery`:`${formatDurationHours(opportunity.normalHours)} normal target`),row('work',work.score==null?(rec.expectedWorkDemand?`${rec.expectedWorkDemand.replace('-',' ')} expected`:'not forecast'):`${work.hours}h · effort ${work.effort}/10`),row('priority',current?current.text:'choose a Focus Queue task'),row('schedule',next?`${formatScheduleTime(next.startMinutes)} · ${next.title}`:'day is open')].join('');
         const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);const plan=getWakePlanForDate(toDateStr(tomorrow)),asleep=plan.time?shiftClock(plan.time,-Math.round(opportunity.opportunityHours*60)):'',wind=asleep?shiftClock(asleep,-45):'';
         const done=tasks.filter(t=>t.completed&&t.completedAt===today).length;
         if(evening)evening.innerHTML=[row('done',`${done} task${done===1?'':'s'} · ${todayFocusMinutes}m focused`),row('body',body.max==null?'fatigue not logged':body.max>=9?'high fatigue':body.max>=7?'moderate fatigue':'low fatigue'),row('tomorrow',plan.time?`${formatClock(plan.time)} ${plan.type} wake`:'open wake time'),row('tonight',wind?`${formatClock(wind)} wind-down · ${formatClock(asleep)} asleep`:`aim for ${formatDurationHours(opportunity.opportunityHours)} sleep opportunity`)].join('');
@@ -9611,12 +9684,13 @@ function updateNotificationSettingUI(){
         if(startMinutes<gridStart||startMinutes>=gridEnd)return;
         let durationMinutes=Math.max(15,Math.round(timeLeftSeconds/60/15)*15);
         if(startMinutes+durationMinutes>gridEnd)durationMinutes=gridEnd-startMinutes;
-        taskSchedule[currentTaskId]={startMinutes,durationMinutes};
+        taskSchedule[currentTaskId]={date:getToday(),startMinutes,durationMinutes};
         renderSchedule();saveData();
       }
       function checkScheduleDayRollover(){
-        const today=getToday();
-        if(scheduleDate!==today){taskSchedule={};scheduleDate=today;}
+        const today=getToday();scheduleDate=today;
+        Object.entries(taskSchedule).forEach(([id,s])=>{const task=tasks.find(t=>String(t.id)===String(id));if(!task||task.completed)delete taskSchedule[id];else if(!s.date)s.date=today;});
+        scheduleCommitments=scheduleCommitments.filter(x=>x&&x.title&&Array.isArray(x.weekdays)&&x.weekdays.length);
       }
       function scheduleTask(taskId,startMinutes){
         const gridStart=SCHEDULE_START_HOUR*60,gridEnd=SCHEDULE_END_HOUR*60;
@@ -9625,7 +9699,7 @@ function updateNotificationSettingUI(){
         let durationMinutes=30;
         if(taskTimeLimits[taskId])durationMinutes=Math.max(15,Math.round(taskTimeLimits[taskId]/60));
         if(startMinutes+durationMinutes>gridEnd)durationMinutes=gridEnd-startMinutes;
-        taskSchedule[taskId]={startMinutes,durationMinutes};
+        taskSchedule[taskId]={date:getToday(),startMinutes,durationMinutes};
         renderSchedule();saveData();
         flashElement(document.querySelector(`.schedule-block[data-task-id="${taskId}"]`));
       }
@@ -9691,6 +9765,17 @@ function updateNotificationSettingUI(){
         }
         scheduleAutoScrolledOnce=true;
       }
+      function scheduleCommitmentOccursOn(item,dateStr){return Array.isArray(item.weekdays)&&item.weekdays.includes(new Date(dateStr+'T12:00:00').getDay())&&!(item.dismissedDates||[]).includes(dateStr);}
+      function getScheduleItemsForDate(dateStr){
+        const taskItems=Object.entries(taskSchedule||{}).map(([taskId,sched])=>{const task=tasks.find(t=>String(t.id)===String(taskId));return task&&!task.completed&&(sched.date||getToday())===dateStr?{kind:'task',key:String(taskId),task,title:task.text,date:dateStr,startMinutes:Number(sched.startMinutes),durationMinutes:Number(sched.durationMinutes)||30}:null;}).filter(Boolean);
+        const commitments=(scheduleCommitments||[]).filter(x=>scheduleCommitmentOccursOn(x,dateStr)).map(x=>({kind:'commitment',key:String(x.id),commitment:x,title:x.title,date:dateStr,startMinutes:Number(x.startMinutes),durationMinutes:Number(x.durationMinutes)||60}));
+        return taskItems.concat(commitments).sort((a,b)=>a.startMinutes-b.startMinutes);
+      }
+      function getUpcomingScheduleItems(days=7){const out=[],today=getToday();for(let i=0;i<days;i++){const date=scheduleDateOffset(today,i);getScheduleItemsForDate(date).forEach(item=>out.push(item));}return out.sort((a,b)=>a.date.localeCompare(b.date)||a.startMinutes-b.startMinutes);}
+      function findLighterScheduleDate(){const today=getToday(),options=[];for(let i=1;i<=6;i++){const date=scheduleDateOffset(today,i),load=getScheduleItemsForDate(date).reduce((n,x)=>n+x.durationMinutes,0);options.push({date,load,weekend:[0,6].includes(new Date(date+'T12:00:00').getDay())});}return options.sort((a,b)=>a.load-b.load||Number(a.weekend)-Number(b.weekend)||a.date.localeCompare(b.date))[0]?.date||scheduleDateOffset(today,2);}
+      function resolveMissedSchedule(taskId,action){const sched=taskSchedule[taskId],task=tasks.find(t=>String(t.id)===String(taskId));if(!sched||!task)return;if(action==='drop'){delete taskSchedule[taskId];setTaskOutcome(taskId,'drop');renderSchedule();renderTodayPanel();return;}const date=action==='tomorrow'?scheduleDateOffset(getToday(),1):findLighterScheduleDate();sched.date=date;task.dueDate=date;task.outcome=action==='tomorrow'?'deferred':'rescheduled';if(action==='tomorrow')task.deferCount=(task.deferCount||0)+1;showToast(`${task.text} moved to ${scheduleDateLabel(date)}`);renderSchedule();renderTodayPanel();renderTasks();saveData();}
+      function renderScheduleRecovery(){const el=document.getElementById('scheduleRecoveryList');if(!el)return;const now=new Date(),nowMin=now.getHours()*60+now.getMinutes(),missed=getScheduleItemsForDate(getToday()).filter(x=>x.kind==='task'&&x.startMinutes+x.durationMinutes<nowMin-10);el.innerHTML=missed.map(x=>`<div class="schedule-recovery-item"><div><div class="schedule-recovery-title">${escapeHtml(x.title)} did not happen at ${formatScheduleTime(x.startMinutes)}</div><div class="schedule-recovery-note">Move it deliberately instead of letting it become overdue clutter.</div></div><div class="schedule-recovery-actions"><button data-resolve="tomorrow" data-task-id="${escapeHtml(x.key)}">tomorrow</button><button data-resolve="later" data-task-id="${escapeHtml(x.key)}">lighter day</button><button data-resolve="drop" data-task-id="${escapeHtml(x.key)}">drop</button></div></div>`).join('');el.querySelectorAll('[data-resolve]').forEach(btn=>btn.addEventListener('click',()=>resolveMissedSchedule(btn.dataset.taskId,btn.dataset.resolve)));}
+      function renderUpcomingSchedule(){const el=document.getElementById('scheduleUpcoming');if(!el)return;const items=getUpcomingScheduleItems(7).filter(x=>x.date>getToday()).slice(0,8);el.innerHTML=items.length?`<div class="schedule-upcoming-label">next 7 days</div>${items.map(x=>`<div class="schedule-upcoming-item"><div class="schedule-upcoming-day">${escapeHtml(scheduleDateLabel(x.date))}</div><div class="schedule-upcoming-title">${escapeHtml(x.title)}${x.kind==='commitment'?' · recurring':''}</div><div class="schedule-upcoming-time">${formatScheduleTime(x.startMinutes)}</div></div>`).join('')}`:'';}
       function renderSchedule(){
         checkScheduleDayRollover();
         const grid=document.getElementById('scheduleGrid');if(!grid)return;
@@ -9715,43 +9800,42 @@ function updateNotificationSettingUI(){
         const agenda=document.getElementById('scheduleAgenda');
         if(agenda){
           agenda.innerHTML='';
-          Object.entries(taskSchedule).map(([taskId,sched])=>({taskId,sched,task:tasks.find(t=>t.id===taskId)})).filter(x=>x.task&&!x.task.completed).sort((a,b)=>a.sched.startMinutes-b.sched.startMinutes).forEach(({taskId,sched,task})=>{
+          getScheduleItemsForDate(getToday()).forEach(itemData=>{const taskId=itemData.key,sched=itemData,task=itemData.task||{text:itemData.title};
             const item=document.createElement('div');item.className='schedule-agenda-item';
             const time=document.createElement('div');time.className='schedule-agenda-time';time.textContent=formatScheduleTime(sched.startMinutes);
             const title=document.createElement('div');title.className='schedule-agenda-title';title.textContent=task.text;title.title=task.text;
             const dur=document.createElement('div');dur.className='schedule-agenda-duration';dur.textContent=`${sched.durationMinutes}m`;
             item.appendChild(time);item.appendChild(title);item.appendChild(dur);
-            item.addEventListener('click',()=>{const block=grid.querySelector(`.schedule-block[data-task-id="${taskId}"]`);if(block)flashElement(block);});
+            item.addEventListener('click',()=>{const block=grid.querySelector(`.schedule-block[data-schedule-key="${itemData.kind}-${taskId}"]`);if(block){document.querySelector('.schedule-timeline-details')?.setAttribute('open','');flashElement(block);}});
             agenda.appendChild(item);
           });
         }
-        Object.entries(taskSchedule).forEach(([taskId,sched])=>{
-          const task=tasks.find(t=>t.id===taskId);
-          if(!task||task.completed){delete taskSchedule[taskId];return;}
+        getScheduleItemsForDate(getToday()).forEach(itemData=>{
+          const taskId=itemData.key,sched=itemData,task=itemData.task||{text:itemData.title};
           const block=document.createElement('div');block.className='schedule-block';block.dataset.taskId=taskId;
+          block.dataset.scheduleKey=`${itemData.kind}-${taskId}`;if(itemData.kind==='commitment')block.classList.add('commitment');
           block.style.top=((sched.startMinutes-SCHEDULE_START_HOUR*60)/60*SCHEDULE_HOUR_HEIGHT)+'px';
           block.style.height=(sched.durationMinutes/60*SCHEDULE_HOUR_HEIGHT)+'px';
-          block.draggable=true;
-          block.addEventListener('dragstart',(e)=>{draggedScheduleTaskId=taskId;block.classList.add('dragging');});
-          block.addEventListener('dragend',()=>block.classList.remove('dragging'));
-          block.addEventListener('touchstart',(e)=>scheduleTouchStart(e,taskId,block),{passive:true});
+          block.draggable=itemData.kind==='task';
+          if(itemData.kind==='task'){block.addEventListener('dragstart',()=>{draggedScheduleTaskId=taskId;block.classList.add('dragging');});block.addEventListener('dragend',()=>block.classList.remove('dragging'));block.addEventListener('touchstart',(e)=>scheduleTouchStart(e,taskId,block),{passive:true});}
           const title=document.createElement('div');title.className='schedule-block-title';title.textContent=task.text;title.title=task.text;
           const timeLabel=document.createElement('div');timeLabel.className='schedule-block-time';timeLabel.textContent=`${formatScheduleTime(sched.startMinutes)} – ${formatScheduleTime(sched.startMinutes+sched.durationMinutes)}`;
           if(sched.durationMinutes<30)timeLabel.style.display='none';
-          const del=document.createElement('button');del.className='schedule-block-del';del.textContent='×';del.addEventListener('click',(e)=>{e.stopPropagation();unscheduleTask(taskId);});
+          const del=document.createElement('button');del.className='schedule-block-del';del.textContent='×';del.title=itemData.kind==='commitment'?'remove recurring commitment':'unschedule';del.addEventListener('click',(e)=>{e.stopPropagation();if(itemData.kind==='commitment'){scheduleCommitments=scheduleCommitments.filter(x=>String(x.id)!==String(taskId));renderSchedule();renderTodayPanel();saveData();}else unscheduleTask(taskId);});
           const resizeHandle=document.createElement('div');resizeHandle.className='schedule-block-resize';
-          resizeHandle.addEventListener('mousedown',(e)=>{
+          if(itemData.kind==='task')resizeHandle.addEventListener('mousedown',(e)=>{
             e.preventDefault();e.stopPropagation();
             scheduleResizeState={taskId,startY:e.clientY,startDuration:sched.durationMinutes};
           });
-          resizeHandle.addEventListener('touchstart',(e)=>{
+          if(itemData.kind==='task')resizeHandle.addEventListener('touchstart',(e)=>{
             e.preventDefault();e.stopPropagation();
             const touch=e.touches[0];
             scheduleResizeState={taskId,startY:touch.clientY,startDuration:sched.durationMinutes};
           },{passive:false});
-          block.appendChild(title);block.appendChild(timeLabel);block.appendChild(del);block.appendChild(resizeHandle);
+          block.appendChild(title);block.appendChild(timeLabel);block.appendChild(del);if(itemData.kind==='task')block.appendChild(resizeHandle);
           grid.appendChild(block);
         });
+        renderScheduleRecovery();renderUpcomingSchedule();
       }
       let scheduleTouchState=null;
       function scheduleTouchStart(e,taskId,sourceEl){
