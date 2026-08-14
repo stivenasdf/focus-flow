@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.135 session-aware recovery and navigation -->
+<!-- Focus::Flow deployment marker: v1.136 supportive habits and weekly reflection -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1785,6 +1785,62 @@
     [data-view-mode="mobile"] .outlook-column { padding:.55rem; }
     [data-view-mode="mobile"] .lifting-records-row { grid-template-columns:1fr auto; align-items:start; }
     [data-view-mode="mobile"] .lifting-records-max { grid-column:1/-1; }
+
+    /* v1.136: supportive habit credit, low-friction weekly reflection, and clearer trends. */
+    .checkin-header-row { gap:.65rem; }
+    .checkin-header-row h2 { flex:1; min-width:0; }
+    .weekly-checkin-card { grid-column:1/-1; }
+    .weekly-checkin-card .checkin-header-row { margin-bottom:.35rem; }
+    .weekly-checkin-intro { color:var(--text-color); opacity:.64; font-size:.64rem; line-height:1.5; max-width:68ch; }
+    .weekly-checkin-preview { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.5rem; margin:.75rem 0 .65rem; }
+    .weekly-checkin-metric { border:1px solid var(--border-color); border-radius:.68rem; padding:.62rem .68rem; background:color-mix(in srgb,var(--bg-color) 94%,var(--main-color) 6%); min-width:0; }
+    .weekly-checkin-value { color:var(--text-color); font:700 .86rem 'JetBrains Mono',monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .weekly-checkin-label { color:var(--text-color); opacity:.5; font:.51rem 'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.35px; margin-top:.16rem; line-height:1.3; }
+    .weekly-checkin-status { display:flex; align-items:center; justify-content:space-between; gap:.6rem; color:var(--text-color); font-size:.61rem; line-height:1.45; padding-top:.55rem; border-top:1px solid var(--border-color); }
+    .weekly-checkin-status strong { color:var(--main-color); }
+    .weekly-checkin-actions { display:flex; gap:.4rem; flex-wrap:wrap; flex-shrink:0; }
+    .legacy-daily-checkin-fields { display:none !important; }
+    .review-optional-note { color:var(--text-color); opacity:.55; font-size:.59rem; line-height:1.45; margin:-.15rem 0 .65rem; }
+    .review-suggestion-row { display:flex; flex-wrap:wrap; gap:.34rem; margin:.25rem 0 .65rem; }
+    .review-suggestion { border:1px solid var(--border-color); border-radius:999px; background:transparent; color:var(--text-color); padding:.3rem .55rem; font:500 .56rem 'Lexend Deca',sans-serif; cursor:pointer; opacity:.76; }
+    .review-suggestion:hover,.review-suggestion.selected { border-color:var(--main-color); color:var(--main-color); background:color-mix(in srgb,var(--bg-color) 88%,var(--main-color) 12%); opacity:1; }
+
+    .habit-week-row { padding:.62rem; border:1px solid var(--border-color); background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); }
+    .habit-week-row:hover { background:color-mix(in srgb,var(--bg-color) 91%,var(--main-color) 9%); }
+    .habit-week-row .overview-row-header { width:220px; flex-shrink:0; align-items:flex-start; }
+    .habit-week-row .overview-label-cell { width:auto; flex:1; }
+    .overview-week-summary { color:var(--text-color); opacity:.64; font-size:.52rem; line-height:1.35; margin-top:.12rem; white-space:normal; }
+    .overview-week-track { height:4px; border-radius:999px; background:var(--border-color); overflow:hidden; margin-top:.28rem; }
+    .overview-week-fill { height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--sub-color),var(--main-color)); }
+    .overview-cell { color:var(--text-color); font:650 .5rem 'JetBrains Mono',monospace; }
+    .overview-cell.partial { background:color-mix(in srgb,var(--bg-color) 78%,var(--sub-color) 22%); opacity:1; border-color:color-mix(in srgb,var(--border-color) 40%,var(--sub-color) 60%); color:var(--sub-color); }
+    .overview-cell.done { color:var(--bg-color); }
+
+    .habit-history-reasons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.48rem; margin-bottom:.7rem; }
+    .habit-history-reason { border:1px solid var(--border-color); border-radius:.7rem; background:color-mix(in srgb,var(--bg-color) 95%,var(--main-color) 5%); color:var(--text-color); text-align:left; padding:.62rem .68rem; cursor:pointer; min-width:0; }
+    .habit-history-reason:hover,.habit-history-reason.selected { border-color:var(--main-color); background:color-mix(in srgb,var(--bg-color) 89%,var(--main-color) 11%); }
+    .habit-history-reason-tag { display:block; color:var(--sub-color); font:600 .49rem 'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.35px; margin-bottom:.22rem; }
+    .habit-history-reason-name { display:block; font-size:.65rem; font-weight:650; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .habit-history-reason-why { display:block; opacity:.56; font-size:.53rem; line-height:1.35; margin-top:.16rem; }
+    .habit-history-insight { display:grid; grid-template-columns:72px minmax(0,1fr); gap:.55rem; padding:.65rem .7rem; border:1px solid var(--border-color); border-radius:.7rem; margin:-.2rem 0 .7rem; background:color-mix(in srgb,var(--bg-color) 95%,var(--sub-color) 5%); }
+    .habit-history-insight-key { color:var(--sub-color); font:600 .52rem 'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.35px; }
+    .habit-history-insight-text { color:var(--text-color); opacity:.78; font-size:.59rem; line-height:1.48; }
+    #habitCheckWrap .heatmap-chunk { width:100%; }
+    #habitCheckWrap .heatmap-months { width:100%; }
+    #habitCheckWrap .heatmap-row { width:100%; }
+    #habitCheckWrap .heatmap-grid { flex:1; min-width:0; }
+    #habitCheckWrap .heatmap-week { flex:1; min-width:18px; }
+    #habitCheckWrap .heatmap-cell { width:100%; max-width:46px; align-self:center; aspect-ratio:1; height:auto; min-height:18px; }
+    .hrv-gradient-dot { background:linear-gradient(90deg,#e05a5a,#d4a94a,#5ec98a) !important; width:30px !important; border-radius:999px !important; }
+
+    @media(max-width:760px){
+      .weekly-checkin-preview { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .weekly-checkin-status { align-items:flex-start; flex-direction:column; }
+      .habit-week-row { align-items:flex-start; width:max-content; min-width:100%; }
+      .habit-week-row .overview-row-header { width:160px; }
+      .habit-history-reasons { grid-template-columns:1fr; }
+      #habitCheckWrap .heatmap-cell { min-height:16px; }
+    }
   </style>
 </head>
 <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
@@ -1964,7 +2020,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.135 separates cardio and lifting into real sessions with their own load and RPE, clarifies feeling scales and lifting maxes, balances the Training Call, compacts the outlook on mobile, and moves your most-used tabs forward.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.136 makes habits supportive instead of all-or-nothing, turns the heavy daily check-in into a 60-second weekly reflection, adds reasons and actions to habit history, fixes HRV trend colors, and adds subtle weekday context to sleep.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2247,7 +2303,7 @@
 
   <div class="settings-overlay" id="recoveryGuideOverlay">
     <div class="settings-modal feature-guide-modal" style="max-width:780px;">
-      <div class="settings-modal-header"><h2>how Recovery works</h2><button class="settings-close" id="recoveryGuideClose">×</button></div>
+      <div class="settings-modal-header"><h2>how Recovery works</h2><button class="settings-close-btn" id="recoveryGuideClose" aria-label="close Recovery guide">✕</button></div>
       <div class="recovery-guide-flow" role="img" aria-label="Recovery inputs flow into Recovery Signals and Body Battery, which combine with safety constraints to produce the Training Call and longer-term outlook.">
         <div class="recovery-guide-node"><b>1 · inputs</b><span>Sleep, HRV, feel, fatigue, work, health flags, cardio load, lifting and session responses.</span></div><div class="recovery-guide-arrow">→</div>
         <div class="recovery-guide-node"><b>2 · interpretations</b><span>Recovery Signals describe today. Body Battery estimates reserve after demands. Neither is a medical measurement.</span></div><div class="recovery-guide-arrow">→</div>
@@ -2435,14 +2491,18 @@
             </div>
           </div>
           <div class="today-section-label">LATER</div>
-          <div class="today-card today-later-card"><div class="checkin-header-row"><div><h2>weekly review</h2><div class="stats-summary-note">Focus::Flow prepares the evidence; you add only what mattered.</div></div><button class="btn small" id="openWeeklyReviewBtn">open review</button></div></div>
-          <div class="today-card daily-checkin-card today-later-card" style="grid-column:1/-1;" id="dailyCheckinCard">
+          <div class="today-card weekly-checkin-card today-later-card" id="dailyCheckinCard">
             <div class="checkin-header-row">
-              <h2>daily check-in</h2>
-              <button class="btn small" id="checkinReviewBtn">review past entries</button>
+              <h2>weekly check-in</h2>
+              <button class="btn small primary" id="openWeeklyReviewBtn">review my week</button>
             </div>
-            <div class="checkin-on-this-day" id="checkinOnThisDay" style="display:none;"></div>
-            <div id="checkinFormWrap">
+            <div class="weekly-checkin-intro">Focus::Flow gathers the evidence. You can finish by tapping three close-enough answers; typing is optional.</div>
+            <div class="weekly-checkin-preview" id="weeklyCheckinPreview"></div>
+            <div class="weekly-checkin-status" id="weeklyCheckinStatus"></div>
+            <div class="weekly-checkin-actions"><button class="btn small" id="checkinReviewBtn">past daily notes</button></div>
+            <div class="legacy-daily-checkin-fields" aria-hidden="true">
+              <div class="checkin-on-this-day" id="checkinOnThisDay" style="display:none;"></div>
+              <div id="checkinFormWrap">
               <div class="checkin-columns">
                 <div class="checkin-col">
                   <div class="checkin-col-label">yesterday</div>
@@ -2457,12 +2517,13 @@
                   <div class="checkin-q"><label>what might get in the way?</label><input type="text" class="search-input" id="checkinT3" maxlength="140" style="margin-bottom:0;"></div>
                 </div>
               </div>
-              <button class="btn primary" id="checkinSaveBtn" style="width:100%;justify-content:center;margin-top:0.8rem;">save check-in</button>
-            </div>
-            <div id="checkinDoneWrap" style="display:none;">
-              <div class="checkin-done-badge">✓ checked in today</div>
-              <div class="checkin-done-summary" id="checkinDoneSummary"></div>
-              <div class="checkin-done-wrap-actions"><button class="btn small" id="checkinEditBtn">edit today's answers</button></div>
+                <button class="btn primary" id="checkinSaveBtn" style="width:100%;justify-content:center;margin-top:0.8rem;">save check-in</button>
+              </div>
+              <div id="checkinDoneWrap" style="display:none;">
+                <div class="checkin-done-badge">checked in today</div>
+                <div class="checkin-done-summary" id="checkinDoneSummary"></div>
+                <div class="checkin-done-wrap-actions"><button class="btn small" id="checkinEditBtn">edit today's answers</button></div>
+              </div>
             </div>
           </div>
         </div>
@@ -2500,7 +2561,7 @@
         <div class="habits-panel-grid">
           <div class="habit-overview-card">
             <h2>this week</h2>
-            <div class="habit-card-intro">A fast seven-day check-in. Tap a day to correct it; today is outlined.</div>
+            <div class="habit-card-intro">A kinder seven-day view. Full target, minimum kept, and missed are different things; tap a day to correct it.</div>
             <div class="chart-nav-row"><button class="chart-nav-btn" id="overviewNavBack" title="previous week">◀</button><span class="chart-range-label" id="overviewRangeLabel"></span><button class="chart-nav-btn" id="overviewNavForward" title="next week">▶</button></div>
             <div class="sort-tabs" id="overviewSortTabs"><button class="sort-btn active" data-sort="manual">my order</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="consistency">consistency</button></div>
             <div class="overview-grid" id="habitOverviewGrid"></div>
@@ -2518,20 +2579,22 @@
 
           <div class="habit-graph-card">
             <div class="habit-graph-header">
-              <div><h2 style="margin-bottom:.2rem;">check-in history</h2><div class="habit-card-intro" style="margin:0;">Choose one habit, then scan its longer pattern without the library controls competing for attention.</div></div>
+              <div><h2 style="margin-bottom:.2rem;">check-in history</h2><div class="habit-card-intro" style="margin:0;">Start with a habit the app has a reason to show you. Every pattern ends with one useful next action.</div></div>
               <div class="graph-period-tabs" id="habitCheckPeriodTabs"><button class="period-btn active" data-period="84">12w</button><button class="period-btn" data-period="168">24w</button><button class="period-btn" data-period="365">1y</button></div>
             </div>
+            <div class="habit-history-reasons" id="habitHistoryReasons"></div>
             <div class="habit-history-toolbar">
               <label class="habit-history-picker-label">habit<select class="search-input habit-history-picker" id="habitGraphPicker"><option value="">select a habit</option></select></label>
               <div class="habit-history-summary" id="habitHistorySummary">Choose a habit to see its check-in history.</div>
             </div>
+            <div class="habit-history-insight" id="habitHistoryInsight" style="display:none;"></div>
             <div class="sort-tabs" id="habitGraphSortTabs" style="display:none;"><button class="sort-btn active" data-sort="frequent">most used</button><button class="sort-btn" data-sort="recent">recent</button><button class="sort-btn" data-sort="name">a-z</button></div>
             <ul class="library-list habit-graph-list" id="habitGraphList" style="display:none;"><li class="empty-library">no habits yet</li></ul>
             <div class="habit-graph-main">
               <div class="habit-graph-name" id="habitGraphName">select a habit</div>
               <div class="chart-nav-row"><button class="chart-nav-btn" id="habitCheckNavBack" title="previous period">◀</button><span class="chart-range-label" id="habitCheckRangeLabel"></span><button class="chart-nav-btn" id="habitCheckNavForward" title="next period">▶</button></div>
               <div class="heatmap-wrap" id="habitCheckWrap"></div>
-              <div class="heatmap-legend"><span>missed</span><span class="heatmap-legend-cell" style="background:var(--heat-0);"></span><span class="heatmap-legend-cell checked"></span><span>done</span></div>
+              <div class="heatmap-legend"><span>missed</span><span class="heatmap-legend-cell" style="background:var(--heat-0);"></span><span class="heatmap-legend-cell" style="background:var(--heat-2);"></span><span>minimum kept</span><span class="heatmap-legend-cell checked"></span><span>full target</span></div>
             </div>
           </div>
         </div>
@@ -3164,7 +3227,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.135';
+      const APP_VERSION='1.136';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3288,7 +3351,9 @@
           h2.innerHTML='';
           h2.appendChild(titleSpan);
           h2.appendChild(countSpan);
-          h2.appendChild(toggleBtn);
+          const headerRow=h2.closest('.checkin-header-row');
+          if(headerRow&&headerRow.parentElement===card)headerRow.appendChild(toggleBtn);
+          else h2.appendChild(toggleBtn);
         });
       }
       function setupQuickJump(){
@@ -4079,7 +4144,7 @@ function updateNotificationSettingUI(){
                 if(day.date===todayStr)cell.classList.add('today');
                 const val=day.value;
                 if(isFocusHeatmap){let level=0;if(val>0)level=1;if(val>=30)level=2;if(val>=60)level=3;if(val>=120)level=4;cell.style.background=`var(--heat-${level})`;cell.title=`${day.date}: ${val}min`;}
-                else{if(val>=dayTarget&&val>0)cell.classList.add('checked');else if(val>0)cell.classList.add('partial');const statusLabel=val>=dayTarget&&val>0?'done':val>0?`${val}/${dayTarget}`:'missed';cell.title=`${day.date}: ${statusLabel}`;}
+                else{if(val>=dayTarget&&val>0)cell.classList.add('checked');else if(val>0)cell.classList.add('partial');const statusLabel=val>=dayTarget&&val>0?'full target':val>0?`minimum kept (${val}/${dayTarget})`:'missed';cell.title=`${day.date}: ${statusLabel}`;}
               }
               weekDiv.appendChild(cell);
             });
@@ -4093,11 +4158,12 @@ function updateNotificationSettingUI(){
 
       function drawHeatmap(){drawHeatmapGrid('heatmapWrap',84,(day)=>dailyHistory[day]?.focusMinutes||0,1,true,heatmapOffset);updateHeatmapNavUI('heatmapNavBack','heatmapNavForward','heatmapRangeLabel',heatmapOffset,84,getFirstRecordedDay(dailyHistory));}
       function drawHabitCheckGraph(){
-        const habit=bgHabits.find(h=>h.id===selectedHabitForGraph),summary=document.getElementById('habitHistorySummary');
-        if(!habit){habitCheckWrap.innerHTML='';habitGraphName.textContent='select a habit';if(summary)summary.textContent='Choose a habit to see its check-in history.';updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',0,parseInt(habitCheckPeriod),getToday());return;}
+        const habit=bgHabits.find(h=>h.id===selectedHabitForGraph),summary=document.getElementById('habitHistorySummary'),insight=document.getElementById('habitHistoryInsight');
+        if(!habit){habitCheckWrap.innerHTML='';habitGraphName.textContent='select a habit';if(summary)summary.textContent='Choose one of the suggested habits to see why its pattern matters.';if(insight)insight.style.display='none';updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',0,parseInt(habitCheckPeriod),getToday());return;}
         habitGraphName.textContent=habit.name;
-        const consistency=getHabitConsistency30d(habit),weekCount=getWeekCheckinCount(habit),weeklyTarget=habit.targetPerWeek||7;
-        if(summary)summary.textContent=`${weekCount}/${weeklyTarget} days this week · ${consistency}% consistency over 30 days`;
+        const stats=getHabitPeriodStats(habit,30),pattern=getHabitPatternReason(habit);
+        if(summary)summary.textContent=`last 30 days: target met ${stats.full} day${stats.full===1?'':'s'} · showed up ${stats.showed} day${stats.showed===1?'':'s'} · ${stats.creditPct}% effort credit`;
+        if(insight){insight.style.display='grid';insight.innerHTML=`<div class="habit-history-insight-key">${escapeHtml(pattern.tag)}</div><div class="habit-history-insight-text">${escapeHtml(pattern.insight)} <strong>${escapeHtml(pattern.action)}</strong></div>`;}
         drawHeatmapGrid('habitCheckWrap',habitCheckPeriod,(day)=>getHabitDayCount(habit,day),getHabitDayTarget(habit),false,habitCheckOffset);
         updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',habitCheckOffset,parseInt(habitCheckPeriod),getFirstRecordedDay(habit.history));
       }
@@ -4128,6 +4194,7 @@ function updateNotificationSettingUI(){
         const list=getSortedHabitsForGraph();
         const picker=document.getElementById('habitGraphPicker');
         if(picker){picker.innerHTML='<option value="">select a habit</option>';list.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(h=>{const opt=document.createElement('option');opt.value=h.id;opt.textContent=h.name;opt.selected=selectedHabitForGraph===h.id;picker.appendChild(opt);});}
+        renderHabitHistoryReasons();
         if(!list.length){habitGraphList.innerHTML='<li class="empty-library">no habits yet</li>';syncHabitGraphListHeight();return;}
         list.forEach(h=>{
           const li=document.createElement('li');li.className='library-item';
@@ -4165,7 +4232,7 @@ function updateNotificationSettingUI(){
         syncListHeight(document.querySelector('.habit-graph-card'),habitGraphList,null);
       }
 
-      function addBgHabit(){const tx=habitInput.value.trim();if(!tx)return;const nh={id:generateId(),name:tx,history:{},targetPerWeek:7,timesPerDay:1,created:getToday()};bgHabits.push(nh);habitInput.value='';if(!selectedHabitForGraph)selectedHabitForGraph=nh.id;renderBgHabits();renderHabitGraphList();saveData();showToast(`habit added: ${tx}`);}
+      function addBgHabit(){const tx=habitInput.value.trim();if(!tx)return;const nh={id:generateId(),name:tx,history:{},targetPerWeek:7,timesPerDay:1,created:getToday()};bgHabits.push(nh);habitInput.value='';if(!selectedHabitForGraph)selectedHabitForGraph=nh.id;renderBgHabits();renderHabitGraphList();drawHabitCheckGraph();saveData();showToast(`habit added: ${tx}`);}
       function deleteBgHabit(id){const h=bgHabits.find(h=>h.id===id);showConfirm(`Delete "${h?h.name:'this habit'}"? Its check-in history will be lost.`,()=>{bgHabits=bgHabits.filter(h=>h.id!==id);if(selectedHabitForGraph===id){selectedHabitForGraph=bgHabits.length>0?bgHabits[0].id:null;}goals.forEach(g=>{if(g.linkedHabitIds&&g.linkedHabitIds.includes(id))g.linkedHabitIds=g.linkedHabitIds.filter(hid=>hid!==id);});renderBgHabits();renderHabitGraphList();renderLibrary();renderGoals();saveData();});}
       function getHabitDayTarget(h){return h.timesPerDay||1;}
       function getHabitDayCount(h,date){const v=h.history[date];if(v===true)return 1;if(typeof v==='number')return v;return 0;}
@@ -4224,12 +4291,45 @@ function updateNotificationSettingUI(){
         const thisMonday=getMondayOf(today);
         const weeksSinceCreated=h.created?Math.floor((today-new Date(h.created+'T00:00:00'))/(7*86400000))+1:Infinity;
         const totalWeeks=Math.max(1,Math.min(4,weeksSinceCreated));
-        let metWeeks=0;
+        let creditWeeks=0;
         for(let w=1;w<=totalWeeks;w++){
           const monday=new Date(thisMonday);monday.setDate(monday.getDate()-w*7);
-          if(getWeekCheckinCountForMonday(h,monday)>=weeklyTarget)metWeeks++;
+          let weekCredit=0;for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(d.getDate()+i);weekCredit+=Math.min(1,getHabitDayCount(h,toDateStr(d))/dayTarget);}creditWeeks+=Math.min(weeklyTarget,weekCredit)/weeklyTarget;
         }
-        return Math.round(metWeeks/totalWeeks*100);
+        return Math.round(creditWeeks/totalWeeks*100);
+      }
+      function getHabitPeriodStats(h,days=30,endOffset=0){
+        const target=getHabitDayTarget(h),today=new Date(),recordedDates=Object.keys(h.history||{}).sort(),startStr=recordedDates.length&&(!h.created||recordedDates[0]<h.created)?recordedDates[0]:h.created,created=startStr?new Date(startStr+'T00:00:00'):null;
+        let full=0,minimum=0,showed=0,credit=0,eligible=0;
+        for(let i=endOffset;i<endOffset+days;i++){
+          const d=new Date(today);d.setDate(d.getDate()-i);
+          if(created&&d<created)continue;
+          const count=getHabitDayCount(h,toDateStr(d));
+          eligible++;
+          if(count>0){showed++;credit+=Math.min(1,count/target);if(count>=target)full++;else minimum++;}
+        }
+        const expected=(h.targetPerWeek||7)>=7?eligible:Math.max(1,Math.round(eligible/7*(h.targetPerWeek||7)));
+        return{full,minimum,showed,credit,eligible,expected,creditPct:expected?Math.round(Math.min(expected,credit)/expected*100):0};
+      }
+      function getHabitPatternReason(h){
+        const recent=getHabitPeriodStats(h,7),prior=getHabitPeriodStats(h,7,7),month=getHabitPeriodStats(h,30);
+        if(month.minimum>0&&month.full===0)return{rank:110,tag:'effort deserves credit',why:`${month.minimum} minimum-kept day${month.minimum===1?'':'s'}`,insight:`You showed up ${month.showed} day${month.showed===1?'':'s'} even though the full target did not happen. That is not zero.`,action:'Useful next step: protect the smaller version first; the full target can be the bonus.'};
+        if(month.minimum>=3)return{rank:100+month.minimum,tag:'minimum kept',why:`${month.minimum} partial day${month.minimum===1?'':'s'} are easy to miss`,insight:`There are ${month.minimum} days where you did part of the habit. Those attempts reveal a version you can still do on hard days.`,action:'Useful next step: decide whether that smaller version should be your bad-day minimum.'};
+        if(recent.credit>prior.credit+0.75)return{rank:90+recent.credit,tag:'momentum',why:'more effort than the prior week',insight:'Your effort credit has moved up compared with the week before.',action:'Useful next step: keep the same cue and avoid making the habit harder yet.'};
+        if(prior.showed>0&&recent.showed<prior.showed)return{rank:85+(prior.showed-recent.showed),tag:'changed pattern',why:'showing up less than last week',insight:'This habit appeared less often than it did the week before. That is information, not a failure.',action:'Useful next step: reconnect it to the easiest reliable moment in your day.'};
+        if(recent.showed===0)return{rank:75,tag:'easy restart',why:'no check-ins this week yet',insight:'This habit has been quiet this week.',action:'Useful next step: do the smallest recognizable version once; no catching up required.'};
+        return{rank:50+recent.credit,tag:'steady pattern',why:`showed up ${recent.showed}/7 days`,insight:`This habit is showing a fairly steady recent pattern with ${recent.creditPct}% effort credit.`,action:'Useful next step: keep the cue stable and let repetition do the work.'};
+      }
+      function renderHabitHistoryReasons(){
+        const wrap=document.getElementById('habitHistoryReasons');
+        if(!wrap)return;
+        wrap.innerHTML='';
+        bgHabits.map(h=>({habit:h,reason:getHabitPatternReason(h)})).sort((a,b)=>b.reason.rank-a.reason.rank).slice(0,3).forEach(({habit,reason})=>{
+          const btn=document.createElement('button');btn.className='habit-history-reason'+(selectedHabitForGraph===habit.id?' selected':'');btn.type='button';
+          btn.innerHTML=`<span class="habit-history-reason-tag">${escapeHtml(reason.tag)}</span><span class="habit-history-reason-name">${escapeHtml(habit.name)}</span><span class="habit-history-reason-why">${escapeHtml(reason.why)}</span>`;
+          btn.addEventListener('click',()=>{selectedHabitForGraph=habit.id;habitCheckOffset=0;renderHabitGraphList();drawHabitCheckGraph();saveData();});
+          wrap.appendChild(btn);
+        });
       }
 
       // --- Recovery / biometric fatigue engine ---
@@ -4269,6 +4369,18 @@ function updateNotificationSettingUI(){
         if(z>=-1)return'green';
         if(z>=-2)return'yellow';
         return'red';
+      }
+      function mixHexColor(from,to,amount){
+        const parse=hex=>hex.replace('#','').match(/.{2}/g).map(x=>parseInt(x,16)),a=parse(from),b=parse(to),t=Math.max(0,Math.min(1,amount));
+        return'#'+a.map((v,i)=>Math.round(v+(b[i]-v)*t).toString(16).padStart(2,'0')).join('');
+      }
+      function getHrvChartState(value,baseline){
+        if(value==null||!baseline)return{status:null,color:'#5ec98a'};
+        const z=(Number(value)-baseline.mean)/(baseline.stddev||1);
+        if(z>=1)return{status:'above usual',color:mixHexColor('#5ec98a','#6ea8d8',Math.min(1,(z-1)/1.5))};
+        if(z>=-0.65)return{status:'usual',color:'#5ec98a'};
+        if(z>=-1.5)return{status:'caution',color:mixHexColor('#5ec98a','#d4a94a',(-z-0.65)/0.85)};
+        return{status:'concerning',color:mixHexColor('#d4a94a','#e05a5a',Math.min(1,(-z-1.5)/1.25))};
       }
       function getPercentStatus(val){
         if(val==null||val==='')return null;
@@ -5013,6 +5125,7 @@ function updateNotificationSettingUI(){
             onThisDayEl.style.display='none';
           }
         }
+        renderWeeklyCheckinCard();
       }
       const LIFTING_WEEKS=[
         {name:'5s',sets:[{pct:0.65,reps:5},{pct:0.75,reps:5},{pct:0.85,reps:5}],amrapMin:5},
@@ -5524,7 +5637,7 @@ function updateNotificationSettingUI(){
         const allVals=known.flatMap(n=>[n.startMin,n.endMin]);
         const rangeMin=Math.max(0,Math.min(...allVals)-45);
         const rangeMax=Math.max(...allVals)+45;
-        const m={top:8,right:4,bottom:16,left:38},cw=cssWidth-m.left-m.right,ch=cssHeight-m.top-m.bottom;
+        const m={top:8,right:4,bottom:25,left:38},cw=cssWidth-m.left-m.right,ch=cssHeight-m.top-m.bottom;
         const valToY=(v)=>m.top+((v-rangeMin)/((rangeMax-rangeMin)||1))*ch;
         const recentNights=nights.slice(-7).filter(n=>n!=null);
         if(recentNights.length>=3){
@@ -5575,6 +5688,9 @@ function updateNotificationSettingUI(){
           ctx.beginPath();ctx.roundRect?ctx.roundRect(x,yTop,barW,barH,1.5):ctx.rect(x,yTop,barW,barH);ctx.fill();ctx.globalAlpha=1;
           sleepChartHitboxes.push({x:x-3,y:yTop,w:barW+6,h:barH,text:`${days[i]}\nbed: ${plotMinutesToTimeStr(n.startMin)} · wake: ${plotMinutesToTimeStr(n.endMin)}\n${n.duration.toFixed(1)}h asleep`});
         });
+        ctx.font='7px "JetBrains Mono",monospace';ctx.textAlign='center';
+        days.forEach((day,i)=>{const date=new Date(day+'T00:00:00'),x=m.left+bw*i+bw/2,isToday=day===getToday(),isWeekend=date.getDay()===0||date.getDay()===6;ctx.fillStyle=isToday?mc:tc;ctx.globalAlpha=isToday?.9:(isWeekend?.56:.34);ctx.fillText(date.toLocaleDateString('en-US',{weekday:'narrow'}),x,cssHeight-5);});
+        ctx.globalAlpha=1;
       }
       function shiftClock(time,minutes){if(!time)return'';const [h,m]=time.split(':').map(Number),n=(h*60+m+minutes+1440*3)%1440;return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;}
       function formatClock(time){if(!time)return'open';const [h,m]=time.split(':').map(Number),suffix=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(m).padStart(2,'0')} ${suffix}`;}
@@ -6552,7 +6668,7 @@ function updateNotificationSettingUI(){
         else if(recoveryChartMetric==='hrv'){
           const baseline=getHrvBaseline(getToday());
           const vals=days.map(d=>{const r=biometrics[d];return r&&r.hrv!=null?Number(r.hrv):null;});
-          series=[{label:'hrv',color:mc,vals,normalRange:baseline?[baseline.mean-baseline.stddev,baseline.mean+baseline.stddev]:null,isBar:true,statusForIndex:(i)=>getHrvStatus(days[i])}];
+          series=[{label:'hrv',color:mc,vals,normalRange:baseline?[baseline.mean-baseline.stddev,baseline.mean+baseline.stddev]:null,isBar:true,statusForIndex:(i)=>getHrvChartState(vals[i],baseline).status,colorForIndex:(i)=>getHrvChartState(vals[i],baseline).color}];
         }
         else if(recoveryChartMetric==='bodyfatigue'){
           series=[
@@ -6576,7 +6692,7 @@ function updateNotificationSettingUI(){
           freshness:'green zone (75+) is where the four signals below are mostly in good shape together. dropping out of it usually means catching up on sleep or easing training load helps more than pushing through.',
           feel:'8-10 is the range worth aiming for. if you\'re consistently below that, it often means you need more recovery time before your next hard effort, regardless of what the other numbers say.',
           bodyfatigue:'1 = fresh and 10 = wrecked. this chart separates systemic, legs, back, and upper-body fatigue so the app can distinguish “don\'t train hard” from “a tiny low-cost lift is still fine.”',
-          hrv:series[0]&&series[0].normalRange?'staying inside the shaded band means today\'s reading is close to your own normal. a drop below it is usually a sign of accumulated stress, poor sleep, illness, or overtraining — not something to fix in one day.':'once you\'ve logged about 5 days of HRV, this chart will shade your own normal range so you can see how today compares to your own history, not a generic number.',
+          hrv:series[0]&&series[0].normalRange?'every bar now uses the same visible personal baseline: green is usual, amber-to-red is progressively below usual, and teal is above usual. either direction is context, not a diagnosis; repeated trends matter more than one reading.':'once you\'ve logged about 5 days of HRV, this chart will shade your own normal range so you can compare the trend with your history, not a generic number.',
           sleep:'67+ is whoop\'s own "well recovered" cutoff for both sleep and recovery %. consistently below it usually means more sleep or lighter days, not more caffeine.',
           acwr:'green = typical training range · amber = somewhat outside it · red = well outside it, in either direction. staying in green means keeping your recent 7-day training load within about 80-130% of your last 28-day average — the safest way is avoiding sudden jumps in volume, not staying still.'
         };
@@ -6645,8 +6761,8 @@ function updateNotificationSettingUI(){
               if(v==null)return;
               const x=m.left+stepX*i+offsetX;
               const y=valToY(v);
-              const status=s.statusForIndex(i);
-              const color=status?STATUS_COLORS[status]:s.color;
+              const status=s.statusForIndex?s.statusForIndex(i):null;
+              const color=s.colorForIndex?s.colorForIndex(i):(status?STATUS_COLORS[status]:s.color);
               ctx.fillStyle=color;ctx.globalAlpha=s.barOpacity!=null?s.barOpacity:0.85;
               const barTop=Math.min(y,baseY),barHeight=Math.max(1,Math.abs(baseY-y));
               ctx.fillRect(x-barW/2,barTop,barW,barHeight);
@@ -6691,7 +6807,8 @@ function updateNotificationSettingUI(){
             let legendHtml='';
             if(barSeries.length>1)legendHtml+=barSeries.map(s=>`<span data-series="${s.label}"><span class="legend-dot" style="background:var(--text-color);opacity:${s.barOpacity!=null?s.barOpacity:0.85};"></span> ${s.label}</span>`).join('');
             if(lineSeries.length)legendHtml+=lineSeries.map(s=>`<span data-series="${s.label}"><span class="legend-dot" style="background:${s.color};"></span> ${s.label}</span>`).join('');
-            if(barSeries.length)legendHtml+='<span><span class="legend-dot" style="background:#5ec98a;"></span> good</span><span><span class="legend-dot" style="background:#d4a94a;"></span> caution</span><span><span class="legend-dot" style="background:#e05a5a;"></span> concerning</span>';
+            if(barSeries.length&&recoveryChartMetric==='hrv')legendHtml+='<span><span class="legend-dot hrv-gradient-dot"></span> progressively below usual</span><span><span class="legend-dot" style="background:#5ec98a;"></span> usual</span><span><span class="legend-dot" style="background:#6ea8d8;"></span> above usual</span>';
+            else if(barSeries.length)legendHtml+='<span><span class="legend-dot" style="background:#5ec98a;"></span> good</span><span><span class="legend-dot" style="background:#d4a94a;"></span> caution</span><span><span class="legend-dot" style="background:#e05a5a;"></span> concerning</span>';
             if(hasTrendLine)legendHtml+='<span data-action="trend"><span class="legend-line"></span> trend</span>';
             legendEl.innerHTML=legendHtml;
           }else{
@@ -6756,7 +6873,7 @@ function updateNotificationSettingUI(){
         else if(overviewSort==='streak'||overviewSort==='consistency')displayHabitsOv=bgHabits.slice().sort((a,b)=>getHabitConsistency30d(b)-getHabitConsistency30d(a));
         displayHabitsOv.forEach(h=>{
           const index=bgHabits.indexOf(h);
-          const row=document.createElement('div');row.className='overview-row';
+          const row=document.createElement('div');row.className='overview-row habit-week-row';
           row.draggable=true;row.dataset.index=index;
           row.addEventListener('dragstart',(e)=>{draggedOverviewIndex=index;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
           row.addEventListener('dragend',()=>{row.classList.remove('dragging');grid.querySelectorAll('.overview-row').forEach(x=>x.classList.remove('drag-over'));draggedOverviewIndex=null;});
@@ -6798,23 +6915,28 @@ function updateNotificationSettingUI(){
           const consistency30dOv=getHabitConsistency30d(h);
           const freqSpan=document.createElement('span');freqSpan.className='overview-freq';freqSpan.textContent=freqText;
           label.appendChild(freqSpan);
-          const consistSpan=document.createElement('span');consistSpan.className='overview-freq';consistSpan.style.color=getProgressColor(consistency30dOv);consistSpan.title=`consistent ${consistency30dOv}% of the last 30 days`;consistSpan.textContent=`${consistency30dOv}%`;
-          label.appendChild(consistSpan);
+          const target=getHabitDayTarget(h);
+          const weekStats=days.reduce((acc,d)=>{const count=getHabitDayCount(h,d);if(count>=target&&count>0)acc.full++;else if(count>0)acc.minimum++;if(count>0)acc.showed++;acc.credit+=Math.min(1,count/target);return acc;},{full:0,minimum:0,showed:0,credit:0});
+          const support=document.createElement('span');support.className='overview-week-summary';support.textContent=`${weekStats.full} full · ${weekStats.minimum} minimum kept · ${weekStats.showed} showed up`;
+          label.appendChild(support);
+          const expectedWeek=Math.max(1,weeklyTarget),weekCreditPct=Math.round(Math.min(expectedWeek,weekStats.credit)/expectedWeek*100);
+          const track=document.createElement('div');track.className='overview-week-track';track.title=`${weekCreditPct}% effort credit this week · ${consistency30dOv}% over 30 days`;const fill=document.createElement('div');fill.className='overview-week-fill';fill.style.width=weekCreditPct+'%';track.appendChild(fill);label.appendChild(track);
           rowHeader.appendChild(label);
           row.appendChild(rowHeader);
           const cellsRow=document.createElement('div');cellsRow.className='overview-cells-row';
-          const target=getHabitDayTarget(h);
           days.forEach(d=>{
             const cnt=getHabitDayCount(h,d);
             const done=cnt>=target&&cnt>0;
             const partial=cnt>0&&!done;
             const cell=document.createElement('button');
             cell.className='overview-cell'+(done?' done':'')+(partial?' partial':'')+(d===todayStr?' today':'');
-            cell.title=`${h.name} — ${d}${target>1?` (${cnt}/${target})`:done?' (done)':''}`;
+            cell.textContent=done?'✓':partial?`${cnt}/${target}`:'';
+            cell.title=`${h.name} — ${d}: ${done?'full target':partial?`minimum kept (${cnt}/${target})`:'missed'}`;
+            cell.setAttribute('aria-label',cell.title);
             cell.addEventListener('click',()=>{
               checkOffHabit(h,d);
               const next=getHabitDayCount(h,d),isDone=next>=target&&next>0,isPartial=next>0&&!isDone;
-              cell.classList.toggle('done',isDone);cell.classList.toggle('partial',isPartial);cell.title=`${h.name} — ${d}${target>1?` (${next}/${target})`:isDone?' (done)':''}`;
+              cell.classList.toggle('done',isDone);cell.classList.toggle('partial',isPartial);cell.textContent=isDone?'✓':isPartial?`${next}/${target}`:'';cell.title=`${h.name} — ${d}: ${isDone?'full target':isPartial?`minimum kept (${next}/${target})`:'missed'}`;cell.setAttribute('aria-label',cell.title);
               saveData();updateStats();scheduleHabitOverviewRefresh();
             });
             cellsRow.appendChild(cell);
@@ -6862,7 +6984,8 @@ function updateNotificationSettingUI(){
           const info=document.createElement('div');info.className='lib-info';
           const name=document.createElement('span');name.className='lib-name';name.textContent=(h.linkedTask?'🔗 ':'')+h.name;if(h.linkedTask)name.title='linked to task: '+h.linkedTask;
           const weekCount=getWeekCheckinCount(h),ratePct=getHabitConsistency30d(h),meta=document.createElement('span');meta.className='lib-meta';
-          meta.innerHTML=`this week <span class="lib-count${weekCount>=freq?' goal-met':''}">${weekCount}/${freq}</span> · 30-day consistency <span class="lib-count">${ratePct}%</span>`+(target>1?` · today ${count}/${target}`:'');
+          const recentStats=getHabitPeriodStats(h,7);
+          meta.innerHTML=`this week <span class="lib-count${weekCount>=freq?' goal-met':''}">${weekCount}/${freq} full</span> · showed up <span class="lib-count">${recentStats.showed}/7</span> · effort credit <span class="lib-count">${ratePct}%</span>`+(target>1?` · today ${count}/${target}`:'');
           const details=document.createElement('details');details.className='habit-settings';const summary=document.createElement('summary');summary.textContent='settings';details.appendChild(summary);
           const settingsBody=document.createElement('div');settingsBody.className='habit-settings-body';settingsBody.appendChild(createHabitControlsRow(h));
           const editBtn=document.createElement('button');editBtn.className='edit-btn';editBtn.textContent='edit';editBtn.addEventListener('click',e=>{e.stopPropagation();startEditHabit(h.id,li,name);});
@@ -8089,7 +8212,7 @@ function updateNotificationSettingUI(){
       document.getElementById('bookPickerOverlay').addEventListener('click',e=>{if(e.target.id==='bookPickerOverlay')closeBookPicker();});
       document.getElementById('bookMemoryGameOverlay').addEventListener('click',e=>{if(e.target.id==='bookMemoryGameOverlay')closeBookMemoryGame();});
       document.getElementById('retroCloseBtn').addEventListener('click',closeWeeklyRetro);
-      document.getElementById('openWeeklyReviewBtn').addEventListener('click',()=>{const today=new Date(),dow=today.getDay(),thisMonday=new Date(today);thisMonday.setDate(thisMonday.getDate()-(dow===0?6:dow-1));const lastMonday=new Date(thisMonday);lastMonday.setDate(lastMonday.getDate()-7);openWeeklyRetro(generateWeeklyRetroData(lastMonday,new Date(lastMonday.getTime()+6*86400000)));});
+      document.getElementById('openWeeklyReviewBtn').addEventListener('click',()=>openWeeklyRetro(getLastCompletedWeekData()));
       document.getElementById('syncAuthForm').addEventListener('submit',(e)=>{e.preventDefault();handleSyncSignIn();});
       document.getElementById('syncSignUpBtn').addEventListener('click',handleSyncSignUp);
       document.getElementById('syncSignOutBtn').addEventListener('click',handleSyncSignOut);
@@ -9514,6 +9637,22 @@ function updateNotificationSettingUI(){
         renderGoalTier('long','goalListLong');
         renderGoalArchive();
       }
+      function getLastCompletedWeekData(){
+        const today=new Date(),thisMonday=getMondayOf(today),lastMonday=new Date(thisMonday);lastMonday.setDate(lastMonday.getDate()-7);
+        return generateWeeklyRetroData(lastMonday,new Date(lastMonday.getTime()+6*86400000));
+      }
+      function renderWeeklyCheckinCard(){
+        const preview=document.getElementById('weeklyCheckinPreview'),status=document.getElementById('weeklyCheckinStatus');
+        if(!preview||!status)return;
+        const data=getLastCompletedWeekData(),review=weeklyReviews[data.weekId]||null;
+        const sleepValue=data.sleep&&data.sleep.avgDuration!=null?formatDurationHours(data.sleep.avgDuration):'not logged';
+        preview.innerHTML=`<div class="weekly-checkin-metric"><div class="weekly-checkin-value">${data.totalMin}m</div><div class="weekly-checkin-label">focus</div></div><div class="weekly-checkin-metric"><div class="weekly-checkin-value">${data.tasksCompletedThisWeek}</div><div class="weekly-checkin-label">tasks finished</div></div><div class="weekly-checkin-metric"><div class="weekly-checkin-value">${data.habitEffortPct==null?'—':data.habitEffortPct+'%'}</div><div class="weekly-checkin-label">habit effort credit</div></div><div class="weekly-checkin-metric"><div class="weekly-checkin-value">${escapeHtml(sleepValue)}</div><div class="weekly-checkin-label">average sleep</div></div>`;
+        if(review){const priority=review.priority?` Next week: ${escapeHtml(review.priority)}`:'';status.innerHTML=`<span><strong>done for this week.</strong>${priority}</span>`;}
+        else status.innerHTML='<span><strong>ready when you are.</strong> Three taps can be enough; blank answers are allowed.</span>';
+      }
+      function reviewSuggestionHtml(fieldId,suggestions){
+        return `<div class="review-suggestion-row">${suggestions.map(value=>`<button type="button" class="review-suggestion" data-review-field="${fieldId}" data-review-value="${escapeHtml(value)}">${escapeHtml(value)}</button>`).join('')}</div>`;
+      }
       function generateWeeklyRetroData(lastMonday,lastSunday){
         const lastMondayStr=toDateStr(lastMonday),lastSundayStr=toDateStr(lastSunday);
         let totalMin=0,totalSessions=0,activeDays=0,bestDay=null;
@@ -9527,9 +9666,10 @@ function updateNotificationSettingUI(){
         const priorMonday=new Date(lastMonday);priorMonday.setDate(priorMonday.getDate()-7);let priorMin=0;
         for(let i=0;i<7;i++){const d=new Date(priorMonday);d.setDate(d.getDate()+i);const r=dailyHistory[toDateStr(d)];if(r)priorMin+=r.focusMinutes||0;}
         const tasksCompletedThisWeek=tasks.filter(t=>t.completed&&t.completedAt&&t.completedAt>=lastMondayStr&&t.completedAt<=lastSundayStr).length;
-        let metHabits=0,totalHabitDays=0;
-        bgHabits.forEach(h=>{for(let i=0;i<7;i++){const d=new Date(lastMonday);d.setDate(d.getDate()+i);const ds=toDateStr(d);totalHabitDays++;if(getHabitDayCount(h,ds)>=getHabitDayTarget(h))metHabits++;}});
+        let metHabits=0,totalHabitDays=0,showedHabitDays=0,habitEffortCredit=0;
+        bgHabits.forEach(h=>{let habitWeekCredit=0;for(let i=0;i<7;i++){const d=new Date(lastMonday);d.setDate(d.getDate()+i);const ds=toDateStr(d),count=getHabitDayCount(h,ds),target=getHabitDayTarget(h);if(count>=target)metHabits++;if(count>0)showedHabitDays++;habitWeekCredit+=Math.min(1,count/target);}const expected=Math.max(1,h.targetPerWeek||7);totalHabitDays+=expected;habitEffortCredit+=Math.min(expected,habitWeekCredit);});
         const habitPct=totalHabitDays>0?Math.round(metHabits/totalHabitDays*100):null;
+        const habitEffortPct=totalHabitDays>0?Math.round(habitEffortCredit/totalHabitDays*100):null;
         const checkInsThisWeek=[];
         goals.forEach(g=>{(g.checkIns||[]).forEach(ci=>{if(ci.date>=lastMondayStr&&ci.date<=lastSundayStr)checkInsThisWeek.push({goal:g.title,status:ci.status});});});
         const taskMinutesThisWeek={};
@@ -9539,7 +9679,7 @@ function updateNotificationSettingUI(){
         for(let i=0;i<7;i++){const d=new Date(lastMonday);d.setDate(d.getDate()+i);const ds=toDateStr(d);if(biometrics[ds])recoveryDaysLogged++;const fd=getFreshnessData(ds);if(fd.score!=null)freshnessScores.push(fd.score);}
         const recovery=freshnessScores.length?{avgScore:Math.round(freshnessScores.reduce((a,b)=>a+b,0)/freshnessScores.length),daysLogged:recoveryDaysLogged,firstHalfAvg:freshnessScores.length>=4?Math.round(freshnessScores.slice(0,Math.ceil(freshnessScores.length/2)).reduce((a,b)=>a+b,0)/Math.ceil(freshnessScores.length/2)):null,secondHalfAvg:freshnessScores.length>=4?Math.round(freshnessScores.slice(Math.ceil(freshnessScores.length/2)).reduce((a,b)=>a+b,0)/Math.floor(freshnessScores.length/2)):null}:null;
         const sleep=getSleepWindowSummary(lastSundayStr,7),sleepDebt=getSleepDebt(lastSundayStr,14),sleepConsistency=getSleepConsistency(lastSundayStr,7);
-        return {weekId:getISOWeekId(lastMonday),totalMin,totalSessions,activeDays,dayActivity,bestDay,priorMin,tasksCompletedThisWeek,habitPct,metHabits,totalHabitDays,checkInsThisWeek,topTasks:topTaskEntries,recovery,sleep,sleepDebt,sleepConsistency};
+        return {weekId:getISOWeekId(lastMonday),totalMin,totalSessions,activeDays,dayActivity,bestDay,priorMin,tasksCompletedThisWeek,habitPct,habitEffortPct,metHabits,showedHabitDays,totalHabitDays,checkInsThisWeek,topTasks:topTaskEntries,recovery,sleep,sleepDebt,sleepConsistency};
       }
       function openWeeklyRetro(data){
         const content=document.getElementById('retroContent');
@@ -9562,7 +9702,7 @@ function updateNotificationSettingUI(){
           html+=`<div class="retro-section"><div class="retro-section-title">where focus went</div><div class="retro-task-list">${data.topTasks.map(([name,min])=>`<div class="retro-task-row"><div class="retro-task-name">${name}</div><div class="retro-task-min">${min}m</div><div class="retro-task-track"><div class="retro-task-fill" style="width:${Math.max(4,Math.round(min/max*100))}%"></div></div></div>`).join('')}</div></div>`;
         }
         html+=`<div class="retro-section"><div class="retro-section-title">habits & recovery</div><div class="retro-metric-grid">`;
-        if(data.habitPct!==null)html+=`<div class="retro-metric"><div class="retro-metric-value sub">${data.habitPct}%</div><div class="retro-metric-label">habit targets hit · ${data.metHabits}/${data.totalHabitDays}</div></div>`;
+        if(data.habitEffortPct!==null)html+=`<div class="retro-metric"><div class="retro-metric-value sub">${data.habitEffortPct}%</div><div class="retro-metric-label">habit effort credit · ${data.showedHabitDays} days showed up</div></div>`;
         if(data.recovery)html+=`<div class="retro-metric"><div class="retro-metric-value sub">${data.recovery.avgScore}</div><div class="retro-metric-label">avg freshness · ${data.recovery.daysLogged}/7 logged</div></div>`;
         if(data.sleep&&data.sleep.avgDuration!=null)html+=`<div class="retro-metric"><div class="retro-metric-value">${formatDurationHours(data.sleep.avgDuration)}</div><div class="retro-metric-label">avg sleep · ${data.sleep.loggedNights} nights</div></div>`;
         if(data.sleep&&data.sleep.loggedNights)html+=`<div class="retro-metric"><div class="retro-metric-value">${data.sleep.targetHits}/${data.sleep.loggedNights}</div><div class="retro-metric-label">nights at ${sleepTargetHours}h target</div></div>`;
@@ -9575,9 +9715,13 @@ function updateNotificationSettingUI(){
         html+=`</div>`;
         if(data.checkInsThisWeek.length)html+=`<div class="retro-section"><div class="retro-section-title">goal check-ins</div><div class="retro-checkins">${data.checkInsThisWeek.map(ci=>`<span class="retro-checkin-chip status-${ci.status.replace(/\s+/g,'-')}">${ci.goal} · ${ci.status}</span>`).join('')}</div></div>`;
         const review=weeklyReviews[data.weekId]||{};
-        html+=`<div class="retro-section"><div class="retro-section-title">your review</div><div class="checkin-q"><label>what went well?</label><input class="search-input" id="weeklyWentWell" maxlength="220" value="${escapeHtml(review.wentWell||'')}"></div><div class="checkin-q"><label>what kept getting in the way?</label><input class="search-input" id="weeklyFriction" maxlength="220" value="${escapeHtml(review.friction||'')}"></div><div class="checkin-q"><label>what matters most next week?</label><input class="search-input" id="weeklyPriority" maxlength="220" value="${escapeHtml(review.priority||'')}"></div><button class="btn primary" id="weeklyReviewSaveBtn" style="width:100%;justify-content:center;">save weekly review</button></div>`;
+        const wentWellSuggestions=[data.tasksCompletedThisWeek?`${data.tasksCompletedThisWeek} tasks finished`:null,data.totalMin?`${data.totalMin} minutes of focus`:null,data.habitEffortPct?`${data.habitEffortPct}% habit effort credit`:null,'I kept showing up'].filter(Boolean);
+        const frictionSuggestions=['starting was hard','low energy','plans changed','work took more out of me','nothing obvious'];
+        const prioritySuggestions=['one important task','protect sleep','keep minimum habits','train consistently','leave more space'];
+        html+=`<div class="retro-section"><div class="retro-section-title">your 60-second review</div><div class="review-optional-note">Tap the closest answer. You can edit it, type your own, or leave anything blank.</div><div class="checkin-q"><label>what went well?</label>${reviewSuggestionHtml('weeklyWentWell',wentWellSuggestions)}<input class="search-input" id="weeklyWentWell" maxlength="220" value="${escapeHtml(review.wentWell||'')}"></div><div class="checkin-q"><label>what kept getting in the way?</label>${reviewSuggestionHtml('weeklyFriction',frictionSuggestions)}<input class="search-input" id="weeklyFriction" maxlength="220" value="${escapeHtml(review.friction||'')}"></div><div class="checkin-q"><label>what matters most next week?</label>${reviewSuggestionHtml('weeklyPriority',prioritySuggestions)}<input class="search-input" id="weeklyPriority" maxlength="220" value="${escapeHtml(review.priority||'')}"></div><button class="btn primary" id="weeklyReviewSaveBtn" style="width:100%;justify-content:center;">done for the week</button></div>`;
         content.innerHTML=html;
-        document.getElementById('weeklyReviewSaveBtn').addEventListener('click',()=>{weeklyReviews[data.weekId]={wentWell:document.getElementById('weeklyWentWell').value.trim(),friction:document.getElementById('weeklyFriction').value.trim(),priority:document.getElementById('weeklyPriority').value.trim(),savedAt:new Date().toISOString()};saveData();showToast('weekly review saved');});
+        content.querySelectorAll('.review-suggestion').forEach(btn=>{const input=document.getElementById(btn.dataset.reviewField);if(input&&input.value===btn.dataset.reviewValue)btn.classList.add('selected');btn.addEventListener('click',()=>{if(!input)return;input.value=btn.dataset.reviewValue;btn.closest('.review-suggestion-row').querySelectorAll('.review-suggestion').forEach(x=>x.classList.toggle('selected',x===btn));});});
+        document.getElementById('weeklyReviewSaveBtn').addEventListener('click',()=>{weeklyReviews[data.weekId]={wentWell:document.getElementById('weeklyWentWell').value.trim(),friction:document.getElementById('weeklyFriction').value.trim(),priority:document.getElementById('weeklyPriority').value.trim(),savedAt:new Date().toISOString()};saveData();renderWeeklyCheckinCard();closeWeeklyRetro();showToast('weekly review done');});
         document.getElementById('retroOverlay').classList.add('open');
       }
       function closeWeeklyRetro(){document.getElementById('retroOverlay').classList.remove('open');}
