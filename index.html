@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.124 sleep plan visibility -->
+<!-- Focus::Flow deployment marker: v1.125 Today agenda foundation -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -224,6 +224,19 @@
     .habits-panel-grid .habit-overview-card { grid-column: 1 / 3; }
     .stats-panel-grid { display: flex; flex-direction: column; gap: 1.5rem; }
     .today-panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .today-section-label { grid-column:1/-1; font:700 .62rem 'JetBrains Mono',monospace; letter-spacing:.18em; color:var(--main-color); opacity:.82; margin:.25rem 0 -.8rem; }
+    .today-now-card { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1.35fr) minmax(230px,.65fr); gap:1rem; align-items:stretch; border-color:var(--border-hover); }
+    .today-now-main { display:flex; flex-direction:column; justify-content:center; min-width:0; }
+    .today-now-kicker { font:600 .58rem 'JetBrains Mono',monospace; color:var(--main-color); letter-spacing:.12em; text-transform:uppercase; margin-bottom:.42rem; }
+    .today-now-task { font-size:clamp(1.3rem,3vw,2.2rem); font-weight:700; line-height:1.12; color:var(--text-color); overflow-wrap:anywhere; }
+    .today-now-next-action { margin-top:.5rem; color:var(--text-color); opacity:.68; font-size:.72rem; line-height:1.45; }
+    .today-now-actions { display:flex; gap:.45rem; flex-wrap:wrap; margin-top:.9rem; }
+    .today-now-side { display:grid; gap:.55rem; align-content:center; }
+    .today-now-signal { padding:.65rem .75rem; border:1px solid var(--border-color); border-radius:.65rem; background:rgba(0,0,0,.08); }
+    .today-now-signal-label { font:600 .53rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.5; text-transform:uppercase; letter-spacing:.08em; }
+    .today-now-signal-value { margin-top:.22rem; color:var(--text-color); font-size:.76rem; font-weight:650; line-height:1.35; }
+    .today-now-signal-note { margin-top:.16rem; color:var(--text-color); opacity:.55; font-size:.58rem; line-height:1.35; }
+    .today-later-card { grid-column:1/-1; }
     .recovery-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 1.5rem; align-items:start; }
     .recovery-snapshot-card { align-self: start; }
     #panel-recovery .recovery-daily-summary { order:1; }
@@ -301,6 +314,7 @@
     .fatigue-map-fill { height: 100%; width: 0%; border-radius: 8px; transition: width 0.25s ease; }
     .fatigue-input-note { grid-column: 1 / -1; font-size: 0.61rem; line-height: 1.4; color: var(--text-color); opacity: 0.58; margin-top: -0.1rem; }
     [data-view-mode="mobile"] .today-panel-grid { grid-template-columns: 1fr; }
+    [data-view-mode="mobile"] .today-now-card { grid-template-columns:1fr; }
     .quick-add-row { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; position: relative; }
     .goals-intro-note { font-size: 0.65rem; color: var(--text-color); opacity: 0.55; line-height: 1.5; flex: 1; min-width: 0; }
     .goal-new-btn { width: 100%; background: transparent; border: 1px dashed var(--border-color); color: var(--text-color); border-radius: 0.6rem; padding: 0.5rem; font-size: 0.7rem; cursor: pointer; transition: all 0.2s ease; opacity: 0.75; margin-bottom: 0.6rem; font-family: 'Lexend Deca', sans-serif; }
@@ -1711,9 +1725,9 @@
 
       <div class="settings-section">
         <div class="settings-section-title">app</div>
-        <div class="settings-desc" style="margin-top:0;"><strong>Version 1.116</strong></div>
-        <div class="settings-desc" style="margin-top:0.2rem;">Released August 12, 2026</div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.124 surfaces tonight's wind-down and target-asleep plan, alongside the Recovery explainer and improved daily-entry layout.</div>
+        <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
+        <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.125 rebuilds Today around Now, Today and Later; separates Focus Queue from To Do; and adds plain-language scheduling.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2019,7 +2033,7 @@
       <div class="chart-tooltip" id="chartTooltip" style="display:none;"></div>
       <div class="app-header">
         <div style="display:flex;gap:0.7rem;align-items:center;">
-          <div class="app-title" id="appTitle" title="Focus::Flow version 1.124">focus<span>::</span>flow</div>
+          <div class="app-title" id="appTitle">focus<span>::</span>flow</div>
           <div class="header-level-chip" id="headerLevelChip">lv. 1</div>
           <div class="header-xp-ring" id="headerXpRing" title="0 / 15 xp">
             <svg viewBox="0 0 24 24"><circle class="track" cx="12" cy="12" r="10"/><circle class="fill" id="headerXpRingFill" cx="12" cy="12" r="10" stroke-dasharray="62.8" stroke-dashoffset="62.8"/></svg>
@@ -2105,16 +2119,30 @@
       <!-- Today Panel -->
       <div class="panel active" id="panel-today">
         <div class="today-panel-grid">
+          <div class="today-section-label">NOW</div>
+          <div class="today-card today-now-card">
+            <div class="today-now-main">
+              <div class="today-now-kicker">focus now</div>
+              <div class="today-now-task" id="todayNowTask">Choose the next useful move</div>
+              <div class="today-now-next-action" id="todayNowNextAction">Add a Focus Queue task or choose one below.</div>
+              <div class="today-now-actions"><button class="btn primary" id="todayNowStartBtn">start focus</button><button class="btn small" id="todayNowChooseBtn">choose from queue</button></div>
+            </div>
+            <div class="today-now-side">
+              <div class="today-now-signal"><div class="today-now-signal-label">next up</div><div class="today-now-signal-value" id="todayNextUpValue">day is open</div><div class="today-now-signal-note" id="todayFreeUntilValue">no scheduled constraint ahead</div></div>
+              <div class="today-now-signal"><div class="today-now-signal-label">body + training</div><div class="today-now-signal-value" id="todayRecoveryCall">waiting for recovery signals</div><div class="today-now-signal-note" id="todayRecoveryWhy">Recovery will refine what fits today.</div></div>
+            </div>
+          </div>
+          <div class="today-section-label">TODAY</div>
           <div class="today-card today-tasks-hub">
             <div class="today-hub-tabs" id="todayHubTabs">
-              <button class="hub-tab-btn active" data-hub="current">current &amp; next<span class="hub-tab-count" id="hubCountCurrent"></span></button>
-              <button class="hub-tab-btn" data-hub="todo">todo<span class="hub-tab-count" id="hubCountTodo"></span></button>
+              <button class="hub-tab-btn active" data-hub="current">focus queue<span class="hub-tab-count" id="hubCountCurrent"></span></button>
+              <button class="hub-tab-btn" data-hub="todo">to do<span class="hub-tab-count" id="hubCountTodo"></span></button>
               <button class="hub-tab-btn" data-hub="due">due today<span class="hub-tab-count" id="hubCountDue"></span></button>
               <button class="hub-tab-btn" data-hub="priority">priorities<span class="hub-tab-count" id="hubCountPriority"></span></button>
             </div>
             <div class="today-hub-panel" id="hubPanelCurrent">
               <div class="quick-add-row"><input type="text" class="search-input" id="todayCurrentQuickAdd" placeholder="quick add — focus task..." autocomplete="off" style="margin-bottom:0;"><button class="add-btn" id="todayCurrentQuickAddBtn">+</button></div>
-              <ul class="task-list" id="todayCurrentNextList"><li class="empty-tasks">no focus tasks yet</li></ul>
+              <ul class="task-list" id="todayCurrentNextList"><li class="empty-tasks">your Focus Queue is empty</li></ul>
             </div>
             <div class="today-hub-panel" id="hubPanelTodo" style="display:none;">
               <div class="quick-add-row"><input type="text" class="search-input" id="todayTodoQuickAdd" placeholder="quick add — todo..." autocomplete="off" style="margin-bottom:0;"><button class="add-btn" id="todayTodoQuickAddBtn">+</button></div>
@@ -2155,13 +2183,15 @@
           </div>
           <div class="schedule-card">
             <h2>today's schedule</h2>
-            <div class="schedule-desc">tasks you start a timer on are auto-placed here. the agenda stays readable at a glance; the timeline below is for moving and resizing blocks.</div>
+            <div class="schedule-desc">Add a plan in normal language, such as “dentist 3 PM” or “gym after work.” Focus timers also place themselves here automatically.</div>
+            <div class="quick-add-row"><input type="text" class="search-input" id="scheduleQuickInput" placeholder="add today: dentist 3 PM, gym after work..." autocomplete="off" style="margin-bottom:0;"><button class="add-btn" id="scheduleQuickBtn">+</button></div>
             <div class="schedule-agenda" id="scheduleAgenda"></div>
             <div class="schedule-grid-scroll">
               <div class="schedule-grid" id="scheduleGrid"></div>
             </div>
           </div>
-          <div class="today-card daily-checkin-card" style="grid-column:1/-1;" id="dailyCheckinCard">
+          <div class="today-section-label">LATER</div>
+          <div class="today-card daily-checkin-card today-later-card" style="grid-column:1/-1;" id="dailyCheckinCard">
             <div class="checkin-header-row">
               <h2>daily check-in</h2>
               <button class="book-flashcard-btn" id="checkinReviewBtn">review past entries</button>
@@ -2200,6 +2230,7 @@
             <h2>tasks</h2>
             <button class="btn small" id="viewCurrentNextBtn" style="width:100%;justify-content:center;margin-bottom:0.6rem;">view current &amp; next →</button>
             <div class="task-input-group"><input type="text" id="taskInput" class="task-input" placeholder="add task..." autocomplete="off" /><button id="addTaskBtn" class="add-btn">+</button></div>
+            <div class="sort-tabs" id="newTaskTypeTabs" aria-label="Does this task need focused work?"><span class="preset-label">needs focused work?</span><button class="sort-btn active" data-type="focus">yes · can use timer</button><button class="sort-btn" data-type="todo">no · regular to-do</button></div>
             <datalist id="taskSuggestions"></datalist>
             <div class="quick-timer-presets"><span class="preset-label">timer</span><button class="preset-btn" data-minutes="5">5m</button><button class="preset-btn" data-minutes="10">10m</button><button class="preset-btn" data-minutes="15">15m</button><button class="preset-btn" data-minutes="25">25m</button><button class="preset-btn" data-minutes="30">30m</button><button class="preset-btn" data-minutes="45">45m</button></div>
             <div class="sort-tabs" id="taskFilterTabs"><button class="sort-btn active" data-filter="active">active</button><button class="sort-btn" data-filter="completed">completed</button></div>
@@ -2861,8 +2892,11 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.124';
-      const APP_RELEASE_DATE='2026-08-12';
+      const APP_VERSION='1.125';
+      const APP_RELEASE_DATE='2026-08-13';
+      document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
+      document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
+      document.getElementById('settingsReleaseLabel').textContent=`Released ${new Date(APP_RELEASE_DATE+'T12:00:00').toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})}`;
       const SYNC_SCHEMA_VERSION=1;
       let hourlyFocus={};
       let selectedHabitForGraph=null;
@@ -6973,7 +7007,7 @@ function updateNotificationSettingUI(){
         }
         const cb=document.createElement('input');cb.type='checkbox';cb.className='task-checkbox';cb.checked=t.completed;cb.addEventListener('change',()=>handleTaskComplete(t.id,cb.checked));const info=document.createElement('div');info.className='task-info';const ts=document.createElement('span');ts.className='task-text';ts.textContent=t.text;ts.addEventListener('click',()=>{if(!t.completed){currentTaskId=t.id;updateCurrentTaskDisplay();renderTasks();}});const meta=document.createElement('div');meta.className='task-meta';meta.appendChild(createTaskTypeToggle(t));meta.appendChild(createHabitLinkBtn(t.text));meta.appendChild(createBookLinkBtn(t.text));const spent=taskTimeLog[t.id]||0;if(!isTodo||spent>0){const sp=document.createElement('span');sp.className='task-time-spent';sp.textContent=`${formatMinutes(spent)}m`;meta.appendChild(sp);}if(ht){const tl=document.createElement('span');tl.className='task-time-limit';if(rem<=0&&!t.completed){tl.classList.add('overdue');tl.textContent='OVERDUE';}else tl.textContent=formatTime(rem);meta.appendChild(tl);}if(!isTodo)meta.appendChild(createTimerControl(t.id,ht?formatMinutes(taskTimeLimits[t.id]):0));meta.appendChild(createPriorityFlag(t.id,t.priority));meta.appendChild(createDueDateControl(t.id,t.dueDate,t.completed));const subs=t.subtasks||[];const subToggle=document.createElement('button');subToggle.className='subtask-toggle';const doneCount=subs.filter(s=>s.completed).length;subToggle.textContent=subs.length?`${expandedSubtasks.has(t.id)?'▾':'▸'} ${doneCount}/${subs.length}`:'+ subtasks';subToggle.addEventListener('click',e=>{e.stopPropagation();toggleSubtaskExpand(t.id);});meta.appendChild(subToggle);const notesToggle=document.createElement('button');notesToggle.className='subtask-toggle';notesToggle.textContent=(t.notes&&t.notes.trim())?'notes':'+ notes';notesToggle.addEventListener('click',e=>{e.stopPropagation();toggleNotesExpand(t.id);});meta.appendChild(notesToggle);const expandBtn=document.createElement('button');expandBtn.className='edit-btn task-expand-btn';const isMetaExpanded=expandedTaskMeta.has(t.id);expandBtn.textContent=isMetaExpanded?'▾':'▸';expandBtn.title=isMetaExpanded?'collapse details':'expand to edit priority, due date, timer, subtasks, notes';expandBtn.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});const editBtn=document.createElement('button');editBtn.className='edit-btn';editBtn.textContent='✎';editBtn.addEventListener('click',e=>{e.stopPropagation();startEditTask(t.id,li,ts);});const del=document.createElement('button');del.className='delete-task-btn';del.textContent='×';del.title='remove from list — keeps history & library entry';del.addEventListener('click',e=>{e.stopPropagation();deleteTask(t.id);});const taskActionsRow=document.createElement('div');taskActionsRow.className='lib-actions-row';taskActionsRow.appendChild(expandBtn);taskActionsRow.appendChild(editBtn);taskActionsRow.appendChild(del);const titleRow=document.createElement('div');titleRow.className='task-title-row';titleRow.appendChild(ts);titleRow.appendChild(taskActionsRow);info.appendChild(titleRow);if(isMetaExpanded)info.appendChild(meta);else info.appendChild(createCompactMetaSummary(t));li.appendChild(handle);if(reorderEl)li.appendChild(reorderEl);li.appendChild(cb);li.appendChild(info);if(isMetaExpanded&&expandedSubtasks.has(t.id))li.appendChild(createSubtaskBlock(t));if(isMetaExpanded&&expandedNotes.has(t.id))li.appendChild(createNotesBlock(t));taskList.appendChild(li);});updateCurrentTaskDisplay();renderSchedule();}
 
-      function addTask(){const tx=taskInput.value.trim();if(!tx)return;const nt={id:generateId(),text:tx,completed:false,dueDate:null,priority:'none',subtasks:[],notes:'',taskType:'focus'};tasks.push(nt);taskTimeLog[nt.id]=0;if(!currentTaskId||!tasks.find(t=>t.id===currentTaskId&&!t.completed))currentTaskId=nt.id;taskInput.value='';renderTasks();renderLibrary();saveData();}
+      function addTask(){const tx=taskInput.value.trim();if(!tx)return;const selectedType=document.querySelector('#newTaskTypeTabs .sort-btn.active')?.dataset.type||'focus';const nt={id:generateId(),text:tx,completed:false,dueDate:null,priority:'none',subtasks:[],notes:'',taskType:selectedType};tasks.push(nt);taskTimeLog[nt.id]=0;if(selectedType==='focus'&&(!currentTaskId||!tasks.find(t=>t.id===currentTaskId&&!t.completed)))currentTaskId=nt.id;taskInput.value='';renderTasks();renderLibrary();saveData();}
       function deleteTask(id){const t=tasks.find(t=>t.id===id);showConfirm(`Remove "${t?t.text:'this task'}" from your list? Its history and library entry stay intact — this only removes today's card.`,()=>{if(t&&!t.completed)tasksAbandonedCount++;tasks=tasks.filter(t=>t.id!==id);delete taskTimeLog[id];delete taskTimeLimits[id];delete taskTimerRemaining[id];if(currentTaskId===id)currentTaskId=null;expandedSubtasks.delete(id);goals.forEach(g=>{if(g.linkedTaskIds&&g.linkedTaskIds.includes(id))g.linkedTaskIds=g.linkedTaskIds.filter(tid=>tid!==id);});renderTasks();renderGoals();saveData();},'remove');}
       function handleTaskComplete(id,chk){const t=tasks.find(t=>t.id===id);if(!t)return;const was=t.completed;t.completed=chk;t.completedAt=chk?getToday():null;if(chk&&!was){trackTaskCompletion(t.text);logCompletionEvent(t.taskType==='todo'?'todo':'task',t.text);if(navigator.vibrate){try{navigator.vibrate(15);}catch(e){}}if(taskTimeLimits[id]){const estimateMin=formatMinutes(taskTimeLimits[id]),actualMin=formatMinutes(taskTimeLog[id]||0);if(actualMin>0){estimateAccuracyLog.push({estimateMin,actualMin});if(estimateAccuracyLog.length>200)estimateAccuracyLog.shift();}}}if(chk){delete taskTimeLimits[id];delete taskTimerRemaining[id];if(currentTaskId===id)currentTaskId=getNextIncompleteTask()?.id||null;}renderTasks();saveData();renderGoals();}
 
@@ -7393,6 +7427,7 @@ function updateNotificationSettingUI(){
       document.getElementById('habitGraphSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){habitGraphSort=e.target.dataset.sort;document.querySelectorAll('#habitGraphSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderHabitGraphList();saveData();}});
       document.getElementById('taskFilterTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskFilter=e.target.dataset.filter;document.querySelectorAll('#taskFilterTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();saveData();}});
       document.getElementById('taskSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskSort=e.target.dataset.sort;document.querySelectorAll('#taskSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();saveData();}});
+      document.getElementById('newTaskTypeTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn'))document.querySelectorAll('#newTaskTypeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b===e.target));});
       document.getElementById('habitSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){habitOrderSort=e.target.dataset.sort;document.querySelectorAll('#habitSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderBgHabits();saveData();}});
       document.getElementById('libSearchInput').addEventListener('input',e=>{libSearchQuery=e.target.value;renderLibrary();});
       document.getElementById('habitSearchInput').addEventListener('input',e=>{habitSearchQuery=e.target.value;renderBgHabits();});
@@ -7551,6 +7586,10 @@ function updateNotificationSettingUI(){
       document.getElementById('todayCurrentQuickAdd').addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodayCurrent();});
       document.getElementById('todayTodoQuickAddBtn').addEventListener('click',quickAddTodayTodo);
       document.getElementById('todayTodoQuickAdd').addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodayTodo();});
+      document.getElementById('scheduleQuickBtn').addEventListener('click',quickAddSchedule);
+      document.getElementById('scheduleQuickInput').addEventListener('keydown',e=>{if(e.key==='Enter')quickAddSchedule();});
+      document.getElementById('todayNowChooseBtn').addEventListener('click',()=>{switchTodayHubTab('current');document.querySelector('.today-tasks-hub')?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('todayCurrentQuickAdd')?.focus();});
+      document.getElementById('todayNowStartBtn').addEventListener('click',()=>{const current=tasks.find(t=>t.id===currentTaskId&&!t.completed&&t.taskType!=='todo');if(!current){showToast('add or choose a Focus Queue task first');return;}if(currentMode!=='pomodoro')switchMode('pomodoro');if(!isRunning)startTimer();else showToast('focus is already running');updateTodayNowCard();});
       document.getElementById('welcomeCloseBtn').addEventListener('click',closeWelcome);
       document.getElementById('goalsTutorialBtn').addEventListener('click',openGoalsTutorial);
       document.getElementById('goalsTutorialCloseBtn').addEventListener('click',closeGoalsTutorial);
@@ -7757,7 +7796,7 @@ function updateNotificationSettingUI(){
         const el=document.getElementById('todayCurrentNextList');if(!el)return;
         el.innerHTML='';
         const active=tasks.filter(t=>!t.completed&&t.taskType!=='todo');
-        if(!active.length){el.innerHTML='<li class="empty-tasks">no focus tasks yet</li>';return;}
+        if(!active.length){el.innerHTML='<li class="empty-tasks">your Focus Queue is empty</li>';return;}
         const current=currentTaskId?active.find(t=>t.id===currentTaskId):null;
         const rest=active.filter(t=>!current||t.id!==current.id);
         const renderRow=(t,isCurrent,isFirstRest)=>{
@@ -7802,7 +7841,7 @@ function updateNotificationSettingUI(){
           const ts=document.createElement('span');ts.className='task-text';ts.textContent=t.text;
           ts.addEventListener('click',()=>{currentTaskId=t.id;updateCurrentTaskDisplay();renderTasks();});
           const meta=document.createElement('div');meta.className='task-meta';
-          const badge=document.createElement('span');badge.className='task-time-limit';badge.style.opacity='0.8';badge.textContent=isCurrent?'current':'up next';meta.appendChild(badge);
+          const badge=document.createElement('span');badge.className='task-time-limit';badge.style.opacity='0.8';badge.textContent=isCurrent?'focus now':'queued';meta.appendChild(badge);
           if(taskTimeLimits[t.id]&&taskTimeLimits[t.id]>0){const rem=taskTimerRemaining[t.id]||0;const durBadge=document.createElement('span');durBadge.className='task-time-limit';durBadge.textContent=rem>0?formatTime(rem):`${formatMinutes(taskTimeLimits[t.id])}m set`;meta.appendChild(durBadge);}
           const subs=t.subtasks||[];
           if(subs.length){const doneCount=subs.filter(s=>s.completed).length;const subBadge=document.createElement('span');subBadge.className='task-time-spent';subBadge.textContent=`${doneCount}/${subs.length} subtasks`;meta.appendChild(subBadge);}
@@ -7870,6 +7909,22 @@ function updateNotificationSettingUI(){
         tasks.push(nt);taskTimeLog[nt.id]=0;
         inp.value='';renderTasks();renderLibrary();saveData();showToast(`added: ${tx} (todo)`);
       }
+      function parseSimpleScheduleEntry(raw){
+        let text=(raw||'').trim(),start=null,matched='';
+        const clock=text.match(/\b(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(a\.?m\.?|p\.?m\.?)\b/i)||text.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);
+        if(clock){let h=Number(clock[1]),m=Number(clock[2]||0);const ap=(clock[3]||'').toLowerCase();if(ap){if(h===12)h=0;if(ap.startsWith('p'))h+=12;}start=h*60+m;matched=clock[0];}
+        if(start==null){const periods=[[/\bafter work\b/i,17*60],[/\btonight\b/i,19*60],[/\bevening\b/i,19*60],[/\bbefore bed\b/i,21*60],[/\bafternoon\b/i,14*60],[/\bmorning\b/i,9*60]];for(const [re,min] of periods){const m=text.match(re);if(m){start=min;matched=m[0];break;}}}
+        let title=text.replace(matched,'').replace(/\b(today|at)\b/ig,'').replace(/\s+/g,' ').trim().replace(/[·,\-]+$/,'').trim();
+        return{title,start};
+      }
+      function quickAddSchedule(){
+        const inp=document.getElementById('scheduleQuickInput'),parsed=parseSimpleScheduleEntry(inp.value);
+        if(!parsed.title){showToast('add what the plan is');return;}
+        if(parsed.start==null){showToast('include a time, or say morning, afternoon, after work, evening, or before bed');return;}
+        const nt={id:generateId(),text:parsed.title,completed:false,dueDate:getToday(),priority:'none',subtasks:[],notes:'',taskType:'todo'};
+        tasks.push(nt);taskTimeLog[nt.id]=0;taskSchedule[nt.id]={startMinutes:parsed.start,durationMinutes:45};scheduleDate=getToday();
+        inp.value='';renderTasks();renderLibrary();saveData();showToast(`scheduled ${parsed.title} · ${formatScheduleTime(parsed.start)}`);
+      }
       function renderTodayTodos(){
         const el=document.getElementById('todayTodoList');if(!el)return;
         el.innerHTML='';
@@ -7897,7 +7952,28 @@ function updateNotificationSettingUI(){
           el.appendChild(li);
         });
       }
-      function renderTodayPanel(){renderTodayCurrentNext();renderTodayTodos();renderTodayDue();renderTodayPriorities();renderTodayHabits();renderTodayGoal();updateGlanceCard();updateHubTabCounts();renderDailyCheckin();}
+      function updateTodayNowCard(){
+        const taskEl=document.getElementById('todayNowTask'),actionEl=document.getElementById('todayNowNextAction'),startBtn=document.getElementById('todayNowStartBtn');
+        const activeFocus=tasks.filter(t=>!t.completed&&t.taskType!=='todo');
+        const current=(currentTaskId&&activeFocus.find(t=>t.id===currentTaskId))||activeFocus[0]||null;
+        if(current&&currentTaskId!==current.id)currentTaskId=current.id;
+        if(taskEl)taskEl.textContent=current?current.text:'Choose the next useful move';
+        if(actionEl){
+          const nextStep=current&&(current.subtasks||[]).find(s=>!s.completed);
+          actionEl.textContent=current?(nextStep?`Next action: ${nextStep.text}`:(current.notes&&current.notes.trim()?current.notes.trim().split(/\r?\n/)[0]:'Ready when you are. Add a subtask to define the next concrete action.')):'Add a focused-work task to the queue, or use To Do for ordinary errands.';
+        }
+        if(startBtn){startBtn.disabled=!current;startBtn.textContent=isRunning&&currentMode==='pomodoro'?'focus running':'start focus';}
+        const now=new Date(),nowMin=now.getHours()*60+now.getMinutes();
+        const upcoming=Object.entries(taskSchedule||{}).map(([id,s])=>({task:tasks.find(t=>String(t.id)===String(id)),...s})).filter(x=>x.task&&!x.task.completed&&Number(x.startMinutes)>=nowMin).sort((a,b)=>a.startMinutes-b.startMinutes)[0];
+        const nextEl=document.getElementById('todayNextUpValue'),freeEl=document.getElementById('todayFreeUntilValue');
+        if(upcoming){if(nextEl)nextEl.textContent=`${upcoming.task.text} · ${formatScheduleTime(upcoming.startMinutes)}`;if(freeEl){const free=Math.max(0,upcoming.startMinutes-nowMin);freeEl.textContent=free?`free for ${free} min before this`:'starts now';}}
+        else{if(nextEl)nextEl.textContent='day is open';if(freeEl)freeEl.textContent='no scheduled constraint ahead';}
+        const fresh=getFreshnessData(getToday()),call=getTrainingCallData(getToday());
+        const recoveryEl=document.getElementById('todayRecoveryCall'),whyEl=document.getElementById('todayRecoveryWhy');
+        if(fresh.score==null){if(recoveryEl)recoveryEl.textContent='recovery pending';if(whyEl)whyEl.textContent='Log at least two morning signals for a training call.';}
+        else{const band=fresh.score>=75?'ready':fresh.score>=60?'caution':'low';if(recoveryEl)recoveryEl.textContent=`${band} · ${call.level||'review'} training`;if(whyEl)whyEl.textContent=(call.reasons&&call.reasons[0])||'Open Recovery for the detailed reasoning.';}
+      }
+      function renderTodayPanel(){renderTodayCurrentNext();renderTodayTodos();renderTodayDue();renderTodayPriorities();renderTodayHabits();renderTodayGoal();updateGlanceCard();updateHubTabCounts();updateTodayNowCard();renderDailyCheckin();}
       function switchTodayHubTab(tab){
         todayHubTab=tab;
         const panels={current:'hubPanelCurrent',todo:'hubPanelTodo',due:'hubPanelDue',priority:'hubPanelPriority'};
