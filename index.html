@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.131 forecast and session ordering -->
+<!-- Focus::Flow deployment marker: v1.132 design consistency and reliability -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1574,6 +1574,56 @@
     .goal-form-optional[open] summary { margin-bottom:0.7rem; color:var(--main-color); opacity:1; }
     @media (max-width:800px){ .stats-summary-grid{grid-template-columns:1fr 1fr;} .today-focus-target{grid-template-columns:auto 1fr;} .focus-target-mode-btn{grid-column:1/-1;} }
 
+    /* Shared containment and interaction standard. Keep every feature inside the shell at every breakpoint. */
+    html, body { max-width:100%; overflow-x:hidden; }
+    .scroll-wrapper, .app-shell, .panel, .panel > *,
+    .today-panel-grid, .tasks-panel-grid, .habits-panel-grid, .goals-panel-grid,
+    .recovery-grid, .activities-grid, .books-grid, .stats-panel-grid,
+    .today-card, .task-card, .habit-overview-card, .habit-library-card, .habit-graph-card,
+    .goal-tier-card, .recovery-card, .activity-card, .books-card { min-width:0; max-width:100%; }
+    .panel-tabs { overflow-x:auto; overscroll-behavior-inline:contain; scrollbar-width:thin; }
+    .panel-tab { min-width:0; padding-inline:clamp(.38rem,.9vw,.65rem); }
+    .card-header-title, .recovery-watch-head, .training-call-info, .training-call-reasons,
+    .training-call-confidence, .training-call-factors, .outlook-column, .outlook-day > div:last-child { min-width:0; }
+    .card-header-title { overflow-wrap:anywhere; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline:2px solid var(--main-color); outline-offset:2px; }
+    button:disabled { cursor:not-allowed; opacity:.35; }
+    @media (max-width:980px) and (min-width:801px) {
+      .panel-tab { font-size:.68rem; letter-spacing:.15px; }
+      .goals-panel-grid { gap:1rem; }
+    }
+    body[data-view-mode="mobile"] { padding:calc(.8rem + env(safe-area-inset-top)) calc(.8rem + env(safe-area-inset-right)) 0 calc(.8rem + env(safe-area-inset-left)); }
+    [data-view-mode="mobile"] .app-header { gap:.45rem; }
+    [data-view-mode="mobile"] .app-header > div:last-child { min-width:0; gap:.3rem!important; }
+    [data-view-mode="mobile"] .header-level-chip { font-size:.58rem; }
+    [data-view-mode="mobile"] .panel-tabs { width:100%; scroll-snap-type:x proximity; }
+    [data-view-mode="mobile"] .panel-tab { scroll-snap-align:start; }
+    [data-view-mode="mobile"] .today-panel-grid,
+    [data-view-mode="mobile"] .tasks-panel-grid,
+    [data-view-mode="mobile"] .habits-panel-grid,
+    [data-view-mode="mobile"] .goals-panel-grid,
+    [data-view-mode="mobile"] .recovery-grid,
+    [data-view-mode="mobile"] .activities-grid,
+    [data-view-mode="mobile"] .books-grid { grid-template-columns:minmax(0,1fr); }
+    [data-view-mode="mobile"] .recovery-card { padding:.9rem; }
+    [data-view-mode="mobile"] .recovery-daily-summary-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    [data-view-mode="mobile"] .recovery-summary-stat { min-width:0; padding:.55rem; }
+    [data-view-mode="mobile"] .training-call-row { flex-direction:column; align-items:stretch; gap:.75rem; }
+    [data-view-mode="mobile"] .training-call-badge { align-self:flex-start; min-width:72px; min-height:72px; }
+    [data-view-mode="mobile"] .training-call-explainer { overflow-wrap:anywhere; }
+    [data-view-mode="mobile"] .training-call-week-row { flex-wrap:wrap; }
+    [data-view-mode="mobile"] .training-call-week-track { flex-basis:100%; }
+    [data-view-mode="mobile"] .session-order-card { grid-template-columns:minmax(0,1fr); }
+    [data-view-mode="mobile"] .session-order-badge { white-space:normal; }
+    [data-view-mode="mobile"] .recovery-watch-head { flex-wrap:wrap; gap:.45rem; }
+    [data-view-mode="mobile"] .outlook-day { grid-template-columns:44px minmax(0,1fr); }
+    [data-view-mode="mobile"] .outlook-load-chip { white-space:normal; overflow-wrap:anywhere; }
+    [data-view-mode="mobile"] .goals-start-row { flex-direction:column; align-items:stretch; }
+    [data-view-mode="mobile"] .settings-modal { width:calc(100vw - 1.6rem); padding:1rem; border-radius:1rem; }
+    [data-view-mode="mobile"] .toast-container { left:.8rem; right:.8rem; bottom:calc(.8rem + env(safe-area-inset-bottom)); }
+    [data-view-mode="mobile"] .toast { max-width:100%; }
+    @media (prefers-reduced-motion:reduce) { *, *::before, *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+
   </style>
 </head>
 <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
@@ -1753,7 +1803,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.131 separates forecast capacity from suggested load, explains partial forecasts, recommends same-day cardio/lift order, and learns task estimates.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.132 standardizes responsive containment, mobile Recovery layouts, navigation, focus states and reduced-motion behavior across the app.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2923,7 +2973,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.131';
+      const APP_VERSION='1.132';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
