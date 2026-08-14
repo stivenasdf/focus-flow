@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.132 design consistency and reliability -->
+<!-- Focus::Flow deployment marker: v1.133 personal pattern intelligence -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1572,6 +1572,22 @@
     .goal-form-optional { margin-top:0.8rem; border-top:1px solid var(--border-color); padding-top:0.7rem; }
     .goal-form-optional summary { cursor:pointer; color:var(--text-color); opacity:0.72; font-size:0.68rem; }
     .goal-form-optional[open] summary { margin-bottom:0.7rem; color:var(--main-color); opacity:1; }
+    .pattern-intro { display:flex; justify-content:space-between; gap:.8rem; align-items:flex-start; margin-bottom:.8rem; }
+    .pattern-intro-copy { font-size:.65rem; color:var(--text-color); opacity:.62; line-height:1.5; max-width:720px; }
+    .pattern-data-status { flex-shrink:0; border:1px solid var(--border-color); border-radius:999px; padding:.22rem .48rem; font:600 .54rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.72; }
+    .pattern-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+    .pattern-card { min-width:0; border:1px solid var(--border-color); border-radius:.7rem; padding:.72rem; background:var(--bg-color); color:var(--text-color); }
+    .pattern-card-head { display:flex; justify-content:space-between; gap:.5rem; align-items:flex-start; }
+    .pattern-kicker { font:600 .52rem 'JetBrains Mono',monospace; color:var(--sub-color); letter-spacing:.08em; text-transform:uppercase; }
+    .pattern-confidence { flex-shrink:0; border:1px solid var(--border-color); border-radius:999px; padding:.14rem .35rem; font:600 .49rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.62; text-transform:uppercase; }
+    .pattern-confidence.high,.pattern-confidence.direct { color:var(--main-color); border-color:var(--main-color); opacity:.9; }
+    .pattern-confidence.medium { color:#d4a94a; border-color:#d4a94a; opacity:.9; }
+    .pattern-title { margin-top:.36rem; font-size:.72rem; font-weight:700; line-height:1.35; overflow-wrap:anywhere; }
+    .pattern-body { margin-top:.28rem; font-size:.61rem; line-height:1.5; opacity:.68; overflow-wrap:anywhere; }
+    .pattern-evidence { margin-top:.48rem; padding-top:.42rem; border-top:1px solid var(--border-color); font:.51rem 'JetBrains Mono',monospace; opacity:.48; }
+    .pattern-empty { grid-column:1/-1; border:1px dashed var(--border-color); border-radius:.7rem; padding:.9rem; color:var(--text-color); font-size:.65rem; opacity:.6; line-height:1.55; }
+    [data-view-mode="mobile"] .pattern-intro { flex-direction:column; }
+    [data-view-mode="mobile"] .pattern-grid { grid-template-columns:minmax(0,1fr); }
     @media (max-width:800px){ .stats-summary-grid{grid-template-columns:1fr 1fr;} .today-focus-target{grid-template-columns:auto 1fr;} .focus-target-mode-btn{grid-column:1/-1;} }
 
     /* Shared containment and interaction standard. Keep every feature inside the shell at every breakpoint. */
@@ -1803,7 +1819,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.132 standardizes responsive containment, mobile Recovery layouts, navigation, focus states and reduced-motion behavior across the app.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.133 turns Stats into personal pattern intelligence with evidence thresholds, confidence labels and cautious recovery/productivity associations.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2442,8 +2458,9 @@
           </div>
 
           <div class="stats-card" id="focusDnaCard">
-            <h2>focus dna</h2>
-            <div id="focusDnaList"></div>
+            <h2>personal patterns</h2>
+            <div class="pattern-intro"><div class="pattern-intro-copy">Useful observations from your own history. Associations are not treated as causes, and weak patterns stay labeled as tentative until more evidence accumulates.</div><div class="pattern-data-status" id="patternDataStatus">building history</div></div>
+            <div class="pattern-grid" id="focusDnaList"></div>
           </div>
 
           <div class="stats-card">
@@ -2973,7 +2990,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.132';
+      const APP_VERSION='1.133';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3750,7 +3767,7 @@
           ['#panel-goals .goal-tier-card[data-tier="medium"] h2','Next keeps a goal visible without treating it as urgent. Move it to Now when it deserves active attention.'],
           ['#panel-goals .goal-tier-card[data-tier="long"] h2','Someday is a parking place for goals you still care about but do not want competing for current attention.'],
           ['#panel-stats .dashboard-card h2','Capacity is the median focus time from recent active days; consistency is the share of the last 30 days with any focus time.'],
-          ['#focusDnaCard h2','Focus DNA turns your own history into descriptive patterns such as time-of-day or task tendencies. It is not a grade.'],
+          ['#focusDnaCard h2','Personal Patterns waits for repeated evidence, labels confidence, and keeps direct task states separate from tentative associations. It is not a grade or a causal analysis.'],
           ['#panel-lifting .lifting-cycle-card h2','There is no fixed split. The app ranks your lift pool and offers the safest useful exposure that fits today.'],
           ['#panel-lifting .lifting-today-card h2','A minimum-dose prescription: usually one lift, conservative loading, check-off warm-up sets, and a final-set RIR target so strength work does not consume the whole recovery budget.'],
           ['#panel-lifting .lifting-lifts-card h2','Training max drives prescribed weights. Progression is automatic: +2.5lb for smaller/upper lifts and +5lb for larger lower/posterior lifts after four easy exposures at the same TM.'],
@@ -6877,7 +6894,7 @@ function updateNotificationSettingUI(){
 
       function recordDailyFocus(m){const t=getToday();if(!dailyHistory[t])dailyHistory[t]={focusMinutes:0,sessions:0};dailyHistory[t].focusMinutes+=m;dailyHistory[t].sessions+=1;const h=new Date().getHours();hourlyFocus[h]=(hourlyFocus[h]||0)+m;saveData();}
       function trackTaskCompletion(txt){tasksCompletedCount++;addXP(5,'tasks');if(txt){taskNameFrequency[txt]=(taskNameFrequency[txt]||0)+1;taskLastUsed[txt]=getToday();recordTaskHabit(txt,0);const linkedHabit=bgHabits.find(h=>h.linkedTask===txt);if(linkedHabit){const today=getToday(),target=getHabitDayTarget(linkedHabit),count=getHabitDayCount(linkedHabit,today);if(count<target){checkOffHabit(linkedHabit,today);renderBgHabits();renderHabitGraphList();if(selectedHabitForGraph===linkedHabit.id)drawHabitCheckGraph();}}}lastActiveDate=getToday();saveData();updateStats();}
-      function recordSessionLogEntry(m){const taskText=currentTaskId?(tasks.find(t=>t.id===currentTaskId)?.text||'no task'):'no task';const entry={id:generateId(),date:getToday(),taskId:currentTaskId||null,taskText,minutes:m,note:''};sessionLog.push(entry);if(sessionLog.length>300)sessionLog.shift();lastSessionLogId=entry.id;updateSessionNoteUI();}
+      function recordSessionLogEntry(m){const taskText=currentTaskId?(tasks.find(t=>t.id===currentTaskId)?.text||'no task'):'no task',now=new Date();const entry={id:generateId(),date:getToday(),taskId:currentTaskId||null,taskText,minutes:m,note:'',completedAtMinutes:now.getHours()*60+now.getMinutes()};sessionLog.push(entry);if(sessionLog.length>300)sessionLog.shift();lastSessionLogId=entry.id;updateSessionNoteUI();}
       function logCompletionEvent(type,name){
         const now=new Date();
         completionEvents.push({type,name,date:getToday(),minutes:now.getHours()*60+now.getMinutes()});
@@ -8815,50 +8832,58 @@ function updateNotificationSettingUI(){
         document.getElementById('goalLinkPopover').style.display='none';
         goalLinkPopoverGoalId=null;
       }
-      function getFocusDNAInsights(){
-        const insights=[];
-        let activeDays=0;
-        for(let i=0;i<30;i++){
-          const d=new Date();d.setDate(d.getDate()-i);
-          const ds=toDateStr(d);
-          if(dailyHistory[ds]&&dailyHistory[ds].focusMinutes>0)activeDays++;
+      function getPatternConfidence(evidence,{medium=6,high=15}={}){return evidence>=high?'high':evidence>=medium?'medium':'early';}
+      function patternAverage(values){return values.length?values.reduce((sum,value)=>sum+Number(value||0),0)/values.length:0;}
+      function getPersonalPatternInsights(){
+        const insights=[],today=getToday(),todayDate=new Date(today+'T12:00:00'),dateKeys=Object.keys(dailyHistory||{}).filter(Boolean).sort();
+        const historySpan=dateKeys.length?Math.max(1,Math.round((todayDate-new Date(dateKeys[0]+'T12:00:00'))/86400000)+1):0;
+        const add=(item)=>insights.push(item);
+
+        // Recent focus is compared with three prior weeks so one unusual day does not become the baseline.
+        if(historySpan>=28){
+          const sumWindow=(start,count)=>{let total=0,active=0;for(let i=start;i<start+count;i++){const d=new Date(todayDate);d.setDate(d.getDate()-i);const m=Number(dailyHistory[toDateStr(d)]?.focusMinutes||0);total+=m;if(m>0)active++;}return{total,active};};
+          const recent=sumWindow(0,7),prior=sumWindow(7,21),priorWeekly=prior.total/3;
+          if(priorWeekly>=30){const change=(recent.total-priorWeekly)/priorWeekly;if(Math.abs(change)>=.2)add({kind:'recent baseline',confidence:getPatternConfidence(recent.active+prior.active,{medium:8,high:16}),title:`Focus volume is ${change>0?'up':'down'} ${Math.abs(Math.round(change*100))}% this week`,body:`${Math.round(recent.total)} minutes in the last 7 days versus a prior three-week average of ${Math.round(priorWeekly)} minutes per week.`,evidence:`${recent.active+prior.active} active focus days across 28 calendar days`});}
         }
-        if(activeDays>0)insights.push(`You've focused on ${activeDays} of the last 30 days — ${Math.round(activeDays/30*100)}% consistency.`);
-        let weekdayTotal=0,weekdayCount=0,weekendTotal=0,weekendCount=0;
-        Object.entries(dailyHistory).forEach(([date,rec])=>{
-          const dow=new Date(date+'T00:00:00').getDay();
-          if(dow===0||dow===6){weekendTotal+=rec.focusMinutes||0;weekendCount++;}
-          else{weekdayTotal+=rec.focusMinutes||0;weekdayCount++;}
-        });
-        if(weekdayCount>=3&&weekendCount>=2){
-          const weekdayAvg=weekdayTotal/weekdayCount,weekendAvg=weekendTotal/weekendCount;
-          if(weekdayAvg>weekendAvg*1.15){
-            insights.push(`You focus ${Math.round((weekdayAvg/Math.max(weekendAvg,1)-1)*100)}% more on weekdays than weekends, on average.`);
-          }else if(weekendAvg>weekdayAvg*1.15){
-            insights.push(`You focus ${Math.round((weekendAvg/Math.max(weekdayAvg,1)-1)*100)}% more on weekends than weekdays, on average.`);
-          }
+
+        // Session timing is recorded from v1.133 onward; use average duration, not just total volume.
+        const timedSessions=(sessionLog||[]).filter(s=>Number.isFinite(Number(s.completedAtMinutes))&&Number(s.minutes)>0);
+        if(timedSessions.length>=6){
+          const buckets={morning:[],afternoon:[],evening:[]};timedSessions.forEach(s=>{const h=Number(s.completedAtMinutes)/60;(h<12?buckets.morning:h<17?buckets.afternoon:buckets.evening).push(Number(s.minutes));});
+          const eligible=Object.entries(buckets).filter(([,values])=>values.length>=2).map(([name,values])=>({name,avg:patternAverage(values),count:values.length})).sort((a,b)=>b.avg-a.avg);
+          if(eligible.length>=2&&eligible[0].avg>=eligible[1].avg*1.15)add({kind:'focus timing',confidence:getPatternConfidence(timedSessions.length,{medium:6,high:18}),title:`Your longest sessions tend to happen in the ${eligible[0].name}`,body:`Average ${Math.round(eligible[0].avg)} minutes there, compared with ${Math.round(eligible[1].avg)} minutes in the ${eligible[1].name}.`,evidence:`${timedSessions.length} timed focus sessions`});
         }
-        if(sessionLog.length>=6){
-          const recent=sessionLog.slice(-7),prior=sessionLog.slice(-14,-7);
-          if(prior.length>=3){
-            const recentAvg=recent.reduce((s,e)=>s+e.minutes,0)/recent.length;
-            const priorAvg=prior.reduce((s,e)=>s+e.minutes,0)/prior.length;
-            if(recentAvg>priorAvg*1.15)insights.push(`Your recent sessions are running longer than usual — up from ~${Math.round(priorAvg)}m to ~${Math.round(recentAvg)}m.`);
-            else if(priorAvg>recentAvg*1.15)insights.push(`Your recent sessions have been shorter than usual — down from ~${Math.round(priorAvg)}m to ~${Math.round(recentAvg)}m.`);
-          }
-        }
-        if(streakDays>=3)insights.push(`You're on a ${streakDays}-day streak — your longest habit right now is holding a routine together.`);
-        return insights;
+
+        // Learn task-specific estimate bias only after three comparable completions.
+        const estimateGroups={};(estimateAccuracyLog||[]).forEach(e=>{if(!e.taskName||!Number(e.estimateMin)||!Number(e.actualMin))return;const key=e.taskName.trim().toLowerCase();if(!estimateGroups[key])estimateGroups[key]={name:e.taskName,rows:[]};estimateGroups[key].rows.push(e);});
+        const estimatePatterns=Object.values(estimateGroups).filter(g=>g.rows.length>=3).map(g=>{const est=patternAverage(g.rows.map(r=>r.estimateMin)),actual=patternAverage(g.rows.map(r=>r.actualMin));return{...g,est,actual,ratio:actual/est};}).filter(g=>Math.abs(g.ratio-1)>=.12).sort((a,b)=>Math.abs(b.ratio-1)-Math.abs(a.ratio-1));
+        if(estimatePatterns.length){const g=estimatePatterns[0],over=g.ratio>1;add({kind:'task estimates',confidence:getPatternConfidence(g.rows.length,{medium:3,high:8}),title:`${g.name} usually takes ${over?'longer':'less time'} than planned`,body:`Your estimate averages ${Math.round(g.est)} minutes; actual focused time averages ${Math.round(g.actual)} minutes. Future suggestions can use the observed duration.`,evidence:`${g.rows.length} completed estimates`});}
+
+        // A stuck task is a direct state, not a statistical inference.
+        const stuck=(tasks||[]).filter(t=>!t.completed&&(t.outcome==='blocked'||Number(t.deferCount)>=2)).sort((a,b)=>(b.deferCount||0)-(a.deferCount||0));
+        if(stuck.length){const t=stuck[0],blocked=t.outcome==='blocked';add({kind:'friction',confidence:'direct',title:`${t.text} needs a different plan`,body:blocked?'It is currently marked blocked. Name what must change or choose a smaller next action before rescheduling it.':`It has been deferred ${t.deferCount} times. A 15-minute first step or a deliberate drop is more useful than another identical deferral.`,evidence:blocked?'current task state: blocked':`current task state: ${t.deferCount} deferrals`});}
+
+        // Habit consistency uses fulfilled days versus the habit's own weekly frequency.
+        const habitPatterns=(bgHabits||[]).map(h=>{const dates=Object.keys(h.history||{}).sort();if(!dates.length)return null;const span=Math.min(28,Math.max(1,Math.round((todayDate-new Date(dates[0]+'T12:00:00'))/86400000)+1));if(span<14)return null;let done=0;for(let i=0;i<span;i++){const d=new Date(todayDate);d.setDate(d.getDate()-i);if(getHabitDayCount(h,toDateStr(d))>=getHabitDayTarget(h))done++;}const expected=Math.max(1,(Number(h.targetPerWeek)||7)*(span/7));return{h,span,done,expected,ratio:done/expected};}).filter(Boolean).sort((a,b)=>b.ratio-a.ratio);
+        if(habitPatterns.length){const best=habitPatterns[0];if(best.ratio>=.7)add({kind:'habit consistency',confidence:getPatternConfidence(best.span,{medium:14,high:28}),title:`${best.h.name} is your most reliable current habit`,body:`You completed it on ${best.done} days against roughly ${Math.round(best.expected)} expected opportunities in this window.`,evidence:`${best.span} calendar days observed`});const weakest=habitPatterns.slice().sort((a,b)=>a.ratio-b.ratio)[0];if(weakest.ratio<.5&&weakest.h.id!==best.h.id)add({kind:'habit friction',confidence:getPatternConfidence(weakest.span,{medium:14,high:28}),title:`${weakest.h.name} is not fitting its current target`,body:`${weakest.done} completed days against roughly ${Math.round(weakest.expected)} expected. Consider a smaller minimum or a lower weekly frequency.`,evidence:`${weakest.span} calendar days observed`});}
+
+        // Recovery/productivity relationships remain observational and require at least three days in each comparison group.
+        const matched=Object.entries(biometrics||{}).filter(([date])=>date<=today&&Math.round((todayDate-new Date(date+'T12:00:00'))/86400000)<=90).map(([date,rec])=>({date,rec,focus:Number(dailyHistory[date]?.focusMinutes||0)}));
+        const comparisons=[];
+        const compare=(label,low,high,lowName,highName)=>{const a=matched.filter(x=>low(x.rec)).map(x=>x.focus),b=matched.filter(x=>high(x.rec)).map(x=>x.focus);if(a.length<3||b.length<3)return;const aa=patternAverage(a),bb=patternAverage(b),effect=(bb-aa)/Math.max(aa,10);if(Math.abs(effect)<.2)return;comparisons.push({label,a,b,aa,bb,effect,lowName,highName});};
+        compare('systemic fatigue',r=>Number(r.systemicFatigue)<=4,r=>Number(r.systemicFatigue)>=7,'lower-fatigue','high-fatigue');
+        compare('work demand',r=>r.workHours!=null&&r.workEffort!=null&&Number(r.workHours)*Number(r.workEffort)<40,r=>r.workHours!=null&&r.workEffort!=null&&Number(r.workHours)*Number(r.workEffort)>=54,'lighter-work','heavy-work');
+        compare('sleep score',r=>Number(r.sleep)>=80,r=>r.sleep!=null&&Number(r.sleep)<=60,'higher-sleep-score','lower-sleep-score');
+        comparisons.sort((a,b)=>Math.abs(b.effect)-Math.abs(a.effect));
+        if(comparisons.length){const c=comparisons[0],direction=c.bb<c.aa?'less':'more';add({kind:'possible association',confidence:getPatternConfidence(c.a.length+c.b.length,{medium:8,high:20}),title:`${c.highName.replaceAll('-',' ')} days coincide with ${direction} focus`,body:`Recorded focus averages ${Math.round(c.bb)} minutes on ${c.highName.replaceAll('-',' ')} days versus ${Math.round(c.aa)} on ${c.lowName.replaceAll('-',' ')} days. This is an association, not proof that ${c.label} caused the difference.`,evidence:`${c.a.length+c.b.length} matched ${c.label} + focus days`});}
+
+        return{insights:insights.slice(0,8),historySpan,timedSessions:timedSessions.length,matchedDays:matched.length};
       }
       function renderFocusDNA(){
-        const el=document.getElementById('focusDnaList');if(!el)return;
-        const insights=getFocusDNAInsights();
-        el.innerHTML='';
-        if(!insights.length){el.innerHTML='<div class="settings-desc" style="margin-top:0;">keep focusing — patterns will show up here once there\'s enough data.</div>';return;}
-        insights.forEach(text=>{
-          const div=document.createElement('div');div.className='focus-dna-item';div.textContent=text;
-          el.appendChild(div);
-        });
+        const el=document.getElementById('focusDnaList'),status=document.getElementById('patternDataStatus');if(!el)return;const data=getPersonalPatternInsights();el.innerHTML='';
+        if(status){const established=data.historySpan>=42&&data.matchedDays>=14;status.textContent=established?'established history':data.historySpan>=14?'patterns forming':'building history';status.title=`${data.historySpan} days of focus history · ${data.matchedDays} recovery-matched days · ${data.timedSessions} time-stamped sessions`;}
+        if(!data.insights.length){el.innerHTML='<div class="pattern-empty">No responsible pattern is strong enough to show yet. Keep using the app normally—Focus::Flow waits for repeated evidence instead of turning one unusual day into a conclusion.</div>';return;}
+        data.insights.forEach(item=>{const card=document.createElement('div');card.className='pattern-card';card.innerHTML=`<div class="pattern-card-head"><div class="pattern-kicker">${escapeHtml(item.kind)}</div><span class="pattern-confidence ${escapeHtml(item.confidence)}">${escapeHtml(item.confidence)}</span></div><div class="pattern-title">${escapeHtml(item.title)}</div><div class="pattern-body">${escapeHtml(item.body)}</div><div class="pattern-evidence">evidence · ${escapeHtml(item.evidence)}</div>`;el.appendChild(card);});
       }
       function autoScheduleCurrentTask(){
         if(currentMode!=='pomodoro'||!currentTaskId)return;
