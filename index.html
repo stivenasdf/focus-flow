@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.134 habits and daily interface cleanup -->
+<!-- Focus::Flow deployment marker: v1.135 session-aware recovery and navigation -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1719,6 +1719,72 @@
       .habit-history-summary { text-align:left; }
       .recovery-snapshot-card .recovery-ring-row { gap:.85rem; align-items:flex-start; }
     }
+
+    /* v1.135: session-aware recovery, balanced prescriptions, and compact outlooks. */
+    .training-prescription-grid { display:grid; grid-template-columns:minmax(0,1.12fr) minmax(260px,.88fr); gap:.75rem; align-items:stretch; }
+    .training-prescription-card { min-width:0; border:1px solid var(--border-color); border-radius:.85rem; padding:.8rem; background:color-mix(in srgb,var(--bg-color) 93%,var(--main-color) 7%); }
+    .training-prescription-card.cardio { background:color-mix(in srgb,var(--bg-color) 89%,#d4a94a 11%); }
+    .training-prescription-card.strength { display:flex; flex-direction:column; background:color-mix(in srgb,var(--bg-color) 91%,var(--main-color) 9%); }
+    .training-prescription-eyebrow { font:.56rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.58; letter-spacing:.5px; text-transform:uppercase; margin-bottom:.55rem; }
+    .training-prescription-card .training-call-row { align-items:flex-start; gap:.8rem; }
+    .training-prescription-card .training-call-badge { width:84px; height:84px; }
+    .training-prescription-card.strength .training-call-lifting-suggestion { display:block; flex:1; margin:0; padding:.8rem; border-radius:.7rem; font-size:.72rem; line-height:1.55; opacity:1; }
+    .training-strength-context { margin-top:auto; padding-top:.65rem; font-size:.56rem; line-height:1.45; color:var(--text-color); opacity:.55; }
+    .training-call-support { margin-top:.75rem; }
+    .outlook-column { border:1px solid var(--border-color); border-radius:.75rem; padding:.65rem; background:color-mix(in srgb,var(--bg-color) 94%,var(--main-color) 6%); }
+    .outlook-column.improved { background:color-mix(in srgb,var(--bg-color) 92%,#5ec98a 8%); }
+    .outlook-mobile-more { display:none; width:100%; justify-content:center; margin-top:.6rem; }
+    .training-session-intro { font-size:.64rem; line-height:1.5; color:var(--text-color); opacity:.7; margin-bottom:.6rem; }
+    .training-session-ledger { display:flex; flex-direction:column; gap:.45rem; margin-bottom:.65rem; }
+    .training-session-empty { padding:.7rem; border:1px dashed var(--border-color); border-radius:.65rem; font-size:.63rem; color:var(--text-color); opacity:.58; }
+    .training-session-row { display:grid; grid-template-columns:minmax(110px,1fr) auto minmax(145px,auto) auto; gap:.55rem; align-items:center; padding:.62rem .7rem; border:1px solid var(--border-color); border-radius:.7rem; background:color-mix(in srgb,var(--bg-color) 91%,var(--main-color) 9%); }
+    .training-session-row.lifting { border-left:3px solid var(--main-color); }
+    .training-session-row.cardio { border-left:3px solid #d4a94a; }
+    .training-session-name { min-width:0; font-size:.68rem; font-weight:700; color:var(--text-color); }
+    .training-session-source { display:block; margin-top:.12rem; font:.52rem 'JetBrains Mono',monospace; font-weight:400; opacity:.52; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .training-session-load { font:.62rem 'JetBrains Mono',monospace; color:var(--text-color); white-space:nowrap; }
+    .training-session-rpe { display:flex; align-items:center; gap:.35rem; }
+    .training-session-rpe label { font:.52rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.55; text-transform:uppercase; }
+    .training-session-rpe select { width:145px; margin:0; padding:.42rem .5rem; font-size:.6rem; }
+    .training-session-delete { border:0; background:transparent; color:var(--text-color); opacity:.45; cursor:pointer; font-size:1rem; padding:.2rem; }
+    .training-session-delete:hover { color:var(--error-color); opacity:1; }
+    .manual-session-card { border:1px solid var(--border-color); border-radius:.75rem; padding:.7rem; background:rgba(0,0,0,.08); }
+    .manual-session-title { font-size:.63rem; font-weight:700; color:var(--text-color); margin-bottom:.5rem; }
+    .manual-session-grid { display:grid; grid-template-columns:1.05fr .75fr .75fr 1.45fr .85fr; gap:.45rem; align-items:end; }
+    .manual-session-grid .recovery-input-group select,.manual-session-grid .recovery-input-group input { margin-bottom:0; }
+    .legacy-load-details { margin-top:.6rem; border-top:1px solid var(--border-color); padding-top:.55rem; }
+    .legacy-load-details summary { cursor:pointer; font:.56rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.55; }
+    .legacy-load-details[open] summary { opacity:.85; }
+    .legacy-load-explainer { font-size:.58rem; line-height:1.45; color:var(--text-color); opacity:.62; margin:.5rem 0; }
+    .feeling-select { min-height:38px; }
+    .lifting-records-explainer { font-size:.62rem; line-height:1.55; color:var(--text-color); opacity:.66; margin:-.25rem 0 .65rem; max-width:760px; }
+    .lifting-records-row { display:grid; grid-template-columns:minmax(120px,1fr) minmax(210px,1.5fr) auto; }
+    .lifting-records-max { display:flex; flex-wrap:wrap; gap:.3rem; color:var(--text-color); }
+    .lifting-max-chip { border:1px solid var(--border-color); border-radius:999px; padding:.2rem .45rem; font-size:.58rem; white-space:nowrap; }
+    .lifting-max-chip.current { color:var(--main-color); border-color:color-mix(in srgb,var(--main-color) 55%,var(--border-color)); }
+    .lifting-max-chip.historical { opacity:.68; }
+    .lifting-max-chip.adjusted { color:#d4a94a; border-color:rgba(212,169,74,.45); }
+
+    @media(max-width:900px){
+      .training-prescription-grid { grid-template-columns:1fr; }
+      .manual-session-grid { grid-template-columns:1fr 1fr 1fr; }
+      .manual-session-grid .manual-session-rpe-field { grid-column:span 2; }
+    }
+    [data-view-mode="mobile"] .training-prescription-grid { grid-template-columns:minmax(0,1fr); }
+    [data-view-mode="mobile"] .training-prescription-card { padding:.65rem; }
+    [data-view-mode="mobile"] .training-prescription-card .training-call-row { flex-direction:row; align-items:flex-start; }
+    [data-view-mode="mobile"] .training-prescription-card .training-call-badge { width:70px; height:70px; min-width:70px; min-height:70px; }
+    [data-view-mode="mobile"] .training-session-row { grid-template-columns:minmax(0,1fr) auto; }
+    [data-view-mode="mobile"] .training-session-rpe { grid-column:1/-1; }
+    [data-view-mode="mobile"] .training-session-rpe select { flex:1; width:auto; }
+    [data-view-mode="mobile"] .manual-session-grid { grid-template-columns:1fr 1fr; }
+    [data-view-mode="mobile"] .manual-session-grid .manual-session-rpe-field { grid-column:1/-1; }
+    [data-view-mode="mobile"] .manual-session-grid .btn { grid-column:1/-1; justify-content:center; }
+    [data-view-mode="mobile"] #trainingOutlookCard:not(.expanded-mobile) .outlook-day:nth-child(n+4) { display:none; }
+    [data-view-mode="mobile"] .outlook-mobile-more { display:flex; }
+    [data-view-mode="mobile"] .outlook-column { padding:.55rem; }
+    [data-view-mode="mobile"] .lifting-records-row { grid-template-columns:1fr auto; align-items:start; }
+    [data-view-mode="mobile"] .lifting-records-max { grid-column:1/-1; }
   </style>
 </head>
 <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
@@ -1898,7 +1964,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.134 makes Habits calmer and crisper, brings reflection forward in Books, compacts Today’s timer, and recalibrates lifting stress as a conservative fatigue estimate.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.135 separates cardio and lifting into real sessions with their own load and RPE, clarifies feeling scales and lifting maxes, balances the Training Call, compacts the outlook on mobile, and moves your most-used tabs forward.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2042,6 +2108,7 @@
           <summary>recovery &amp; training call</summary>
           <div class="feature-guide-body">
             <p><strong>freshness</strong> is a 0–100 app heuristic built from the signals you have logged: HRV relative to your own baseline, WHOOP recovery %, sleep, load ratio, and how you feel. WHOOP sleep score is preferred; if it is missing but sleep start/end are logged, duration versus your target is used as a fallback. Missing signals are simply left out; the score is not a medical measurement.</p>
+            <p><strong>training sessions</strong> keep lifting and cardio separate. A lift appears automatically when its exposure is logged; runs, rides, and rows come from Intervals.icu or from a manual session if they will not sync. Each session keeps its own load and session RPE. The old daily load fallback is used only when no session-specific cardio load exists.</p>
             <p><strong>HRV</strong> needs at least five previous entries before the app colors it against your own 30-day baseline. WHOOP recovery and sleep use three broad bands; how-you-feel gives extra weight to your subjective read of the day.</p>
             <p><strong>load ratio</strong> is the 7-day average workout load divided by the 28-day average. The app treats roughly 0.8–1.3 as its normal zone, 0.5–0.79 / 1.31–1.5 as caution, and values below 0.5 or above 1.5 as high deviation.</p>
             <p><strong>training call</strong> is deliberately conservative. Weekly volume, freshness, labour load, physical fatigue, load ratio, consecutive training days, yesterday's session size, medium-day count, and test spacing can all pull the call easier. One caution signal can be enough; the app does not average a hard warning away.</p>
@@ -2234,12 +2301,12 @@
       <!-- Panel Tabs -->
       <div class="panel-tabs">
         <button class="panel-tab active" data-panel="today">today</button>
-        <button class="panel-tab" data-panel="tasks">tasks</button>
         <button class="panel-tab" data-panel="habits">habits</button>
-        <button class="panel-tab" data-panel="goals">goals</button>
-        <button class="panel-tab" data-panel="lifting">lifting</button>
         <button class="panel-tab" data-panel="recovery">recovery</button>
+        <button class="panel-tab" data-panel="tasks">tasks</button>
+        <button class="panel-tab" data-panel="lifting">lifting</button>
         <button class="panel-tab" data-panel="activities">activities</button>
+        <button class="panel-tab" data-panel="goals">goals</button>
         <button class="panel-tab" data-panel="books">books</button>
         <button class="panel-tab" data-panel="stats">stats</button>
       </div>
@@ -2634,7 +2701,8 @@
             <ul class="session-log-list" id="liftingHistoryList"><li class="empty-tasks">no sets logged yet</li></ul>
           </div>
           <div class="recovery-card lifting-records-card" style="grid-column:1/-1;">
-            <h2>personal records</h2>
+            <h2>strength numbers</h2>
+            <div class="lifting-records-explainer"><strong>Current training max</strong> drives today’s working weights. <strong>Historical high</strong> is your best-ever training max and never disappears. After a long layoff, the current number can step down automatically while the historical high stays visible.</div>
             <div class="lifting-records-bw-note" id="liftingRecordsBwNote"></div>
             <div id="liftingRecordsList"></div>
           </div>
@@ -2662,20 +2730,31 @@
 
           <div class="recovery-card training-call-card">
             <h2>today's training call</h2>
-            <div class="training-call-row">
-              <div class="training-call-badge" id="trainingCallBadge">--</div>
-              <div class="training-call-info">
-                <div class="training-call-reasons" id="trainingCallReasons"></div>
-                <div class="training-call-confidence" id="trainingCallConfidence"></div>
-                <div class="training-call-factors" id="trainingCallFactors"></div>
-                <div class="training-call-lifting-suggestion" id="trainingCallLiftingSuggestion" style="display:none;"></div>
-                <div class="training-call-lifting-suggestion" id="trainingCallRaceWindow" style="display:none;"></div>
-                <div class="session-order-card" id="sessionOrderCard" style="display:none;"></div>
-                <div class="training-call-explainer">each chip above is one input into today's call — green means that signal looks fine, yellow means it's pulling the call toward something easier. the badge is the most conservative reading across all of them, not an average, so one yellow chip can be enough to change it.</div>
-                <div class="training-call-week-row">
-                  <span id="trainingCallWeekText">0 / 5 this week</span>
-                  <div class="training-call-week-track"><div class="training-call-week-fill" id="trainingCallWeekFill"></div></div>
+            <div class="training-prescription-grid">
+              <section class="training-prescription-card cardio">
+                <div class="training-prescription-eyebrow">primary · cardio / aerobic</div>
+                <div class="training-call-row">
+                  <div class="training-call-badge" id="trainingCallBadge">--</div>
+                  <div class="training-call-info">
+                    <div class="training-call-reasons" id="trainingCallReasons"></div>
+                    <div class="training-call-confidence" id="trainingCallConfidence"></div>
+                    <div class="training-call-factors" id="trainingCallFactors"></div>
+                    <div class="training-call-lifting-suggestion" id="trainingCallRaceWindow" style="display:none;"></div>
+                  </div>
                 </div>
+              </section>
+              <section class="training-prescription-card strength">
+                <div class="training-prescription-eyebrow">secondary · minimum-dose strength</div>
+                <div class="training-call-lifting-suggestion" id="trainingCallLiftingSuggestion">set up lifts to receive a strength prescription.</div>
+                <div class="training-strength-context">Strength is evaluated separately so an easy cardio call does not automatically mean “lift,” and a valid lift never hides the primary cardio prescription.</div>
+              </section>
+            </div>
+            <div class="training-call-support">
+              <div class="session-order-card" id="sessionOrderCard" style="display:none;"></div>
+              <div class="training-call-explainer">each chip above is one input into today's call — green means that signal looks fine, yellow means it's pulling the call toward something easier. the badge is the most conservative reading across all of them, not an average, so one yellow chip can be enough to change it.</div>
+              <div class="training-call-week-row">
+                <span id="trainingCallWeekText">0 / 5 this week</span>
+                <div class="training-call-week-track"><div class="training-call-week-fill" id="trainingCallWeekFill"></div></div>
               </div>
             </div>
             <div class="training-call-history-row">
@@ -2699,7 +2778,9 @@
           <div class="recovery-card recovery-long-card" id="trainingOutlookCard">
             <div class="recovery-watch-head"><h2>7-day training outlook</h2><span class="training-call-confidence-detail">possibilities, not prescriptions</span></div>
             <div class="training-call-confidence" id="outlookConfidence"></div>
-            <div class="outlook-scenarios"><div class="outlook-column"><div class="training-call-subheading">current trend</div><div id="outlookCurrent"></div></div><div class="outlook-column"><div class="training-call-subheading">if recovery improves</div><div id="outlookOptimal"></div></div></div><div class="recovery-path" id="recoveryOpportunityPath"></div>
+            <div class="outlook-scenarios"><div class="outlook-column current"><div class="training-call-subheading">current trend</div><div id="outlookCurrent"></div></div><div class="outlook-column improved"><div class="training-call-subheading">if recovery improves</div><div id="outlookOptimal"></div></div></div>
+            <button type="button" class="btn secondary outlook-mobile-more" id="outlookMobileMore">show all 7 days</button>
+            <div class="recovery-path" id="recoveryOpportunityPath"></div>
           </div>
 
           <div class="recovery-card recovery-entry-card">
@@ -2729,7 +2810,7 @@
                   <div class="recovery-input-group"><label>HRV — hrv4training<span class="recovery-hrv-dot" id="recoveryHrvDot" style="display:none;"></span></label><input type="number" id="recoveryHrvInput" class="search-input" placeholder="e.g. 62" inputmode="decimal"></div>
                   <div class="recovery-input-group"><label>recovery % — whoop</label><input type="number" id="recoveryRecoveryInput" class="search-input" placeholder="0-100" inputmode="decimal"></div>
                   <div class="recovery-input-group"><label>sleep score — whoop</label><input type="number" id="recoverySleepInput" class="search-input" placeholder="0-100" inputmode="decimal"></div>
-                  <div class="recovery-input-group"><label>how you feel (1=rough, 10=great)</label><input type="number" id="recoveryRpeInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
+                  <div class="recovery-input-group"><label>how you feel</label><select id="recoveryRpeInput" class="search-input feeling-select"><option value="">— choose the closest feeling —</option><option value="1">1 · awful</option><option value="2">2 · very rough</option><option value="3">3 · rough</option><option value="4">4 · below par</option><option value="5">5 · off</option><option value="6">6 · okay</option><option value="7">7 · decent</option><option value="8">8 · good</option><option value="9">9 · great</option><option value="10">10 · excellent</option></select></div>
                   <div class="recovery-input-group"><label>sleep start / end</label><div class="recovery-time-row"><input type="time" id="recoverySleepStartInput" class="search-input"><input type="time" id="recoverySleepEndInput" class="search-input"></div><div class="recovery-sleep-duration-preview" id="recoverySleepDurationPreview"></div></div>
                   <div class="recovery-input-group"><label>bodyweight <span class="goal-form-hint">(for pound-for-pound lifts)</span></label><input type="number" id="recoveryBodyweightInput" class="search-input" placeholder="e.g. 165" inputmode="decimal"></div>
                 </div>
@@ -2749,39 +2830,46 @@
                   <div class="recovery-input-group"><label>expected work demand</label><select id="recoveryExpectedWorkInput" class="search-input"><option value="">not set</option><option value="light">light</option><option value="normal">normal</option><option value="heavy">heavy</option><option value="unusually-heavy">unusually heavy</option></select></div>
                   <div class="recovery-input-group"><label>temporary health override</label><select id="recoveryHealthFlagInput" class="search-input"><option value="none">none</option><option value="illness">sick / illness</option><option value="injury">pain / injury</option></select></div>
                   <div class="recovery-input-group"><label>work hours</label><input type="number" id="recoveryWorkHoursInput" class="search-input" placeholder="e.g. 9" inputmode="decimal" min="0" max="18" step="0.5"></div>
-                  <div class="recovery-input-group"><label>work effort (1=light, 10=brutal)</label><input type="number" id="recoveryWorkEffortInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
-                  <div class="recovery-input-group"><label>systemic fatigue (1=fresh, 10=wrecked)</label><input type="number" id="recoverySystemicFatigueInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
-                  <div class="recovery-input-group"><label>leg fatigue</label><input type="number" id="recoveryLegFatigueInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
-                  <div class="recovery-input-group"><label>back fatigue</label><input type="number" id="recoveryBackFatigueInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
-                  <div class="recovery-input-group"><label>upper-body fatigue</label><input type="number" id="recoveryUpperFatigueInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
+                  <div class="recovery-input-group"><label>work effort</label><select id="recoveryWorkEffortInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · almost effortless</option><option value="2">2 · very light</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · moderate</option><option value="6">6 · demanding</option><option value="7">7 · hard</option><option value="8">8 · very hard</option><option value="9">9 · brutal</option><option value="10">10 · maximal</option></select></div>
+                  <div class="recovery-input-group"><label>systemic fatigue</label><select id="recoverySystemicFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
+                  <div class="recovery-input-group"><label>leg fatigue</label><select id="recoveryLegFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
+                  <div class="recovery-input-group"><label>back fatigue</label><select id="recoveryBackFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
+                  <div class="recovery-input-group"><label>upper-body fatigue</label><select id="recoveryUpperFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
                 </div>
                 <div class="fatigue-input-note">expected work demand protects capacity before work happens. illness or injury remains a separate override instead of being averaged into readiness.</div>
               </div>
 
               <div class="recovery-entry-section">
                 <div class="recovery-entry-section-title">after training / end of day</div>
-                <div class="recovery-input-group" style="margin-bottom:0.65rem;">
-                  <label>training modality <span class="goal-form-hint">(select everything that applied)</span></label>
-                  <div class="intensity-btn-row" id="recoveryModalityRow">
-                    <button type="button" class="intensity-btn" data-modality="run">run</button>
-                    <button type="button" class="intensity-btn" data-modality="bike">bike</button>
-                    <button type="button" class="intensity-btn" data-modality="row">rowing</button>
-                    <button type="button" class="intensity-btn" data-modality="weights">weights</button>
-                    <button type="button" class="intensity-btn" data-modality="plyometrics">plyo add-on</button>
-                    <button type="button" class="intensity-btn" data-modality="other">other</button>
+                <div class="training-session-intro">Each workout is its own session. Lifts logged on the Lifting page and Intervals.icu activities appear automatically; use “add a cardio session” only when an activity will not sync.</div>
+                <div class="training-session-ledger" id="trainingSessionsToday"></div>
+                <div class="manual-session-card">
+                  <div class="manual-session-title">add a cardio session manually</div>
+                  <div class="manual-session-grid">
+                    <div class="recovery-input-group"><label>type</label><select id="manualSessionType" class="search-input"><option value="run">run</option><option value="bike">bike</option><option value="row">rowing</option><option value="other">other cardio</option></select></div>
+                    <div class="recovery-input-group"><label>load</label><input type="number" id="manualSessionLoad" class="search-input" placeholder="e.g. 42" min="0" step="0.1" inputmode="decimal"></div>
+                    <div class="recovery-input-group"><label>minutes</label><input type="number" id="manualSessionDuration" class="search-input" placeholder="optional" min="0" step="1" inputmode="numeric"></div>
+                    <div class="recovery-input-group manual-session-rpe-field"><label>session RPE</label><select id="manualSessionRpe" class="search-input"><option value="">add after the session</option><option value="1">1 · very easy</option><option value="2">2 · easy</option><option value="3">3 · comfortable</option><option value="4">4 · steady</option><option value="5">5 · moderate</option><option value="6">6 · challenging</option><option value="7">7 · hard</option><option value="8">8 · very hard</option><option value="9">9 · near-maximal</option><option value="10">10 · maximal</option></select></div>
+                    <button type="button" class="btn primary" id="addManualSessionBtn">add session</button>
                   </div>
+                </div>
+                <details class="legacy-load-details">
+                  <summary>What does “daily load fallback” mean?</summary>
+                  <div class="legacy-load-explainer">This is the old one-number total for an entire day. It is used only when there is no session-specific cardio load. Most days you can leave it alone.</div>
+                  <div class="recovery-input-group" id="recoveryLoadInputGroup"><label>daily cardio load fallback</label><input type="number" id="recoveryLoadInput" class="search-input" placeholder="e.g. 85" inputmode="decimal"><div class="goal-form-hint" id="recoveryLoadSourceHint">Used only when no Intervals.icu or manual cardio session has load for this date.</div></div>
+                </details>
+                <div style="display:none;" aria-hidden="true">
+                  <div id="recoveryModalityRow"></div>
                   <input type="hidden" id="recoveryModalityInput" value="">
-                  <div class="recovery-modality-note">Plyometrics can be selected alongside running, rowing, or weights. Re-entry status reduces temporary recovery penalties as similar exposures accumulate.</div>
-                  <div class="recovery-modality-status" id="recoveryModalityStatus"></div>
+                  <div id="recoveryModalityStatus"></div>
+                  <div id="recoveryTrainingRpeGroup"><input type="hidden" id="recoveryTrainingRpeInput"></div>
                 </div>
                 <div class="recovery-input-grid">
-                  <div class="recovery-input-group" id="recoveryLoadInputGroup"><label>workout load — fallback only</label><input type="number" id="recoveryLoadInput" class="search-input" placeholder="e.g. 85" inputmode="decimal"><div class="goal-form-hint" id="recoveryLoadSourceHint">Used only when Intervals.icu has no load for this date.</div></div>
                   <div class="recovery-input-group"><label>end-of-day strain — whoop</label><input type="number" id="recoveryStrainInput" class="search-input" placeholder="0-21" inputmode="decimal" min="0" max="21" step="0.1"></div>
-                  <div class="recovery-input-group" id="recoveryTrainingRpeGroup"><label>session RPE (1=very easy, 10=maximal)</label><input type="number" id="recoveryTrainingRpeInput" class="search-input" placeholder="1-10" inputmode="decimal" min="1" max="10"></div>
                   <div class="recovery-input-group" style="grid-column:1/-1;">
-                    <label>what did you actually do <span class="goal-form-hint">(powers weekly caps and training history)</span></label>
+                    <label>highest cardio intensity today <span class="goal-form-hint">(lifting is tracked separately)</span></label>
                     <div class="intensity-btn-row" id="recoveryIntensityRow">
-                      <button type="button" class="intensity-btn" data-intensity="rest">rest</button>
+                      <button type="button" class="intensity-btn" data-intensity="rest">no cardio / rest</button>
                       <button type="button" class="intensity-btn" data-intensity="easy">easy</button>
                       <button type="button" class="intensity-btn" data-intensity="medium">medium</button>
                       <button type="button" class="intensity-btn" data-intensity="test">5k test</button>
@@ -3076,7 +3164,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.134';
+      const APP_VERSION='1.135';
       const APP_RELEASE_DATE='2026-08-13';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3099,6 +3187,7 @@
       let biometrics={};
       let importedActivities=[];
       let sessionResponses={};
+      let manualTrainingSessions={};
       let trainingCallSnapshots={};
       let intervalsBestRecords={run:{},ride:{},lastSyncAt:null};
       let intervalsLastSyncAt=null;
@@ -3257,7 +3346,7 @@
       function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingLoadModelVersion,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
       function buildCloudStateSnapshot(){const state=buildStateSnapshot();delete state.importedActivities;delete state.intervalsLastSyncAt;return state;}
       const buildStateSnapshotCore=buildStateSnapshot;
-      buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.trainingCallSnapshots=trainingCallSnapshots;state.wakeSchedule=wakeSchedule;state.wakeOverride=wakeOverride;state.weeklyReviews=weeklyReviews;return state;};
+      buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.manualTrainingSessions=manualTrainingSessions;state.trainingCallSnapshots=trainingCallSnapshots;state.wakeSchedule=wakeSchedule;state.wakeOverride=wakeOverride;state.weeklyReviews=weeklyReviews;return state;};
       function saveData(){const d=buildStateSnapshot();try{localStorage.setItem('pomodoro-cyberspace-data',JSON.stringify(d));saveFailureWarned=false;}catch(e){if(!saveFailureWarned){saveFailureWarned=true;showToast('⚠ save failed — storage may be full');}}scheduleCloudPush();}
 
       function loadData(sourceData){try{const r=sourceData||JSON.parse(localStorage.getItem('pomodoro-cyberspace-data')||'null');if(!r)return;const d=r,today=getToday();if(d.todayDate!==today){
@@ -3271,6 +3360,7 @@
       liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;
       migrateLiftingLoadModel();
       sessionResponses=d.sessionResponses||{};
+      manualTrainingSessions=d.manualTrainingSessions||{};
       trainingCallSnapshots=d.trainingCallSnapshots||{};
       weeklyReviews=d.weeklyReviews||{};
       if(Array.isArray(d.wakeSchedule)&&d.wakeSchedule.length===7)wakeSchedule=d.wakeSchedule;
@@ -3329,7 +3419,7 @@
         if(validationError){showToast(`invalid backup file — ${validationError}`);return;}
         try{
           if(d.totalFocusMinutes!==undefined)totalFocusMinutes=d.totalFocusMinutes;if(d.todayFocusMinutes!==undefined)todayFocusMinutes=d.todayFocusMinutes;if(d.todaySessions!==undefined)todaySessions=d.todaySessions;if(d.sessionsCompleted!==undefined)sessionsCompleted=d.sessionsCompleted;if(d.tasksCompletedCount!==undefined)tasksCompletedCount=d.tasksCompletedCount;if(d.taskNameFrequency)taskNameFrequency=d.taskNameFrequency;if(d.taskLastUsed)taskLastUsed=d.taskLastUsed;if(d.streakDays!==undefined)streakDays=d.streakDays;if(d.lastActiveDate)lastActiveDate=d.lastActiveDate;if(d.dailyHistory)dailyHistory=d.dailyHistory;if(d.taskHabitHistory)taskHabitHistory=d.taskHabitHistory;if(d.tasks)tasks=d.tasks;if(d.taskTimeLog)taskTimeLog=d.taskTimeLog;if(d.chainConfig){chainConfig=d.chainConfig;document.getElementById('chainWorkCount').value=chainConfig.workCount;document.getElementById('chainWorkMinutes').value=chainConfig.workMinutes;document.getElementById('chainShortBreak').value=chainConfig.shortBreak;document.getElementById('chainLongBreak').value=chainConfig.longBreak;}if(d.chainActive!==undefined)chainActive=d.chainActive;if(d.chainSessionIndex!==undefined)chainSessionIndex=d.chainSessionIndex;if(d.soundEnabled!==undefined){soundEnabled=d.soundEnabled;if(!soundEnabled){soundToggle.classList.add('muted');soundToggle.textContent='🔕';}else{soundToggle.classList.remove('muted');soundToggle.textContent='🔔';}}if(d.currentTheme)applyTheme(d.currentTheme);if(d.bgHabits)bgHabits=d.bgHabits;if(d.totalXP!==undefined)totalXP=d.totalXP;else if(d.totalFocusMinutes!==undefined)totalXP=d.totalFocusMinutes;if(d.dailyGoalBonusDate!==undefined)dailyGoalBonusDate=d.dailyGoalBonusDate;if(d.focusPeriod)focusPeriod=d.focusPeriod;if(d.habitCheckPeriod)habitCheckPeriod=d.habitCheckPeriod;if(d.dailyGoal!==undefined){dailyGoal=d.dailyGoal;goalInput.value=dailyGoal;}if(d.hourlyFocus)hourlyFocus=d.hourlyFocus;if(d.selectedHabitForGraph!==undefined)selectedHabitForGraph=d.selectedHabitForGraph;if(d.focusMode)focusMode=(d.focusMode==='nudge')?'pause':d.focusMode;if(d.habitGraphSort)habitGraphSort=d.habitGraphSort;if(d.activePanel){activePanel=d.activePanel;switchPanel(activePanel);}if(d.notificationsEnabled!==undefined){notificationsEnabled=d.notificationsEnabled;updateNotificationSettingUI();}if(d.sessionLog)sessionLog=d.sessionLog;if(d.lastSessionLogId!==undefined)lastSessionLogId=d.lastSessionLogId;if(d.estimateAccuracyLog)estimateAccuracyLog=d.estimateAccuracyLog;if(d.tasksAbandonedCount!==undefined)tasksAbandonedCount=d.tasksAbandonedCount;if(d.taskFilter)taskFilter=d.taskFilter;if(d.chartOffset!==undefined)chartOffset=d.chartOffset;if(d.heatmapOffset!==undefined)heatmapOffset=d.heatmapOffset;if(d.habitCheckOffset!==undefined)habitCheckOffset=d.habitCheckOffset;if(d.overviewOffset!==undefined)overviewOffset=d.overviewOffset;if(d.hasSeenWelcome!==undefined)hasSeenWelcome=d.hasSeenWelcome;if(d.taskSort)taskSort=d.taskSort;if(d.recurringTasks)recurringTasks=d.recurringTasks;if(d.lastRecapWeek!==undefined)lastRecapWeek=d.lastRecapWeek;if(d.taskWeeklyGoal!==undefined)taskWeeklyGoal=d.taskWeeklyGoal;if(d.habitOrderSort)habitOrderSort=d.habitOrderSort;if(d.xpFromFocus!==undefined)xpFromFocus=d.xpFromFocus;if(d.xpFromTasks!==undefined)xpFromTasks=d.xpFromTasks;if(d.xpFromHabits!==undefined)xpFromHabits=d.xpFromHabits;if(d.xpFromGoals!==undefined)xpFromGoals=d.xpFromGoals;if(d.xpFromChains!==undefined)xpFromChains=d.xpFromChains;if(d.notepadContent!==undefined)notepadContent=d.notepadContent;if(d.notepadPinned!==undefined)notepadPinned=d.notepadPinned;if(d.todayHabitSort)todayHabitSort=d.todayHabitSort;if(d.todoSort)todoSort=d.todoSort;if(d.overviewSort)overviewSort=d.overviewSort;if(d.adaptiveGoalEnabled!==undefined)adaptiveGoalEnabled=d.adaptiveGoalEnabled;if(d.adaptiveFocusGoalEnabled!==undefined)adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled;if(d.todayDueSort)todayDueSort=d.todayDueSort;if(d.todayPrioritySort)todayPrioritySort=d.todayPrioritySort;if(d.goals)goals=d.goals;if(d.taskSchedule)taskSchedule=d.taskSchedule;if(d.scheduleDate!==undefined)scheduleDate=d.scheduleDate;if(d.viewMode){viewMode=d.viewMode;applyViewMode();}if(d.collapsedCardKeys)collapsedCardKeys=new Set(d.collapsedCardKeys);if(d.todayHubTab)todayHubTab=d.todayHubTab;if(d.completionEvents)completionEvents=d.completionEvents;if(d.biometrics)biometrics=d.biometrics;if(d.recoveryChartPeriod)recoveryChartPeriod=d.recoveryChartPeriod;if(d.recoveryChartMetric)recoveryChartMetric=d.recoveryChartMetric;if(d.sleepTargetHours!==undefined)sleepTargetHours=d.sleepTargetHours;if(d.recoveryChartOffset!==undefined)recoveryChartOffset=d.recoveryChartOffset;if(d.breakOvertimeLog)breakOvertimeLog=d.breakOvertimeLog;if(d.books)books=d.books;if(d.bookStatusFilter)bookStatusFilter=d.bookStatusFilter;if(d.hasSeenGoalsTutorial!==undefined)hasSeenGoalsTutorial=d.hasSeenGoalsTutorial;if(d.librarySort)librarySort=d.librarySort;if(d.selectedTaskForGraph!==undefined)selectedTaskForGraph=d.selectedTaskForGraph;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;if(d.liftingCycleNumber!==undefined)liftingCycleNumber=d.liftingCycleNumber;if(d.liftingHistory)liftingHistory=d.liftingHistory;if(d.liftingPendingLiftIds)liftingPendingLiftIds=d.liftingPendingLiftIds;if(d.liftingWarmupChecks)liftingWarmupChecks=d.liftingWarmupChecks;if(d.dailyCheckins)dailyCheckins=d.dailyCheckins;if(d.currentTaskId!==undefined)currentTaskId=d.currentTaskId;if(d.taskTimeLimits)taskTimeLimits=d.taskTimeLimits;if(d.taskTimerRemaining)taskTimerRemaining=d.taskTimerRemaining;
-          liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;migrateLiftingLoadModel();
+          liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;migrateLiftingLoadModel();if(d.sessionResponses)sessionResponses=d.sessionResponses;if(d.manualTrainingSessions)manualTrainingSessions=d.manualTrainingSessions;
           saveData();updateStats();renderTasks();renderLibrary();renderBgHabits();updateLevelDisplay();renderHabitGraphList();updateFocusModeUI();updateSessionNoteUI();renderSessionLog();drawFocusChart();drawHeatmap();drawHabitCheckGraph();showToast('data imported successfully');
         }catch(err){showToast('import failed while applying backup — no changes were saved');}
       };r.readAsText(file);}
@@ -3782,7 +3872,7 @@
       }
       function bindActivityResponseControls(list){
         list.querySelectorAll('.activity-response-toggle').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`);if(form)form.classList.toggle('open');}));
-        list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),activityDate=String(activity?.start_date_local||'').slice(0,10),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'',previous=sessionResponses[id]||{};let predictedLevel=previous.predictedLevel||trainingCallSnapshots[activityDate]?.level||'';if(!predictedLevel&&activityDate){try{predictedLevel=getTrainingCallData(activityDate).level;}catch(e){}}sessionResponses[id]={activityId:id,activityDate,activityType:activity?.type||'',predictedLevel,feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),mismatchReason:value('mismatchReason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();renderDeloadWatch();renderTrainingOutlook();showToast('session response saved');}));
+        list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),activityDate=String(activity?.start_date_local||'').slice(0,10),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'',previous=sessionResponses[id]||{};let predictedLevel=previous.predictedLevel||trainingCallSnapshots[activityDate]?.level||'';if(!predictedLevel&&activityDate){try{predictedLevel=getTrainingCallData(activityDate).level;}catch(e){}}sessionResponses[id]={...previous,activityId:id,activityDate,activityType:activity?.type||'',predictedLevel,feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),mismatchReason:value('mismatchReason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();renderDeloadWatch();renderTrainingOutlook();showToast('session response saved');}));
       }
       function renderActivitiesPanel(){
         const key=getIntervalsApiKey(),dot=document.getElementById('intervalsStatusDot'),txt=document.getElementById('intervalsStatusText'),form=document.getElementById('intervalsConnectForm'),actions=document.getElementById('intervalsConnectedActions');
@@ -3886,7 +3976,7 @@
           '#recoveryLegFatigueInput':'Local leg fatigue mainly affects whether lower-body lifting is worth the cost today.',
           '#recoveryBackFatigueInput':'Local back fatigue mainly affects rows, deadlifts, and posterior-chain choices.',
           '#recoveryUpperFatigueInput':'Local upper-body fatigue mainly affects pressing, rows, and arm work.',
-          '#recoveryLoadInput':'Workout load from Intervals.icu. Used for 7-day / 28-day load trends and session-spike checks.',
+          '#recoveryLoadInput':'Legacy day-level cardio load. It is ignored whenever a session-specific manual or Intervals.icu cardio load is available.',
           '#recoveryStrainInput':'WHOOP strain is stored and graphed but does not replace Intervals.icu workout load in the load-ratio calculation.',
           '#sleepTargetInput':'Your normal nightly target. Recent short sleep may temporarily add a conservative recovery opportunity.',
           '#liftingNewLiftMax':'Training max is the current working number used to calculate prescriptions; it can regress after long layoffs while historical highs stay preserved.',
@@ -4484,8 +4574,11 @@ function updateNotificationSettingUI(){
         (importedActivities||[]).forEach(activity=>{
           if(modalityFromActivityType(activity.type)===modality)add(activity.start_date_local,activity.session_rpe,'Intervals.icu');
         });
+        Object.entries(manualTrainingSessions||{}).forEach(([date,sessions])=>{
+          (Array.isArray(sessions)?sessions:[]).forEach(session=>{if(session&&session.type===modality)add(date,session.rpe,'manual session');});
+        });
         if(modality==='weights'){
-          (liftingHistory||[]).forEach(entry=>{if(entry&&entry.kind==='exposure')add(entry.date,null,'lifting log');});
+          (liftingHistory||[]).forEach(entry=>{if(entry&&entry.kind==='exposure')add(entry.date,entry.sessionRpe,'lifting log');});
         }
         return Array.from(byDate.values()).sort((a,b)=>a.date.localeCompare(b.date));
       }
@@ -4667,10 +4760,11 @@ function updateNotificationSettingUI(){
         const workDates=Object.keys(biometrics||{}).filter(d=>d<=referenceDateStr&&biometrics[d]&&(biometrics[d].workHours!=null||biometrics[d].workEffort!=null));
         const activities=(importedActivities||[]).filter(a=>String(a.start_date_local||'').slice(0,10)<=referenceDateStr);
         const lifts=(liftingHistory||[]).filter(h=>h&&h.kind!=='regression'&&h.date<=referenceDateStr);
+        const manualSessions=Object.entries(manualTrainingSessions||{}).flatMap(([date,sessions])=>(Array.isArray(sessions)?sessions:[]).filter(Boolean).map(s=>({date,...s}))).filter(s=>s.date<=referenceDateStr);
         const responses=Object.values(sessionResponses||{}).filter(r=>r&&r.activityDate<=referenceDateStr&&r.updatedAt);
-        const dated=[...recoveryDates,...workDates,...activities.map(a=>String(a.start_date_local||'').slice(0,10)),...lifts.map(h=>h.date)].filter(Boolean).sort();
+        const dated=[...recoveryDates,...workDates,...activities.map(a=>String(a.start_date_local||'').slice(0,10)),...lifts.map(h=>h.date),...manualSessions.map(s=>s.date)].filter(Boolean).sort();
         const spanDays=dated.length?Math.max(1,Math.round((new Date(referenceDateStr+'T12:00:00')-new Date(dated[0]+'T12:00:00'))/86400000)+1):0;
-        const sessionCount=activities.length+lifts.length;
+        const sessionCount=activities.length+lifts.length+manualSessions.length;
         let level='low',detail='limited personal history';
         if(spanDays>=42&&recoveryDates.length>=30&&sessionCount>=20&&responses.length>=5){level='high';detail='established recovery and session-response history';}
         else if(spanDays>=14&&recoveryDates.length>=7&&sessionCount>=5){level='medium';detail='personal patterns are beginning to form';}
@@ -4733,7 +4827,9 @@ function updateNotificationSettingUI(){
             liftingSuggestionEl.className='training-call-lifting-suggestion '+suggestion.status;
             liftingSuggestionEl.textContent=suggestion.text;
           }else{
-            liftingSuggestionEl.style.display='none';
+            liftingSuggestionEl.style.display='block';
+            liftingSuggestionEl.className='training-call-lifting-suggestion skip';
+            liftingSuggestionEl.textContent='lift: set up your strength movements on the Lifting page to receive a separate minimum-dose prescription.';
           }
         }
         const raceWindowEl=document.getElementById('trainingCallRaceWindow');
@@ -4954,9 +5050,9 @@ function updateNotificationSettingUI(){
         document.getElementById('recoveryHrvInput').value=rec.hrv!=null?rec.hrv:'';
         document.getElementById('recoveryBodyweightInput').value=rec.bodyweight!=null?rec.bodyweight:'';
         document.getElementById('recoveryLoadInput').value=rec.load!=null?rec.load:'';
-        const importedBreakdown=getImportedLoadForDate(dateStr),importedLoad=(importedBreakdown.other||0)+(importedBreakdown.lifting||0),loadInput=document.getElementById('recoveryLoadInput'),loadHint=document.getElementById('recoveryLoadSourceHint');
-        loadInput.disabled=importedLoad>0;
-        if(loadHint)loadHint.textContent=importedLoad>0?`Intervals.icu supplied ${Math.round(importedLoad*10)/10} load; manual entry is disabled to prevent double-counting.`:'Used only when Intervals.icu has no load for this date.';
+        const importedByType=getImportedCardioLoadByModality(dateStr),manualByType=getManualCardioLoadByModality(dateStr),sessionCardio=['run','bike','row','other'].reduce((sum,type)=>sum+Math.max(importedByType[type]||0,manualByType[type]||0),0),loadInput=document.getElementById('recoveryLoadInput'),loadHint=document.getElementById('recoveryLoadSourceHint');
+        loadInput.disabled=sessionCardio>0;
+        if(loadHint)loadHint.textContent=sessionCardio>0?`Session-specific cardio supplied ${Math.round(sessionCardio*10)/10} load; the fallback is disabled to prevent double-counting.`:'Used only when no Intervals.icu or manual cardio session has load for this date.';
         document.getElementById('recoverySleepInput').value=rec.sleep!=null?rec.sleep:'';
         document.getElementById('recoveryRecoveryInput').value=rec.recovery!=null?rec.recovery:'';
         document.getElementById('recoveryStrainInput').value=rec.strain!=null?rec.strain:'';
@@ -4988,6 +5084,7 @@ function updateNotificationSettingUI(){
         document.getElementById('recoveryTrainingRpeGroup').style.display=rec.actualIntensity==='rest'?'none':'block';
         updateSleepDurationPreview();
         renderRecoveryModalityStatus(dateStr);
+        renderTrainingSessionLedger(dateStr);
       }
       function saveRecoveryEntry(){
         const dateStr=document.getElementById('recoveryDateInput').value||getToday();
@@ -5008,7 +5105,7 @@ function updateNotificationSettingUI(){
         if(trainingRpe!=null&&(trainingRpe<1||trainingRpe>10)){showToast('session RPE must be from 1 to 10');return;}
         const strain=entry.strain;
         if(strain!=null&&(strain<0||strain>21)){showToast('WHOOP strain must be from 0 to 21');return;}
-        if(entry.actualIntensity==='rest'){entry.trainingRpe=null;entry.modalities=[];}
+        if(entry.actualIntensity==='rest')entry.trainingRpe=null;
         if(!anyTouched){showToast('enter or change at least one value first');return;}
         if(Object.values(entry).every(v=>v==null)){showToast('enter at least one value first');return;}
         biometrics[dateStr]=entry;
@@ -5221,11 +5318,11 @@ function updateNotificationSettingUI(){
         if(rec.workHours!=null||rec.workEffort!=null)chips.push(`work ${rec.workHours??'?'}h @ ${rec.workEffort??'?'} /10`);
         const fats=[['sys',rec.systemicFatigue],['legs',rec.legFatigue],['back',rec.backFatigue],['upper',rec.upperFatigue]].filter(([,v])=>v!=null);
         if(fats.length)chips.push(`fatigue ${fats.map(([n,v])=>`${n} ${v}/10`).join(' · ')}`);
-        if(rec.actualIntensity)chips.push(`training ${rec.actualIntensity}`);
-        const modalities=normalizeModalityList(rec.modalities);
-        if(modalities.length)chips.push(`modalities ${modalities.map(x=>TRAINING_MODALITY_META[x].label).join(' + ')}`);
-        if(rec.trainingRpe!=null)chips.push(`session RPE ${rec.trainingRpe}/10`);
-        if(rec.load!=null)chips.push(`workout load ${rec.load}`);
+        if(rec.actualIntensity)chips.push(`cardio ${rec.actualIntensity==='rest'?'none / rest':rec.actualIntensity}`);
+        const sessions=getTrainingSessionsForDate(date),modalities=normalizeModalityList(rec.modalities);
+        if(sessions.length){const rpeCount=sessions.filter(s=>s.rpe!=null).length;chips.push(`${sessions.length} session${sessions.length===1?'':'s'} · ${rpeCount}/${sessions.length} with RPE`);}
+        else if(modalities.length)chips.push(`legacy modalities ${modalities.map(x=>TRAINING_MODALITY_META[x].label).join(' + ')}`);
+        const loadBreakdown=getTrainingLoadBreakdown(date);if(loadBreakdown.total)chips.push(`training load ${loadBreakdown.total} · cardio ${loadBreakdown.other||0} + lift ${loadBreakdown.lifting||0}${loadBreakdown.fallbackUsed?' (fallback)':''}`);
         if(rec.strain!=null)chips.push(`day strain ${rec.strain}/21`);
         if(rec.testTime5k)chips.push(`5k ${rec.testTime5k}`);
         el.innerHTML='';
@@ -5248,15 +5345,12 @@ function updateNotificationSettingUI(){
           if(rec.systemicFatigue==null&&rec.legFatigue==null&&rec.backFatigue==null&&rec.upperFatigue==null)afterWork.push('body fatigue');
           if(afterWork.length)reminders.push(`after work — add ${afterWork.join(', ')}`);
         }
-        if(!rec.actualIntensity)reminders.push('end of day — record whether you trained or rested, plus WHOOP strain');
-        else if(rec.actualIntensity!=='rest'){
-          const afterTraining=[];
-          if(!normalizeModalityList(rec.modalities).length)afterTraining.push('training modality');
-          if(rec.trainingRpe==null)afterTraining.push('session RPE /10');
-          if(getEffectiveTrainingLoad(date)==null)afterTraining.push('workout load');
-          if(afterTraining.length)reminders.push(`after training — add ${afterTraining.join(', ')}`);
-          if(rec.strain==null)reminders.push('end of day — add WHOOP strain /21');
-        }else if(rec.strain==null)reminders.push('end of day — add WHOOP strain /21');
+        const sessions=getTrainingSessionsForDate(date),cardioSessions=sessions.filter(s=>s.kind!=='lifting'&&s.type!=='weights');
+        if(!rec.actualIntensity)reminders.push(cardioSessions.length?'end of day — mark the highest cardio intensity':'end of day — mark no cardio / rest if no run or ride happens');
+        const missingRpe=sessions.filter(s=>s.rpe==null).length;
+        if(missingRpe)reminders.push(`after training — add RPE to ${missingRpe} session${missingRpe===1?'':'s'}`);
+        if(cardioSessions.some(s=>!s.load))reminders.push('after training — add missing cardio load when available');
+        if(rec.strain==null)reminders.push('end of day — add WHOOP strain /21');
         el.style.display='block';
         el.classList.toggle('complete',reminders.length===0);
         el.innerHTML='';
@@ -5585,19 +5679,84 @@ function updateNotificationSettingUI(){
           return out;
         },{lifting:0,other:0});
       }
+      function getImportedCardioLoadByModality(dateStr){
+        return (importedActivities||[]).reduce((out,a)=>{
+          const activityDate=String(a&&a.start_date_local||'').slice(0,10),load=Number(a&&a.training_load);
+          if(activityDate!==dateStr||!Number.isFinite(load)||load<=0)return out;
+          const modality=modalityFromActivityType(a.type)||'other';
+          if(modality!=='weights')out[modality]=(out[modality]||0)+load;
+          return out;
+        },{run:0,bike:0,row:0,other:0});
+      }
+      function getManualSessionsForDate(dateStr){return Array.isArray(manualTrainingSessions[dateStr])?manualTrainingSessions[dateStr]:[];}
+      function getManualCardioLoadByModality(dateStr){
+        return getManualSessionsForDate(dateStr).reduce((out,s)=>{const modality=TRAINING_MODALITY_META[s.type]?s.type:'other',load=Math.max(0,Number(s.load)||0);if(modality!=='weights')out[modality]=(out[modality]||0)+load;return out;},{run:0,bike:0,row:0,other:0});
+      }
       function getTrainingLoadBreakdown(dateStr){
         const recorded=biometrics[dateStr]&&biometrics[dateStr].load!=null?Math.max(0,Number(biometrics[dateStr].load)||0):0;
-        const historyLifting=getLiftingLoadForDate(dateStr)||0,intervals=getImportedLoadForDate(dateStr);
+        const historyLifting=getLiftingLoadForDate(dateStr)||0,intervals=getImportedLoadForDate(dateStr),importedByType=getImportedCardioLoadByModality(dateStr),manualByType=getManualCardioLoadByModality(dateStr);
         const lifting=Math.max(historyLifting,intervals.lifting);
-        const other=Math.max(intervals.other,Math.max(0,recorded-lifting));
+        const sessionSpecificOther=['run','bike','row','other'].reduce((sum,type)=>sum+Math.max(importedByType[type]||0,manualByType[type]||0),0);
+        const fallbackOther=Math.max(0,recorded-lifting);
+        const other=sessionSpecificOther>0?sessionSpecificOther:fallbackOther;
         const sources=[];
         if(intervals.other||intervals.lifting)sources.push('Intervals.icu');
         if(historyLifting)sources.push('lifting history');
-        if(recorded>lifting)sources.push('manual load');
-        return{total:Math.round((lifting+other)*10)/10,lifting:Math.round(lifting*10)/10,other:Math.round(other*10)/10,sources};
+        if(Object.values(manualByType).some(Boolean))sources.push('manual sessions');
+        if(sessionSpecificOther<=0&&fallbackOther>0)sources.push('daily fallback');
+        return{total:Math.round((lifting+other)*10)/10,lifting:Math.round(lifting*10)/10,other:Math.round(other*10)/10,sources,fallbackUsed:sessionSpecificOther<=0&&fallbackOther>0};
       }
       function getEffectiveTrainingLoad(dateStr){
         return getTrainingLoadBreakdown(dateStr).total||null;
+      }
+      const SESSION_RPE_LABELS={1:'very easy',2:'easy',3:'comfortable',4:'steady',5:'moderate',6:'challenging',7:'hard',8:'very hard',9:'near-maximal',10:'maximal'};
+      function sessionRpeOptions(value){
+        const selected=value==null?'':String(Math.round(Number(value)));
+        return `<option value=""${selected===''?' selected':''}>add RPE</option>`+Object.entries(SESSION_RPE_LABELS).map(([n,label])=>`<option value="${n}"${selected===n?' selected':''}>${n} · ${label}</option>`).join('');
+      }
+      function getTrainingSessionsForDate(dateStr){
+        const sessions=[];
+        (liftingHistory||[]).filter(h=>h&&h.kind==='exposure'&&h.date===dateStr).forEach(h=>sessions.push({id:String(h.id),kind:'lifting',name:h.liftName||'strength session',source:'lifting log · load estimated from the prescribed sets',load:Number(h.loadValue)||getStoredLiftingExposureLoad(h),duration:null,rpe:h.sessionRpe}));
+        (importedActivities||[]).filter(a=>String(a&&a.start_date_local||'').slice(0,10)===dateStr).forEach(a=>{const modality=modalityFromActivityType(a.type)||'other';if(modality==='weights'&&sessions.some(s=>s.kind==='lifting'))return;const response=sessionResponses[String(a.id)]||{};sessions.push({id:String(a.id),kind:modality==='weights'?'imported':'imported',type:modality,name:a.name||a.type||'activity',source:`Intervals.icu · ${a.type||'activity'}`,load:Number(a.training_load)||0,duration:Number(a.moving_time)||0,rpe:response.rpe??a.session_rpe});});
+        getManualSessionsForDate(dateStr).forEach(s=>sessions.push({id:String(s.id),kind:'manual',type:s.type||'other',name:`manual ${TRAINING_MODALITY_META[s.type]?.label||'cardio'}`,source:'manual session · use this only when it will not sync',load:Number(s.load)||0,duration:Number(s.durationMinutes||0)*60,rpe:s.rpe}));
+        return sessions;
+      }
+      function updateTrainingSessionRpe(dateStr,kind,id,value){
+        const rpe=value===''?null:Number(value);if(rpe!=null&&(!Number.isFinite(rpe)||rpe<1||rpe>10))return;
+        if(kind==='lifting'){
+          const entry=liftingHistory.find(h=>String(h.id)===String(id));if(entry)entry.sessionRpe=rpe;
+        }else if(kind==='imported'){
+          const activity=importedActivities.find(a=>String(a.id)===String(id)),previous=sessionResponses[String(id)]||{};
+          sessionResponses[String(id)]={...previous,activityId:String(id),activityDate:dateStr,activityType:activity?.type||previous.activityType||'',rpe,updatedAt:new Date().toISOString()};
+        }else if(kind==='manual'){
+          const session=getManualSessionsForDate(dateStr).find(s=>String(s.id)===String(id));if(session)session.rpe=rpe;
+        }
+        saveData();renderRecoveryModalityStatus(dateStr);updateRecoveryEntrySummary();renderDeloadWatch();showToast(rpe==null?'session RPE cleared':`session RPE ${rpe} · ${SESSION_RPE_LABELS[rpe]}`);
+      }
+      function renderTrainingSessionLedger(dateStr){
+        const el=document.getElementById('trainingSessionsToday');if(!el)return;const sessions=getTrainingSessionsForDate(dateStr);el.innerHTML='';
+        if(!sessions.length){el.innerHTML='<div class="training-session-empty">No sessions on this date yet. A lift will appear after you log its exposure; a synced run or ride will appear after Intervals.icu refreshes.</div>';return;}
+        sessions.forEach(session=>{
+          const row=document.createElement('div');row.className=`training-session-row ${session.kind==='lifting'||session.type==='weights'?'lifting':'cardio'}`;
+          const name=document.createElement('div');name.className='training-session-name';name.textContent=session.name;const source=document.createElement('span');source.className='training-session-source';source.textContent=session.source;name.appendChild(source);
+          const load=document.createElement('div');load.className='training-session-load';const details=[];details.push(session.load>0?`load ${Math.round(session.load*10)/10}`:'load pending');if(session.duration>0)details.push(formatActivityDuration(session.duration));load.textContent=details.join(' · ');
+          const rpeWrap=document.createElement('div');rpeWrap.className='training-session-rpe';const label=document.createElement('label');label.textContent='RPE';const select=document.createElement('select');select.className='search-input';select.innerHTML=sessionRpeOptions(session.rpe);select.addEventListener('change',()=>updateTrainingSessionRpe(dateStr,session.kind,session.id,select.value));rpeWrap.appendChild(label);rpeWrap.appendChild(select);
+          row.appendChild(name);row.appendChild(load);row.appendChild(rpeWrap);
+          if(session.kind==='manual'){const del=document.createElement('button');del.type='button';del.className='training-session-delete';del.title='remove this manual session';del.textContent='×';del.addEventListener('click',()=>removeManualTrainingSession(dateStr,session.id));row.appendChild(del);}else{const locked=document.createElement('span');locked.className='training-session-source';locked.textContent=session.kind==='lifting'?'auto':'sync';locked.title=session.kind==='lifting'?'Remove a mistaken lift from Lifting history.':'Synced activities are managed on Activities.';row.appendChild(locked);}
+          el.appendChild(row);
+        });
+      }
+      function addManualTrainingSession(){
+        const dateStr=document.getElementById('recoveryDateInput').value||getToday(),type=document.getElementById('manualSessionType').value||'other',load=Number(document.getElementById('manualSessionLoad').value),durationMinutes=Number(document.getElementById('manualSessionDuration').value)||null,rpeValue=document.getElementById('manualSessionRpe').value,rpe=rpeValue?Number(rpeValue):null;
+        if(!Number.isFinite(load)||load<=0){showToast('add the session load first');return;}
+        if(!manualTrainingSessions[dateStr])manualTrainingSessions[dateStr]=[];
+        manualTrainingSessions[dateStr].push({id:generateId(),type,load:Math.round(load*10)/10,durationMinutes,rpe,createdAt:new Date().toISOString()});
+        const rec=biometrics[dateStr]||{};rec.modalities=Array.from(new Set([...normalizeModalityList(rec.modalities),type]));biometrics[dateStr]=rec;
+        document.getElementById('manualSessionLoad').value='';document.getElementById('manualSessionDuration').value='';document.getElementById('manualSessionRpe').value='';
+        saveData();renderRecoveryTab();showToast(`${TRAINING_MODALITY_META[type]?.label||'cardio'} session added separately from lifting`);
+      }
+      function removeManualTrainingSession(dateStr,id){
+        manualTrainingSessions[dateStr]=getManualSessionsForDate(dateStr).filter(s=>String(s.id)!==String(id));if(!manualTrainingSessions[dateStr].length)delete manualTrainingSessions[dateStr];saveData();renderRecoveryTab();showToast('manual session removed');
       }
       // Strength-first profiles: low rep exposure, conservative RIR, and only enough volume to practice force production.
       // The app is not trying to maximize hypertrophy; minimum-dose work deliberately leaves several reps in reserve.
@@ -6059,7 +6218,12 @@ function updateNotificationSettingUI(){
         sorted.forEach(lift=>{
           const row=document.createElement('div');row.className='lifting-records-row';
           const name=document.createElement('span');name.className='lifting-records-name';name.textContent=lift.name;
-          const max=document.createElement('span');max.className='lifting-records-max';max.textContent=`high ${formatLb(lift.allTimeMax)}lb · current ${formatLb(lift.trainingMax)}lb`;
+          const max=document.createElement('span');max.className='lifting-records-max';
+          const current=document.createElement('span');current.className='lifting-max-chip current';current.textContent=`current TM ${formatLb(lift.trainingMax)}lb`;current.title='The conservative training max used to calculate today’s work weights.';
+          const historical=document.createElement('span');historical.className='lifting-max-chip historical';historical.textContent=`historical high ${formatLb(lift.allTimeMax)}lb`;historical.title='Your highest training max. It stays preserved when the current max is adjusted after time off.';
+          max.appendChild(current);max.appendChild(historical);
+          const regression=getLiftRegressionInfo(lift,getToday());
+          if(regression.tier.key==='reentry'||regression.tier.factor<1){const adjusted=document.createElement('span');adjusted.className='lifting-max-chip adjusted';adjusted.textContent=regression.tier.key==='reentry'?`re-entry after ${regression.days}d`:`${Math.round((1-regression.tier.factor)*1000)/10}% layoff adjustment`;adjusted.title=regression.tier.key==='reentry'?"Current TM stays put, but today’s work percentage is trimmed for the first exposure back.":`Current TM was reduced from a ${formatLb(regression.anchorTM)}lb post-exposure anchor after ${regression.days} days away.`;max.appendChild(adjusted);}
           if(liftJustSetRecord(lift.id,lift.allTimeMax)){const badge=document.createElement('span');badge.className='lifting-records-new-badge';badge.textContent='new';badge.title='set last time you lifted this';max.appendChild(badge);}
           const p4p=document.createElement('span');p4p.className='lifting-records-p4p';
           p4p.textContent=bw?`${(lift.allTimeMax/bw.weight).toFixed(2)}x bw`:'--';
@@ -7618,6 +7782,8 @@ function updateNotificationSettingUI(){
       document.getElementById('focusPeriodTabs').addEventListener('click',e=>{if(e.target.classList.contains('period-btn')){focusPeriod=e.target.dataset.period;chartOffset=0;document.querySelectorAll('#focusPeriodTabs .period-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');drawFocusChart();saveData();}});
       document.getElementById('focusTaskSelect').addEventListener('change',e=>selectTaskForGraph(e.target.value));
       document.getElementById('recoverySaveBtn').addEventListener('click',saveRecoveryEntry);
+      document.getElementById('addManualSessionBtn').addEventListener('click',addManualTrainingSession);
+      document.getElementById('outlookMobileMore').addEventListener('click',e=>{const card=document.getElementById('trainingOutlookCard'),expanded=card.classList.toggle('expanded-mobile');e.currentTarget.textContent=expanded?'show first 3 days':'show all 7 days';});
       document.getElementById('recoveryGuideOpen').addEventListener('click',()=>document.getElementById('recoveryGuideOverlay').classList.add('open'));
       document.getElementById('recoveryGuideClose').addEventListener('click',()=>document.getElementById('recoveryGuideOverlay').classList.remove('open'));
       document.getElementById('recoveryGuideOverlay').addEventListener('click',e=>{if(e.target.id==='recoveryGuideOverlay')e.currentTarget.classList.remove('open');});
@@ -7637,6 +7803,7 @@ function updateNotificationSettingUI(){
         document.getElementById(id).addEventListener('input',()=>recoveryTouchedFields.add(id));
       });
       ['recoveryExpectedWorkInput','recoveryHealthFlagInput','recoveryEnergyInput','recoverySorenessInput','recoveryMotivationInput'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{recoveryTouchedFields.add(id);updateRecoveryEntrySummary();}));
+      ['recoveryRpeInput','recoveryWorkEffortInput','recoverySystemicFatigueInput','recoveryLegFatigueInput','recoveryBackFatigueInput','recoveryUpperFatigueInput'].forEach(id=>document.getElementById(id).addEventListener('change',()=>recoveryTouchedFields.add(id)));
       ['recoverySleepStartInput','recoverySleepEndInput'].forEach(id=>{
         document.getElementById(id).addEventListener('input',updateSleepDurationPreview);
       });
@@ -7677,9 +7844,6 @@ function updateNotificationSettingUI(){
         trainingRpeGroup.style.display=newVal==='rest'?'none':'block';
         if(newVal==='rest'){
           document.getElementById('recoveryTrainingRpeInput').value='';recoveryTouchedFields.add('recoveryTrainingRpeInput');
-          document.getElementById('recoveryModalityInput').value='';recoveryTouchedFields.add('recoveryModalityInput');
-          document.querySelectorAll('#recoveryModalityRow .intensity-btn').forEach(b=>b.classList.remove('active'));
-          renderRecoveryModalityStatus(document.getElementById('recoveryDateInput').value||getToday());
         }
       });
       document.querySelector('.recovery-date-row').addEventListener('click',e=>{if(e.target.id!=='recoveryDateInput'){try{document.getElementById('recoveryDateInput').showPicker();}catch(err){}}});
