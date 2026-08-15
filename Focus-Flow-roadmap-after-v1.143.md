@@ -279,14 +279,18 @@ Status: implemented on August 15, 2026. Activities charts now use explicit axis 
 
 Missing activity load now follows a visible one-score hierarchy: imported source load, imported source intensity, local cycling power or running pace threshold estimate, session RPE, then HR reserve. Cycling uses normalized-power/FTP TSS arithmetic when FTP is available. Running uses a clearly labelled average-pace/threshold-pace TSS-style estimate; it is not presented as official rTSS because grade-normalized pace is unavailable. Focus::Flow does not imitate proprietary Xert XSS without Xert's Fitness Signature and MPA inputs. Recovery consumes the selected single activity load rather than adding these methods together.
 
-## v1.161 — Goals, Books and review loop
+## v1.161 — Activity classification and quiet controls
+
+Status: implemented on August 15, 2026. The maximum-weekly-cardio field now uses a themed 0.5-hour stepper, autosaves inline and does not queue a toast for every adjustment. Run and bike remain the stable top-level sports so history, load and records do not fragment; virtual run and virtual bike are shown as context labels and remain eligible for the appropriate sport analysis. Virtual-run elevation remains excluded. Running displays prefer min/km pace everywhere while speed is retained only as an internal arithmetic representation. Activity-load guidance now distinguishes consistent output-based TSS-style stress from HR and RPE response-based fallbacks, with one method selected rather than multiple methods added together.
+
+## v1.162 — Goals, Books and review loop
 
 - Complete goal status, next milestone, evidence, obstacle planning, review cadence and archive.
 - Connect goals to actual task, habit, reading, training and Money evidence.
 - Complete key book learnings, finish reflection, spaced review and reading-goal pacing.
 - Refine Weekly Review, Morning Brief and Evening Shutdown into one low-effort planning loop.
 
-## v1.162 — Cross-app personal intelligence
+## v1.163 — Cross-app personal intelligence
 
 - Build What Focus::Flow has learned about me with evidence links and confidence.
 - Improve What should I do now using the mature task, schedule, training and recovery systems.
