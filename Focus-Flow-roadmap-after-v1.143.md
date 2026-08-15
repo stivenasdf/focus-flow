@@ -273,14 +273,20 @@ Status: implemented and released on August 15, 2026 as an Activities usability, 
 
 Status: implemented on August 15, 2026. This release closes the current v1.150 and v1.154 feature scopes, adds the personal cardio-hours ceiling, edits/repairs sport at the activity level, closes old RPE prompts after 14 days, prevents replacement activities from double-counting manual loads, and makes workout timeline/effort values inspectable.
 
-## v1.160 — Goals, Books and review loop
+## v1.160 — Activity chart clarity and load provenance
+
+Status: implemented on August 15, 2026. Activities charts now use explicit axis titles, visible symbol/band legends, exact hover or tap values and descriptions that connect the displayed older/recent median points to the reported percentage. The newest pace/HR or power/HR activity is deliberately highlighted. Heart-rate decoupling uses symmetric absolute-drift coaching guides: 0–3% stable, 3–5% mild, 5–8% notable and above 8% high/context; these remain heuristics rather than universal physiological zones. The Activities layout is rebalanced to remove the narrow Awards / short Distance-card gap.
+
+Missing activity load now follows a visible one-score hierarchy: imported source load, imported source intensity, local cycling power or running pace threshold estimate, session RPE, then HR reserve. Cycling uses normalized-power/FTP TSS arithmetic when FTP is available. Running uses a clearly labelled average-pace/threshold-pace TSS-style estimate; it is not presented as official rTSS because grade-normalized pace is unavailable. Focus::Flow does not imitate proprietary Xert XSS without Xert's Fitness Signature and MPA inputs. Recovery consumes the selected single activity load rather than adding these methods together.
+
+## v1.161 — Goals, Books and review loop
 
 - Complete goal status, next milestone, evidence, obstacle planning, review cadence and archive.
 - Connect goals to actual task, habit, reading, training and Money evidence.
 - Complete key book learnings, finish reflection, spaced review and reading-goal pacing.
 - Refine Weekly Review, Morning Brief and Evening Shutdown into one low-effort planning loop.
 
-## v1.161 — Cross-app personal intelligence
+## v1.162 — Cross-app personal intelligence
 
 - Build What Focus::Flow has learned about me with evidence links and confidence.
 - Improve What should I do now using the mature task, schedule, training and recovery systems.
@@ -297,3 +303,4 @@ Status: implemented on August 15, 2026. This release closes the current v1.150 a
 - Automatic bank connectivity before the manual/CSV Money model proves useful.
 - Full calorie and macro tracking inside Focus::Flow.
 - Continuous theme colour blending; fixed, tested phase changes remain safer for contrast and identity.
+
