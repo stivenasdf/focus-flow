@@ -330,12 +330,16 @@
     .recovery-sleep-target-row input { width: 60px; text-align: center; }
     .recovery-hrv-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-left: 0.4rem; vertical-align: middle; }
     .fatigue-map { margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--border-color); }
-    .fatigue-map-heading { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-color); opacity: 0.58; margin-bottom: 0.5rem; }
-    .fatigue-map-row { display: grid; grid-template-columns: 70px minmax(0,1fr) 34px; gap: 0.5rem; align-items: center; margin: 0.35rem 0; }
+    .fatigue-map-heading { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-color); opacity: 0.58; margin-bottom: 0.18rem; }
+    .fatigue-map-explainer { color:var(--text-color); opacity:.5; font-size:.55rem; line-height:1.4; margin-bottom:.55rem; }
+    .fatigue-map-row { display: grid; grid-template-columns: 76px minmax(0,1fr) 38px; gap: 0.42rem 0.5rem; align-items: center; margin: 0.48rem 0; }
     .fatigue-map-label, .fatigue-map-value { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--text-color); }
     .fatigue-map-value { text-align: right; opacity: 0.78; }
     .fatigue-map-track { height: 8px; background: var(--border-color); border-radius: 8px; overflow: hidden; }
     .fatigue-map-fill { height: 100%; width: 0%; border-radius: 8px; transition: width 0.25s ease; }
+    .fatigue-map-trend { grid-column:2 / 4; color:var(--text-color); opacity:.55; font:500 .53rem/1.35 'JetBrains Mono',monospace; }
+    .fatigue-map-trend.higher { color:#d4a94a; opacity:.9; }
+    .fatigue-map-trend.lower { color:#5ec98a; opacity:.85; }
     .fatigue-input-note { grid-column: 1 / -1; font-size: 0.61rem; line-height: 1.4; color: var(--text-color); opacity: 0.58; margin-top: -0.1rem; }
     [data-view-mode="mobile"] .today-panel-grid { grid-template-columns: 1fr; }
     [data-view-mode="mobile"] .today-now-card { grid-template-columns:1fr; max-height:none; overflow:visible; }
@@ -785,6 +789,11 @@
     .sleep-insight-row { display:grid; grid-template-columns:74px minmax(0,1fr); gap:0.55rem; align-items:start; border-top:1px solid var(--border-color); padding-top:0.5rem; }
     .sleep-insight-key { font-family:'JetBrains Mono',monospace; font-size:0.55rem; color:var(--sub-color); text-transform:uppercase; letter-spacing:0.3px; }
     .sleep-insight-text { font-size:0.64rem; color:var(--text-color); opacity:0.72; line-height:1.45; }
+    .sleep-chart-legend { display:flex; flex-wrap:wrap; gap:.35rem .7rem; margin:.45rem 0 .15rem; color:var(--text-color); font:.52rem/1.4 'JetBrains Mono',monospace; }
+    .sleep-chart-legend span { display:inline-flex; align-items:center; gap:.3rem; opacity:.68; }
+    .sleep-chart-swatch { width:9px; height:9px; border-radius:3px; flex:0 0 auto; }
+    .sleep-chart-band-swatch { width:18px; height:9px; border:1px solid var(--main-color); background:color-mix(in srgb,var(--bg-color) 84%,var(--main-color) 16%); border-radius:3px; }
+    .sleep-chart-legend-note { width:100%; opacity:.52 !important; }
     @media (max-width:620px){.sleep-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.retro-metric-grid{grid-template-columns:1fr 1fr;}}
     .dash-value { font-size: 1.4rem; font-weight: 700; color: var(--main-color); font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 8px var(--main-glow); }
     .dash-value.purple { color: var(--sub-color); text-shadow: 0 0 8px var(--sub-glow); }
@@ -1568,7 +1577,9 @@
     .capacity-ledger-row { display:flex; justify-content:space-between; gap:.8rem; padding-bottom:.28rem; border-bottom:1px solid var(--border-color); font:500 .6rem 'JetBrains Mono',monospace; color:var(--text-color); }
     .capacity-ledger-row span:first-child { opacity:.65; }
     .capacity-ledger-row.total { font-weight:700; border-bottom:0; padding-top:.12rem; }
-    .capacity-note { margin-top:.75rem; font-size:.58rem; line-height:1.45; color:var(--text-color); opacity:.55; }
+    .capacity-note { margin-top:.75rem; padding:.62rem .7rem; border:1px solid var(--border-color); border-radius:.62rem; font-size:.6rem; line-height:1.5; color:var(--text-color); background:color-mix(in srgb,var(--bg-color) 94%,var(--main-color) 6%); }
+    .capacity-note strong { display:block; color:var(--main-color); font:700 .76rem/1.35 'JetBrains Mono',monospace; margin-bottom:.2rem; }
+    .capacity-note span { opacity:.62; }
     .wake-schedule { margin-top:.7rem; border-top:1px solid var(--border-color); padding-top:.65rem; }
     .wake-schedule-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.3rem; }
     .wake-day { border:1px solid var(--border-color); border-radius:.5rem; padding:.35rem; min-width:0; }
@@ -1601,13 +1612,18 @@
     .training-call-history-block { flex: 1; min-width: 180px; }
     .training-call-subheading { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-color); opacity: 0.5; margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; }
     .training-call-history-strip { display: flex; gap: 0.25rem; }
-    .training-call-dot { flex: 1; height: 22px; border-radius: 0.3rem; cursor: default; }
+    .training-call-dot { flex: 1; height: 22px; border-radius: 0.3rem; cursor: default; position:relative; overflow:hidden; box-sizing:border-box; }
     .training-call-dot.matched { background: #5ec98a; opacity: 0.9; }
     .training-call-dot.under { background: #7ba3d0; opacity: 0.75; }
     .training-call-dot.over { background: #d4a94a; opacity: 0.85; }
     .training-call-dot.race { background: #c9a4e8; opacity: 0.9; }
     .training-call-dot.none { background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); }
     .training-call-dot.unspecified { background: rgba(255,255,255,0.1); border: 1px solid var(--border-color); }
+    .training-call-dot.lifting { background:color-mix(in srgb,var(--bg-color) 72%,var(--main-color) 28%); border:1px solid var(--main-color); opacity:1; }
+    .training-call-dot.has-lift::after { content:''; position:absolute; left:2px; right:2px; bottom:2px; height:4px; border-radius:4px; background:var(--text-color); opacity:.85; }
+    .training-call-history-legend { display:flex; flex-wrap:wrap; gap:.28rem .55rem; margin-top:.38rem; color:var(--text-color); font:.49rem 'JetBrains Mono',monospace; }
+    .training-call-history-legend span { display:inline-flex; align-items:center; gap:.22rem; opacity:.58; }
+    .training-call-history-key { width:8px; height:8px; border-radius:2px; display:inline-block; }
     .training-call-test-gauge-track { height: 8px; border-radius: 4px; background: rgba(0,0,0,0.2); position: relative; overflow: hidden; margin-bottom: 0.4rem; }
     .training-call-test-gauge-fill { height: 100%; border-radius: 4px; background: #c9a4e8; transition: all 0.4s ease; }
     .training-call-test-gauge-text { font-size: 0.62rem; color: var(--text-color); opacity: 0.65; line-height: 1.4; }
@@ -2636,7 +2652,7 @@
       <div class="settings-section">
         <div class="settings-section-title">focus &amp; planning</div>
         <div class="settings-row">
-          <div><div class="settings-label">daily focus target</div><div class="settings-desc">adaptive uses the median of your recent active focus days, then nudges it for recovery, work load, and systemic fatigue. switch to manual whenever you want a fixed target.</div></div>
+          <div><div class="settings-label">daily focus target</div><div class="settings-desc">adaptive uses the median of your recent active focus days, then nudges it for recovery, work load, and whole-body fatigue. switch to manual whenever you want a fixed target.</div></div>
           <button class="focus-mode-toggle" id="settingsAdaptiveFocusToggle">adaptive</button>
         </div>
         <div class="settings-row" id="settingsManualFocusRow" style="display:none;">
@@ -2686,7 +2702,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.150 makes workout comparisons flexible instead of exact-match-only, shows comparison confidence and widened ranges, and adds cursor or touch inspection to both duration curves.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.151 separates current Body Battery from the prescribed-day forecast, adds conditional 5k test windows and imported-test recognition, compares today’s body fatigue with your recent pattern, clarifies sleep colors, and gives lifting its own 14-day marker.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2773,7 +2789,7 @@
         <p>focus::flow is a personal agenda built around the timer, your actual workload, and the patterns you build over time. you do not need to configure every feature before using it. start with Today, Tasks, and Habits; the rest can become useful when you need it.</p>
         <ul>
           <li><strong>focus tasks vs todos</strong> — focus tasks are work you may run the timer against. todos are quick items that do not need a focus session. you can switch a task between the two from its details.</li>
-          <li><strong>today's focus range</strong> — adaptive mode starts from the median of your recent active focus days and adjusts gently for recovery, labour load, and systemic fatigue. manual mode keeps the center fixed until you change it.</li>
+          <li><strong>today's focus range</strong> — adaptive mode starts from the median of your recent active focus days and adjusts gently for recovery, labour load, and whole-body fatigue. manual mode keeps the center fixed until you change it.</li>
           <li><strong>timer chain</strong> — the repeating pattern under the main timer: focus sessions, short breaks, then a longer rest. edit the counts and durations under the timer.</li>
           <li><strong>today's schedule</strong> — timed tasks can place themselves on the agenda when you start them. the timeline below can also be used to move and resize blocks.</li>
           <li><strong>habits</strong> — habits can have daily counts and weekly frequency targets. a task can also be linked to a habit so completing the task checks the habit automatically when appropriate.</li>
@@ -2800,7 +2816,7 @@
           <summary>today, tasks &amp; timer</summary>
           <div class="feature-guide-body">
             <p><strong>focus task</strong> means the timer can be attached to it; <strong>todo</strong> means it is a quick item that does not need focus time. Current &amp; next is the working queue, while Task Library is the reusable history of task names, time, notes, and usage.</p>
-            <p><strong>adaptive focus range</strong> uses the median focus time from up to 28 recent active days once enough history exists. It then makes small adjustments for today's freshness, work hours × effort, and systemic fatigue, and keeps the center between 30 and 180 minutes.</p>
+            <p><strong>adaptive focus range</strong> uses the median focus time from up to 28 recent active days once enough history exists. It then makes small adjustments for today's freshness, work hours × effort, and whole-body fatigue, and keeps the center between 30 and 180 minutes.</p>
             <p><strong>timer chain</strong> is the repeating sequence of focus sessions, short breaks, and the longer rest. Session presets on Tasks set a task-specific countdown; the main chain still controls the Pomodoro rhythm.</p>
           </div>
         </details>
@@ -2829,7 +2845,7 @@
         <details class="feature-guide-item">
           <summary>recovery &amp; training call</summary>
           <div class="feature-guide-body">
-            <p><strong>freshness</strong> is a 0–100 app heuristic built from the recovery signals you have logged: HRV relative to your own baseline, WHOOP recovery %, sleep, how you feel, and systemic fatigue. Training load stays separate as context rather than being scored as recovery. WHOOP sleep score is preferred; if it is missing but sleep start/end are logged, duration versus your target is used as a fallback. Missing signals are left out; the score is not a medical measurement.</p>
+            <p><strong>freshness</strong> is a 0–100 app heuristic built from the recovery signals you have logged: HRV relative to your own baseline, WHOOP recovery %, sleep, how you feel, and whole-body fatigue. Training load stays separate as context rather than being scored as recovery. WHOOP sleep score is preferred; if it is missing but sleep start/end are logged, duration versus your target is used as a fallback. Missing signals are left out; the score is not a medical measurement.</p>
             <p><strong>training sessions</strong> keep lifting and cardio separate. A lift appears automatically when its exposure is logged; runs, rides, and rows come from Intervals.icu or from a manual session if they will not sync. Each session keeps its own load and session RPE. The old daily load fallback is used only when no session-specific cardio load exists.</p>
             <p><strong>HRV</strong> needs at least five previous entries before the app colors it against your own 30-day baseline. WHOOP recovery and sleep use three broad bands; how-you-feel gives extra weight to your subjective read of the day.</p>
             <p><strong>load ratio</strong> is the 7-day average workout load divided by the 28-day average. The app treats roughly 0.8–1.3 as its normal zone, 0.5–0.79 / 1.31–1.5 as caution, and values below 0.5 or above 1.5 as high deviation.</p>
@@ -2848,7 +2864,7 @@
           <summary>sleep &amp; physical fatigue</summary>
           <div class="feature-guide-body">
             <p><strong>sleep debt</strong> adds up the hours below your chosen nightly sleep target over the rolling 14-day window. <strong>sleep consistency</strong> looks at variation in sleep start and end times over the last 7 days and needs several entries before it is meaningful.</p>
-            <p><strong>work stress</strong> is work hours × perceived work effort. <strong>systemic fatigue</strong> can protect the whole training day, while leg, back, and upper-body fatigue mainly help the lifting engine avoid expensive movements for a tired region.</p>
+            <p><strong>work stress</strong> is work hours × perceived work effort. <strong>whole-body fatigue</strong> (stored as systemic fatigue) means general physical heaviness or exhaustion that is not mainly one body region. It can protect the whole training day, while leg, back, and upper-body fatigue mainly help the lifting engine avoid expensive movements for a tired region.</p>
           </div>
         </details>
         <details class="feature-guide-item">
@@ -2972,12 +2988,12 @@
       <div class="settings-modal-header"><h2>how Recovery works</h2><button class="settings-close-btn" id="recoveryGuideClose" aria-label="close Recovery guide">✕</button></div>
       <div class="recovery-guide-flow" role="img" aria-label="Recovery inputs flow into Recovery Signals and Body Battery, which combine with safety constraints to produce the Training Call and longer-term outlook.">
         <div class="recovery-guide-node"><b>1 · inputs</b><span>Sleep, HRV, feel, fatigue, work, health flags, cardio load, lifting and session responses.</span></div><div class="recovery-guide-arrow">→</div>
-        <div class="recovery-guide-node"><b>2 · interpretations</b><span>Recovery Signals describe today. Body Battery estimates reserve after demands. Neither is a medical measurement.</span></div><div class="recovery-guide-arrow">→</div>
+        <div class="recovery-guide-node"><b>2 · interpretations</b><span>Recovery Signals describe today. Body Battery separates current logged reserve from the prescribed-day forecast. Neither is a medical measurement.</span></div><div class="recovery-guide-arrow">→</div>
         <div class="recovery-guide-node"><b>3 · decisions</b><span>Training Call chooses a conservative useful action. Outlook shows possibilities. Deload Risk watches multi-week patterns.</span></div>
       </div>
       <div class="recovery-guide-grid">
         <div class="recovery-guide-item"><b>Recovery Signals</b><span>A weighted daily composite of the signals actually available. Missing inputs are omitted rather than treated as perfect.</span></div>
-        <div class="recovery-guide-item"><b>Body Battery · estimated</b><span>Starts from morning recovery, then subtracts expected or logged work and recommended or logged training.</span></div>
+        <div class="recovery-guide-item"><b>Body Battery · estimated</b><span>The large battery reflects what is currently logged. A separate forecast shows the reserve expected after outstanding work and the app’s current training prescription.</span></div>
         <div class="recovery-guide-item"><b>Training Call</b><span>Uses the most conservative important constraint. Illness, injury, severe fatigue or workload can override a decent composite score.</span></div>
         <div class="recovery-guide-item"><b>Training load</b><span>Recent is the 7-day daily average and base is the 28-day daily average. Their ratio is descriptive context—not a validated safe zone or injury predictor. Cardio-only excludes lifting and work.</span></div>
         <div class="recovery-guide-item"><b>7-day outlook</b><span>Not a fixed plan. Each day shows a possible training level and a load range anchored to your chronic base.</span></div>
@@ -3173,7 +3189,7 @@
             </div>
             <div class="today-focus-target">
               <div class="goal-ring"><svg viewBox="0 0 80 80"><circle class="bg-circle" cx="40" cy="40" r="34"/><circle class="fg-circle" id="goalCircle" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg><div class="goal-text" id="goalText">0%</div></div>
-              <div class="today-focus-target-copy"><div class="today-focus-target-title">today's focus range <span class="help-tip" tabindex="0" role="button" data-help="Adaptive mode uses your recent focus capacity, then nudges the target for recovery, work load, and systemic fatigue. Manual mode keeps the center fixed." title="Adaptive mode uses recent focus capacity and today's workload/recovery.">?</span></div><div class="today-focus-target-range" id="focusTargetRange">--</div><div class="today-focus-target-note" id="focusTargetNote">adapts gradually from your recent focus capacity.</div><div class="focus-target-manual" id="focusTargetManualControls" style="display:none;"><button class="goal-adjust" id="goalDown">−</button><input type="number" class="goal-input" id="goalInput" value="90" min="1" max="600"><button class="goal-adjust" id="goalUp">+</button><span class="goal-label">min</span></div></div>
+              <div class="today-focus-target-copy"><div class="today-focus-target-title">today's focus range <span class="help-tip" tabindex="0" role="button" data-help="Adaptive mode uses your recent focus capacity, then nudges the target for recovery, work load, and whole-body fatigue. Manual mode keeps the center fixed." title="Adaptive mode uses recent focus capacity and today's workload/recovery.">?</span></div><div class="today-focus-target-range" id="focusTargetRange">--</div><div class="today-focus-target-note" id="focusTargetNote">adapts gradually from your recent focus capacity.</div><div class="focus-target-manual" id="focusTargetManualControls" style="display:none;"><button class="goal-adjust" id="goalDown">−</button><input type="number" class="goal-input" id="goalInput" value="90" min="1" max="600"><button class="goal-adjust" id="goalUp">+</button><span class="goal-label">min</span></div></div>
               <button class="focus-target-mode-btn active" id="adaptiveFocusGoalToggle">adaptive</button>
             </div>
           </div>
@@ -3618,6 +3634,7 @@
               <div class="training-call-history-block">
                 <div class="training-call-subheading">last 14 days</div>
                 <div class="training-call-history-strip" id="trainingCallHistoryStrip"></div>
+                <div class="training-call-history-legend"><span><i class="training-call-history-key" style="background:#5ec98a;"></i>matched call</span><span><i class="training-call-history-key" style="background:#7ba3d0;"></i>easier</span><span><i class="training-call-history-key" style="background:#d4a94a;"></i>harder</span><span><i class="training-call-history-key" style="border:1px solid var(--main-color);background:color-mix(in srgb,var(--bg-color) 72%,var(--main-color) 28%);"></i>lifting</span><span><i class="training-call-history-key" style="border:1px dashed var(--border-color);"></i>not logged</span></div>
               </div>
               <div class="training-call-history-block">
                 <div class="training-call-subheading">next fitness test</div>
@@ -3698,7 +3715,7 @@
                   <div class="recovery-input-group"><label>temporary health override</label><select id="recoveryHealthFlagInput" class="search-input"><option value="none">none</option><option value="illness">sick / illness</option><option value="injury">pain / injury</option></select></div>
                   <div class="recovery-input-group"><label>work hours</label><input type="number" id="recoveryWorkHoursInput" class="search-input" placeholder="e.g. 9" inputmode="decimal" min="0" max="18" step="0.5"></div>
                   <div class="recovery-input-group"><label>work effort</label><select id="recoveryWorkEffortInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · almost effortless</option><option value="2">2 · very light</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · moderate</option><option value="6">6 · demanding</option><option value="7">7 · hard</option><option value="8">8 · very hard</option><option value="9">9 · brutal</option><option value="10">10 · maximal</option></select></div>
-                  <div class="recovery-input-group"><label>systemic fatigue</label><select id="recoverySystemicFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
+                  <div class="recovery-input-group"><label>whole-body fatigue <span class="goal-form-hint" title="General physical fatigue that is not mainly your legs, back, or upper body. It is a subjective check, not a nervous-system measurement.">(systemic)</span></label><select id="recoverySystemicFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
                   <div class="recovery-input-group"><label>leg fatigue</label><select id="recoveryLegFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
                   <div class="recovery-input-group"><label>back fatigue</label><select id="recoveryBackFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
                   <div class="recovery-input-group"><label>upper-body fatigue</label><select id="recoveryUpperFatigueInput" class="search-input feeling-select"><option value="">— choose —</option><option value="1">1 · fresh</option><option value="2">2 · trace</option><option value="3">3 · light</option><option value="4">4 · manageable</option><option value="5">5 · noticeable</option><option value="6">6 · heavy</option><option value="7">7 · very heavy</option><option value="8">8 · drained</option><option value="9">9 · wrecked</option><option value="10">10 · extreme / unwell</option></select></div>
@@ -3774,6 +3791,7 @@
             </div>
             <div class="fatigue-map" id="fatigueMap">
               <div class="fatigue-map-heading">physical fatigue today</div>
+              <div class="fatigue-map-explainer">Today is compared automatically with your own previous seven days; you only rate how you feel now.</div>
               <div id="fatigueMapRows"></div>
             </div>
           </div>
@@ -3781,13 +3799,13 @@
           <div class="recovery-card capacity-card">
             <h2>body battery · estimated</h2>
             <div class="capacity-layout">
-              <div class="capacity-battery" title="Projected reserve after logged and expected demands"><div class="capacity-battery-fill" id="capacityBatteryFill"></div><div class="capacity-battery-value" id="capacityBatteryValue">--</div></div>
+              <div class="capacity-battery" title="Current estimated reserve based on what is logged so far"><div class="capacity-battery-fill" id="capacityBatteryFill"></div><div class="capacity-battery-value" id="capacityBatteryValue">--</div></div>
               <div>
                 <div class="capacity-status" id="capacityStatus">waiting for morning signals</div>
                 <div class="capacity-ledger" id="capacityLedger"></div>
               </div>
             </div>
-            <div class="capacity-note" id="capacityTrainingProjection">Your estimated readiness reserve after today’s demands. It is a Focus::Flow planning estimate, not Garmin’s live physiological Body Battery.</div>
+            <div class="capacity-note" id="capacityTrainingProjection"><strong>forecast waiting</strong><span>Log morning signals to compare your current reserve with the app’s prescribed-day estimate.</span></div>
           </div>
 
           <div class="recovery-card recovery-load-card">
@@ -3823,6 +3841,7 @@
               <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="sleepConsistencyValue">--</div><div class="recovery-acwr-label">consistency (7d)</div></div>
             </div>
             <div class="graph-container recovery-sleep-graph-container"><canvas id="sleepDurationChart"></canvas></div>
+            <div class="sleep-chart-legend" aria-label="Sleep chart color legend"><span><i class="sleep-chart-swatch" style="background:#5ec98a;"></i>target met</span><span><i class="sleep-chart-swatch" style="background:#d4a94a;"></i>up to 1h short</span><span><i class="sleep-chart-swatch" style="background:#e05a5a;"></i>more than 1h short</span><span><i class="sleep-chart-band-swatch"></i>usual bed/wake range</span><span class="sleep-chart-legend-note">Bar color uses duration versus your target—not WHOOP sleep score. Shaded bands show recent timing consistency.</span></div>
             <div class="sleep-summary-grid" id="sleepSummaryGrid">
               <div class="sleep-summary-item"><div class="sleep-summary-value main" id="sleepAvgDurationValue">--</div><div class="sleep-summary-label">avg sleep · 7d</div></div>
               <div class="sleep-summary-item"><div class="sleep-summary-value" id="sleepTargetHitValue">--</div><div class="sleep-summary-label">target nights · 7d</div></div>
@@ -4124,7 +4143,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.150';
+      const APP_VERSION='1.151';
       const APP_RELEASE_DATE='2026-08-15';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -5274,7 +5293,7 @@
           ['#panel-recovery .recovery-daily-summary h2','A compact summary of readiness, labour stress, body fatigue, primary training, and whether lifting fits.'],
           ['#panel-recovery .training-call-card h2','The call is conservative: a caution signal can pull the recommendation easier instead of being averaged away by better signals.'],
           ['#panel-recovery .recovery-entry-card h2','Enter only what you actually have. Saving updates fields you touched and leaves untouched fields alone.'],
-          ['#panel-recovery .recovery-snapshot-card h2','Freshness is an app heuristic from available HRV, recovery %, sleep, how you feel, and systemic fatigue. Training load is shown separately and is not scored as recovery.'],
+          ['#panel-recovery .recovery-snapshot-card h2','Freshness is an app heuristic from available HRV, recovery %, sleep, how you feel, and whole-body fatigue. Training load is shown separately and is not scored as recovery.'],
           ['#panel-recovery .recovery-load-card h2','Load ratio compares your 7-day average workout load with your 28-day average. It is used as one signal, not the whole training decision.'],
           ['#panel-recovery .recovery-sleep-card h2','Sleep debt is accumulated shortfall versus your target; consistency reflects variation in sleep start/end times.'],
           ['#panel-recovery .recovery-trend-card h2','Switch metrics to see how freshness, feel, fatigue, HRV, load, sleep/recovery, and load ratio change over time.'],
@@ -5851,24 +5870,34 @@ function updateNotificationSettingUI(){
         }
         return count;
       }
-      function getDaysSinceLastHardDay(referenceDateStr){
-        const refDate=new Date(referenceDateStr+'T00:00:00');
-        for(let i=1;i<=365;i++){
-          const d=new Date(refDate);d.setDate(d.getDate()-i);
-          const ds=toDateStr(d);
-          if(biometrics[ds]&&biometrics[ds].actualIntensity==='test')return i;
-        }
-        return Infinity;
+      function isImportedFiveKTest(activity){
+        if(activitySportGroup(activity)!=='run')return false;
+        const distance=Number(activity&&activity.distance)||0;if(distance<4700||distance>5400)return false;
+        const text=`${activity.name||''} ${activity.type||''}`.toLowerCase(),response=sessionResponses[String(activity.id)]||{},rpe=Number(response.rpe??activity.session_rpe)||0;
+        return /\b(5\s*k|5km|parkrun|race|time[ -]?trial|test)\b/i.test(text)||rpe>=9;
+      }
+      function getLastFiveKTestInfo(referenceDateStr){
+        const refDate=new Date(referenceDateStr+'T12:00:00'),candidates=[];
+        for(let i=1;i<=365;i++){const d=new Date(refDate);d.setDate(d.getDate()-i);const ds=toDateStr(d);if(biometrics[ds]&&biometrics[ds].actualIntensity==='test')candidates.push({date:ds,days:i,source:'marked in today’s numbers'});}
+        (importedActivities||[]).forEach(activity=>{if(!isImportedFiveKTest(activity))return;const date=String(activity.start_date_local||'').slice(0,10);if(!date||date>=referenceDateStr)return;const days=Math.round((refDate-new Date(date+'T12:00:00'))/86400000),manual=/manual/i.test(String(activity.source||''));if(days>=1&&days<=365)candidates.push({date,days,source:manual?'recognized manual 5k':'recognized imported 5k',activityId:String(activity.id)});});
+        return candidates.sort((a,b)=>a.days-b.days)[0]||null;
+      }
+      function getDaysSinceLastHardDay(referenceDateStr){const info=getLastFiveKTestInfo(referenceDateStr);return info?info.days:Infinity;}
+      function isImportedExceptionalEffort(activity){
+        const text=`${activity&&activity.name||''} ${activity&&activity.type||''}`.toLowerCase(),response=sessionResponses[String(activity&&activity.id)]||{},rpe=Number(response.rpe??(activity&&activity.session_rpe))||0;
+        return /\b(race|time[ -]?trial|test|parkrun)\b/i.test(text)||rpe>=9;
       }
       function getDaysSinceLastExceptionalEffort(referenceDateStr){
         const refDate=new Date(referenceDateStr+'T00:00:00');
+        let closest=Infinity;
         for(let i=1;i<=365;i++){
           const d=new Date(refDate);d.setDate(d.getDate()-i);
           const ds=toDateStr(d);
           const intensity=biometrics[ds]&&biometrics[ds].actualIntensity;
-          if(intensity==='test'||intensity==='race')return i;
+          if(intensity==='test'||intensity==='race'){closest=i;break;}
         }
-        return Infinity;
+        (importedActivities||[]).forEach(activity=>{if(!isImportedExceptionalEffort(activity))return;const date=String(activity.start_date_local||'').slice(0,10);if(!date||date>=referenceDateStr)return;const days=Math.round((new Date(referenceDateStr+'T12:00:00')-new Date(date+'T12:00:00'))/86400000);if(days>=1&&days<closest)closest=days;});
+        return closest;
       }
       function getRaceWindowData(referenceDateStr,trainingData){
         const freshness=getFreshnessData(referenceDateStr);
@@ -6053,7 +6082,7 @@ function updateNotificationSettingUI(){
         else if(freshness.label==='fatigued — prioritize recovery'){tier=0;reasons.push('freshness signals are showing fatigue today');}
         else if(freshness.label==='showing signs of fatigue'){tier=1;reasons.push('a few freshness signals are a bit off today');}
         else{tier=2;}
-        factors.push({label:'freshness',status:freshness.score==null?null:(freshness.label==='fatigued — prioritize recovery'?'red':freshness.label==='showing signs of fatigue'?'yellow':'green'),detail:freshness.score==null?'not enough data logged yet':`${freshness.label} (score ${freshness.score})`,explain:'your composite recovery heuristic (0-100), built from available HRV, sleep, recovery %, how you feel, and systemic fatigue. Training load is deliberately kept separate from this score.'});
+        factors.push({label:'freshness',status:freshness.score==null?null:(freshness.label==='fatigued — prioritize recovery'?'red':freshness.label==='showing signs of fatigue'?'yellow':'green'),detail:freshness.score==null?'not enough data logged yet':`${freshness.label} (score ${freshness.score})`,explain:'your composite recovery heuristic (0-100), built from available HRV, sleep, recovery %, how you feel, and whole-body fatigue. Training load is deliberately kept separate from this score.'});
         const todayRec=biometrics[referenceDateStr]||{};
         const healthFlag=todayRec.healthFlag||'none';
         if(healthFlag==='illness'){tier=0;reasons.push('illness is flagged today — structured training is held back regardless of an optimistic readiness score');}
@@ -6077,9 +6106,9 @@ function updateNotificationSettingUI(){
         if(workStress.status==='red'&&tier>1){tier=1;reasons.push('today’s labour load is high enough that training stays easy even if recovery metrics look good');}
         factors.push({label:'labour load',status:workStress.status,detail:workStress.score==null?'not logged':`${workStress.hours??'--'}h × ${workStress.effort??'--'}/10 = ${Math.round(workStress.score)}`,explain:'your work hours multiplied by how hard the day felt. this is deliberately conservative because your job gets first claim on recovery capacity.'});
         const bodyFatigue=getBodyFatigueData(referenceDateStr);
-        if(bodyFatigue.status==='red'){if(bodyFatigue.systemic>=9)tier=0;else if(tier>1)tier=1;reasons.push(bodyFatigue.systemic>=9?'systemic fatigue is very high today':'body-region fatigue is high enough to cap training at easy');}
+        if(bodyFatigue.status==='red'){if(bodyFatigue.systemic>=9)tier=0;else if(tier>1)tier=1;reasons.push(bodyFatigue.systemic>=9?'whole-body fatigue is very high today':'body-region fatigue is high enough to cap training at easy');}
         else if(bodyFatigue.status==='yellow'&&tier>1){tier=1;reasons.push('physical fatigue is elevated today, so medium work is held back');}
-        factors.push({label:'physical fatigue',status:bodyFatigue.status,detail:bodyFatigue.max==null?'not logged':`systemic ${bodyFatigue.systemic??'--'} · legs ${bodyFatigue.legs??'--'} · back ${bodyFatigue.back??'--'} · upper ${bodyFatigue.upper??'--'}`,explain:'your quick subjective body check. high systemic fatigue protects the whole day; high local fatigue also helps the lifting engine avoid expensive movements.'});
+        factors.push({label:'physical fatigue',status:bodyFatigue.status,detail:bodyFatigue.max==null?'not logged':`whole body ${bodyFatigue.systemic??'--'} · legs ${bodyFatigue.legs??'--'} · back ${bodyFatigue.back??'--'} · upper ${bodyFatigue.upper??'--'}`,explain:'your quick subjective body check. High whole-body fatigue protects the entire day; high local fatigue also helps the lifting engine avoid expensive movements.'});
         const modalityRecovery=getActiveModalityRecovery(referenceDateStr);
         if(modalityRecovery.length&&tier>1){
           tier=1;
@@ -6109,7 +6138,8 @@ function updateNotificationSettingUI(){
         if(tier===2){
           daysSinceHard=getDaysSinceLastHardDay(referenceDateStr);
           const overdue=daysSinceHard>=testCadenceDays;
-          factors.push({label:'test cadence',status:overdue?'green':null,detail:daysSinceHard===Infinity?'no test logged yet':`${Math.min(daysSinceHard,testCadenceDays)}/${testCadenceDays} days since last one`,explain:'days since your last logged 5k test — a test only gets suggested once you\u2019re overdue (42+ days) and every other signal below is already green.'});
+          const lastTestInfo=getLastFiveKTestInfo(referenceDateStr);
+          factors.push({label:'test cadence',status:overdue?'green':null,detail:daysSinceHard===Infinity?'no test logged or recognized yet':`${Math.min(daysSinceHard,testCadenceDays)}/${testCadenceDays} days since last one${lastTestInfo&&lastTestInfo.source.includes('imported')?' · imported':''}`,explain:'days since your last marked 5k test or a clearly recognized imported 5k race/test. An ambiguous ordinary run is not silently treated as a benchmark. A test only gets suggested once overdue (42+ days) and every other signal below is already green.'});
           if(overdue){
             const rec=biometrics[referenceDateStr];
             const feelStatus=rec&&rec.rpe!=null?getRpeStatus(rec.rpe):null;
@@ -6253,6 +6283,7 @@ function updateNotificationSettingUI(){
             const ds=toDateStr(d);
             const rec=biometrics[ds];
             const intensity=rec&&rec.actualIntensity?rec.actualIntensity:null;
+            const loadBreakdown=getTrainingLoadBreakdown(ds),liftingLoad=loadBreakdown.lifting||0,cardioLoad=loadBreakdown.other||0;
             const dot=document.createElement('div');
             let cls,titleText;
             if(intensity==='race'){
@@ -6264,12 +6295,15 @@ function updateNotificationSettingUI(){
               if(actualRank===recRank){cls='matched';titleText=`${ds}: ${intensity} — matched the call (${recommended})`;}
               else if(actualRank<recRank){cls='under';titleText=`${ds}: ${intensity} — call was ${recommended}, you took it easier`;}
               else{cls='over';titleText=`${ds}: ${intensity} — call was ${recommended}, you pushed harder`;}
+            }else if(liftingLoad>0&&cardioLoad<=0){
+              cls='lifting';titleText=`${ds}: lifting logged · estimated strength load ${liftingLoad}`;
             }else if(getEffectiveTrainingLoad(ds)>0){
-              cls='unspecified';titleText=`${ds}: workout detected (load ${getEffectiveTrainingLoad(ds)}) — intensity not marked`;
+              cls='unspecified';titleText=`${ds}: workout detected (load ${getEffectiveTrainingLoad(ds)}) — cardio intensity not marked${cardioLoad>0?` · cardio / other load ${cardioLoad}`:''}`;
             }else{
               cls='none';titleText=`${ds}: not logged`;
             }
-            dot.className='training-call-dot '+cls;
+            dot.className='training-call-dot '+cls+(liftingLoad>0?' has-lift':'');
+            if(liftingLoad>0&&cls!=='lifting')titleText+=` · lifting also logged (load ${liftingLoad})`;
             dot.title=titleText;
             historyStrip.appendChild(dot);
           }
@@ -6277,13 +6311,13 @@ function updateNotificationSettingUI(){
         const testGaugeFill=document.getElementById('trainingCallTestGaugeFill');
         const testGaugeText=document.getElementById('trainingCallTestGaugeText');
         if(testGaugeFill&&testGaugeText){
-          const daysSinceHard=getDaysSinceLastHardDay(getToday());
+          const lastTestInfo=getLastFiveKTestInfo(getToday()),daysSinceHard=lastTestInfo?lastTestInfo.days:Infinity;
           const testCadenceDays=42;
           const displayDays=daysSinceHard===Infinity?testCadenceDays:Math.min(daysSinceHard,testCadenceDays);
           testGaugeFill.style.width=(displayDays/testCadenceDays*100)+'%';
-          if(daysSinceHard===Infinity)testGaugeText.textContent='no fitness test logged yet';
-          else if(daysSinceHard>=testCadenceDays)testGaugeText.textContent=`${daysSinceHard} days since your last one — overdue`;
-          else testGaugeText.textContent=`${daysSinceHard} of ${testCadenceDays} days since your last one`;
+          if(daysSinceHard===Infinity)testGaugeText.textContent='no 5k test logged or clearly recognized yet';
+          else if(daysSinceHard>=testCadenceDays)testGaugeText.textContent=`${daysSinceHard} days since your last 5k test — overdue${lastTestInfo.source.includes('imported')?' · imported':''}`;
+          else testGaugeText.textContent=`${daysSinceHard} of ${testCadenceDays} days since your last 5k test${lastTestInfo.source.includes('imported')?' · imported':''}`;
         }
       }
       let recoveryTouchedFields=new Set();
@@ -6561,19 +6595,32 @@ function updateNotificationSettingUI(){
         if(entryBody&&entryToggle){entryBody.classList.add('collapsed');entryToggle.textContent='edit numbers';recoveryEntryManuallyCollapsed=true;}
       }
       function recoveryStatusLabel(status){return status==='green'?'normal':status==='yellow'?'elevated':status==='red'?'high':'no data';}
+      function getFatigueComparison(metric,currentValue,referenceDateStr){
+        if(currentValue==null)return{text:'log today to compare with your recent pattern',className:''};
+        const ref=new Date(referenceDateStr+'T12:00:00'),history=[];
+        for(let i=7;i>=1;i--){const d=new Date(ref);d.setDate(d.getDate()-i);const value=getBodyFatigueData(toDateStr(d))[metric];if(value!=null)history.push(Number(value));}
+        if(history.length<3)return{text:`baseline building · ${history.length}/3 prior check-ins`,className:''};
+        const typical=medianNumber(history),delta=Number(currentValue)-typical,recent=history.slice(-2).concat(Number(currentValue)),recentChange=recent.length>=3?recent[recent.length-1]-recent[0]:0;
+        const direction=recentChange>=1?'rising':recentChange<=-1?'easing':'steady';
+        const typicalLabel=Number.isInteger(typical)?String(typical):typical.toFixed(1);
+        if(delta>=.75)return{text:`${direction} · ${delta.toFixed(1)} above 7d typical (${typicalLabel})`,className:'higher'};
+        if(delta<=-.75)return{text:`${direction} · ${Math.abs(delta).toFixed(1)} below 7d typical (${typicalLabel})`,className:'lower'};
+        return{text:`${direction} · near 7d typical (${typicalLabel})`,className:''};
+      }
       function updateFatigueMap(){
         const rows=document.getElementById('fatigueMapRows');if(!rows)return;
         const bodyFatigue=getBodyFatigueData(getToday()),work=getWorkStressData(getToday());
-        const items=[['systemic',bodyFatigue.systemic],['legs',bodyFatigue.legs],['back',bodyFatigue.back],['upper',bodyFatigue.upper]];
+        const items=[['whole body','systemic',bodyFatigue.systemic],['legs','legs',bodyFatigue.legs],['back','back',bodyFatigue.back],['upper','upper',bodyFatigue.upper]];
         rows.innerHTML='';
-        items.forEach(([label,val])=>{
+        items.forEach(([label,metric,val])=>{
           const row=document.createElement('div');row.className='fatigue-map-row';
-          const l=document.createElement('div');l.className='fatigue-map-label';l.textContent=label;
+          const l=document.createElement('div');l.className='fatigue-map-label';l.textContent=label;if(metric==='systemic')l.title='General whole-body physical fatigue, not a direct nervous-system measurement.';
           const track=document.createElement('div');track.className='fatigue-map-track';
           const fill=document.createElement('div');fill.className='fatigue-map-fill';
           const v=document.createElement('div');v.className='fatigue-map-value';v.textContent=val==null?'--':`${val}/10`;
           if(val!=null){fill.style.width=(val*10)+'%';fill.style.background=val>=9?'#e05a5a':val>=7?'#d4a94a':'#5ec98a';}
-          track.appendChild(fill);row.appendChild(l);row.appendChild(track);row.appendChild(v);rows.appendChild(row);
+          const comparison=getFatigueComparison(metric,val,getToday()),trend=document.createElement('div');trend.className=`fatigue-map-trend ${comparison.className}`.trim();trend.textContent=comparison.text;
+          track.appendChild(fill);row.appendChild(l);row.appendChild(track);row.appendChild(v);row.appendChild(trend);rows.appendChild(row);
         });
         const row=document.createElement('div');row.className='fatigue-map-row';
         const l=document.createElement('div');l.className='fatigue-map-label';l.textContent='work';
@@ -6646,41 +6693,44 @@ function updateNotificationSettingUI(){
       }
       function getEstimatedCapacityData(referenceDateStr){
         const freshness=getFreshnessData(referenceDateStr),rec=biometrics[referenceDateStr]||{};
-        if(freshness.score==null)return{score:null,status:'waiting for enough morning recovery data',rows:[],projection:'Log at least two morning recovery signals before Focus::Flow estimates today’s reserve.'};
+        if(freshness.score==null)return{score:null,currentScore:null,forecastScore:null,status:'waiting for enough morning recovery data',rows:[],forecastTitle:'forecast waiting',forecastBody:'Log at least two morning recovery signals before Focus::Flow estimates current reserve and the prescribed-day forecast.'};
         const energy=Number(rec.morningEnergy)||null,soreness=Number(rec.morningSoreness)||null,motivation=Number(rec.morningMotivation)||null;
         const subjectiveAdjust=(energy==null?0:(energy-3)*6)+(soreness==null?0:(3-soreness)*3)+(motivation==null?0:(motivation-3)*2);
         const start=Math.max(5,Math.min(100,Math.round(freshness.score+subjectiveAdjust)));
         const work=getWorkStressData(referenceDateStr),expected=rec.expectedWorkDemand||'';
         const expectedWorkDrain={light:6,normal:12,heavy:22,'unusually-heavy':32}[expected]||0;
-        const workDrain=work.score==null?expectedWorkDrain:Math.min(32,Math.round(work.score/3));
-        const workLabel=work.score==null?(expected?`expected work (${expected.replace('-',' ')})`:'work not forecast'):'logged work';
+        const hasLoggedWork=work.score!=null,loggedWorkDrain=hasLoggedWork?Math.min(32,Math.round(work.score/3)):0,outstandingWorkDrain=hasLoggedWork?0:expectedWorkDrain;
         const training=getTrainingLoadBreakdown(referenceDateStr),loggedTraining=training.total||0;
         const trainingCall=getTrainingCallData(referenceDateStr);
         const plannedTrainingDrain={rest:0,easy:7,medium:15,test:22}[trainingCall.level]||0;
-        const trainingDrain=loggedTraining?Math.min(35,Math.round(loggedTraining*.35)):plannedTrainingDrain;
-        const trainingLabel=loggedTraining?'logged training':`${trainingCall.level} call allowance`;
-        const beforeTraining=Math.max(0,Math.min(100,start-workDrain));
-        const score=Math.max(0,Math.min(100,beforeTraining-trainingDrain));
-        const status=score>=70?'good reserve':score>=45?'limited reserve':score>=25?'low reserve':'protect what remains';
-        const callLabel={rest:'rest call',easy:'prescribed easy training',medium:'prescribed medium training',test:'prescribed test'}[trainingCall.level]||'prescribed training';
-        const projection=loggedTraining?`With today’s logged training included, estimated reserve is about ${score}/100. This is a planning heuristic, not Garmin’s physiological Body Battery.`:trainingDrain?`If you complete the ${callLabel}, estimated reserve is about ${score}/100; without that training demand it is about ${beforeTraining}/100. This is a planning heuristic, not Garmin’s physiological Body Battery.`:`Today’s ${callLabel} adds no planned training drain, leaving estimated reserve near ${score}/100. This is a planning heuristic, not Garmin’s physiological Body Battery.`;
-        return{score,status,beforeTraining,trainingDrain,loggedTraining,trainingLevel:trainingCall.level,projection,rows:[
-          {label:`morning start (readiness ${freshness.score})`,value:start},
-          {label:workLabel,value:-workDrain},
-          {label:trainingLabel,value:-trainingDrain},
-          {label:'projected reserve',value:score,total:true}
+        const actualCardioIntensity=rec.actualIntensity||'',cardioOutcomeLogged=['easy','medium','test','race'].includes(actualCardioIntensity),loggedCardioDrain=training.other>0?Math.min(35,Math.round(training.other*.35)):(cardioOutcomeLogged?({easy:7,medium:15,test:22,race:24}[actualCardioIntensity]||0):0),loggedLiftingDrain=training.lifting>0?Math.min(18,Math.round(training.lifting*.35)):0;
+        const loggedTrainingDrain=Math.min(35,loggedCardioDrain+loggedLiftingDrain),outstandingTrainingDrain=(training.other>0||cardioOutcomeLogged)?0:plannedTrainingDrain;
+        const currentScore=Math.max(0,Math.min(100,start-loggedWorkDrain-loggedTrainingDrain));
+        const forecastBeforeTraining=Math.max(0,Math.min(100,currentScore-outstandingWorkDrain));
+        const forecastScore=Math.max(0,Math.min(100,forecastBeforeTraining-outstandingTrainingDrain));
+        const status=currentScore>=70?'good reserve':currentScore>=45?'limited reserve':currentScore>=25?'low reserve':'protect what remains';
+        const callLabel={rest:'rest prescription',easy:'easy prescription',medium:'medium prescription',test:'5k test prescription'}[trainingCall.level]||'training prescription';
+        let forecastTitle,forecastBody;
+        if(outstandingWorkDrain&&outstandingTrainingDrain){forecastTitle=`After expected work + ${callLabel}: ~${forecastScore}/100`;forecastBody=`The large battery is current from logged data. This forecast subtracts ${outstandingWorkDrain} for expected work and ${outstandingTrainingDrain} for the app’s training prescription.`;}
+        else if(outstandingTrainingDrain){forecastTitle=`After the ${callLabel}: ~${forecastScore}/100`;forecastBody=loggedLiftingDrain?`Logged lifting is already reflected in the large battery. This forecast still subtracts ${outstandingTrainingDrain} for the app’s cardio prescription; actual cardio replaces that estimate once logged.`:`The large battery is current from logged data. This forecast subtracts ${outstandingTrainingDrain} for the app’s prescription; actual cardio replaces that estimate once logged.`;}
+        else if(outstandingWorkDrain){forecastTitle=`After expected work: ~${forecastScore}/100`;forecastBody=`Training already logged replaces the prescription estimate. The remaining forecast subtracts ${outstandingWorkDrain} for expected work.`;}
+        else{forecastTitle='No additional modeled drain remains';forecastBody='The large battery already reflects the work and training you logged today; no prescription estimate is added on top.';}
+        return{score:currentScore,currentScore,forecastScore,status,start,loggedWorkDrain,loggedTrainingDrain,outstandingWorkDrain,outstandingTrainingDrain,loggedTraining,trainingLevel:trainingCall.level,forecastTitle,forecastBody,rows:[
+          {label:`morning estimate · recovery index ${freshness.score}`,display:String(start)},
+          {label:'logged work so far',display:hasLoggedWork?`−${loggedWorkDrain}`:'none'},
+          {label:'logged training so far',display:loggedTraining||cardioOutcomeLogged?`−${loggedTrainingDrain}${loggedCardioDrain&&loggedLiftingDrain?' · mixed':loggedLiftingDrain?' · lifting':' · cardio'}`:'none'}
         ]};
       }
       function updateEstimatedCapacity(){
         const fill=document.getElementById('capacityBatteryFill'),value=document.getElementById('capacityBatteryValue'),status=document.getElementById('capacityStatus'),ledger=document.getElementById('capacityLedger'),projection=document.getElementById('capacityTrainingProjection');
         if(!fill||!value||!status||!ledger)return;
         const data=getEstimatedCapacityData(getToday());
-        if(data.score==null){fill.style.height='0';value.textContent='--';status.textContent=data.status;ledger.innerHTML='<div class="capacity-ledger-row"><span>need</span><strong>2+ recovery signals</strong></div>';if(projection)projection.textContent=data.projection;return;}
+        if(data.score==null){fill.style.height='0';value.textContent='--';status.textContent=data.status;ledger.innerHTML='<div class="capacity-ledger-row"><span>need</span><strong>2+ recovery signals</strong></div>';if(projection)projection.innerHTML=`<strong>${escapeHtml(data.forecastTitle)}</strong><span>${escapeHtml(data.forecastBody)}</span>`;return;}
         fill.style.height=`${Math.max(0,data.score-5)}%`;
         fill.style.background=data.score>=70?'#5ec98a':data.score>=45?'#d4a94a':'#e05a5a';
-        value.textContent=data.score;status.textContent=data.status;
-        ledger.innerHTML=data.rows.map(r=>`<div class="capacity-ledger-row${r.total?' total':''}"><span>${escapeHtml(r.label)}</span><strong>${r.value>0&&!r.total&&!r.label.startsWith('morning start')?'+':''}${r.value}</strong></div>`).join('');
-        if(projection)projection.textContent=data.projection;
+        value.textContent=data.score;value.setAttribute('aria-label',`Current estimated reserve ${data.score} out of 100`);status.textContent=`current estimate · ${data.status}`;
+        ledger.innerHTML=data.rows.map(r=>`<div class="capacity-ledger-row"><span>${escapeHtml(r.label)}</span><strong>${escapeHtml(r.display)}</strong></div>`).join('');
+        if(projection)projection.innerHTML=`<strong>${escapeHtml(data.forecastTitle)}</strong><span>${escapeHtml(data.forecastBody)} Focus::Flow planning estimate—not Garmin’s live physiological Body Battery.</span>`;
       }
       function setRecoverySummaryValue(id,text,status){
         const el=document.getElementById(id);if(!el)return;
@@ -6704,7 +6754,7 @@ function updateNotificationSettingUI(){
         const readinessEl=document.getElementById('summaryReadiness');if(readinessEl&&freshness.score!=null)readinessEl.title=`Recovery index from ${freshness.dataPoints}/6 available signals. This is a condition index, not energy remaining or a percent charged. Training Call overrides are evaluated separately.`;
         const capacity=getEstimatedCapacityData(today);
         setRecoverySummaryValue('summaryCapacity',capacity.score==null?'pending':`${capacity.score}/100`,capacity.score==null?null:capacity.score>=70?'good':capacity.score>=45?'caution':'bad');
-        const capacityEl=document.getElementById('summaryCapacity');if(capacityEl)capacityEl.title='Projected reserve after expected/logged work and recommended/logged training. This is a planning estimate, not live physiology.';
+        const capacityEl=document.getElementById('summaryCapacity');if(capacityEl)capacityEl.title=capacity.score==null?'Current reserve is waiting for morning signals.':`Current estimated reserve from morning signals and logged work/training. Body Battery forecasts about ${capacity.forecastScore}/100 after outstanding work and today’s prescription.`;
         const tomorrowDate=new Date(today+'T00:00:00');tomorrowDate.setDate(tomorrowDate.getDate()+1);
         const tomorrowPlan=getWakePlanForDate(toDateStr(tomorrowDate));
         if(tomorrowPlan.type==='open'||!tomorrowPlan.time){
@@ -6762,7 +6812,7 @@ function updateNotificationSettingUI(){
         if(rec.expectedWorkDemand)chips.push(`expected work ${rec.expectedWorkDemand.replace('-',' ')}`);
         if(rec.healthFlag&&rec.healthFlag!=='none')chips.push(rec.healthFlag==='illness'?'illness flag':'pain / injury flag');
         if(rec.workHours!=null||rec.workEffort!=null)chips.push(`work ${rec.workHours??'?'}h @ ${rec.workEffort??'?'} /10`);
-        const fats=[['sys',rec.systemicFatigue],['legs',rec.legFatigue],['back',rec.backFatigue],['upper',rec.upperFatigue]].filter(([,v])=>v!=null);
+        const fats=[['whole',rec.systemicFatigue],['legs',rec.legFatigue],['back',rec.backFatigue],['upper',rec.upperFatigue]].filter(([,v])=>v!=null);
         if(fats.length)chips.push(`fatigue ${fats.map(([n,v])=>`${n} ${v}/10`).join(' · ')}`);
         if(rec.actualIntensity)chips.push(`cardio ${rec.actualIntensity==='rest'?'none / rest':rec.actualIntensity}`);
         const sessions=getTrainingSessionsForDate(date),modalities=normalizeModalityList(rec.modalities);
@@ -7592,7 +7642,7 @@ function updateNotificationSettingUI(){
         let unavailable='';
         if((rec.healthFlag||'none')!=='none')unavailable='health override is active, so no extra movement primer is added.';
         else if(level==='rest'||level==='test')unavailable=level==='rest'?'today is recovery-first, so the app is not adding bonus reps.':'a test day does not need extra pre-fatigue.';
-        else if(body.systemic!=null&&body.systemic>=7)unavailable='systemic fatigue is high enough that the extra set is not worth its cost.';
+        else if(body.systemic!=null&&body.systemic>=7)unavailable='whole-body fatigue is high enough that the extra set is not worth its cost.';
         else if(body.upper!=null&&body.upper>=6)unavailable='upper-body fatigue is high, so both push-ups and burpees would add the wrong local stress.';
         if(unavailable)return{available:false,reason:unavailable};
         const history=state.history.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))),done=history.filter(h=>h.status==='done'),pushDone=done.filter(h=>h.type==='pushups').length,burpeeDone=done.filter(h=>h.type==='burpees').length;
@@ -7804,17 +7854,20 @@ function updateNotificationSettingUI(){
       }
       function renderTrainingOutlook(){
         const current=document.getElementById('outlookCurrent'),optimal=document.getElementById('outlookOptimal');if(!current||!optimal)return;const today=getToday(),call=getTrainingCallData(today),watch=getLongTermRecoveryData(today),health=(biometrics[today]||{}).healthFlag||'none';
-        const loadBase=(getACWR(today)||{}).chronic||null,loadGuidance=(text,improved)=>{if(!loadBase)return{capacity:'building baseline',suggested:'building baseline',conservative:false};const capacity=improved?[.75,1.15]:[.65,1],suggest=/recovery|rest/.test(text)?[0,.35]:/easy/.test(text)?[.4,.75]:/quality/.test(text)?[.9,1.25]:[.65,1],cap=[Math.round(loadBase*capacity[0]),Math.round(loadBase*capacity[1])],suggested=[Math.round(loadBase*Math.min(suggest[0],capacity[1])),Math.round(loadBase*Math.min(suggest[1],capacity[1]))];return{capacity:`${cap[0]}–${cap[1]}`,suggested:`${suggested[0]}–${suggested[1]}`,conservative:suggested[1]<cap[1]};};
+        const loadBase=(getACWR(today)||{}).chronic||null,loadGuidance=(text,improved)=>{if(!loadBase)return{capacity:'building baseline',suggested:'building baseline',conservative:false};const capacity=improved?[.75,1.15]:[.65,1],suggest=/recovery|rest/.test(text)?[0,.35]:/easy/.test(text)?[.4,.75]:/quality|5k|test/i.test(text)?[.9,1.25]:[.65,1],cap=[Math.round(loadBase*capacity[0]),Math.round(loadBase*capacity[1])],suggested=[Math.round(loadBase*Math.min(suggest[0],capacity[1])),Math.round(loadBase*Math.min(suggest[1],capacity[1]))];return{capacity:`${cap[0]}–${cap[1]}`,suggested:`${suggested[0]}–${suggested[1]}`,conservative:suggested[1]<cap[1]};};
         const rec=biometrics[today]||{},bodyLogged=[rec.systemicFatigue,rec.legFatigue,rec.backFatigue,rec.upperFatigue].some(v=>v!=null),workLogged=rec.workHours!=null&&rec.workEffort!=null,trainingLogged=!!rec.actualIntensity,missing=[];if(!bodyLogged)missing.push('after-work body fatigue');if(!workLogged)missing.push('actual work cost');if(!trainingLogged)missing.push('training/rest outcome');const confidence=document.getElementById('outlookConfidence'),partial=missing.length>0;
         if(confidence)confidence.innerHTML=`<span class="training-call-confidence-level ${partial?'medium':'high'}">forecast confidence: ${partial?'partial':'updated'}</span><span class="training-call-confidence-detail">${partial?`Still missing: ${escapeHtml(missing.join(' · '))}. The outlook will update when those are logged.`:'Today’s work, body-fatigue and training outcome are logged; the forecast is updated.'}</span>`;
         const row=(date,callText,why,load)=>{const dt=new Date(date+'T12:00:00'),weekday=dt.toLocaleDateString(undefined,{weekday:'short'}),day=dt.toLocaleDateString(undefined,{month:'short',day:'numeric'});return `<div class="outlook-day"><div class="outlook-date"><strong>${weekday}</strong><span>${day}</span></div><div><div class="outlook-call">${escapeHtml(callText)}</div><div class="outlook-why">${escapeHtml(why)}</div><div class="outlook-load-row"><span class="outlook-load-chip" title="Physiological load range the current recovery scenario could plausibly tolerate.">capacity ${escapeHtml(load.capacity)}</span><span class="outlook-load-chip suggested" title="The deliberately chosen target range after protecting recovery and future training opportunities.">suggested ${escapeHtml(load.suggested)}${load.conservative?' · conservative':''}</span></div></div></div>`;};
+        const lastTest=getLastFiveKTestInfo(today),daysSinceTest=lastTest?lastTest.days:Infinity,daysUntilTestDue=daysSinceTest===Infinity?0:Math.max(0,42-daysSinceTest),showTestWindow=health==='none'&&daysUntilTestDue<=7,testWindowDay=call.level==='test'?1:Math.min(7,Math.max(5,daysUntilTestDue||5));
         const a=[],b=[];for(let i=1;i<=7;i++){const d=new Date(today+'T12:00:00');d.setDate(d.getDate()+i);const ds=toDateStr(d),early=i<=2;
           let cur=watch.level==='high'?'recovery-biased':watch.level==='moderate'?(early?'easy likely':'moderate opportunity: low'):(call.level==='rest'&&early?'easy possible':'moderate opportunity: possible');
           const wakePlan=getWakePlanForDate(ds),wakeNote=wakePlan.type==='required'&&wakePlan.time?` · ${formatClock(wakePlan.time)} required wake`:wakePlan.type==='preferred'&&wakePlan.time?` · ${formatClock(wakePlan.time)} preferred wake`:'';
           let why=(watch.level==='low'?'depends on daily recovery and accumulated load':`${watch.level} deload risk keeps structured stress conservative`)+wakeNote;
           if(health!=='none'){cur='recovery-biased';why='health override must clear before training opportunity returns';}
-          const opt=i<=2?'easy / minimum-dose lift possible':i<=4?'moderate aerobic opportunity':'quality opportunity: possible';
-          const optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep opportunity is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';a.push(row(ds,cur,why,loadGuidance(cur,false)));b.push(row(ds,opt,optWhy,loadGuidance(opt,true)));}
+          let opt=i<=2?'easy / minimum-dose lift possible':i<=4?'moderate aerobic opportunity':'quality opportunity: possible';
+          let optWhy=health!=='none'?'only becomes possible after the health override clears':i<=2?'more likely if sleep opportunity is hit and fatigue falls':'requires improving sleep, fatigue, and no new warning signals';
+          if(showTestWindow&&i===testWindowDay){opt='5k test window · conditional';optWhy=call.level==='test'?'The test is due now; if you skip today, use this only when that morning’s recovery, feel, load stability and hard-effort spacing are all green.':daysSinceTest===Infinity?'No benchmark is recorded yet. Treat this as the first possible quality window—not an appointment—and confirm every same-day signal first.':daysSinceTest>=42?'The 42-day test cadence is overdue. Use the first genuinely green quality day; otherwise let the window move.':`The 42-day cadence reaches its window this week. Same-day recovery, feel, stable load and hard-effort spacing still decide whether testing is appropriate.`;}
+          a.push(row(ds,cur,why,loadGuidance(cur,false)));b.push(row(ds,opt,optWhy,loadGuidance(opt,true)));}
         current.innerHTML=a.join('');optimal.innerHTML=b.join('');
         const path=document.getElementById('recoveryOpportunityPath');if(path){const f=getFreshnessData(today),body=getBodyFatigueData(today),sleep=getSleepDuration(today),steps=[];if(sleep==null||sleep<sleepTargetHours)steps.push(`sleep target · improves the next opportunity`);if(body.legs>=7)steps.push('easy mobility / leg recovery · supports the next quality day');if(body.systemic>=7)steps.push('reduce optional stress · protect tomorrow’s reserve');if(!steps.length)steps.push('maintain sleep and hydration · keep the next opportunity open');path.innerHTML=steps.slice(0,3).map(x=>`<div class="recovery-path-chip">${escapeHtml(x)}</div>`).join('');}
       }
@@ -8113,7 +8166,7 @@ function updateNotificationSettingUI(){
         }
         else if(recoveryChartMetric==='bodyfatigue'){
           series=[
-            {label:'systemic',color:mc,vals:days.map(d=>getBodyFatigueData(d).systemic),isBar:false},
+            {label:'whole body',color:mc,vals:days.map(d=>getBodyFatigueData(d).systemic),isBar:false},
             {label:'legs',color:sc,vals:days.map(d=>getBodyFatigueData(d).legs),isBar:false},
             {label:'back',color:'#d4a94a',vals:days.map(d=>getBodyFatigueData(d).back),isBar:false},
             {label:'upper',color:'#6ea8d8',vals:days.map(d=>getBodyFatigueData(d).upper),isBar:false}
@@ -8132,7 +8185,7 @@ function updateNotificationSettingUI(){
         const metricExplainers={
           freshness:'green zone (75+) is where the four signals below are mostly in good shape together. dropping out of it usually means catching up on sleep or easing training load helps more than pushing through.',
           feel:'8-10 is the range worth aiming for. if you\'re consistently below that, it often means you need more recovery time before your next hard effort, regardless of what the other numbers say.',
-          bodyfatigue:'1 = fresh and 10 = wrecked. this chart separates systemic, legs, back, and upper-body fatigue so the app can distinguish “don\'t train hard” from “a tiny low-cost lift is still fine.”',
+          bodyfatigue:'1 = fresh and 10 = wrecked. this chart separates whole-body, legs, back, and upper-body fatigue so the app can distinguish “don\'t train hard” from “a tiny low-cost lift is still fine.”',
           hrv:series[0]&&series[0].normalRange?'every bar now uses the same visible personal baseline: green is usual, amber-to-red is progressively below usual, and teal is above usual. either direction is context, not a diagnosis; repeated trends matter more than one reading.':'once you\'ve logged about 5 days of HRV, this chart will shade your own normal range so you can compare the trend with your history, not a generic number.',
           sleep:'67+ is whoop\'s own "well recovered" cutoff for both sleep and recovery %. consistently below it usually means more sleep or lighter days, not more caffeine.',
           acwr:'Near-base = the recent 7-day average is about 80–130% of the 28-day average; amber/red only show larger departures. The bands are descriptive app heuristics, not validated safety or injury-risk zones.'
@@ -10820,7 +10873,7 @@ function updateNotificationSettingUI(){
         const matched=Object.entries(biometrics||{}).filter(([date])=>date<=today&&Math.round((todayDate-new Date(date+'T12:00:00'))/86400000)<=90).map(([date,rec])=>({date,rec,focus:Number(dailyHistory[date]?.focusMinutes||0)}));
         const comparisons=[];
         const compare=(label,low,high,lowName,highName)=>{const a=matched.filter(x=>low(x.rec)).map(x=>x.focus),b=matched.filter(x=>high(x.rec)).map(x=>x.focus);if(a.length<3||b.length<3)return;const aa=patternAverage(a),bb=patternAverage(b),effect=(bb-aa)/Math.max(aa,10);if(Math.abs(effect)<.2)return;comparisons.push({label,a,b,aa,bb,effect,lowName,highName});};
-        compare('systemic fatigue',r=>Number(r.systemicFatigue)<=4,r=>Number(r.systemicFatigue)>=7,'lower-fatigue','high-fatigue');
+        compare('whole-body fatigue',r=>Number(r.systemicFatigue)<=4,r=>Number(r.systemicFatigue)>=7,'lower-fatigue','high-fatigue');
         compare('work demand',r=>r.workHours!=null&&r.workEffort!=null&&Number(r.workHours)*Number(r.workEffort)<40,r=>r.workHours!=null&&r.workEffort!=null&&Number(r.workHours)*Number(r.workEffort)>=54,'lighter-work','heavy-work');
         compare('sleep score',r=>Number(r.sleep)>=80,r=>r.sleep!=null&&Number(r.sleep)<=60,'higher-sleep-score','lower-sleep-score');
         comparisons.sort((a,b)=>Math.abs(b.effect)-Math.abs(a.effect));
