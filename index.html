@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.146 recovery drafts, weight trends, and adaptive movement primers -->
+<!-- Focus::Flow deployment marker: v1.147 clearer navigation, movable notes, forgiving morning times, and a practical money ledger -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -2367,6 +2367,79 @@
     [data-view-mode="mobile"] .task-details-footer { align-items:stretch; flex-direction:column; }
     [data-view-mode="mobile"] .task-order-tools,[data-view-mode="mobile"] .task-edit-tools { width:100%; }
     [data-view-mode="mobile"] .task-edit-tools .task-text-btn { flex:1; }
+
+    /* v1.147: icon navigation, movable Notes, forgiving sleep times, and a transaction-first Money view. */
+    .sidebar-control-row { padding:0 0 .65rem; border-bottom:1px solid var(--border-color); }
+    .sidebar-collapse-btn { width:100%; height:42px; display:flex; align-items:center; justify-content:center; gap:.5rem; }
+    .sidebar-collapse-arrow { font:700 1rem 'JetBrains Mono',monospace; line-height:1; }
+    .sidebar-collapse-label { font-size:.6rem; font-weight:650; }
+    .sidebar-nav-btn::before,.sidebar-utility-btn::before { display:none; }
+    .sidebar-nav-icon { width:18px; height:18px; flex:none; display:grid; place-items:center; color:currentColor; }
+    .sidebar-nav-icon svg { width:18px; height:18px; display:block; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+    .sidebar-nav-btn.active .sidebar-nav-icon { filter:drop-shadow(0 0 5px var(--main-glow)); }
+    .sidebar-sync-dot { position:absolute; left:19px; top:9px; width:7px; height:7px; border:2px solid var(--sub-alt-color); border-radius:50%; background:var(--border-color); }
+    .sidebar-utility-btn[data-sync-mirror].synced .sidebar-sync-dot { background:var(--main-color); box-shadow:0 0 7px var(--main-glow); }
+    .sidebar-utility-btn[data-sync-mirror].syncing .sidebar-sync-dot { background:#d4a94a; animation:pulse 1s infinite; }
+    .sidebar-utility-btn[data-sync-mirror].error .sidebar-sync-dot { background:var(--error-color); }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-control-row { padding-bottom:.55rem; }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-collapse-label { display:none; }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-collapse-btn { transform:none; }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-collapse-arrow { transform:rotate(180deg); }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-nav-btn,body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-utility-btn { min-height:44px; }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-nav-icon { width:21px; height:21px; }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-nav-icon svg { width:21px; height:21px; }
+    body[data-sidebar-collapsed="true"] .app-sidebar [data-nav-short]::after { content:none; }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-utility-btn[data-sync-mirror]::before { display:none; }
+    body[data-sidebar-collapsed="true"] .app-sidebar .sidebar-sync-dot { left:calc(50% + 5px); top:8px; }
+
+    [data-view-mode="desktop"] .notepad-backdrop.open { display:none; }
+    [data-view-mode="desktop"] .notepad-popover { inset:auto!important; left:var(--notes-x,calc(100vw - 424px))!important; top:var(--notes-y,70px)!important; right:auto!important; bottom:auto!important; width:var(--notes-width,400px)!important; height:var(--notes-height,430px)!important; min-width:320px; min-height:260px; max-width:min(760px,calc(100vw - 24px)); max-height:calc(100vh - 24px); }
+    [data-view-mode="desktop"] .notepad-header { cursor:move; user-select:none; touch-action:none; }
+    .notepad-resize-handle { left:auto; top:auto; right:3px; bottom:3px; width:22px; height:22px; transform:none; border-radius:.35rem 0 .7rem 0; cursor:nwse-resize; opacity:.75; background:linear-gradient(135deg,transparent 0 46%,var(--border-color) 47% 55%,transparent 56% 66%,var(--border-color) 67% 75%,transparent 76%); }
+    .notepad-resize-handle:hover { background:linear-gradient(135deg,transparent 0 46%,var(--main-color) 47% 55%,transparent 56% 66%,var(--main-color) 67% 75%,transparent 76%); }
+    .notepad-window-hint { color:var(--text-color); opacity:.38; font-size:.5rem; font-weight:500; text-transform:none; letter-spacing:0; }
+
+    .recovery-time-row.flexible-time input { font-family:'JetBrains Mono',monospace; }
+    .recovery-time-help { margin-top:.28rem; color:var(--text-color); opacity:.45; font-size:.52rem; line-height:1.4; }
+    .recovery-input-group.sleep-window-input { grid-column:1/-1; }
+    .sleep-window-input .recovery-time-row input { flex:1 1 0; }
+
+    .money-grid-v147 { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr); gap:1rem; }
+    .money-wide { grid-column:1/-1; }
+    .money-summary-grid.v147 { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .money-entry-type { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.35rem; margin:.7rem 0; }
+    .money-entry-type button { min-height:36px; border:1px solid var(--border-color); border-radius:.62rem; background:transparent; color:var(--text-color); opacity:.62; cursor:pointer; font-size:.58rem; font-weight:650; }
+    .money-entry-type button.active { color:var(--main-color); opacity:1; border-color:var(--main-color); background:color-mix(in srgb,var(--bg-color) 90%,var(--main-color) 10%); }
+    .money-entry-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+    .money-entry-grid label,.money-account-form label { color:var(--text-color); font-size:.54rem; line-height:1.35; }
+    .money-entry-grid .wide { grid-column:1/-1; }
+    .money-entry-actions { display:flex; gap:.45rem; margin-top:.65rem; }
+    .money-account-list { display:grid; gap:.42rem; margin-top:.65rem; }
+    .money-account-row { display:grid; grid-template-columns:minmax(0,1fr) 112px auto; gap:.5rem; align-items:center; padding:.6rem .65rem; border:1px solid var(--border-color); border-radius:.68rem; background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); }
+    .money-account-name { min-width:0; color:var(--text-color); font-size:.67rem; font-weight:680; }
+    .money-account-name span { display:block; margin-top:.12rem; opacity:.43; font-size:.49rem; font-weight:500; text-transform:uppercase; }
+    .money-account-balance { color:var(--text-color); text-align:right; font:700 .7rem 'JetBrains Mono',monospace; }
+    .money-account-opening { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:.65rem; color:var(--text-color); font-size:.52rem; opacity:.72; }
+    .money-account-opening input { width:132px!important; min-width:0; margin:0!important; opacity:1; }
+    .money-account-balance.debt { color:#d4a94a; }
+    .money-account-edit { display:grid; grid-template-columns:1fr 1fr auto; gap:.38rem; margin-top:.6rem; }
+    .money-category-list { display:grid; gap:.38rem; margin-top:.65rem; }
+    .money-category-row { display:grid; grid-template-columns:100px minmax(0,1fr) auto; gap:.5rem; align-items:center; color:var(--text-color); font-size:.55rem; }
+    .money-category-track { height:7px; border-radius:999px; overflow:hidden; background:var(--border-color); }
+    .money-category-track span { display:block; height:100%; border-radius:inherit; background:var(--main-color); }
+    .money-ledger-controls { display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.55rem; }
+    .money-ledger-list { display:grid; gap:.38rem; }
+    .money-ledger-row { display:grid; grid-template-columns:72px minmax(0,1fr) auto auto; gap:.55rem; align-items:center; padding:.58rem .62rem; border:1px solid var(--border-color); border-radius:.65rem; }
+    .money-ledger-date { color:var(--text-color); opacity:.48; font:500 .51rem 'JetBrains Mono',monospace; }
+    .money-ledger-main { min-width:0; color:var(--text-color); font-size:.62rem; line-height:1.35; }
+    .money-ledger-main span { display:block; opacity:.45; font-size:.49rem; }
+    .money-ledger-amount { color:var(--text-color); font:700 .66rem 'JetBrains Mono',monospace; }
+    .money-ledger-amount.income { color:var(--main-color); }
+    .money-ledger-delete { width:28px; height:28px; border:1px solid transparent; border-radius:.45rem; background:transparent; color:var(--text-color); opacity:.4; cursor:pointer; }
+    .money-ledger-delete:hover { opacity:1; color:var(--error-color); border-color:var(--border-color); }
+    .money-empty { padding:.85rem; border:1px dashed var(--border-color); border-radius:.68rem; color:var(--text-color); opacity:.5; font-size:.58rem; line-height:1.5; text-align:center; }
+    @media(max-width:900px){.money-grid-v147{grid-template-columns:1fr}.money-wide{grid-column:auto}.money-summary-grid.v147{grid-template-columns:1fr 1fr}.money-entry-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.money-entry-grid{grid-template-columns:1fr}.money-entry-grid .wide{grid-column:auto}.money-account-row{grid-template-columns:minmax(0,1fr) auto}.money-account-row .money-ledger-delete{grid-column:2}.money-account-edit{grid-template-columns:1fr}.money-ledger-row{grid-template-columns:60px minmax(0,1fr) auto}.money-ledger-delete{grid-column:3}.money-summary-grid.v147{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
@@ -2552,7 +2625,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.146 protects unfinished morning entries, restores visible total sleep, adds bodyweight trends, improves mobile safe areas, keeps sync visible in the collapsed rail, and adds fatigue-aware push-up or burpee primers to lifting.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.147 replaces cryptic sidebar letters with page icons, makes Notes movable and resizable, accepts approximate morning times, and adds a simple paycheck, purchase, account, and debt ledger.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2856,35 +2929,29 @@
 
   <div class="scroll-wrapper">
     <aside class="app-sidebar" id="appSidebar" aria-label="Main navigation">
-      <div class="sidebar-brand">
-        <div class="sidebar-brand-lockup" title="Focus::Flow">
-          <span class="sidebar-brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle class="brand-mark-ring" cx="16" cy="16" r="11.5"></circle><path class="brand-mark-hand" d="M16 9.5v7l5 3"></path><circle class="brand-mark-center" cx="16" cy="16" r="1.45"></circle><path class="brand-mark-flow" d="M5.5 16h3M23.5 16h3"></path></svg></span>
-          <span class="sidebar-wordmark">focus<span>::</span>flow</span>
-        </div>
-        <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="collapse or expand navigation" aria-label="collapse or expand navigation">‹</button>
-      </div>
+      <div class="sidebar-control-row"><button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="collapse or expand navigation" aria-label="collapse or expand navigation"><span class="sidebar-collapse-arrow">‹</span><span class="sidebar-collapse-label">collapse navigation</span></button></div>
       <nav class="sidebar-nav">
         <div class="sidebar-section"><div class="sidebar-section-label">every day</div>
-          <button class="sidebar-nav-btn panel-tab active" data-panel="today" data-nav-short="T"><span class="sidebar-nav-label">Today</span></button>
-          <button class="sidebar-nav-btn panel-tab" data-panel="recovery" data-nav-short="R"><span class="sidebar-nav-label">Recovery</span></button>
-          <button class="sidebar-nav-btn panel-tab" data-panel="habits" data-nav-short="H"><span class="sidebar-nav-label">Habits</span></button>
-          <button class="sidebar-nav-btn panel-tab" data-panel="tasks" data-nav-short="Tk"><span class="sidebar-nav-label">Tasks</span></button>
+          <button class="sidebar-nav-btn panel-tab active" data-panel="today" aria-label="Today"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.5 10.5 12 3l8.5 7.5v9H14v-5h-4v5H3.5z"/></svg></span><span class="sidebar-nav-label">Today</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="recovery" aria-label="Recovery"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/><path d="M19.5 5.5A5 5 0 0 0 12 6.8 5 5 0 0 0 4.5 5.5"/></svg></span><span class="sidebar-nav-label">Recovery</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="habits" aria-label="Habits"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8 12 2.5 2.5L16.5 9"/></svg></span><span class="sidebar-nav-label">Habits</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="tasks" aria-label="Tasks"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M8.5 9h7M8.5 13h7M8.5 17h4"/></svg></span><span class="sidebar-nav-label">Tasks</span></button>
         </div>
         <div class="sidebar-section"><div class="sidebar-section-label">training</div>
-          <button class="sidebar-nav-btn panel-tab" data-panel="lifting" data-nav-short="L"><span class="sidebar-nav-label">Lifting</span></button>
-          <button class="sidebar-nav-btn panel-tab" data-panel="activities" data-nav-short="A"><span class="sidebar-nav-label">Activities</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="lifting" aria-label="Lifting"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12"/></svg></span><span class="sidebar-nav-label">Lifting</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="activities" aria-label="Activities"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 13h4l2.5-6 4 11 2.5-6h5"/></svg></span><span class="sidebar-nav-label">Activities</span></button>
         </div>
         <div class="sidebar-section"><div class="sidebar-section-label">life</div>
-          <button class="sidebar-nav-btn panel-tab" data-panel="money" data-nav-short="$"><span class="sidebar-nav-label">Money</span></button>
-          <button class="sidebar-nav-btn panel-tab" data-panel="goals" data-nav-short="G"><span class="sidebar-nav-label">Goals</span></button>
-          <button class="sidebar-nav-btn panel-tab" data-panel="books" data-nav-short="B"><span class="sidebar-nav-label">Books</span></button>
-          <button class="sidebar-nav-btn panel-tab" data-panel="stats" data-nav-short="S"><span class="sidebar-nav-label">Stats</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="money" aria-label="Money"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.5 7h15A2.5 2.5 0 0 1 21 9.5v8A2.5 2.5 0 0 1 18.5 20h-15z"/><path d="M3.5 7V5.5A1.5 1.5 0 0 1 5 4h12v3M16 13h5"/></svg></span><span class="sidebar-nav-label">Money</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="goals" aria-label="Goals"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span><span class="sidebar-nav-label">Goals</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="books" aria-label="Books"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H11v18H7.5A3.5 3.5 0 0 0 4 23zM20 5.5A3.5 3.5 0 0 0 16.5 2H13v18h3.5A3.5 3.5 0 0 1 20 23z"/></svg></span><span class="sidebar-nav-label">Books</span></button>
+          <button class="sidebar-nav-btn panel-tab" data-panel="stats" aria-label="Stats"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20v-7h4v7M10 20V5h4v15M15 20v-10h4v10M3 20h18"/></svg></span><span class="sidebar-nav-label">Stats</span></button>
         </div>
       </nav>
       <div class="sidebar-footer">
-        <button class="sidebar-utility-btn" data-ui-action="notes" data-nav-short="N"><span class="sidebar-nav-label">Notes</span><span class="sidebar-utility-meta">open</span></button>
-        <button class="sidebar-utility-btn" data-ui-action="sync" data-sync-mirror data-nav-short="C"><span class="sidebar-nav-label">Cloud sync</span><span class="sidebar-utility-meta" data-sync-label>local only</span></button>
-        <button class="sidebar-utility-btn" data-ui-action="settings" data-nav-short="P"><span class="sidebar-nav-label">Settings</span><span class="sidebar-utility-meta">preferences</span></button>
+        <button class="sidebar-utility-btn" data-ui-action="notes" aria-label="Notes"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5zM16 3v4h4M8 11h8M8 15h8"/></svg></span><span class="sidebar-nav-label">Notes</span><span class="sidebar-utility-meta">open</span></button>
+        <button class="sidebar-utility-btn" data-ui-action="sync" data-sync-mirror aria-label="Cloud sync"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .7-7.9A6 6 0 0 0 6.3 8.6 4.7 4.7 0 0 0 7 18z"/><path d="m9 13 3-3 3 3M12 10v6"/></svg></span><span class="sidebar-sync-dot" aria-hidden="true"></span><span class="sidebar-nav-label">Cloud sync</span><span class="sidebar-utility-meta" data-sync-label>local only</span></button>
+        <button class="sidebar-utility-btn" data-ui-action="settings" aria-label="Settings"><span class="sidebar-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg></span><span class="sidebar-nav-label">Settings</span><span class="sidebar-utility-meta">preferences</span></button>
       </div>
     </aside>
     <div class="app-shell">
@@ -2907,11 +2974,11 @@
 
       <div class="notepad-backdrop" id="notepadBackdrop"></div>
       <div class="notepad-popover" id="notepadPopover" style="display:none;" role="dialog" aria-label="Notes">
-        <button class="notepad-resize-handle" id="notepadResizeHandle" title="drag to resize notes" aria-label="resize notes"></button>
+        <button class="notepad-resize-handle" id="notepadResizeHandle" title="drag to resize notes width and height" aria-label="resize notes width and height"></button>
         <div class="notepad-header" id="notepadHeader">
-          <span>notes</span>
+          <span>notes <small class="notepad-window-hint">drag this bar to move</small></span>
           <div class="notepad-header-btns">
-            <button id="notepadResetBtn" title="reset notes width">reset width</button>
+            <button id="notepadResetBtn" title="reset notes position and size">reset window</button>
             <button id="notepadCloseBtn" title="close">✕</button>
           </div>
         </div>
@@ -3316,27 +3383,44 @@
       <!-- Money Panel -->
       <div class="panel" id="panel-money">
         <div class="money-intro">
-          <div><div class="money-kicker">simple monthly direction</div><h1>Money without a spreadsheet ritual</h1><p>Enter rough numbers. Focus::Flow shows room, momentum, and one next action; it does not judge imperfect months.</p></div>
+          <div><div class="money-kicker">one entry at a time</div><h1>Your full picture, without bookkeeping homework</h1><p>Add each paycheck and purchase when they happen. Accounts answer “where did it come from?” while categories answer “what was it for?”</p></div>
           <div class="money-autosave">autosaves on this device and through your normal cloud sync</div>
         </div>
-        <div class="money-grid">
-          <section class="money-card money-overview-card">
-            <div class="money-card-head"><h2>monthly plan</h2><span id="moneyMonthLabel"></span></div>
-            <div class="money-summary-grid">
-              <div class="money-summary-item"><span>income</span><strong id="moneyIncomeSummary">—</strong></div>
-              <div class="money-summary-item"><span>planned out</span><strong id="moneyOutSummary">—</strong></div>
-              <div class="money-summary-item primary"><span>room left</span><strong id="moneyRoomSummary">—</strong></div>
+        <div class="money-grid-v147">
+          <section class="money-card money-wide">
+            <div class="money-card-head"><h2>this month</h2><span id="moneyMonthLabel"></span></div>
+            <div class="money-summary-grid v147">
+              <div class="money-summary-item"><span>paychecks</span><strong id="moneyIncomeSummary">—</strong></div>
+              <div class="money-summary-item"><span>purchases</span><strong id="moneyOutSummary">—</strong></div>
+              <div class="money-summary-item primary"><span>cash available</span><strong id="moneyCashSummary">—</strong></div>
+              <div class="money-summary-item"><span>debt owed</span><strong id="moneyDebtSummary">—</strong></div>
             </div>
             <div class="money-plan-bar"><span id="moneyPlanBarFill"></span></div>
-            <div class="money-plan-message" id="moneyPlanMessage">Add rough monthly numbers to make the plan visible.</div>
+            <div class="money-plan-message" id="moneyPlanMessage">Add an account balance, then your next paycheck or purchase.</div>
           </section>
           <section class="money-card">
-            <h2>three useful numbers</h2>
-            <div class="money-fields">
-              <label>monthly take-home<input class="search-input money-input" id="moneyIncomeInput" type="number" inputmode="decimal" min="0" step="50" placeholder="e.g. 3200"></label>
-              <label>fixed bills<input class="search-input money-input" id="moneyBillsInput" type="number" inputmode="decimal" min="0" step="25" placeholder="rent, phone, subscriptions"></label>
-              <label>flexible spending plan<input class="search-input money-input" id="moneyFlexibleInput" type="number" inputmode="decimal" min="0" step="25" placeholder="food, fuel, fun"></label>
+            <h2>add one entry</h2>
+            <div class="money-plan-message">Most days this is only description, amount and account.</div>
+            <div class="money-entry-type" id="moneyEntryType"><button type="button" class="active" data-money-type="purchase">purchase</button><button type="button" data-money-type="paycheck">paycheck</button><button type="button" data-money-type="payment">account payment</button></div>
+            <div class="money-entry-grid">
+              <label>date<input class="search-input money-input" id="moneyEntryDate" type="date"></label>
+              <label>amount<input class="search-input money-input" id="moneyEntryAmount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></label>
+              <label class="wide">description<input class="search-input money-input" id="moneyEntryDescription" type="text" placeholder="groceries, paycheque, card payment..."></label>
+              <label id="moneyEntryCategoryWrap">category<select class="search-input money-input" id="moneyEntryCategory"><option>Groceries</option><option>Dining</option><option>Transport</option><option>Housing</option><option>Health</option><option>Training</option><option>Fun</option><option>Subscriptions</option><option>Debt / interest</option><option>Other</option></select></label>
+              <label id="moneyEntryAccountWrap">account<select class="search-input money-input" id="moneyEntryAccount"></select></label>
+              <label id="moneyEntryToAccountWrap" style="display:none;">pay toward<select class="search-input money-input" id="moneyEntryToAccount"></select></label>
             </div>
+            <div class="money-entry-actions"><button type="button" class="btn primary" id="moneyAddEntryBtn">add purchase</button></div>
+          </section>
+          <section class="money-card">
+            <div class="money-card-head"><h2>accounts</h2><span>starting balance + entries</span></div>
+            <div class="money-plan-message">Cash balances are money available. Credit cards and the line of credit are amounts owed.</div>
+            <div class="money-account-list" id="moneyAccountList"></div>
+            <div class="money-account-edit"><input class="search-input money-input" id="moneyNewAccountName" placeholder="new account name"><select class="search-input money-input" id="moneyNewAccountType"><option value="cash">cash / chequing</option><option value="savings">savings</option><option value="credit">credit card</option><option value="loc">line of credit</option></select><button type="button" class="btn" id="moneyAddAccountBtn">add</button></div>
+          </section>
+          <section class="money-card">
+            <div class="money-card-head"><h2>where purchases went</h2><span>selected month</span></div>
+            <div class="money-category-list" id="moneyCategoryList"><div class="money-empty">Categories appear after your first purchase.</div></div>
           </section>
           <section class="money-card money-goal-card">
             <h2>financial goal</h2>
@@ -3348,6 +3432,10 @@
             <div class="money-fields"><label>invested balance<input class="search-input money-input" id="moneyInvestedInput" type="number" inputmode="decimal" min="0" step="100"></label><label>usual monthly contribution<input class="search-input money-input" id="moneyContributionInput" type="number" inputmode="decimal" min="0" step="25"></label></div>
             <div class="money-projection" id="moneyProjection">Add a contribution to see twelve months of deposits—without assuming market returns.</div>
             <div class="money-disclaimer">Planning view only, not investment advice. Market returns are deliberately excluded from this first version.</div>
+          </section>
+          <section class="money-card money-wide">
+            <div class="money-ledger-controls"><div><h2>entries</h2><div class="money-plan-message">Payments move money between your accounts and do not count as new spending.</div></div><input class="search-input money-input" id="moneyLedgerMonth" type="month" style="width:auto;"></div>
+            <div class="money-ledger-list" id="moneyLedgerList"><div class="money-empty">No entries yet.</div></div>
           </section>
         </div>
       </div>
@@ -3516,7 +3604,7 @@
                   <div class="recovery-input-group"><label>recovery % — whoop</label><input type="number" id="recoveryRecoveryInput" class="search-input" placeholder="0-100" inputmode="decimal"></div>
                   <div class="recovery-input-group"><label>sleep score — whoop</label><input type="number" id="recoverySleepInput" class="search-input" placeholder="0-100" inputmode="decimal"></div>
                   <div class="recovery-input-group"><label>how you feel</label><select id="recoveryRpeInput" class="search-input feeling-select"><option value="">— choose the closest feeling —</option><option value="1">1 · awful</option><option value="2">2 · very rough</option><option value="3">3 · rough</option><option value="4">4 · below par</option><option value="5">5 · off</option><option value="6">6 · okay</option><option value="7">7 · decent</option><option value="8">8 · good</option><option value="9">9 · great</option><option value="10">10 · excellent</option></select></div>
-                  <div class="recovery-input-group"><label>sleep start / end</label><div class="recovery-time-row"><input type="time" id="recoverySleepStartInput" class="search-input"><input type="time" id="recoverySleepEndInput" class="search-input"></div><div class="recovery-sleep-duration-preview" id="recoverySleepDurationPreview"></div></div>
+                  <div class="recovery-input-group sleep-window-input"><label>sleep start / wake time</label><div class="recovery-time-row flexible-time"><input type="text" id="recoverySleepStartInput" class="search-input" inputmode="text" autocomplete="off" placeholder="10:30 PM"><input type="text" id="recoverySleepEndInput" class="search-input" inputmode="text" autocomplete="off" placeholder="8 AM"></div><div class="recovery-time-help">Approximate is okay: “8 AM” and “08:-- AM” both save as 8:00 AM.</div><div class="recovery-sleep-duration-preview" id="recoverySleepDurationPreview"></div></div>
                   <div class="recovery-input-group"><label>bodyweight <span class="goal-form-hint">(for pound-for-pound lifts)</span></label><input type="number" id="recoveryBodyweightInput" class="search-input" placeholder="e.g. 165" inputmode="decimal"></div>
                 </div>
               </div>
@@ -3930,7 +4018,7 @@
       let bgHabits=[],totalXP=0,dailyGoal=90;
       let dailyGoalBonusDate=null;
       let xpFromFocus=0,xpFromTasks=0,xpFromHabits=0,xpFromGoals=0,xpFromChains=0;
-      let notepadContent='',notepadPinned=false,notepadPosX=null,notepadPosY=null,notepadWidth=400;
+      let notepadContent='',notepadPinned=false,notepadPosX=null,notepadPosY=null,notepadWidth=400,notepadHeight=430,notepadGeometryLoaded=false;
       let todayHabitSort='manual',todoSort='manual';
       let overviewSort='manual';
       let adaptiveGoalEnabled=false;
@@ -3956,7 +4044,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.146';
+      const APP_VERSION='1.147';
       const APP_RELEASE_DATE='2026-08-15';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -3978,7 +4066,7 @@
       let completionEvents=[];
       let biometrics={};
       let recoveryDrafts=(()=>{try{return JSON.parse(localStorage.getItem('focus-flow-recovery-drafts')||'{}')||{};}catch(e){return{};}})();
-      let moneyState={income:'',bills:'',flexible:'',goalName:'',goalSaved:'',goalTarget:'',invested:'',contribution:''};
+      let moneyState={income:'',bills:'',flexible:'',goalName:'',goalSaved:'',goalTarget:'',invested:'',contribution:'',entryType:'purchase',accounts:[{id:'money-chequing',name:'Chequing',type:'cash',openingBalance:''},{id:'money-card-1',name:'Credit card 1',type:'credit',openingBalance:''},{id:'money-card-2',name:'Credit card 2',type:'credit',openingBalance:''},{id:'money-loc',name:'Line of credit',type:'loc',openingBalance:''}],transactions:[],ledgerMonth:''};
       let importedActivities=[];
       let sessionResponses={};
       let manualTrainingSessions={};
@@ -4469,9 +4557,21 @@
       function openWelcome(){document.getElementById('welcomeOverlay').classList.add('open');}
 
       function isMobileLayout(){return document.body.getAttribute('data-view-mode')==='mobile';}
+      function loadNotepadGeometry(){
+        if(notepadGeometryLoaded)return;notepadGeometryLoaded=true;
+        try{const g=JSON.parse(localStorage.getItem('focus-flow-notes-geometry')||'null');if(g){notepadPosX=Number.isFinite(Number(g.x))?Number(g.x):null;notepadPosY=Number.isFinite(Number(g.y))?Number(g.y):null;notepadWidth=Number(g.width)||400;notepadHeight=Number(g.height)||430;}}catch(e){}
+      }
+      function persistNotepadGeometry(){
+        try{localStorage.setItem('focus-flow-notes-geometry',JSON.stringify({x:notepadPosX,y:notepadPosY,width:notepadWidth,height:notepadHeight}));}catch(e){}
+      }
       function positionNotepad(){
-        const pop=document.getElementById('notepadPopover');if(!pop)return;
-        pop.style.setProperty('--notes-width',Math.max(320,Math.min(720,notepadWidth||400))+'px');
+        const pop=document.getElementById('notepadPopover');if(!pop)return;loadNotepadGeometry();
+        notepadWidth=Math.max(320,Math.min(Math.min(760,window.innerWidth-24),notepadWidth||400));notepadHeight=Math.max(260,Math.min(window.innerHeight-24,notepadHeight||430));
+        if(!isMobileLayout()){
+          if(notepadPosX==null)notepadPosX=Math.max(12,window.innerWidth-notepadWidth-24);if(notepadPosY==null)notepadPosY=70;
+          notepadPosX=Math.max(12,Math.min(window.innerWidth-notepadWidth-12,notepadPosX));notepadPosY=Math.max(12,Math.min(window.innerHeight-notepadHeight-12,notepadPosY));
+        }
+        pop.style.setProperty('--notes-width',notepadWidth+'px');pop.style.setProperty('--notes-height',notepadHeight+'px');pop.style.setProperty('--notes-x',(notepadPosX??12)+'px');pop.style.setProperty('--notes-y',(notepadPosY??70)+'px');
       }
       function setNotesOpenState(open){
         const pop=document.getElementById('notepadPopover'),backdrop=document.getElementById('notepadBackdrop');if(!pop)return;
@@ -4481,7 +4581,7 @@
       function openNotepad(){positionNotepad();setNotesOpenState(true);}
       function closeNotepad(){setNotesOpenState(false);}
       function toggleNotepad(){const pop=document.getElementById('notepadPopover');if(pop.style.display==='none'||!pop.style.display)openNotepad();else closeNotepad();}
-      function resetNotepadWindow(){notepadPinned=false;notepadPosX=null;notepadPosY=null;notepadWidth=400;positionNotepad();saveData();showToast('notes width reset');}
+      function resetNotepadWindow(){notepadPinned=false;notepadPosX=null;notepadPosY=null;notepadWidth=400;notepadHeight=430;positionNotepad();persistNotepadGeometry();saveData();showToast('notes position and size reset');}
       let notepadUndoStack=[],notepadRedoStack=[],notepadHistoryApplying=false;
       function updateNotepadHistoryButtons(){const undo=document.getElementById('notepadUndoBtn'),redo=document.getElementById('notepadRedoBtn');if(undo){undo.disabled=!notepadUndoStack.length;undo.dataset.depth=String(notepadUndoStack.length);}if(redo){redo.disabled=!notepadRedoStack.length;redo.dataset.depth=String(notepadRedoStack.length);}}
       function rememberNotepadState(value){if(notepadHistoryApplying)return;if(notepadUndoStack[notepadUndoStack.length-1]!==value){notepadUndoStack.push(value);if(notepadUndoStack.length>80)notepadUndoStack.shift();}notepadRedoStack=[];updateNotepadHistoryButtons();}
@@ -4499,12 +4599,15 @@
         if(ta&&document.activeElement!==ta)ta.value=notepadContent||'';
         if(notepadInitialRestoreDone)return;
         notepadInitialRestoreDone=true;
-        notepadPinned=false;notepadPosX=null;notepadPosY=null;positionNotepad();updateNotepadHistoryButtons();
+        loadNotepadGeometry();positionNotepad();updateNotepadHistoryButtons();
       }
-      let notepadResizing=false;
+      let notepadResizing=false,notepadDragging=false,notepadDragOffsetX=0,notepadDragOffsetY=0;
       function notepadResizeStart(){if(isMobileLayout())return;notepadResizing=true;document.body.style.userSelect='none';}
-      function notepadResizeMove(clientX){if(!notepadResizing)return;notepadWidth=Math.max(320,Math.min(720,window.innerWidth-clientX-16));positionNotepad();}
-      function notepadResizeEnd(){if(!notepadResizing)return;notepadResizing=false;document.body.style.userSelect='';saveData();}
+      function notepadResizeMove(clientX,clientY){if(!notepadResizing)return;notepadWidth=Math.max(320,Math.min(760,clientX-(notepadPosX??0)));notepadHeight=Math.max(260,Math.min(window.innerHeight-12-(notepadPosY??0),clientY-(notepadPosY??0)));positionNotepad();}
+      function notepadResizeEnd(){if(!notepadResizing)return;notepadResizing=false;document.body.style.userSelect='';persistNotepadGeometry();saveData();}
+      function notepadDragStart(clientX,clientY,target){if(isMobileLayout()||target?.closest('button,input,textarea,select'))return;loadNotepadGeometry();notepadDragging=true;notepadDragOffsetX=clientX-(notepadPosX??0);notepadDragOffsetY=clientY-(notepadPosY??0);document.body.style.userSelect='none';}
+      function notepadDragMove(clientX,clientY){if(!notepadDragging)return;notepadPosX=clientX-notepadDragOffsetX;notepadPosY=clientY-notepadDragOffsetY;positionNotepad();}
+      function notepadDragEnd(){if(!notepadDragging)return;notepadDragging=false;document.body.style.userSelect='';persistNotepadGeometry();saveData();}
 
       function closeMobileMore(){document.getElementById('mobileMoreSheet')?.classList.remove('open');document.getElementById('mobileMoreBackdrop')?.classList.remove('open');document.getElementById('mobileMoreBtn')?.setAttribute('aria-expanded','false');}
       function toggleMobileMore(){const sheet=document.getElementById('mobileMoreSheet'),open=!sheet?.classList.contains('open');sheet?.classList.toggle('open',open);document.getElementById('mobileMoreBackdrop')?.classList.toggle('open',open);document.getElementById('mobileMoreBtn')?.setAttribute('aria-expanded',String(open));}
@@ -4886,20 +4989,50 @@
       }
 
       function formatMoney(value){const n=Number(value);return Number.isFinite(n)&&value!==''?new Intl.NumberFormat(undefined,{style:'currency',currency:'CAD',maximumFractionDigits:0}).format(n):'—';}
+      function formatMoneyExact(value){const n=Number(value);return Number.isFinite(n)?new Intl.NumberFormat(undefined,{style:'currency',currency:'CAD',minimumFractionDigits:2,maximumFractionDigits:2}).format(n):'—';}
+      function ensureMoneyState(){
+        if(!moneyState||typeof moneyState!=='object')moneyState={};
+        if(!Array.isArray(moneyState.accounts))moneyState.accounts=[{id:'money-chequing',name:'Chequing',type:'cash',openingBalance:''},{id:'money-card-1',name:'Credit card 1',type:'credit',openingBalance:''},{id:'money-card-2',name:'Credit card 2',type:'credit',openingBalance:''},{id:'money-loc',name:'Line of credit',type:'loc',openingBalance:''}];
+        if(!Array.isArray(moneyState.transactions))moneyState.transactions=[];
+        if(!['purchase','paycheck','payment'].includes(moneyState.entryType))moneyState.entryType='purchase';
+      }
+      function getMoneyAccount(id){return moneyState.accounts.find(a=>String(a.id)===String(id));}
+      function isMoneyDebtAccount(account){return account&&['credit','loc'].includes(account.type);}
+      function getMoneyAccountBalance(account){
+        let balance=Number(account.openingBalance)||0;
+        moneyState.transactions.forEach(tx=>{const amount=Number(tx.amount)||0;if(tx.type==='purchase'&&tx.accountId===account.id)balance+=isMoneyDebtAccount(account)?amount:-amount;else if(tx.type==='paycheck'&&tx.accountId===account.id)balance+=amount;else if(tx.type==='payment'){if(tx.accountId===account.id)balance-=amount;if(tx.toAccountId===account.id)balance=Math.max(0,balance-amount);}});return Math.round(balance*100)/100;
+      }
+      function moneyMonthKey(date=new Date()){return`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;}
+      function renderMoneyAccountOptions(){
+        ensureMoneyState();const type=moneyState.entryType,accountSelect=document.getElementById('moneyEntryAccount'),toSelect=document.getElementById('moneyEntryToAccount');if(!accountSelect||!toSelect)return;
+        const previous=accountSelect.value,previousTo=toSelect.value,fromAccounts=type==='paycheck'?moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)):type==='payment'?moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)):moneyState.accounts,toAccounts=moneyState.accounts.filter(isMoneyDebtAccount),options=list=>list.map(a=>`<option value="${escapeHtml(String(a.id))}">${escapeHtml(a.name)}</option>`).join('');accountSelect.innerHTML=options(fromAccounts);toSelect.innerHTML=options(toAccounts);if(fromAccounts.some(a=>String(a.id)===previous))accountSelect.value=previous;if(toAccounts.some(a=>String(a.id)===previousTo))toSelect.value=previousTo;
+      }
+      function setMoneyEntryType(type){
+        if(!['purchase','paycheck','payment'].includes(type))type='purchase';moneyState.entryType=type;document.querySelectorAll('#moneyEntryType [data-money-type]').forEach(b=>b.classList.toggle('active',b.dataset.moneyType===type));document.getElementById('moneyEntryCategoryWrap').style.display=type==='purchase'?'block':'none';document.getElementById('moneyEntryToAccountWrap').style.display=type==='payment'?'block':'none';document.getElementById('moneyEntryAccountWrap').firstChild.textContent=type==='payment'?'pay from':type==='paycheck'?'deposit to':'account';document.getElementById('moneyAddEntryBtn').textContent=type==='purchase'?'add purchase':type==='paycheck'?'add paycheck':'record payment';renderMoneyAccountOptions();saveData();
+      }
       function renderMoney(){
-        const map={moneyIncomeInput:'income',moneyBillsInput:'bills',moneyFlexibleInput:'flexible',moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};
+        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};
         Object.entries(map).forEach(([id,key])=>{const el=document.getElementById(id);if(el&&document.activeElement!==el)el.value=moneyState[key]??'';});
-        const income=Number(moneyState.income)||0,bills=Number(moneyState.bills)||0,flexible=Number(moneyState.flexible)||0,out=bills+flexible,room=income-out,set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-        set('moneyMonthLabel',new Date().toLocaleDateString(undefined,{month:'long',year:'numeric'}));set('moneyIncomeSummary',income?formatMoney(income):'—');set('moneyOutSummary',out?formatMoney(out):'—');set('moneyRoomSummary',income?formatMoney(room):'—');
+        const monthInput=document.getElementById('moneyLedgerMonth'),month=moneyState.ledgerMonth||moneyMonthKey();moneyState.ledgerMonth=month;if(monthInput&&document.activeElement!==monthInput)monthInput.value=month;const monthTransactions=moneyState.transactions.filter(tx=>String(tx.date||'').startsWith(month)),income=monthTransactions.filter(tx=>tx.type==='paycheck').reduce((s,tx)=>s+(Number(tx.amount)||0),0),out=monthTransactions.filter(tx=>tx.type==='purchase').reduce((s,tx)=>s+(Number(tx.amount)||0),0),cash=moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)).reduce((s,a)=>s+getMoneyAccountBalance(a),0),debt=moneyState.accounts.filter(isMoneyDebtAccount).reduce((s,a)=>s+getMoneyAccountBalance(a),0),invested=Number(moneyState.invested)||0,netFlow=income-out,netPosition=cash+invested-debt,set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+        const monthDate=new Date(`${month}-02T12:00:00`);set('moneyMonthLabel',monthDate.toLocaleDateString(undefined,{month:'long',year:'numeric'}));set('moneyIncomeSummary',income?formatMoney(income):'—');set('moneyOutSummary',out?formatMoney(out):'—');set('moneyCashSummary',formatMoney(cash));set('moneyDebtSummary',formatMoney(debt));
         const planFill=document.getElementById('moneyPlanBarFill');if(planFill)planFill.style.width=`${income?Math.min(100,out/income*100):0}%`;
-        set('moneyPlanMessage',!income?'Add a rough take-home number first. Approximate is useful.':room<0?`The plan is ${formatMoney(Math.abs(room))} over income. That is a signal to adjust one category—not a failure.`:room===0?'Every planned dollar has a job. Keep a little buffer if the month tends to surprise you.':`${formatMoney(room)} is not assigned yet. It can become buffer, goal progress, or investing.`);
+        set('moneyPlanMessage',!moneyState.transactions.length?'Start with the current balance or amount owed on each account, then add the next real entry.':`${monthDate.toLocaleDateString(undefined,{month:'long'})} cash flow is ${netFlow>=0?'+':''}${formatMoney(netFlow)}. Across cash, tracked debt and investments, the current net position is ${formatMoney(netPosition)}. Card payments are transfers, so they are not counted twice as spending.`);
         const saved=Number(moneyState.goalSaved)||0,target=Number(moneyState.goalTarget)||0,goalPct=target?Math.min(100,saved/target*100):0,goalFill=document.getElementById('moneyGoalProgressFill');if(goalFill)goalFill.style.width=`${goalPct}%`;
         set('moneyGoalMessage',target?`${moneyState.goalName||'Goal'}: ${formatMoney(saved)} of ${formatMoney(target)} · ${Math.round(goalPct)}%. ${saved>=target?'Target reached; choose what this money should do next.':`${formatMoney(Math.max(0,target-saved))} remaining.`}`:'A financial goal belongs here because this is where the next contribution becomes concrete. Bigger life direction can still live on Goals.');
-        const invested=Number(moneyState.invested)||0,contribution=Number(moneyState.contribution)||0;set('moneyProjection',contribution?`${formatMoney(contribution*12)} of deposits over the next 12 months; ${formatMoney(invested+contribution*12)} total before any market movement.`:'Add a usual contribution to see twelve months of deposits—without assuming market returns.');
+        const contribution=Number(moneyState.contribution)||0;set('moneyProjection',contribution?`${formatMoney(contribution*12)} of deposits over the next 12 months; ${formatMoney(invested+contribution*12)} total before any market movement.`:'Add a usual contribution to see twelve months of deposits—without assuming market returns.');
+        const accountList=document.getElementById('moneyAccountList');accountList.innerHTML='';moneyState.accounts.forEach(account=>{const row=document.createElement('div');row.className='money-account-row';const balance=getMoneyAccountBalance(account),typeLabel=account.type==='credit'?'credit card':account.type==='loc'?'line of credit':account.type==='savings'?'savings':'cash / chequing';row.innerHTML=`<div class="money-account-name">${escapeHtml(account.name)}<span>${typeLabel}</span></div><div class="money-account-balance ${isMoneyDebtAccount(account)?'debt':''}">${isMoneyDebtAccount(account)?`${formatMoney(balance)} owed`:formatMoney(balance)}</div><button type="button" class="money-ledger-delete" title="remove account">×</button><label class="money-account-opening"><span>starting ${isMoneyDebtAccount(account)?'amount owed':'balance'}</span><input class="search-input money-input" type="number" inputmode="decimal" step="0.01" min="0" value="${account.openingBalance??''}" placeholder="0.00"></label>`;const openingInput=row.querySelector('input');openingInput.addEventListener('input',e=>{account.openingBalance=e.target.value;saveData();});openingInput.addEventListener('change',renderMoney);row.querySelector('button').addEventListener('click',()=>removeMoneyAccount(account.id));accountList.appendChild(row);});
+        renderMoneyAccountOptions();setMoneyEntryTypeVisualOnly(moneyState.entryType);
+        const categoryList=document.getElementById('moneyCategoryList'),purchases=monthTransactions.filter(tx=>tx.type==='purchase'),categoryTotals={};purchases.forEach(tx=>{const category=tx.category||'Other';categoryTotals[category]=(categoryTotals[category]||0)+(Number(tx.amount)||0);});const maxCategory=Math.max(0,...Object.values(categoryTotals));categoryList.innerHTML=Object.keys(categoryTotals).length?Object.entries(categoryTotals).sort((a,b)=>b[1]-a[1]).map(([category,total])=>`<div class="money-category-row"><span>${escapeHtml(category)}</span><span class="money-category-track"><span style="width:${maxCategory?total/maxCategory*100:0}%"></span></span><strong>${formatMoney(total)}</strong></div>`).join(''):'<div class="money-empty">Categories appear after your first purchase in this month.</div>';
+        const ledger=document.getElementById('moneyLedgerList'),sorted=monthTransactions.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(b.createdAt||'').localeCompare(String(a.createdAt||'')));ledger.innerHTML='';if(!sorted.length)ledger.innerHTML='<div class="money-empty">No entries in this month yet. Add a paycheck or purchase above.</div>';sorted.forEach(tx=>{const from=getMoneyAccount(tx.accountId),to=getMoneyAccount(tx.toAccountId),row=document.createElement('div');row.className='money-ledger-row';const meta=tx.type==='payment'?`${from?.name||'account'} → ${to?.name||'debt account'}`:`${tx.category||tx.type} · ${from?.name||'unknown account'}`,sign=tx.type==='paycheck'?'+':tx.type==='purchase'?'-':'';row.innerHTML=`<div class="money-ledger-date">${escapeHtml(new Date((tx.date||getToday())+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'}))}</div><div class="money-ledger-main">${escapeHtml(tx.description||tx.type)}<span>${escapeHtml(meta)}</span></div><div class="money-ledger-amount ${tx.type==='paycheck'?'income':''}">${sign}${formatMoneyExact(tx.amount)}</div><button type="button" class="money-ledger-delete" title="remove entry">×</button>`;row.querySelector('button').addEventListener('click',()=>showConfirm(`Remove ${tx.description||tx.type} for ${formatMoneyExact(tx.amount)}?`,()=>{moneyState.transactions=moneyState.transactions.filter(x=>x.id!==tx.id);saveData();renderMoney();showToast('money entry removed');},'remove'));ledger.appendChild(row);});
       }
+      function setMoneyEntryTypeVisualOnly(type){document.querySelectorAll('#moneyEntryType [data-money-type]').forEach(b=>b.classList.toggle('active',b.dataset.moneyType===type));document.getElementById('moneyEntryCategoryWrap').style.display=type==='purchase'?'block':'none';document.getElementById('moneyEntryToAccountWrap').style.display=type==='payment'?'block':'none';const label=document.getElementById('moneyEntryAccountWrap');if(label)label.childNodes[0].textContent=type==='payment'?'pay from':type==='paycheck'?'deposit to':'account';const add=document.getElementById('moneyAddEntryBtn');if(add)add.textContent=type==='purchase'?'add purchase':type==='paycheck'?'add paycheck':'record payment';}
+      function addMoneyEntry(){
+        ensureMoneyState();const type=moneyState.entryType,date=document.getElementById('moneyEntryDate').value||getToday(),amount=Number(document.getElementById('moneyEntryAmount').value),description=document.getElementById('moneyEntryDescription').value.trim()||(type==='paycheck'?'paycheck':type==='payment'?'account payment':'purchase'),category=document.getElementById('moneyEntryCategory').value||'Other',accountId=document.getElementById('moneyEntryAccount').value,toAccountId=document.getElementById('moneyEntryToAccount').value;if(!amount||amount<=0){showToast('enter the amount first');return;}if(!accountId){showToast('add or choose an account first');return;}if(type==='payment'&&!toAccountId){showToast('choose the debt account receiving the payment');return;}moneyState.transactions.push({id:generateId(),type,date,amount:Math.round(amount*100)/100,description,category:type==='purchase'?category:null,accountId,toAccountId:type==='payment'?toAccountId:null,createdAt:new Date().toISOString()});document.getElementById('moneyEntryAmount').value='';document.getElementById('moneyEntryDescription').value='';moneyState.ledgerMonth=date.slice(0,7);saveData();renderMoney();showToast(type==='purchase'?'purchase added':type==='paycheck'?'paycheck added':'account payment recorded');
+      }
+      function addMoneyAccount(){const name=document.getElementById('moneyNewAccountName').value.trim(),type=document.getElementById('moneyNewAccountType').value;if(!name){showToast('name the account first');return;}moneyState.accounts.push({id:`money-${generateId()}`,name,type,openingBalance:''});document.getElementById('moneyNewAccountName').value='';saveData();renderMoney();showToast(`${name} added`);}
+      function removeMoneyAccount(id){const account=getMoneyAccount(id);if(!account)return;if(moneyState.transactions.some(tx=>tx.accountId===id||tx.toAccountId===id)){showToast('remove or move this account’s entries before deleting it');return;}showConfirm(`Remove ${account.name}?`,()=>{moneyState.accounts=moneyState.accounts.filter(a=>a.id!==id);saveData();renderMoney();showToast('account removed');},'remove');}
       function setupMoney(){
-        const map={moneyIncomeInput:'income',moneyBillsInput:'bills',moneyFlexibleInput:'flexible',moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};
-        Object.entries(map).forEach(([id,key])=>document.getElementById(id)?.addEventListener('input',e=>{moneyState[key]=e.target.value;renderMoney();saveData();}));renderMoney();
+        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};Object.entries(map).forEach(([id,key])=>document.getElementById(id)?.addEventListener('input',e=>{moneyState[key]=e.target.value;renderMoney();saveData();}));document.getElementById('moneyEntryType')?.addEventListener('click',e=>{const btn=e.target.closest('[data-money-type]');if(btn)setMoneyEntryType(btn.dataset.moneyType);});document.getElementById('moneyAddEntryBtn')?.addEventListener('click',addMoneyEntry);document.getElementById('moneyAddAccountBtn')?.addEventListener('click',addMoneyAccount);document.getElementById('moneyLedgerMonth')?.addEventListener('change',e=>{moneyState.ledgerMonth=e.target.value;saveData();renderMoney();});const dateInput=document.getElementById('moneyEntryDate');if(dateInput&&!dateInput.value)dateInput.value=getToday();renderMoney();
       }
       function setRecoveryEntryStage(stage='morning'){
         if(!['morning','later','all'].includes(stage))stage='morning';body.dataset.entryStageCurrent=stage;document.querySelectorAll('#recoveryEntryModeTabs [data-entry-stage]').forEach(b=>b.classList.toggle('active',b.dataset.entryStage===stage));
@@ -5346,10 +5479,20 @@ function updateNotificationSettingUI(){
         if(v>=5)return'yellow';
         return'red';
       }
+      function normalizeFlexibleTime(value,kind='end'){
+        if(value==null||String(value).trim()==='')return null;
+        let raw=String(value).trim().toLowerCase().replace(/\./g,'').replace(/\s+/g,'');
+        let compact=raw.match(/^(\d{3,4})(am|pm)?$/);if(compact){const digits=compact[1];raw=`${digits.slice(0,-2)}:${digits.slice(-2)}${compact[2]||''}`;}
+        const match=raw.match(/^(\d{1,2})(?::(\d{0,2}|--))?(am|pm)?$/);if(!match)return null;
+        let hour=Number(match[1]),minute=match[2]&&match[2]!=='--'?Number(match[2]):0,meridiem=match[3]||'';if(minute>59)return null;
+        if(meridiem){if(hour<1||hour>12)return null;if(meridiem==='am')hour=hour===12?0:hour;else hour=hour===12?12:hour+12;}
+        else{if(hour>23)return null;const wasApprox=!match[2]||match[2]==='--';if(wasApprox&&hour>=1&&hour<=11&&kind==='start')hour+=12;}
+        return`${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`;
+      }
       function computeSleepDurationHours(startStr,endStr){
-        if(!startStr||!endStr)return null;
-        const[sh,sm]=startStr.split(':').map(Number);
-        const[eh,em]=endStr.split(':').map(Number);
+        const normalizedStart=normalizeFlexibleTime(startStr,'start'),normalizedEnd=normalizeFlexibleTime(endStr,'end');if(!normalizedStart||!normalizedEnd)return null;
+        const[sh,sm]=normalizedStart.split(':').map(Number);
+        const[eh,em]=normalizedEnd.split(':').map(Number);
         let startMin=sh*60+sm,endMin=eh*60+em;
         if(endMin<=startMin)endMin+=24*60;
         return(endMin-startMin)/60;
@@ -5368,7 +5511,8 @@ function updateNotificationSettingUI(){
         if(dur==null){preview.textContent='';preview.style.display='none';return;}
         const hrs=Math.floor(dur),mins=Math.round((dur-hrs)*60);
         preview.style.display='inline-flex';
-        preview.textContent=`${hrs}h ${mins}m total sleep`;
+        const startNorm=normalizeFlexibleTime(startVal,'start'),endNorm=normalizeFlexibleTime(endVal,'end');
+        preview.textContent=`${hrs}h ${mins}m total · ${formatClock(startNorm)} → ${formatClock(endNorm)}`;
       }
       function getSleepDebt(referenceDateStr,windowDays){
         windowDays=windowDays||14;
@@ -6189,11 +6333,14 @@ function updateNotificationSettingUI(){
         const dateStr=document.getElementById('recoveryDateInput').value||getToday();
         if(dateStr>getToday()){showToast("can't log a day that hasn't happened yet");return;}
         const readVal=(id)=>{const v=document.getElementById(id).value;return v===''?null:Number(v);};
-        const readTime=(id)=>{const v=document.getElementById(id).value;return v===''?null:v;};
+        const readTime=(id)=>{const v=document.getElementById(id).value;return v===''?null:normalizeFlexibleTime(v,id.includes('Start')?'start':'end');};
         const readStr=(id)=>{const v=document.getElementById(id).value;return v===''?null:v;};
         const readModalities=(id)=>normalizeModalityList(document.getElementById(id).value);
         const readWorkday=(id)=>{const v=document.getElementById(id).value;return v==='yes'?true:v==='no'?false:null;};
         const fieldMap={hrv:['recoveryHrvInput',readVal],bodyweight:['recoveryBodyweightInput',readVal],load:['recoveryLoadInput',readVal],sleep:['recoverySleepInput',readVal],recovery:['recoveryRecoveryInput',readVal],strain:['recoveryStrainInput',readVal],rpe:['recoveryRpeInput',readVal],morningEnergy:['recoveryEnergyInput',readVal],morningSoreness:['recoverySorenessInput',readVal],morningMotivation:['recoveryMotivationInput',readVal],trainingRpe:['recoveryTrainingRpeInput',readVal],modalities:['recoveryModalityInput',readModalities],hasWork:['recoveryHasWorkInput',readWorkday],workHours:['recoveryWorkHoursInput',readVal],workEffort:['recoveryWorkEffortInput',readVal],expectedWorkDemand:['recoveryExpectedWorkInput',readStr],healthFlag:['recoveryHealthFlagInput',readStr],systemicFatigue:['recoverySystemicFatigueInput',readVal],legFatigue:['recoveryLegFatigueInput',readVal],backFatigue:['recoveryBackFatigueInput',readVal],upperFatigue:['recoveryUpperFatigueInput',readVal],sleepStart:['recoverySleepStartInput',readTime],sleepEnd:['recoverySleepEndInput',readTime],actualIntensity:['recoveryIntensityInput',readStr],testTime5k:['recoveryTestTimeInput',readStr]};
+        const rawSleepStart=document.getElementById('recoverySleepStartInput').value.trim(),rawSleepEnd=document.getElementById('recoverySleepEndInput').value.trim();
+        if(recoveryTouchedFields.has('recoverySleepStartInput')&&rawSleepStart&&!normalizeFlexibleTime(rawSleepStart,'start')){showToast('sleep start was not understood — try “10:30 PM”');return;}
+        if(recoveryTouchedFields.has('recoverySleepEndInput')&&rawSleepEnd&&!normalizeFlexibleTime(rawSleepEnd,'end')){showToast('wake time was not understood — try “8 AM”');return;}
         const existing=biometrics[dateStr]||{};
         const entry={...existing};
         let anyTouched=false;
@@ -9237,11 +9384,10 @@ function updateNotificationSettingUI(){
       document.getElementById('notepadTextarea').addEventListener('beforeinput',(e)=>{if(e.inputType?.startsWith('history'))return;rememberNotepadState(e.currentTarget.value);});
       document.getElementById('notepadTextarea').addEventListener('input',(e)=>{notepadContent=e.target.value;const state=document.getElementById('notepadSaveState');if(state)state.textContent='saving…';saveData();if(state)setTimeout(()=>state.textContent='saved locally',260);});
       const notepadResizeHandle=document.getElementById('notepadResizeHandle');
-      notepadResizeHandle.addEventListener('mousedown',(e)=>{notepadResizeStart();e.preventDefault();});
-      notepadResizeHandle.addEventListener('touchstart',(e)=>{notepadResizeStart();e.preventDefault();},{passive:false});
-      document.addEventListener('mousemove',(e)=>notepadResizeMove(e.clientX));
-      document.addEventListener('touchmove',(e)=>{if(notepadResizing){notepadResizeMove(e.touches[0].clientX);e.preventDefault();}},{passive:false});
-      document.addEventListener('mouseup',notepadResizeEnd);document.addEventListener('touchend',notepadResizeEnd);
+      notepadResizeHandle.addEventListener('pointerdown',(e)=>{notepadResizeStart();e.preventDefault();});
+      document.getElementById('notepadHeader').addEventListener('pointerdown',e=>notepadDragStart(e.clientX,e.clientY,e.target));
+      document.addEventListener('pointermove',e=>{notepadResizeMove(e.clientX,e.clientY);notepadDragMove(e.clientX,e.clientY);});
+      document.addEventListener('pointerup',()=>{notepadResizeEnd();notepadDragEnd();});
       document.querySelectorAll('[data-ui-action="notes"]').forEach(btn=>btn.addEventListener('click',()=>{closeMobileMore();toggleNotepad();}));
       document.querySelectorAll('[data-ui-action="settings"]').forEach(btn=>btn.addEventListener('click',()=>{closeMobileMore();openSettings();}));
       document.querySelectorAll('[data-ui-action="sync"]').forEach(btn=>btn.addEventListener('click',openSyncSettings));
