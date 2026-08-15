@@ -2440,6 +2440,37 @@
     .money-empty { padding:.85rem; border:1px dashed var(--border-color); border-radius:.68rem; color:var(--text-color); opacity:.5; font-size:.58rem; line-height:1.5; text-align:center; }
     @media(max-width:900px){.money-grid-v147{grid-template-columns:1fr}.money-wide{grid-column:auto}.money-summary-grid.v147{grid-template-columns:1fr 1fr}.money-entry-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:520px){.money-entry-grid{grid-template-columns:1fr}.money-entry-grid .wide{grid-column:auto}.money-account-row{grid-template-columns:minmax(0,1fr) auto}.money-account-row .money-ledger-delete{grid-column:2}.money-account-edit{grid-template-columns:1fr}.money-ledger-row{grid-template-columns:60px minmax(0,1fr) auto}.money-ledger-delete{grid-column:3}.money-summary-grid.v147{grid-template-columns:1fr 1fr}}
+
+    /* v1.148: stable habits, explanatory Stats, and pressure-free milestones. */
+    .onboarding-card { grid-column:1/-1; border-color:color-mix(in srgb,var(--main-color) 42%,var(--border-color)); background:linear-gradient(135deg,color-mix(in srgb,var(--bg-color) 92%,var(--main-color) 8%),var(--sub-alt-color)); }
+    .onboarding-head { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; }
+    .onboarding-head h2 { margin:.18rem 0 0; }
+    .onboarding-copy { max-width:720px; margin:.45rem 0 .75rem; color:var(--text-color); opacity:.62; font-size:.6rem; line-height:1.55; }
+    .onboarding-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.5rem; }
+    .onboarding-step { min-width:0; display:flex; align-items:center; gap:.58rem; padding:.65rem; border:1px solid var(--border-color); border-radius:.68rem; background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); color:var(--text-color); text-align:left; cursor:pointer; }
+    .onboarding-step.done { opacity:.52; cursor:default; }
+    .onboarding-step-mark { width:25px; height:25px; flex:none; display:grid; place-items:center; border:1px solid var(--border-color); border-radius:50%; color:var(--main-color); font:700 .62rem 'JetBrains Mono',monospace; }
+    .onboarding-step strong { display:block; font-size:.59rem; }
+    .onboarding-step small { display:block; margin-top:.12rem; opacity:.5; font-size:.49rem; line-height:1.35; }
+    .stats-v148-grid { align-items:stretch; }
+    .stats-section-heading { grid-column:1/-1; display:flex; align-items:baseline; gap:.8rem; padding:.2rem .05rem 0; }
+    .stats-section-heading span { color:var(--main-color); font-size:.72rem; font-weight:760; letter-spacing:.12em; text-transform:uppercase; }
+    .stats-section-heading p { margin:0; color:var(--text-color); opacity:.46; font-size:.55rem; line-height:1.45; }
+    .stats-meaning-card { grid-column:span 1; }
+    .stats-interpretation-grid { display:grid; gap:.48rem; margin-top:.65rem; }
+    .stats-interpretation { padding:.68rem .72rem; border:1px solid var(--border-color); border-radius:.7rem; background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); }
+    .stats-interpretation-head { display:flex; align-items:center; justify-content:space-between; gap:.6rem; }
+    .stats-interpretation-label { color:var(--text-color); opacity:.48; font-size:.49rem; letter-spacing:.08em; text-transform:uppercase; }
+    .stats-interpretation-value { margin-top:.22rem; color:var(--text-color); font-size:.69rem; font-weight:720; line-height:1.35; }
+    .stats-interpretation-body { margin-top:.25rem; color:var(--text-color); opacity:.58; font-size:.53rem; line-height:1.48; }
+    .stats-milestones-card { grid-column:1/-1; }
+    .habit-type-badge { display:inline-flex; align-items:center; padding:.12rem .35rem; border:1px solid var(--border-color); border-radius:999px; color:var(--text-color); opacity:.55; font-size:.45rem; font-weight:650; text-transform:uppercase; }
+    .habit-settings-body .habit-controls-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    #overviewSortArrow { display:inline-block; min-width:.7em; color:var(--main-color); }
+    #memoryGameBtn { display:none!important; }
+    #welcomeOverlay { display:none!important; }
+    @media(max-width:900px){.onboarding-steps{grid-template-columns:1fr 1fr}.stats-section-heading{display:block}.stats-section-heading p{margin-top:.22rem}.habit-settings-body .habit-controls-row{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.onboarding-steps{grid-template-columns:1fr}.stats-section-heading{padding-top:.05rem}.stats-section-heading p{font-size:.52rem}.habit-settings-body .habit-controls-row{grid-template-columns:1fr}}
   </style>
 </head>
 <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
@@ -2590,15 +2621,9 @@
       </div>
 
       <div class="settings-section">
-        <div class="settings-section-title">level progress</div>
-        <div class="level-info-readout" id="levelInfoReadout">level 1</div>
-        <div class="settings-desc" style="max-width:none;line-height:1.6;">
-          every minute of focus earns 1xp — and so does actually getting things done. completing a task adds <strong style="color:var(--main-color);">+5xp</strong>, fully checking off a habit for the day adds <strong style="color:var(--main-color);">+3xp</strong>, hitting your daily focus goal adds <strong style="color:var(--main-color);">+20xp</strong> (once per day), and finishing a full chain through to rest adds <strong style="color:var(--main-color);">+15xp</strong>. keep a focus streak going and your per-minute xp gets a boost too — up to +30% at a 15-day streak.
-          <br><br>
-          each level needs slightly more xp than the last (about 0.5% more), so higher levels take a bit longer to reach.
-          <br><br>
-          hit level 100 and you <strong style="color:var(--main-color);">prestige</strong>: your level resets to 1, but every prestige is worth keeping — it adds a permanent <strong style="color:var(--main-color);">+4% to all xp you earn, forever</strong>, stacking with every prestige after it. you also keep a badge next to your level that upgrades in rarity as you rack up more — plain mark, then silver, gold, cyan, and pink at the highest tiers. how long a prestige takes depends on more than the clock — tasks, habits, daily goals, and finished chains all add up alongside your focus time (and compound faster the more you've already prestiged).
-        </div>
+        <div class="settings-section-title">recorded milestones</div>
+        <div class="level-info-readout" id="levelInfoReadout">building your history</div>
+        <div class="settings-desc" style="max-width:none;line-height:1.6;">A quiet record of focus, completed tasks, books, and training. There are no multipliers, prestige ranks, or streak bonuses. The header shows the nearest concrete milestone so the number always has a meaning.</div>
       </div>
 
       <div class="settings-section">
@@ -2607,7 +2632,7 @@
         <div class="settings-action-stack">
           <button class="btn small" id="openFeatureGuideBtn" style="width:100%;justify-content:center;">open feature guide</button>
           <button class="btn small" id="showGoalsGuideBtn" style="width:100%;justify-content:center;">how goals work</button>
-          <button class="btn small" id="showWelcomeBtn" style="width:100%;justify-content:center;">show welcome guide</button>
+          <button class="btn small" id="showWelcomeBtn" style="width:100%;justify-content:center;">show getting-started checklist</button>
           <button class="btn small" id="showLastRecapBtn" style="width:100%;justify-content:center;">show last week's recap</button>
         </div>
       </div>
@@ -2625,7 +2650,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.147 replaces cryptic sidebar letters with page icons, makes Notes movable and resizable, accepts approximate morning times, and adds a simple paycheck, purchase, account, and debt ledger.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.148 makes habit check-ins stable and more supportive, reorganizes Stats around recent results, patterns, and history, and replaces pressure-heavy levels and onboarding with quieter milestones and a short checklist.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2746,7 +2771,7 @@
         <details class="feature-guide-item">
           <summary>habits</summary>
           <div class="feature-guide-body">
-            <p>Daily count and weekly frequency are separate. A habit can be something like 2 times per day, 3 days per week, or both. The overview is the fast week view; Habit Check-ins is the longer heatmap history.</p>
+            <p>Each habit can be a simple check-off, a count, minutes of duration, or something you are avoiding. Daily target and weekly frequency are separate. Partial progress is called a minimum kept so effort is visible even when the full target does not happen.</p>
             <p>Linking a recurring task to a habit means completing that task can advance the habit automatically. Deleting a task card does not erase the saved task name/history from the library.</p>
           </div>
         </details>
@@ -2762,7 +2787,7 @@
           <div class="feature-guide-body">
             <p><strong>sustainable daily capacity</strong> is the median focus minutes from your recent active days, not a maximum. <strong>consistency</strong> is the percentage of the last 30 days that contained focus time.</p>
             <p><strong>completion rate</strong> compares tasks completed with tasks completed plus tasks removed while unfinished. <strong>estimate accuracy</strong> compares actual task time with the timer estimate and reports whether you tend to finish over or under it.</p>
-            <p><strong>focus DNA</strong> is a set of observations generated only from your own history, such as time-of-day and task patterns. It is descriptive, not a score.</p>
+            <p><strong>personal patterns</strong> and the Recent interpretations are generated only from your own history, such as time-of-day, estimate bias, and session fragmentation. They are descriptive, not scores. History keeps longer charts and concrete milestones without streak bonuses or levels.</p>
           </div>
         </details>
         <details class="feature-guide-item">
@@ -3050,6 +3075,11 @@
       <!-- Today Panel -->
       <div class="panel active" id="panel-today">
         <div class="today-panel-grid">
+          <div class="today-card onboarding-card" id="progressiveOnboardingCard" style="display:none;">
+            <div class="onboarding-head"><div><div class="today-now-kicker">start with one useful thing</div><h2>getting started</h2></div><button class="btn small" id="onboardingDismissBtn">hide</button></div>
+            <div class="onboarding-copy">You do not need to set up the whole app. Pick the next unfinished step; this card gets out of the way once you have a working rhythm.</div>
+            <div class="onboarding-steps" id="onboardingSteps"></div>
+          </div>
           <div class="today-section-label">NOW</div>
           <div class="today-card today-now-card">
             <div class="today-now-main">
@@ -3115,7 +3145,7 @@
           <div class="today-card rhythm-card"><h2>evening shutdown</h2><div class="rhythm-list" id="eveningShutdownList"></div></div>
           <div class="today-card today-habits-card">
             <h2>habits today</h2>
-            <div class="sort-tabs" id="todayHabitSortTabs"><button class="sort-btn active" data-sort="manual">manual</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="streak">streak</button></div>
+            <div class="sort-tabs" id="todayHabitSortTabs"><button class="sort-btn active" data-sort="manual">manual</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="effort">30d effort</button></div>
             <ul class="habit-list" id="todayHabitList"><li class="empty-habits">no habits yet</li></ul>
           </div>
           <div class="schedule-card">
@@ -3212,7 +3242,7 @@
             <h2>this week</h2>
             <div class="habit-card-intro">A kinder seven-day view. Full target, minimum kept, and missed are different things; tap a day to correct it.</div>
             <div class="chart-nav-row"><button class="chart-nav-btn" id="overviewNavBack" title="previous week">◀</button><span class="chart-range-label" id="overviewRangeLabel"></span><button class="chart-nav-btn" id="overviewNavForward" title="next week">▶</button></div>
-            <div class="sort-tabs" id="overviewSortTabs"><button class="sort-btn active" data-sort="manual">my order</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="consistency">consistency</button></div>
+            <div class="sort-tabs" id="overviewSortTabs"><button class="sort-btn active" data-sort="manual">my order</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="consistency">consistency <span id="overviewSortArrow" aria-hidden="true">↓</span></button></div>
             <div class="overview-grid" id="habitOverviewGrid"></div>
           </div>
           <div class="habit-library-card">
@@ -3309,9 +3339,10 @@
 
       <!-- Stats Panel -->
       <div class="panel" id="panel-stats">
-        <div class="stats-panel-grid">
+        <div class="stats-panel-grid stats-v148-grid">
+          <div class="stats-section-heading"><span>recent</span><p>What has happened lately, with enough context to act on it.</p></div>
           <div class="dashboard-card stats-overview-card">
-            <h2>progress overview</h2>
+            <h2>last 30 days</h2>
             <div class="stats-summary-grid">
               <div class="stats-summary-item"><div class="stats-summary-value" id="stats30DayFocus">0m</div><div class="stats-summary-label">focus · last 30 days</div></div>
               <div class="stats-summary-item"><div class="stats-summary-value" id="stats30DayActive">0</div><div class="stats-summary-label">active focus days</div></div>
@@ -3321,14 +3352,13 @@
             <div class="stats-summary-note" id="statsProgressNote">Your history will become more useful as more days are logged.</div>
           </div>
 
-          <div class="stats-card" id="focusDnaCard">
-            <h2>personal patterns</h2>
-            <div class="pattern-intro"><div class="pattern-intro-copy">Useful observations from your own history. Associations are not treated as causes, and weak patterns stay labeled as tentative until more evidence accumulates.</div><div class="pattern-data-status" id="patternDataStatus">building history</div></div>
-            <div class="pattern-grid" id="focusDnaList"></div>
+          <div class="stats-card stats-meaning-card">
+            <h2>what the numbers mean</h2>
+            <div class="stats-interpretation-grid" id="statsInterpretationGrid"><div class="pattern-empty">Interpretations will appear as your history grows.</div></div>
           </div>
 
-          <div class="stats-card">
-            <h2>stats</h2>
+          <div class="stats-card stats-useful-totals">
+            <h2>useful totals</h2>
             <div class="stat-row"><span class="stat-label">today's focus</span><span class="stat-value" id="statTodayFocus">0m</span></div>
             <div class="stat-row"><span class="stat-label">sessions today</span><span class="stat-value purple" id="statSessionsToday">0</span></div>
             <div class="stat-row"><span class="stat-label">tasks completed</span><span class="stat-value" id="statTasksCompleted">0</span></div>
@@ -3336,11 +3366,19 @@
             <div class="stat-row"><span class="stat-label">avg per session</span><span class="stat-value purple" id="statAvgPerSession">--</span></div>
             <div class="stat-row"><span class="stat-label">estimate accuracy</span><span class="stat-value" id="statEstimateAccuracy">--</span></div>
             <div class="stat-row"><span class="stat-label">most focused task</span><span class="stat-value highlight" id="statFavoriteTask">--</span></div>
-            <div class="stat-row"><span class="stat-label">current streak</span><span class="stat-value" id="statStreak">0 days</span></div>
+            <div class="stat-row"><span class="stat-label">last focused</span><span class="stat-value" id="statStreak">not yet</span></div>
           </div>
 
-          <div class="stats-card">
-            <h2>level milestones</h2>
+          <div class="stats-section-heading"><span>patterns</span><p>Repeated observations from your own data, never a grade or a diagnosis.</p></div>
+          <div class="stats-card" id="focusDnaCard">
+            <h2>personal patterns</h2>
+            <div class="pattern-intro"><div class="pattern-intro-copy">Useful observations from your own history. Associations are not treated as causes, and weak patterns stay labeled as tentative until more evidence accumulates.</div><div class="pattern-data-status" id="patternDataStatus">building history</div></div>
+            <div class="pattern-grid" id="focusDnaList"></div>
+          </div>
+
+          <div class="stats-section-heading"><span>history</span><p>Longer records for looking back without turning every day into a score.</p></div>
+          <div class="stats-card stats-milestones-card">
+            <h2>recorded milestones</h2>
             <div class="milestone-list" id="milestoneList"></div>
           </div>
 
@@ -4021,6 +4059,7 @@
       let notepadContent='',notepadPinned=false,notepadPosX=null,notepadPosY=null,notepadWidth=400,notepadHeight=430,notepadGeometryLoaded=false;
       let todayHabitSort='manual',todoSort='manual';
       let overviewSort='manual';
+      let overviewSortDirection='desc',overviewSortSnapshot=[],habitOrderSnapshot=[],todayHabitOrderSnapshot=[];
       let adaptiveGoalEnabled=false;
       let adaptiveFocusGoalEnabled=true;
       let todayDueSort='date',todayPrioritySort='priority';
@@ -4044,7 +4083,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.147';
+      const APP_VERSION='1.148';
       const APP_RELEASE_DATE='2026-08-15';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -4289,6 +4328,7 @@
       }
       if(d.chainConfig){chainConfig=d.chainConfig;document.getElementById('chainWorkCount').value=chainConfig.workCount;document.getElementById('chainWorkMinutes').value=chainConfig.workMinutes;document.getElementById('chainShortBreak').value=chainConfig.shortBreak;document.getElementById('chainLongBreak').value=chainConfig.longBreak;}
       chainActive=d.chainActive!==undefined?d.chainActive:true;chainSessionIndex=d.chainSessionIndex||0;document.querySelectorAll('#sortTabs .sort-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#sortTabs .sort-btn[data-sort="${librarySort}"]`)?.classList.add('active');
+      if(todayHabitSort==='streak')todayHabitSort='effort';
       document.querySelectorAll('#habitGraphSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#habitGraphSortTabs .sort-btn[data-sort="${habitGraphSort}"]`)?.classList.add('active');
       document.querySelectorAll('#taskFilterTabs .sort-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#taskFilterTabs .sort-btn[data-filter="${taskFilter}"]`)?.classList.add('active');
       document.querySelectorAll('#taskSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#taskSortTabs .sort-btn[data-sort="${taskSort}"]`)?.classList.add('active');
@@ -4361,42 +4401,28 @@
       }
       updateLevelDisplay=function(){
         const workouts=(importedActivities||[]).length+(liftingHistory||[]).filter(h=>h.kind==='exposure').length,finishedBooks=(books||[]).filter(b=>b.status==='finished').length,focusedHours=Math.floor(totalFocusMinutes/60);
-        const lifetimeUnits=focusedHours+Math.floor(tasksCompletedCount/2)+Math.floor(sessionsCompleted/4)+finishedBooks*5+Math.floor(workouts/5),lifetimeLevel=1+Math.floor(lifetimeUnits/100);
         const ladder=(value,targets)=>{let next=targets.find(x=>x>value);if(!next){next=targets[targets.length-1];while(next<=value)next*=2;}const reached=targets.filter(x=>x<=value).pop()||0,previous=next>targets[targets.length-1]?next/2:reached,progress=Math.max(0,Math.min(100,(value-previous)/Math.max(1,next-previous)*100));return{next,reached,progress};};
         const milestones=[['focus sessions',sessionsCompleted,[10,25,50,100,250,500,1000,2500]],['focused hours',focusedHours,[10,25,50,100,250,500,1000,2500]],['tasks completed',tasksCompletedCount,[25,50,100,250,500,1000,2500,5000]],['books finished',finishedBooks,[1,3,6,12,24,50,100]],['workouts recorded',workouts,[10,25,50,100,250,500,1000,2500]]].map(([name,value,targets])=>({name,value,...ladder(value,targets)}));
-        const readout=document.getElementById('levelInfoReadout');if(readout)readout.textContent=`level ${lifetimeLevel} · ${focusedHours} focused hours · ${tasksCompletedCount} tasks finished`;
-        const headerChip=document.getElementById('headerLevelChip');if(headerChip)headerChip.innerHTML=`<b>level ${lifetimeLevel}</b>`;
         const next=milestones.slice().sort((a,b)=>b.progress-a.progress)[0],progress=next?.progress||0,ringFill=document.getElementById('headerXpRingFill'),ringWrap=document.getElementById('headerXpRing');
-        if(ringFill)ringFill.style.width=`${progress}%`;if(ringWrap)ringWrap.title=next?`nearest milestone: ${next.value}/${next.next} ${next.name}`:'level progress';
-        const list=document.getElementById('milestoneList');if(list)list.innerHTML=milestones.map(m=>`<div class="milestone-row${m.reached?' achieved':''}"><div><div class="milestone-name">${escapeHtml(m.name)}</div><div class="milestone-detail">${m.value} recorded${m.reached?` · last milestone ${m.reached}`:' · first milestone ahead'}</div></div><div class="milestone-state">next ${m.next}</div></div>`).join('');
-        const section=readout&&readout.closest('.settings-section');if(section&&!section.dataset.modernized){section.dataset.modernized='1';section.querySelector('.settings-section-title').textContent='level progress';section.querySelectorAll('.settings-desc').forEach(e=>e.remove());const d=document.createElement('div');d.className='settings-desc';d.style.cssText='max-width:none;line-height:1.55;';d.textContent='A quiet historical marker based on focus, completed tasks, books and recorded training. It never resets and unlocks nothing important. The bar points to the nearest real milestone so the number has context.';section.appendChild(d);}
+        const readout=document.getElementById('levelInfoReadout');if(readout)readout.textContent=next?`nearest · ${next.value} of ${next.next} ${next.name}`:'building your history';
+        const headerChip=document.getElementById('headerLevelChip');if(headerChip)headerChip.innerHTML=next?`<b>${next.value}/${next.next}</b> ${escapeHtml(next.name.replace(' completed',''))}`:'<b>history</b>';
+        if(ringFill)ringFill.style.width=`${progress}%`;if(ringWrap)ringWrap.title=next?`nearest milestone: ${next.value} of ${next.next} ${next.name}`:'recorded milestones';
+        const list=document.getElementById('milestoneList');if(list)list.innerHTML=milestones.map(m=>`<div class="milestone-row${m.reached?' achieved':''}"><div><div class="milestone-name">${escapeHtml(m.name)}</div><div class="milestone-detail">${m.value} recorded${m.reached?` · reached ${m.reached}`:' · first marker ahead'}</div></div><div class="milestone-state">${Math.max(0,m.next-m.value)} to ${m.next}</div></div>`).join('');
       };
       function getPrestigeXPBonus(prestige){return 1+prestige*0.04;}
       function addXP(amount,source){
         if(!amount||amount<=0)return;
-        const oldInfo=getLevelInfo();
-        const boosted=Math.round(amount*getPrestigeXPBonus(oldInfo.prestige));
-        totalXP+=boosted;
-        if(source==='focus')xpFromFocus+=boosted;
-        else if(source==='tasks')xpFromTasks+=boosted;
-        else if(source==='habits')xpFromHabits+=boosted;
-        else if(source==='goals')xpFromGoals+=boosted;
-        else if(source==='chains')xpFromChains+=boosted;
-        const newInfo=getLevelInfo();
-        if(newInfo.prestige>oldInfo.prestige){
-          const bonusPct=Math.round(newInfo.prestige*4);
-          showToast(`prestige ${newInfo.prestige}! legendary. all xp is now +${bonusPct}% — forever.`);
-        }else if(newInfo.level>oldInfo.level&&newInfo.prestige===oldInfo.prestige){
-          const lvl=newInfo.level;
-          if(lvl%25===0)showToast(`level ${lvl}! big milestone.`);
-          else if(lvl%10===0)showToast(`level ${lvl}!`);
-          else showToast(`⬆ level ${lvl}!`);
-        }
+        const recorded=Math.round(amount);totalXP+=recorded;
+        if(source==='focus')xpFromFocus+=recorded;
+        else if(source==='tasks')xpFromTasks+=recorded;
+        else if(source==='habits')xpFromHabits+=recorded;
+        else if(source==='goals')xpFromGoals+=recorded;
+        else if(source==='chains')xpFromChains+=recorded;
         updateLevelDisplay();
         updateXPSourcesUI();
       }
-      function getStreakMultiplier(){return 1+Math.min(streakDays,15)*0.02;}
-      function awardFocusXP(minutes){addXP(Math.round(minutes*getStreakMultiplier()),'focus');}
+      function getStreakMultiplier(){return 1;}
+      function awardFocusXP(minutes){addXP(Math.round(minutes),'focus');}
       function checkOffHabit(h,date){
         const wasComplete=getHabitDayCount(h,date)>=getHabitDayTarget(h);
         incrementHabitDay(h,date);
@@ -4450,6 +4476,20 @@
         const e1=document.getElementById('stats30DayFocus'),e2=document.getElementById('stats30DayActive'),e3=document.getElementById('statsCapacity'),e4=document.getElementById('statsConsistency'),note=document.getElementById('statsProgressNote');
         if(e1)e1.textContent=total30>=60?`${Math.floor(total30/60)}h ${total30%60}m`:`${total30}m`;if(e2)e2.textContent=active30;if(e3)e3.textContent=active30>=5?`${cap}m`:'--';if(e4)e4.textContent=active30?`${consistency}%`:'--';
         if(note){if(active30<5)note.textContent='A few more active days will make the capacity and consistency trends more useful.';else if(consistency>=70)note.textContent='Your recent focus pattern is consistent. The adaptive target will change slowly rather than chasing individual high or low days.';else note.textContent='Your recent pattern has room to become steadier. The app will keep the target conservative while consistency builds.';}
+      }
+
+      function formatRelativeDay(dateStr){if(!dateStr)return'not yet';const today=new Date(getToday()+'T12:00:00'),date=new Date(dateStr+'T12:00:00'),days=Math.round((today-date)/86400000);if(days<=0)return'today';if(days===1)return'yesterday';if(days<7)return`${days} days ago`;return date.toLocaleDateString(undefined,{month:'short',day:'numeric'});}
+      function getLastFocusDate(){return Object.keys(dailyHistory||{}).filter(date=>Number(dailyHistory[date]?.focusMinutes)>0).sort().pop()||null;}
+      function renderStatsInterpretations(){
+        const el=document.getElementById('statsInterpretationGrid');if(!el)return;
+        const cards=[];
+        const timed=(sessionLog||[]).filter(s=>Number(s.minutes)>0&&Number.isFinite(Number(s.completedAtMinutes))).slice(-90);
+        if(timed.length>=4){const buckets={morning:[],afternoon:[],evening:[]};timed.forEach(s=>{const h=Number(s.completedAtMinutes)/60;(h<12?buckets.morning:h<17?buckets.afternoon:buckets.evening).push(Number(s.minutes));});const ranked=Object.entries(buckets).filter(([,v])=>v.length>=2).map(([name,v])=>({name,count:v.length,avg:Math.round(v.reduce((a,b)=>a+b,0)/v.length)})).sort((a,b)=>b.avg-a.avg);if(ranked.length)cards.push({label:'best focus window',value:ranked[0].name,body:`Sessions completed then average ${ranked[0].avg} minutes across ${ranked[0].count} records. Treat this as a useful window, not a rule.`});}
+        if((estimateAccuracyLog||[]).length>=3){const rows=estimateAccuracyLog.filter(e=>Number(e.estimateMin)>0&&Number(e.actualMin)>0).slice(-30),ratio=rows.reduce((s,e)=>s+Number(e.actualMin)/Number(e.estimateMin),0)/Math.max(1,rows.length),pct=Math.round(Math.abs(ratio-1)*100);cards.push({label:'estimate bias',value:pct<=8?'usually close':ratio>1?`${pct}% longer than planned`:`${pct}% quicker than planned`,body:`Based on ${rows.length} completed tasks. Use this to set kinder time estimates, not to grade yourself.`});}
+        if(timed.length>=5){const short=timed.filter(s=>Number(s.minutes)<15).length,share=Math.round(short/timed.length*100),avg=Math.round(timed.reduce((s,e)=>s+Number(e.minutes),0)/timed.length);cards.push({label:'session shape',value:share>=50?'frequent short starts':avg>=35?'longer focus blocks':'mixed session lengths',body:`Average ${avg} minutes; ${share}% are under 15 minutes. ${share>=50?'Short starts can be useful—protect one block from interruptions when deeper work matters.':'Your recent sessions are not dominated by very short fragments.'}`});}
+        const weekday=getBestWeekday();if(weekday!=='--')cards.push({label:'strongest weekday',value:weekday,body:'This is the weekday with your highest average recorded focus. It describes your history; it is not a target for every week.'});
+        if(!cards.length){el.innerHTML='<div class="pattern-empty">A few completed focus sessions and task estimates will unlock plain-language interpretations here.</div>';return;}
+        el.innerHTML=cards.slice(0,4).map(c=>`<div class="stats-interpretation"><div class="stats-interpretation-head"><span class="stats-interpretation-label">${escapeHtml(c.label)}</span></div><div class="stats-interpretation-value">${escapeHtml(c.value)}</div><div class="stats-interpretation-body">${escapeHtml(c.body)}</div></div>`).join('');
       }
 
       function updateSessionNoteUI(){
@@ -4554,7 +4594,22 @@
       }
       function closeConfirm(){document.getElementById('confirmOverlay').classList.remove('open');confirmCallback=null;}
 
-      function openWelcome(){document.getElementById('welcomeOverlay').classList.add('open');}
+      let onboardingForced=false;
+      function renderProgressiveOnboarding(force=false){
+        const card=document.getElementById('progressiveOnboardingCard'),stepsEl=document.getElementById('onboardingSteps');if(!card||!stepsEl)return;
+        if(force)onboardingForced=true;
+        const morning=biometrics[getToday()]||{},hasMorning=['energy','sleep','recovery','hrv','rpe','sleepStart','sleepEnd'].some(k=>morning[k]!=null&&morning[k]!==''),hasTask=(tasks||[]).length>0,hasHabit=(bgHabits||[]).length>0,hasActivity=(importedActivities||[]).length>0||(liftingHistory||[]).length>0;
+        const steps=[
+          {done:hasMorning,title:'log morning numbers',detail:'Recovery · whatever you have',action:()=>{switchPanel('recovery');setRecoveryEntryStage('morning');setTimeout(()=>{document.getElementById('recoveryEntryToggle')?.click();document.getElementById('recoveryEntryToggle')?.scrollIntoView({behavior:'smooth',block:'center'});},0);}},
+          {done:hasTask,title:'add one focus task',detail:'A useful next move is enough',action:()=>{switchPanel('tasks');setTimeout(()=>{taskInput?.scrollIntoView({behavior:'smooth',block:'center'});taskInput?.focus();},0);}},
+          {done:hasHabit,title:'choose one habit',detail:'Start with a realistic version',action:()=>{switchPanel('habits');setTimeout(()=>{habitInput?.scrollIntoView({behavior:'smooth',block:'center'});habitInput?.focus();},0);}},
+          {done:hasActivity,title:'record training',detail:'Sync or add a single activity',action:()=>switchPanel('activities')}
+        ];
+        const complete=steps.filter(s=>s.done).length;
+        card.style.display=(!onboardingForced&&(hasSeenWelcome||complete>=3))?'none':'block';
+        stepsEl.innerHTML='';steps.forEach((step,i)=>{const btn=document.createElement('button');btn.type='button';btn.className='onboarding-step'+(step.done?' done':'');btn.innerHTML=`<span class="onboarding-step-mark">${step.done?'✓':i+1}</span><span><strong>${escapeHtml(step.title)}</strong><small>${escapeHtml(step.done?'already in place':step.detail)}</small></span>`;if(!step.done)btn.addEventListener('click',step.action);stepsEl.appendChild(btn);});
+      }
+      function openWelcome(){closeSettings();hasSeenWelcome=false;onboardingForced=true;switchPanel('today');renderProgressiveOnboarding(true);setTimeout(()=>document.getElementById('progressiveOnboardingCard')?.scrollIntoView({behavior:'smooth',block:'start'}),0);}
 
       function isMobileLayout(){return document.body.getAttribute('data-view-mode')==='mobile';}
       function loadNotepadGeometry(){
@@ -4614,11 +4669,11 @@
       function openSyncSettings(){closeMobileMore();openSettings();setTimeout(()=>document.querySelector('#settingsOverlay .settings-section')?.scrollIntoView({block:'start'}),0);}
       function applySidebarState(){let collapsed=false;try{collapsed=localStorage.getItem('focus-flow-sidebar-collapsed')==='true';}catch(e){}document.body.dataset.sidebarCollapsed=String(collapsed);}
       function toggleSidebarState(){const collapsed=document.body.dataset.sidebarCollapsed!=='true';document.body.dataset.sidebarCollapsed=String(collapsed);try{localStorage.setItem('focus-flow-sidebar-collapsed',String(collapsed));}catch(e){}}
-      function closeWelcome(){document.getElementById('welcomeOverlay').classList.remove('open');hasSeenWelcome=true;saveData();}
+      function closeWelcome(){document.getElementById('welcomeOverlay').classList.remove('open');document.getElementById('progressiveOnboardingCard').style.display='none';onboardingForced=false;hasSeenWelcome=true;saveData();}
       function openGoalsTutorial(){document.getElementById('goalsTutorialOverlay').classList.add('open');}
       function closeGoalsTutorial(){document.getElementById('goalsTutorialOverlay').classList.remove('open');if(!hasSeenGoalsTutorial){hasSeenGoalsTutorial=true;saveData();}}
       function closeMemoryGame(){document.getElementById('memoryGameOverlay').classList.remove('open');}
-      function updateMemoryGameButtonVisibility(){const btn=document.getElementById('memoryGameBtn');if(!btn)return;const onBreak=currentMode==='shortBreak'||currentMode==='longBreak';btn.style.display=onBreak?'block':'none';if(!onBreak)closeMemoryGame();}
+      function updateMemoryGameButtonVisibility(){const btn=document.getElementById('memoryGameBtn');if(btn)btn.style.display='none';closeMemoryGame();}
 
 
       function escapeHtml(value){
@@ -4686,795 +4741,9 @@
         anchors.forEach(sec=>{let bi=0,bd=Infinity;for(let i=0;i<n;i++){const d=Math.abs(Number(curve.secs[i])-sec);if(d<bd){bd=d;bi=i;}}wanted.add(bi);});
         const samples=Math.min(96,n);for(let i=0;i<samples;i++)wanted.add(Math.round((Math.exp(i/(samples-1)*Math.log(n))-1)/(n-1)*(n-1)));
         const rows=Array.from(wanted).filter(i=>i>=0&&i<n).sort((a,b)=>a-b).map(i=>[Number(curve.secs[i]),Number(curve.values[i])]).filter(x=>Number.isFinite(x[0])&&x[0]>0&&Number.isFinite(x[1])&&x[1]>0);
-        return rows.length?{secs:rows.map(x=>x[0]),values:rows.map(x=>x[1])}:null;
-      }
-      async function fetchIntervalsPersonalBests(){
-        const key=getIntervalsApiKey();if(!key)return false;
-        const auth='Basic '+btoa('API_KEY:'+key),today=isoDateOffset(1),yearStart=`${new Date().getFullYear()}-01-01`,distances=[1000,1609,5000,10000,21097,42195],durations=[['5 sec',5],['1 min',60],['5 min',300],['20 min',1200],['60 min',3600]];
-        const specs=[{key:'all',oldest:'2000-01-01',curve:'all'},{key:'365',oldest:isoDateOffset(-365),curve:'1y'},{key:'90',oldest:isoDateOffset(-90),curve:'90d'},{key:'30',oldest:isoDateOffset(-30),curve:'30d'}];
-        const previous=intervalsBestRecords.ranges||{},nextRanges={};let changed=false,allRanks={},topRunEfforts=intervalsBestRecords.runTopEfforts||{};
-        for(const spec of specs){
-          const range={run:{...(previous[spec.key]?.run||{})},ride:{...(previous[spec.key]?.ride||{})},rideCurve:previous[spec.key]?.rideCurve||null};
-          try{
-            const url=`https://intervals.icu/api/v1/athlete/0/activity-pace-curves.json?oldest=${spec.oldest}&newest=${today}&distances=${distances.join(',')}&gap=false&includeRanks=true`;
-            const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok){const data=await r.json(),run={};[['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]].forEach(([label,d])=>{const efforts=paceEffortsFromSet(data,d);if(efforts.length){run[label]=efforts[0].value;if(spec.key==='all'){const yearEfforts=efforts.filter(x=>String(x.date)>=yearStart),all=rankForLatestEffort(efforts),yr=rankForLatestEffort(yearEfforts);allRanks[label]={all,year:yr};topRunEfforts[label]={all:efforts.slice(0,10).map((x,i)=>({...x,rank:i+1})),year:yearEfforts.slice(0,10).map((x,i)=>({...x,rank:i+1}))};}}});if(Object.keys(run).length){range.run=run;changed=true;}}
-          }catch(e){}
-          try{
-            const url=`https://intervals.icu/api/v1/athlete/0/power-curves.json?curves=${encodeURIComponent(spec.curve)}&type=Ride&includeRanks=true`;
-            const r=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(r.ok){const curve=firstCurveFromSet(await r.json()),ride={};durations.forEach(([label,d])=>{const v=nearestCurveValue(curve,d);if(v!=null)ride[label]=Math.round(v);});if(Object.keys(ride).length){range.ride=ride;range.rideCurve=compactPowerCurve(curve);changed=true;}}
-          }catch(e){}
-          nextRanges[spec.key]=range;
-        }
-        if(changed){
-          intervalsBestRecords.ranges=nextRanges;
-          intervalsBestRecords.run=nextRanges.all?.run||intervalsBestRecords.run||{};
-          intervalsBestRecords.ride=nextRanges.all?.ride||intervalsBestRecords.ride||{};
-          intervalsBestRecords.runRanks=allRanks;
-          intervalsBestRecords.runTopEfforts=topRunEfforts;
-          const yearRide=nextRanges['365']?.ride||{};intervalsBestRecords.rideRanks={};durations.forEach(([label])=>intervalsBestRecords.rideRanks[label]={yearValue:yearRide[label]??null});
-        }
-        if(changed){intervalsBestRecords.lastSyncAt=new Date().toISOString();saveData();}return changed;
-      }
-      function rankChips(rankInfo){
-        if(!rankInfo)return '';
-        const chips=[];
-        if(rankInfo.year?.rank)chips.push(`<span class="activity-rank-chip year ${rankInfo.year.rank<=3?'top':''}">${ordinal(rankInfo.year.rank)} this year</span>`);
-        if(rankInfo.all?.rank)chips.push(`<span class="activity-rank-chip ${rankInfo.all.rank<=3?'top':''}">${ordinal(rankInfo.all.rank)} all time</span>`);
-        return chips.length?`<div class="activity-pb-ranks">${chips.join('')}</div>`:'';
-      }
-      function activitySportGroup(a){return /run/i.test(a?.type||'')?'run':/ride|cycling|virtualride/i.test(a?.type||'')?'ride':'other';}
-      function formatAwardPace(secondsPerKm){const sec=Number(secondsPerKm);if(!(sec>0))return '—';return `${Math.floor(sec/60)}:${String(Math.round(sec%60)).padStart(2,'0')}/km`;}
-      function buildActivityAwardIndex(){
-        const index=new Map(),push=(id,award)=>{if(id==null)return;const key=String(id),rows=index.get(key)||[];if(!rows.some(x=>x.label===award.label)){rows.push(award);index.set(key,rows);}};
-        Object.entries(intervalsBestRecords.runTopEfforts||{}).forEach(([distance,sets])=>{
-          (sets?.year||[]).forEach(e=>push(e.id,{label:`${ordinal(e.rank)} fastest ${distance} this year`,value:fmtPbTime(e.value),rank:e.rank,priority:0,top:e.rank<=3}));
-          (sets?.all||[]).forEach(e=>push(e.id,{label:`${ordinal(e.rank)} fastest ${distance} all time`,value:fmtPbTime(e.value),rank:e.rank,priority:1,top:e.rank<=3}));
-        });
-        const addRanked=(rows,label,valueFn,lowerIsBetter,formatValue)=>{
-          const valid=rows.map(a=>({a,value:Number(valueFn(a))})).filter(x=>Number.isFinite(x.value)&&x.value>0),rankRows=(list,suffix,priority)=>list.sort((x,y)=>lowerIsBetter?x.value-y.value:y.value-x.value).slice(0,10).forEach((x,i)=>push(x.a.id,{label:`${ordinal(i+1)} ${label} ${suffix}`,value:formatValue(x.value,x.a),rank:i+1,priority,top:i<3}));
-          const byYear={};valid.forEach(x=>{const year=String(x.a.start_date_local||'').slice(0,4);if(year)(byYear[year]||(byYear[year]=[])).push(x);});Object.entries(byYear).forEach(([year,list])=>rankRows(list,year===String(new Date().getFullYear())?'this year':`in ${year}`,2));rankRows(valid.slice(),'all time',3);
-        };
-        const runs=importedActivities.filter(a=>activitySportGroup(a)==='run'),rides=importedActivities.filter(a=>activitySportGroup(a)==='ride'),cardio=importedActivities.filter(a=>activitySportGroup(a)!=='other');
-        addRanked(runs.filter(a=>a.distance>=800&&a.moving_time>0),'fastest average run pace',a=>a.moving_time/(a.distance/1000),true,v=>formatAwardPace(v));
-        addRanked(runs.filter(a=>a.distance>0),'longest run',a=>a.distance,false,v=>`${(v/1000).toFixed(1)} km`);
-        addRanked(rides.filter(a=>a.distance>0),'longest ride',a=>a.distance,false,v=>`${(v/1000).toFixed(1)} km`);
-        addRanked(rides.filter(a=>a.average_watts>0),'highest ride average power',a=>a.average_watts,false,v=>`${Math.round(v)} W`);
-        addRanked(rides.filter(a=>a.weighted_watts>0),'highest normalized power',a=>a.weighted_watts,false,v=>`${Math.round(v)} W`);
-        addRanked(runs.filter(a=>a.average_heartrate>0&&a.distance>0&&a.moving_time>0),'run aerobic efficiency',a=>(a.distance/a.moving_time)/a.average_heartrate,false,v=>`${v.toFixed(4)} m/s/bpm`);
-        addRanked(rides.filter(a=>a.average_heartrate>0&&a.average_watts>0),'ride aerobic efficiency',a=>a.average_watts/a.average_heartrate,false,v=>`${v.toFixed(2)} W/bpm`);
-        addRanked(cardio.filter(a=>a.max_heartrate>0),'highest recorded peak HR',a=>a.max_heartrate,false,v=>`${Math.round(v)} bpm`);
-        addRanked(cardio.filter(a=>Number.isFinite(a.decoupling)&&Math.abs(a.decoupling)<=30),'lowest absolute HR drift',a=>Math.abs(a.decoupling),true,(v,a)=>`${Number(a.decoupling).toFixed(1)}%`);
-        addRanked(importedActivities.filter(a=>a.training_load>0),'largest training load',a=>a.training_load,false,v=>`${Math.round(v)} load`);
-        addRanked(importedActivities.filter(a=>a.elevation>0),'most elevation',a=>a.elevation,false,v=>`${Math.round(v)} m`);
-        addRanked(importedActivities.filter(a=>a.moving_time>0),'longest duration',a=>a.moving_time,false,v=>formatActivityDuration(v));
-        index.forEach(rows=>rows.sort((a,b)=>a.priority-b.priority||a.rank-b.rank||a.label.localeCompare(b.label)));
-        return index;
-      }
-      function renderActivityAwards(awards){return awards?.length?`<div class="activity-awards">${awards.slice(0,5).map(a=>`<span class="activity-award ${a.top?'top':''}" title="${escapeHtml(a.value)}">${escapeHtml(a.label)}</span>`).join('')}</div>`:'';}
-      function renderAchievementFeed(awardIndex){
-        const block=document.getElementById('achievementFeedBlock'),feed=document.getElementById('activityAchievementFeed');if(!block||!feed)return;const index=awardIndex||buildActivityAwardIndex(),rows=[];
-        importedActivities.slice(0,120).forEach(a=>(index.get(String(a.id))||[]).slice(0,2).forEach(award=>rows.push({activity:a.name||a.type,date:String(a.start_date_local||'').slice(0,10),...award})));
-        rows.sort((a,b)=>a.priority-b.priority||a.rank-b.rank||String(b.date).localeCompare(String(a.date)));feed.innerHTML=rows.slice(0,14).map(x=>`<div class="activity-achievement-row"><div><div class="activity-achievement-name">${escapeHtml(x.activity)} · ${escapeHtml(x.label)}</div><div class="activity-source">${escapeHtml(x.date)}</div></div><div class="activity-achievement-value">${escapeHtml(x.value)}</div></div>`).join('');block.style.display=rows.length?'block':'none';
-      }
-      function getSelectedPersonalBestData(){
-        const ranges=intervalsBestRecords.ranges||{};
-        if(ranges[personalBestRange])return ranges[personalBestRange];
-        return personalBestRange==='all'?{run:intervalsBestRecords.run||{},ride:intervalsBestRecords.ride||{},rideCurve:null}:{run:{},ride:{},rideCurve:null};
-      }
-      function getPowerDisplayContext(){
-        const bw=getMostRecentBodyweight(),kg=bw&&Number(bw.weight)>0?Number(bw.weight)*0.45359237:null;
-        return{kg,bw,factor:powerDisplayUnit==='wkg'&&kg?1/kg:1,unit:powerDisplayUnit==='wkg'&&kg?'W/kg':'W'};
-      }
-      function renderPowerDurationCurve(rangeData){
-        const wrap=document.getElementById('powerCurveWrap'),note=document.getElementById('powerCurveNote');if(!wrap)return;
-        const curve=rangeData?.rideCurve,ctx=getPowerDisplayContext(),rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[personalBestRange]||personalBestRange;
-        if(note)note.textContent=`${rangeLabel} · ${ctx.unit}${ctx.unit==='W/kg'?' from latest bodyweight':''} · logarithmic time axis`;
-        if(!curve||!Array.isArray(curve.secs)||curve.secs.length<2){wrap.innerHTML='<div class="power-curve-empty">No power curve is available for this range yet.</div>';return;}
-        const rows=curve.secs.map((sec,i)=>({sec:Number(sec),value:Number(curve.values[i])*ctx.factor})).filter(x=>x.sec>0&&x.value>0).sort((a,b)=>a.sec-b.sec);if(rows.length<2){wrap.innerHTML='<div class="power-curve-empty">No power curve is available for this range yet.</div>';return;}
-        const W=720,H=190,L=48,R=16,T=12,B=28,x0=Math.log(rows[0].sec),x1=Math.log(rows[rows.length-1].sec),maxV=Math.max(...rows.map(x=>x.value))*1.08,minV=Math.max(0,Math.min(...rows.map(x=>x.value))*.82);
-        const x=s=>L+(Math.log(s)-x0)/(x1-x0)*(W-L-R),y=v=>T+(maxV-v)/(maxV-minV)*(H-T-B),path=rows.map((p,i)=>`${i?'L':'M'}${x(p.sec).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
-        const xTicks=[5,60,300,1200,3600,14400].filter(s=>s>=rows[0].sec&&s<=rows[rows.length-1].sec),xLabels={5:'5s',60:'1m',300:'5m',1200:'20m',3600:'1h',14400:'4h'};
-        const yTicks=[0,.5,1].map(f=>minV+(maxV-minV)*f);
-        wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cycling power-duration curve for ${escapeHtml(rangeLabel)}">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${ctx.unit==='W/kg'?v.toFixed(1):Math.round(v)}</text>`).join('')}${xTicks.map(s=>`<line class="power-curve-grid" x1="${x(s)}" x2="${x(s)}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${x(s)}" y="${H-8}" text-anchor="middle">${xLabels[s]}</text>`).join('')}<path class="power-curve-path" d="${path}"></path></svg>`;
-      }
-      function renderRunPaceDurationCurve(rangeData){
-        const wrap=document.getElementById('runCurveWrap'),note=document.getElementById('runCurveNote');if(!wrap)return;const rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[personalBestRange]||personalBestRange;
-        if(note)note.textContent=`${rangeLabel} · best mean pace by effort duration · lower is faster`;
-        const specs=[['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]],rows=specs.map(([label,distance])=>{const sec=Number(rangeData?.run?.[label]);return{label,distance,sec,pace:sec>0?sec/(distance/1000):null};}).filter(x=>x.sec>0&&x.pace>0).sort((a,b)=>a.sec-b.sec);
-        if(rows.length<2){wrap.innerHTML='<div class="power-curve-empty">At least two run best-effort distances are needed for this range.</div>';return;}
-        const W=720,H=190,L=52,R=16,T=12,B=30,x0=Math.log(rows[0].sec),x1=Math.log(rows[rows.length-1].sec),minP=Math.min(...rows.map(x=>x.pace))*.96,maxP=Math.max(...rows.map(x=>x.pace))*1.04,x=s=>L+(Math.log(s)-x0)/(x1-x0)*(W-L-R),y=p=>T+(p-minP)/(maxP-minP)*(H-T-B),path=rows.map((p,i)=>`${i?'L':'M'}${x(p.sec).toFixed(1)},${y(p.pace).toFixed(1)}`).join(' '),paceLabel=p=>`${Math.floor(p/60)}:${String(Math.round(p%60)).padStart(2,'0')}`;
-        const yTicks=[minP,(minP+maxP)/2,maxP];wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Running pace-duration curve for ${escapeHtml(rangeLabel)}">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${paceLabel(v)}</text>`).join('')}${rows.map(p=>`<line class="power-curve-grid" x1="${x(p.sec)}" x2="${x(p.sec)}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${x(p.sec)}" y="${H-8}" text-anchor="middle">${escapeHtml(p.label)}</text>`).join('')}<path class="run-curve-path" d="${path}"></path>${rows.map(p=>`<circle cx="${x(p.sec)}" cy="${y(p.pace)}" r="3.5" style="fill:var(--main-color);stroke:var(--bg-color);stroke-width:1"><title>${escapeHtml(p.label)} · ${fmtPbTime(p.sec)} · ${paceLabel(p.pace)}/km</title></circle>`).join('')}</svg>`;
-      }
-      function renderPersonalBests(awardIndex){
-        const run=document.getElementById('runPbGrid'),ride=document.getElementById('ridePbGrid'),status=document.getElementById('pbSyncStatus');if(!run||!ride)return;
-        const rangeData=getSelectedPersonalBestData(),ctx=getPowerDisplayContext(),runOrder=['1k','1 mile','5k','10k','half','marathon'],rideOrder=['5 sec','1 min','5 min','20 min','60 min'];
-        run.innerHTML=runOrder.map(k=>`<div class="activity-pb-item"><div class="activity-pb-value">${rangeData.run?.[k]?fmtPbTime(rangeData.run[k]):'—'}</div><div class="activity-pb-label">${escapeHtml(k)}</div>${personalBestRange==='all'?rankChips(intervalsBestRecords.runRanks?.[k]):''}</div>`).join('');
-        ride.innerHTML=rideOrder.map(k=>{const value=rangeData.ride?.[k],display=value!=null?(ctx.unit==='W/kg'?(Number(value)*ctx.factor).toFixed(2):Math.round(value))+` ${ctx.unit}`:'—';return `<div class="activity-pb-item"><div class="activity-pb-value">${display}</div><div class="activity-pb-label">${escapeHtml(k)}</div>${personalBestRange==='all'&&intervalsBestRecords.rideRanks?.[k]?.yearValue!=null&&value!=null&&intervalsBestRecords.rideRanks[k].yearValue===Math.round(value)?'<div class="activity-pb-ranks"><span class="activity-rank-chip year top">year best = all-time best</span></div>':''}</div>`;}).join('');
-        const rangeLabel={all:'all-time',365:'one-year',90:'90-day',30:'30-day'}[personalBestRange];
-        if(status){if(!getIntervalsApiKey())status.textContent='Connect Intervals.icu to load personal records automatically.';else if(!intervalsBestRecords.lastSyncAt)status.textContent='connected · personal-best sync pending';else status.textContent=`${rangeLabel} records synced ${new Date(intervalsBestRecords.lastSyncAt).toLocaleString()}${ctx.unit==='W/kg'?(ctx.kg?' · W/kg uses your latest logged bodyweight':' · log bodyweight in Recovery to use W/kg'):''}`;}
-        document.querySelectorAll('#pbRangeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b.dataset.pbRange===personalBestRange));document.querySelectorAll('#powerUnitToggle .power-unit-btn').forEach(b=>b.classList.toggle('active',b.dataset.powerUnit===powerDisplayUnit));
-        renderPowerDurationCurve(rangeData);
-        renderRunPaceDurationCurve(rangeData);
-        renderAchievementFeed(awardIndex);
-      }
-      function fmtHrRange(vals){vals=vals.filter(v=>Number.isFinite(v));if(!vals.length)return '—';const lo=Math.round(Math.min(...vals)),hi=Math.round(Math.max(...vals));return lo===hi?`${lo}`:`${lo}–${hi}`;}
-      function medianNumber(values){const xs=values.map(Number).filter(Number.isFinite).sort((a,b)=>a-b);if(!xs.length)return null;const m=Math.floor(xs.length/2);return xs.length%2?xs[m]:(xs[m-1]+xs[m])/2;}
-      function renderAerobicBaselines(){
-        const cutoff=Date.now()-120*86400000,recent=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff);
-        const runs=recent.filter(a=>/run/i.test(a.type)&&a.average_heartrate>0&&a.distance>0&&a.moving_time>0);
-        const rides=recent.filter(a=>/ride|cycling|virtualride/i.test(a.type)&&a.average_heartrate>0&&a.average_watts>0);
-        const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
-        const runPace=medianNumber(runs.map(a=>a.moving_time/(a.distance/1000))),runHr=medianNumber(runs.map(a=>a.average_heartrate));
-        if(runs.length>=3&&runPace){const m=Math.floor(runPace/60),s=Math.round(runPace%60);set('baselineRunPace',`${m}:${String(s).padStart(2,'0')}/km`);set('baselineRunHr',`${Math.round(runHr)} bpm`);}else{set('baselineRunPace','—');set('baselineRunHr','—');}
-        const ridePower=medianNumber(rides.map(a=>a.average_watts)),rideHr=medianNumber(rides.map(a=>a.average_heartrate));
-        if(rides.length>=3){set('baselineRidePower',`${Math.round(ridePower)} W`);set('baselineRideHr',`${Math.round(rideHr)} bpm`);}else{set('baselineRidePower','—');set('baselineRideHr','—');}
-        const note=document.getElementById('aerobicBaselineNote');if(note){const bits=[runs.length>=3?`running baseline: ${runs.length} sessions`:`running: ${runs.length}/3 usable sessions`,rides.length>=3?`cycling baseline: ${rides.length} sessions`:`cycling: ${rides.length}/3 usable sessions`];note.textContent=`Last 120 days · ${bits.join(' · ')} · medians resist one unusual workout.`;}
-      }
-      function getAdaptationComparison(rows,valueFn,lowerIsBetter=false){
-        const sample=rows.slice().sort((a,b)=>String(a.start_date_local).localeCompare(String(b.start_date_local))).slice(-24);if(sample.length<6)return{available:false,count:sample.length};const split=Math.floor(sample.length/2),older=sample.slice(0,split).map(valueFn).filter(Number.isFinite),recent=sample.slice(split).map(valueFn).filter(Number.isFinite);if(older.length<3||recent.length<3)return{available:false,count:sample.length};const oldMedian=medianNumber(older),recentMedian=medianNumber(recent),raw=(recentMedian-oldMedian)/oldMedian*100,change=lowerIsBetter?-raw:raw;return{available:true,count:sample.length,older:oldMedian,recent:recentMedian,change};
-      }
-      function renderActivityScatter(targetId,rows,xFn,yFn,options={}){
-        const el=document.getElementById(targetId);if(!el)return;const points=rows.slice().sort((a,b)=>String(a.start_date_local).localeCompare(String(b.start_date_local))).slice(-36).map(a=>({a,x:Number(xFn(a)),y:Number(yFn(a))})).filter(p=>Number.isFinite(p.x)&&p.x>0&&Number.isFinite(p.y)&&p.y>0);if(points.length<3){el.innerHTML=`<div class="activity-analysis-empty">${escapeHtml(options.empty||'At least three usable activities are needed.')}</div>`;return;}
-        const W=360,H=185,L=38,R=12,T=10,B=27,xMin=Math.min(...points.map(p=>p.x)),xMax=Math.max(...points.map(p=>p.x)),yMin=Math.min(...points.map(p=>p.y)),yMax=Math.max(...points.map(p=>p.y)),xPad=Math.max(1,(xMax-xMin)*.08),yPad=Math.max(.01,(yMax-yMin)*.1),x0=xMin-xPad,x1=xMax+xPad,y0=yMin-yPad,y1=yMax+yPad,x=v=>L+(v-x0)/(x1-x0)*(W-L-R),y=v=>options.lowerYBetter?T+(v-y0)/(y1-y0)*(H-T-B):T+(y1-v)/(y1-y0)*(H-T-B),half=Math.floor(points.length/2),old=points.slice(0,half),recent=points.slice(half),medianPoint=list=>({x:medianNumber(list.map(p=>p.x)),y:medianNumber(list.map(p=>p.y))}),p0=medianPoint(old),p1=medianPoint(recent),latest=points[points.length-1];
-        const xTicks=[x0,(x0+x1)/2,x1],yTicks=[y0,(y0+y1)/2,y1];el.innerHTML=`<svg class="activity-analysis-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${escapeHtml(options.aria||'Activity relationship chart')}"><line class="activity-analysis-axis" x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}"></line><line class="activity-analysis-axis" x1="${L}" x2="${L}" y1="${T}" y2="${H-B}"></line>${xTicks.map(v=>`<text class="activity-analysis-label" x="${x(v)}" y="${H-8}" text-anchor="middle">${escapeHtml(options.xFormat?options.xFormat(v):Math.round(v))}</text>`).join('')}${yTicks.map(v=>`<text class="activity-analysis-label" x="${L-5}" y="${y(v)+3}" text-anchor="end">${escapeHtml(options.yFormat?options.yFormat(v):Math.round(v))}</text>`).join('')}<line class="activity-analysis-line" x1="${x(p0.x)}" y1="${y(p0.y)}" x2="${x(p1.x)}" y2="${y(p1.y)}"></line>${points.map(p=>`<circle class="activity-analysis-dot ${p===latest?'latest':''}" cx="${x(p.x)}" cy="${y(p.y)}" r="${p===latest?4:3}"><title>${escapeHtml(String(p.a.start_date_local||'').slice(0,10))} · ${escapeHtml(options.tooltip?options.tooltip(p):`${p.x}, ${p.y}`)}</title></circle>`).join('')}<text class="activity-analysis-label" x="${W-R}" y="${H-8}" text-anchor="end">${escapeHtml(options.xLabel||'')}</text></svg>`;
-      }
-      function renderDecouplingChart(rows){
-        const el=document.getElementById('decouplingChart');if(!el)return;const points=rows.slice().sort((a,b)=>String(a.start_date_local).localeCompare(String(b.start_date_local))).slice(-28).map(a=>({a,value:Number(a.decoupling)})).filter(p=>Number.isFinite(p.value));if(points.length<3){el.innerHTML='<div class="activity-analysis-empty">At least three activities with decoupling are needed.</div>';return;}const W=360,H=185,L=34,R=12,T=10,B=27,min=Math.min(-5,...points.map(p=>p.value)),max=Math.max(10,...points.map(p=>p.value)),x=i=>L+(i/Math.max(1,points.length-1))*(W-L-R),y=v=>T+(max-v)/(max-min)*(H-T-B),path=points.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(' '),zero=y(0);el.innerHTML=`<svg class="activity-analysis-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Heart-rate decoupling across recent activities"><line class="activity-analysis-axis" x1="${L}" x2="${W-R}" y1="${zero}" y2="${zero}"></line><path class="activity-analysis-line" d="${path}"></path>${points.map((p,i)=>`<circle class="activity-analysis-dot ${i===points.length-1?'latest':''}" cx="${x(i)}" cy="${y(p.value)}" r="${i===points.length-1?4:3}"><title>${escapeHtml(String(p.a.start_date_local||'').slice(0,10))} · ${p.value.toFixed(1)}%</title></circle>`).join('')}<text class="activity-analysis-label" x="${L-4}" y="${y(max)+3}" text-anchor="end">${max.toFixed(0)}%</text><text class="activity-analysis-label" x="${L-4}" y="${zero+3}" text-anchor="end">0%</text><text class="activity-analysis-label" x="${W-R}" y="${H-8}" text-anchor="end">oldest → newest</text></svg>`;}
-      function renderRunningProgress(rows){
-        const el=document.getElementById('runningProgressChart'),subtitle=document.getElementById('runningProgressSubtitle');if(!el)return;const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate()),dow=today.getDay(),thisMonday=new Date(today);thisMonday.setDate(today.getDate()-(dow===0?6:dow-1));
-        const weeks=Array.from({length:8},(_,i)=>{const start=new Date(thisMonday);start.setDate(start.getDate()-(7-i)*7);const end=new Date(start);end.setDate(end.getDate()+7);return{start,end,km:0,eff:[],count:0};});
-        rows.forEach(a=>{const d=new Date(String(a.start_date_local||'').slice(0,10)+'T12:00:00'),w=weeks.find(x=>d>=x.start&&d<x.end);if(!w)return;w.km+=(Number(a.distance)||0)/1000;w.count++;if(a.average_heartrate>0&&a.distance>0&&a.moving_time>0)w.eff.push((a.distance/a.moving_time)/a.average_heartrate);});
-        if(!weeks.some(w=>w.km>0)){el.innerHTML='<div class="activity-analysis-empty">No runs with usable distance in the last eight weeks.</div>';return;}const W=720,H=190,L=38,R=18,T=12,B=30,plotW=W-L-R,slot=plotW/weeks.length,barW=Math.min(44,slot*.56),maxKm=Math.max(1,...weeks.map(w=>w.km))*1.12,yKm=v=>H-B-v/maxKm*(H-T-B),effRows=weeks.map((w,i)=>({i,value:medianNumber(w.eff)})).filter(x=>x.value!=null),effMin=effRows.length?Math.min(...effRows.map(x=>x.value))*.98:0,effMax=effRows.length?Math.max(...effRows.map(x=>x.value))*1.02:1,yEff=v=>T+(effMax-v)/Math.max(.000001,effMax-effMin)*(H-T-B),x=i=>L+slot*i+slot/2,path=effRows.map((p,i)=>`${i?'L':'M'}${x(p.i).toFixed(1)},${yEff(p.value).toFixed(1)}`).join(' '),fmtWeek=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
-        el.innerHTML=`<svg class="activity-analysis-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Eight weeks of running distance and heart-rate efficiency"><line class="activity-analysis-axis" x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}"></line>${weeks.map((w,i)=>`<rect x="${x(i)-barW/2}" y="${yKm(w.km)}" width="${barW}" height="${Math.max(1,H-B-yKm(w.km))}" rx="3" style="fill:var(--main-color);opacity:${w.km?'.38':'.08'}"><title>${fmtWeek(w.start)} · ${w.km.toFixed(1)} km · ${w.count} run${w.count===1?'':'s'}</title></rect><text class="activity-analysis-label" x="${x(i)}" y="${H-8}" text-anchor="middle">${fmtWeek(w.start)}</text>`).join('')}${effRows.length>1?`<path class="run-curve-path" d="${path}"></path>${effRows.map(p=>`<circle cx="${x(p.i)}" cy="${yEff(p.value)}" r="3.5" style="fill:var(--sub-color)"><title>${fmtWeek(weeks[p.i].start)} · pace/HR efficiency ${p.value.toFixed(4)}</title></circle>`).join('')}`:''}<text class="activity-analysis-label" x="${L-5}" y="${T+3}" text-anchor="end">${maxKm.toFixed(0)}km</text><text class="activity-analysis-label" x="${L-5}" y="${H-B+3}" text-anchor="end">0</text></svg>`;
-        if(subtitle){const split=Math.max(1,Math.floor(effRows.length/2)),early=medianNumber(effRows.slice(0,split).map(x=>x.value)),late=medianNumber(effRows.slice(split).map(x=>x.value));subtitle.textContent=effRows.length>=2&&early&&late?`Weekly distance bars · pace-per-heartbeat line ${late>=early?'+':''}${((late-early)/early*100).toFixed(1)}% from earlier to recent available weeks. Compare similar terrain and conditions.`:'Weekly distance bars · add HR to more runs and weeks to establish the pace-per-heartbeat trend.';}
-      }
-      function renderActivityAnalysis(){
-        const cardio=importedActivities.filter(a=>activitySportGroup(a)!=='other'),runs=cardio.filter(a=>activitySportGroup(a)==='run'&&a.distance>0&&a.moving_time>0&&a.average_heartrate>0),rides=cardio.filter(a=>activitySportGroup(a)==='ride'&&a.average_watts>0&&a.average_heartrate>0),drift=cardio.filter(a=>Number.isFinite(a.decoupling));
-        const runEfficiency=a=>(a.distance/a.moving_time)/a.average_heartrate,rideEfficiency=a=>a.average_watts/a.average_heartrate,runCmp=getAdaptationComparison(runs,runEfficiency),rideCmp=getAdaptationComparison(rides,rideEfficiency),driftCmp=getAdaptationComparison(drift,a=>Math.abs(a.decoupling),true);
-        renderActivityScatter('runEfficiencyChart',runs,a=>a.average_heartrate,a=>a.moving_time/(a.distance/1000),{lowerYBetter:true,xLabel:'HR →',yFormat:v=>formatAwardPace(v).replace('/km',''),tooltip:p=>`${Math.round(p.x)} bpm · ${formatAwardPace(p.y)}`,empty:'Sync at least three runs with duration, distance, and average HR.',aria:'Running pace compared with average heart rate'});
-        renderActivityScatter('rideEfficiencyChart',rides,a=>a.average_heartrate,a=>a.average_watts,{xLabel:'HR →',yFormat:v=>`${Math.round(v)}W`,tooltip:p=>`${Math.round(p.x)} bpm · ${Math.round(p.y)} W`,empty:'Sync at least three rides with average power and heart rate.',aria:'Cycling average power compared with average heart rate'});renderDecouplingChart(drift);renderRunningProgress(runs);
-        const runSub=document.getElementById('runEfficiencySubtitle'),rideSub=document.getElementById('rideEfficiencySubtitle'),driftSub=document.getElementById('decouplingSubtitle');if(runSub)runSub.textContent=runCmp.available?`${runCmp.change>=0?'+':''}${runCmp.change.toFixed(1)}% recent run efficiency across ${runCmp.count} sessions.`:`${runs.length}/6 usable runs · faster at similar HR is the useful direction.`;if(rideSub)rideSub.textContent=rideCmp.available?`${rideCmp.change>=0?'+':''}${rideCmp.change.toFixed(1)}% recent ride efficiency across ${rideCmp.count} sessions.`:`${rides.length}/6 usable rides · more power at similar HR is the useful direction.`;if(driftSub)driftSub.textContent=driftCmp.available?`${driftCmp.change>=0?'+':''}${driftCmp.change.toFixed(1)}% change toward lower absolute drift across ${driftCmp.count} sessions.`:`${drift.length}/6 usable activities · lower absolute drift is usually preferable.`;
-        const summary=document.getElementById('activityAdaptationSummary');if(!summary)return;const signals=[['running',runCmp],['cycling',rideCmp]].filter(([,x])=>x.available),badge=summary.querySelector('.activity-adaptation-badge'),text=summary.querySelector('.activity-adaptation-text');if(!signals.length){badge.className='activity-adaptation-badge insufficient';badge.textContent='not enough data';text.textContent='At least three older and three recent sessions with usable HR plus pace or power are needed before Focus::Flow comments on adaptation.';return;}const improving=signals.filter(([,x])=>x.change>=3),watch=signals.filter(([,x])=>x.change<=-3),parts=signals.map(([name,x])=>`${name} ${x.change>=0?'+':''}${x.change.toFixed(1)}%`);let level='stable',label='mostly stable',message='Recent aerobic efficiency is broadly similar to the earlier half of your available sessions.';if(improving.length&&!watch.length){level='improving';label='possible adaptation';message='Recent activity-level efficiency is moving in a positive direction.';}else if(watch.length&&!improving.length){level='watch';label='watch trend';message='Recent activity-level efficiency is lower than the earlier comparison group; fatigue, conditions, terrain, or workout type may explain it.';}else if(improving.length&&watch.length){message='Running and cycling are moving in different directions, so the adaptation signal is mixed.';}badge.className=`activity-adaptation-badge ${level}`;badge.textContent=label;text.textContent=`${message} ${parts.join(' · ')}. Treat this as a pattern worth watching, not proof by itself.`;
-      }
-      function getAutomaticActivityAnomaly(activity){
-        if(!activity||!activity.start_date_local||!activity.average_heartrate)return null;
-        const type=/run/i.test(activity.type)?'run':/ride|cycling|virtualride/i.test(activity.type)?'ride':null;if(!type)return null;
-        const activityTime=new Date(activity.start_date_local).getTime(),cutoff=activityTime-180*86400000;
-        const peers=importedActivities.filter(a=>String(a.id)!==String(activity.id)&&new Date(a.start_date_local).getTime()>=cutoff&&new Date(a.start_date_local).getTime()<activityTime&&a.average_heartrate>0&&(type==='run'?/run/i.test(a.type)&&a.distance>0&&a.moving_time>0:/ride|cycling|virtualride/i.test(a.type)&&a.average_watts>0));
-        if(peers.length<5)return null;
-        const typicalHr=medianNumber(peers.map(a=>a.average_heartrate)),currentMetric=type==='run'?activity.moving_time/(activity.distance/1000):activity.average_watts,typicalMetric=medianNumber(peers.map(a=>type==='run'?a.moving_time/(a.distance/1000):a.average_watts));
-        if(!currentMetric||!typicalMetric)return null;
-        const comparable=type==='run'?Math.abs(currentMetric-typicalMetric)/typicalMetric<=.15:Math.abs(currentMetric-typicalMetric)/typicalMetric<=.15;
-        const hrDelta=Math.round(activity.average_heartrate-typicalHr);if(!comparable||Math.abs(hrDelta)<10)return null;
-        return{direction:hrDelta>0?'high':'low',hrDelta,typicalHr:Math.round(typicalHr),peerCount:peers.length,detail:`HR ${Math.abs(hrDelta)} bpm ${hrDelta>0?'above':'below'} your typical response at comparable ${type==='run'?'pace':'power'}`};
-      }
-      function renderHeartRateRanges(){
-        const cutoff=Date.now()-30*86400000,recent=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff),withHr=recent.filter(a=>a.average_heartrate!=null),runs=withHr.filter(a=>/run/i.test(a.type)),rides=withHr.filter(a=>/ride|cycling|virtualride/i.test(a.type));
-        const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-        set('hrObservedRange',fmtHrRange(withHr.map(a=>a.average_heartrate))+(withHr.length?' bpm':''));
-        const peaks=recent.map(a=>a.max_heartrate).filter(v=>Number.isFinite(v));set('hrPeakValue',peaks.length?`${Math.round(Math.max(...peaks))} bpm`:'—');
-        set('hrRunRange',fmtHrRange(runs.map(a=>a.average_heartrate))+(runs.length?' bpm':''));set('hrRideRange',fmtHrRange(rides.map(a=>a.average_heartrate))+(rides.length?' bpm':''));
-        const zoneEl=document.getElementById('hrZoneList'),note=document.getElementById('hrRangeNote');if(!zoneEl||!note)return;const zoneRows=recent.filter(a=>Array.isArray(a.hr_zone_times)&&a.hr_zone_times.some(x=>x>0));
-        if(!zoneRows.length){zoneEl.innerHTML='';note.textContent=withHr.length?'Average/max HR is available. Intervals.icu did not include time-in-HR-zone data in these activity summaries, so Focus::Flow will not invent zone boundaries.':'Sync activities with heart-rate data to populate this card.';return;}
-        const n=Math.max(...zoneRows.map(a=>a.hr_zone_times.length)),sums=Array(n).fill(0);zoneRows.forEach(a=>a.hr_zone_times.forEach((x,i)=>sums[i]+=Number(x)||0));const total=sums.reduce((a,b)=>a+b,0)||1;
-        zoneEl.innerHTML=sums.map((sec,i)=>{const pct=sec/total*100,h=Math.floor(sec/3600),m=Math.round((sec%3600)/60),time=h?`${h}h ${m}m`:`${m}m`;return `<div class="hr-zone-row"><div class="hr-zone-name">Z${i+1}</div><div class="hr-zone-track"><div class="hr-zone-fill" style="width:${pct.toFixed(1)}%"></div></div><div class="hr-zone-time">${time}</div></div>`;}).join('');note.textContent=`30-day HR-zone distribution from ${zoneRows.length} activit${zoneRows.length===1?'y':'ies'} · zone definitions remain the ones Intervals.icu used when each activity was analyzed.`;
-      }
-      function fullHistoryWindows(){const newest=isoDateOffset(1),lastYear=Number(newest.slice(0,4)),windows=[];for(let year=2000;year<=lastYear;year+=5)windows.push({oldest:`${year}-01-01`,newest:year+4>=lastYear?newest:`${year+4}-12-31`});return windows;}
-      async function fetchIntervalsActivityWindow(auth,oldest,newest){const url=`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}`,res=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(!res.ok)throw new Error(res.status===401?'API key was rejected':`Intervals.icu returned ${res.status}`);const rows=await res.json();if(!Array.isArray(rows))throw new Error('unexpected response from Intervals.icu');return rows;}
-      async function enrichIncompleteIntervalRows(auth,rows,limit=18){const candidates=rows.map(normalizeIntervalsActivity).filter(a=>a.id&&(!(a.moving_time>0)||(a.has_heartrate&&a.average_heartrate==null))).sort((a,b)=>String(b.start_date_local).localeCompare(String(a.start_date_local))).slice(0,limit),enriched=[];for(let i=0;i<candidates.length;i+=4){const batch=candidates.slice(i,i+4);const details=await Promise.all(batch.map(async a=>{try{const r=await fetch(`https://intervals.icu/api/v1/activity/${encodeURIComponent(a.id)}`,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});return r.ok?normalizeIntervalsActivity(await r.json()):a;}catch(e){return a;}}));enriched.push(...details);}return enriched;}
-      async function syncIntervalsActivities(opts={}){
-        const key=getIntervalsApiKey();if(!key){renderActivitiesPanel();return false;}if(intervalsSyncInFlight)return false;intervalsSyncInFlight=true;
-        const full=opts.full===true||!getIntervalsHistoryBackfillAt(),status=document.getElementById('intervalsStatusText');if(status)status.textContent=full?'importing all history…':'syncing recent…';
-        try{
-          const auth='Basic '+btoa('API_KEY:'+key),windows=full?fullHistoryWindows():[{oldest:isoDateOffset(-45),newest:isoDateOffset(1)}],allRows=[];
-          for(let i=0;i<windows.length;i++){if(status&&full)status.textContent=`history ${i+1}/${windows.length}…`;const rows=await fetchIntervalsActivityWindow(auth,windows[i].oldest,windows[i].newest);allRows.push(...rows);mergeImportedActivities(rows.map(normalizeIntervalsActivity));if(full)renderActivitiesPanel();}
-          const enriched=await enrichIncompleteIntervalRows(auth,allRows,full?24:18);if(enriched.length)mergeImportedActivities(enriched);
-          intervalsLastSyncAt=new Date().toISOString();if(full)setIntervalsHistoryBackfillAt(intervalsLastSyncAt);await fetchIntervalsPersonalBests();saveData();renderActivitiesPanel();
-          if(!opts.silent)showToast(full?`Intervals.icu history imported · ${importedActivities.length} activities stored`:`Intervals.icu synced · ${allRows.length} recent activities checked`);return true;
-        }catch(err){
-          const msg=String(err&&err.message||err);const status=document.getElementById('intervalsStatusText');if(status)status.textContent='sync failed';
-          if(!opts.silent)showToast(`Intervals.icu sync failed — ${msg.includes('Failed to fetch')?'browser/network blocked the direct connection':msg}`);return false;
-        }finally{intervalsSyncInFlight=false;}
-      }
-      async function rebuildIntervalsHistory(){
-        if(!getIntervalsApiKey()){showToast('connect Intervals.icu first');return;}
-        const keepManual=()=>{
-          importedActivities=importedActivities.filter(a=>String(a?.source||'').toLowerCase()==='manual entry');
-          setIntervalsHistoryBackfillAt('');intervalsLastSyncAt=null;saveData();renderActivitiesPanel();
-          syncIntervalsActivities({full:true});
-        };
-        showConfirm('Rebuild imported history now? Synced copies will be cleared and fetched again from Intervals.icu. Manual entries stay. Use this once after you replace a Strava route with original files or a direct device source.',keepManual,'rebuild');
-      }
-      function addManualActivity(){
-        const name=document.getElementById('manualActivityName')?.value.trim(),date=document.getElementById('manualActivityDate')?.value||getToday(),type=document.getElementById('manualActivityType')?.value||'Other',minutes=Number(document.getElementById('manualActivityDuration')?.value),distanceKm=Number(document.getElementById('manualActivityDistance')?.value)||0,avgHr=Number(document.getElementById('manualActivityHr')?.value)||null,enteredLoad=Number(document.getElementById('manualActivityLoad')?.value),rpeValue=document.getElementById('manualActivityRpe')?.value,rpe=rpeValue?Number(rpeValue):null;
-        if(!name){showToast('give the activity a short name');return;}if(!Number.isFinite(minutes)||minutes<=0){showToast('add the activity duration');return;}
-        const sessionRpeAu=rpe?Math.round(minutes*rpe):null,estimatedFromRpe=!(enteredLoad>0)&&sessionRpeAu!=null,trainingLoad=enteredLoad>0?Math.round(enteredLoad*10)/10:estimatedFromRpe?Math.round(sessionRpeAu/10*10)/10:null;
-        if(trainingLoad==null){showToast('add training load or a session RPE');return;}
-        const row={id:`manual-${generateId()}`,name,type,start_date_local:`${date}T12:00:00`,distance:Math.max(0,distanceKm)*1000,moving_time:Math.round(minutes*60),elapsed_time:Math.round(minutes*60),elevation:0,average_speed:distanceKm>0?distanceKm*1000/(minutes*60):0,average_heartrate:avgHr&&avgHr>=30&&avgHr<=240?Math.round(avgHr):null,max_heartrate:null,has_heartrate:!!avgHr,average_watts:null,weighted_watts:null,training_load:trainingLoad,intensity:null,efficiency:null,decoupling:null,cadence:null,session_rpe:rpe,session_rpe_au:sessionRpeAu,load_estimated_from_rpe:estimatedFromRpe,source:'manual entry',stream_types:[],hr_zone_times:[]};
-        mergeImportedActivities([row]);['manualActivityName','manualActivityDuration','manualActivityDistance','manualActivityHr','manualActivityLoad'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});const rpeEl=document.getElementById('manualActivityRpe');if(rpeEl)rpeEl.value='';saveData();renderActivitiesPanel();renderRecoveryTab();showToast(estimatedFromRpe?`activity added · app load ${trainingLoad} from ${sessionRpeAu} session-RPE AU`:'activity added to history and Recovery');
-      }
-      function removeManualActivity(id){
-        const activity=importedActivities.find(a=>String(a.id)===String(id));if(!activity||String(activity.source).toLowerCase()!=='manual entry')return;
-        showConfirm(`Delete manual activity “${activity.name}”?`,()=>{importedActivities=importedActivities.filter(a=>String(a.id)!==String(id));delete sessionResponses[String(id)];saveData();renderActivitiesPanel();renderRecoveryTab();showToast('manual activity removed');});
-      }
-      function renderActivityTrendSummary(){
-        const el=document.getElementById('activityTrendSummary');if(!el)return;
-        const recent=importedActivities.slice(0,16);if(recent.length<2){el.innerHTML='';return;}
-        const rides=recent.filter(a=>/ride|cycling|virtualride/i.test(a.type));const runs=recent.filter(a=>/run/i.test(a.type));const parts=[];
-        const metricRow=(label,val,pct)=>`<div class="activity-trend-row"><span>${escapeHtml(label)}</span><div class="activity-trend-track"><div class="activity-trend-fill" style="width:${Math.max(5,Math.min(100,pct))}%"></div></div><b>${escapeHtml(val)}</b></div>`;
-        if(rides.length){const ps=rides.filter(a=>a.average_watts!=null);const hrs=rides.filter(a=>a.average_heartrate!=null);if(ps.length)parts.push(metricRow('ride avg power',`${Math.round(ps.reduce((x,a)=>x+a.average_watts,0)/ps.length)} W`,70));if(hrs.length)parts.push(metricRow('ride avg HR',`${Math.round(hrs.reduce((x,a)=>x+a.average_heartrate,0)/hrs.length)} bpm`,58));}
-        if(runs.length){const paces=runs.map(a=>{const d=a.distance/1000;return d>0?a.moving_time/d:null;}).filter(Boolean);const hrs=runs.filter(a=>a.average_heartrate!=null);if(paces.length){const x=paces.reduce((a,b)=>a+b,0)/paces.length,m=Math.floor(x/60),ss=Math.round(x%60);parts.push(metricRow('run avg pace',`${m}:${String(ss).padStart(2,'0')}/km`,68));}if(hrs.length)parts.push(metricRow('run avg HR',`${Math.round(hrs.reduce((x,a)=>x+a.average_heartrate,0)/hrs.length)} bpm`,58));}
-        el.innerHTML=parts.length?`<div class="activity-trend-block"><div class="activity-trend-title">recent aerobic snapshot</div>${parts.join('')}</div>`:'';
-      }
-      function activityResponseOption(value,label,current){return `<option value="${value}" ${current===value?'selected':''}>${label}</option>`;}
-      function renderActivityResponse(a){
-        const r=sessionResponses[String(a.id)]||{},has=!!r.updatedAt,alert=r.physiology==='high'||r.physiology==='low';
-        const chips=[];
-        const automatic=getAutomaticActivityAnomaly(a);if(automatic)chips.push(`<span class="activity-response-chip alert" title="${escapeHtml(`Compared with ${automatic.peerCount} earlier similar sessions · typical ${automatic.typicalHr} bpm`)}">auto flag · ${escapeHtml(automatic.detail)}</span>`);
-        if(r.feel)chips.push(`<span class="activity-response-chip">felt ${escapeHtml({easier:'easier than expected',right:'about right',harder:'harder than expected'}[r.feel]||r.feel)}</span>`);
-        if(r.physiology&&r.physiology!=='normal')chips.push(`<span class="activity-response-chip ${alert?'alert':''}">${escapeHtml({high:'HR unusually high',low:'HR unusually low',sensor:'sensor questionable'}[r.physiology]||r.physiology)}</span>`);
-        if(r.outcome&&r.outcome!=='completed')chips.push(`<span class="activity-response-chip">${escapeHtml(r.outcome==='shortened'?'shortened':'stopped early')}</span>`);
-        if(r.predictedLevel)chips.push(`<span class="activity-response-chip">call was ${escapeHtml(r.predictedLevel)}</span>`);
-        const id=encodeURIComponent(String(a.id));
-        return `<div class="activity-response-summary">${chips.join('')}${!has?'<span class="activity-response-chip">how did it go?</span>':''}<button class="activity-response-toggle" data-response-id="${id}">${has?'edit response':'add response'}</button></div><div class="activity-response-form" data-response-form="${id}"><label>session feel<select data-field="feel"><option value="">choose…</option>${activityResponseOption('easier','easier than expected',r.feel)}${activityResponseOption('right','about right',r.feel)}${activityResponseOption('harder','harder than expected',r.feel)}</select></label><label>physiological response<select data-field="physiology"><option value="">choose…</option>${activityResponseOption('normal','normal',r.physiology)}${activityResponseOption('high','HR unusually high',r.physiology)}${activityResponseOption('low','HR unusually low',r.physiology)}${activityResponseOption('sensor','sensor questionable',r.physiology)}</select></label><label>outcome<select data-field="outcome">${activityResponseOption('completed','completed',r.outcome||'completed')}${activityResponseOption('shortened','shortened',r.outcome)}${activityResponseOption('stopped','stopped early',r.outcome)}</select></label><label>possible anomaly reason<select data-field="reason"><option value="">unknown / not sure</option>${[['normal_high','felt normal, HR just high'],['heat','heat / humidity'],['hydration','dehydrated'],['sleep','poor sleep'],['caffeine','caffeine / stimulant'],['illness','illness coming on'],['stress','stressful day'],['pain','pain / soreness'],['sensor','sensor seemed wrong'],['other','other']].map(([v,l])=>activityResponseOption(v,l,r.reason)).join('')}</select></label><label style="grid-column:1/-1;">if the call missed, what changed?<select data-field="mismatchReason"><option value="">no mismatch / unknown</option>${[['sleep','sleep felt worse than its score'],['work','work was harder than expected'],['body','body deteriorated during the day'],['illness','illness / stress'],['fueling','fueling / hydration'],['pain','pain / soreness'],['better','felt better than the caution suggested'],['other','other']].map(([v,l])=>activityResponseOption(v,l,r.mismatchReason)).join('')}</select></label><button class="btn small activity-response-save" data-response-id="${id}">save session response</button></div>`;
-      }
-      function isStravaSourcedActivity(a){return /strava/i.test(String(a?.source||''));}
-      function activityHasSourceGap(a){return !(Number(a?.moving_time)>0)||(a?.has_heartrate&&!(Number(a?.average_heartrate)>0));}
-      function renderActivityDetail(a){
-        const stats=[],add=(label,value)=>{if(value!=null&&value!==''&&value!=='—')stats.push({label,value});};add('sport',a.type);add('duration',formatActivityDuration(a.moving_time));if(a.elapsed_time>0)add('elapsed',formatActivityDuration(a.elapsed_time));if(a.distance>0)add('distance',`${(a.distance/1000).toFixed(2)} km`);if(/run/i.test(a.type)){add('average pace',formatRunPace(a));}else if(a.average_speed>0)add('average speed',`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate>0)add('average HR',`${Math.round(a.average_heartrate)} bpm`);if(a.max_heartrate>0)add('maximum HR',`${Math.round(a.max_heartrate)} bpm`);if(a.average_watts>0)add('average power',`${Math.round(a.average_watts)} W`);if(a.weighted_watts>0)add('normalized power',`${Math.round(a.weighted_watts)} W`);if(a.training_load!=null)add(a.load_estimated_from_rpe?'Focus::Flow load estimate':'training load',Math.round(a.training_load));if(a.session_rpe_au!=null)add('session-RPE load',`${Math.round(a.session_rpe_au)} AU`);if(a.intensity!=null)add('intensity',`${Math.round(a.intensity)}%`);if(a.efficiency!=null)add('efficiency factor',Number(a.efficiency).toFixed(2));if(a.decoupling!=null)add('HR decoupling',`${Number(a.decoupling).toFixed(1)}%`);if(a.cadence!=null)add('average cadence',Math.round(a.cadence));if(a.elevation>0)add('elevation gain',`${Math.round(a.elevation)} m`);if(a.session_rpe!=null)add('session RPE',`${Math.round(a.session_rpe)}/10`);if(a.source)add('original source',a.source);
-        const zones=Array.isArray(a.hr_zone_times)?a.hr_zone_times.map(Number).filter(x=>x>=0):[],total=zones.reduce((x,y)=>x+y,0),zoneBar=total?`<div class="activity-detail-zones" title="HR-zone time: ${zones.map((s,i)=>`Z${i+1} ${Math.round(s/60)}m`).join(' · ')}">${zones.map((s,i)=>`<span class="activity-detail-zone" style="width:${(s/total*100).toFixed(2)}%;opacity:${Math.min(1,.38+i*.13)}"></span>`).join('')}</div>`:'';return `<details class="activity-detail"><summary>view full activity summary</summary><div class="activity-detail-body">${stats.map(s=>`<div class="activity-detail-stat"><div class="activity-detail-value">${escapeHtml(s.value)}</div><div class="activity-detail-label">${escapeHtml(s.label)}</div></div>`).join('')}${zoneBar}</div></details>`;
-      }
-      function renderActivityRow(a,awards=[]){
-        const metrics=[];metrics.push(formatActivityDuration(a.moving_time));if(a.distance)metrics.push(`${(a.distance/1000).toFixed(a.distance>=10000?1:2)} km`);if(/run/i.test(a.type)){const pace=formatRunPace(a);if(pace)metrics.push(pace);}else if(a.average_speed)metrics.push(`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate!=null)metrics.push(`HR ${Math.round(a.average_heartrate)} avg`);if(a.max_heartrate!=null)metrics.push(`${Math.round(a.max_heartrate)} max`);if(a.average_watts!=null)metrics.push(`${Math.round(a.average_watts)} W avg`);if(a.weighted_watts!=null)metrics.push(`${Math.round(a.weighted_watts)} W NP`);if(a.training_load!=null)metrics.push(`load ${Math.round(a.training_load)}`);if(a.session_rpe!=null)metrics.push(`RPE ${Math.round(a.session_rpe)}/10`);if(a.decoupling!=null)metrics.push(`decouple ${a.decoupling.toFixed(1)}%`);
-        const sourceWarning=isStravaSourcedActivity(a)&&activityHasSourceGap(a)?'<div class="activity-source-warning">Some summary fields are missing on this Strava-sourced activity. Focus::Flow can only use the fields Intervals is permitted to forward.</div>':'',manualDelete=String(a.source||'').toLowerCase()==='manual entry'?`<button class="btn small activity-manual-delete" data-manual-activity-id="${encodeURIComponent(String(a.id))}">delete manual entry</button>`:'';return `<div class="activity-row"><div class="activity-row-head" role="button" tabindex="0" aria-label="Open details for ${escapeHtml(a.name)}"><div><div class="activity-row-name">${escapeHtml(a.name)}</div><div class="activity-source">${escapeHtml(a.type)}${a.source?' · '+escapeHtml(a.source):''}</div></div><div><div class="activity-row-date">${a.start_date_local?new Date(a.start_date_local).toLocaleDateString(undefined,{month:'short',day:'numeric'}):''}</div><div class="activity-source" style="text-align:right;">details</div></div></div><div class="activity-metrics">${metrics.map(m=>`<span class="activity-metric">${escapeHtml(m)}</span>`).join('')}</div>${renderActivityAwards(awards)}${sourceWarning}${renderActivityDetail(a)}${renderActivityResponse(a)}${manualDelete}</div>`;
-      }
-      function bindActivityResponseControls(list){
-        list.querySelectorAll('.activity-row-head').forEach(head=>{const toggle=()=>{const details=head.closest('.activity-row')?.querySelector('.activity-detail');if(details)details.open=!details.open;};head.addEventListener('click',toggle);head.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});});
-        list.querySelectorAll('.activity-response-toggle').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`);if(form)form.classList.toggle('open');}));
-        list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),activityDate=String(activity?.start_date_local||'').slice(0,10),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'',previous=sessionResponses[id]||{};let predictedLevel=previous.predictedLevel||trainingCallSnapshots[activityDate]?.level||'';if(!predictedLevel&&activityDate){try{predictedLevel=getTrainingCallData(activityDate).level;}catch(e){}}sessionResponses[id]={...previous,activityId:id,activityDate,activityType:activity?.type||'',predictedLevel,feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),mismatchReason:value('mismatchReason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();renderDeloadWatch();renderTrainingOutlook();showToast('session response saved');}));
-        list.querySelectorAll('.activity-manual-delete').forEach(btn=>btn.addEventListener('click',()=>removeManualActivity(decodeURIComponent(btn.dataset.manualActivityId))));
-      }
-      function renderActivityCoverage(){
-        const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;},rows=importedActivities.filter(a=>a?.start_date_local),count=importedActivities.length,durationCount=importedActivities.filter(a=>Number(a.moving_time)>0).length,hrCount=importedActivities.filter(a=>Number(a.average_heartrate)>0||Number(a.max_heartrate)>0).length,runs=importedActivities.filter(a=>/run/i.test(a.type)).length;
-        set('activityCoverageCount',count||'—');const dates=rows.map(a=>String(a.start_date_local).slice(0,10)).filter(Boolean).sort();set('activityCoverageSpan',dates.length?`${dates[0].slice(0,4)}–${dates[dates.length-1].slice(0,4)}`:'—');set('activityCoverageDuration',count?`${Math.round(durationCount/count*100)}%`:'—');set('activityCoverageHr',count?`${Math.round(hrCount/count*100)}%`:'—');
-        const note=document.getElementById('activityCoverageNote'),sourceNotice=document.getElementById('activitySourceNotice');if(!note)return;const completed=getIntervalsHistoryBackfillAt(),stravaRows=importedActivities.filter(isStravaSourcedActivity),stravaGaps=stravaRows.filter(activityHasSourceGap);if(sourceNotice){sourceNotice.style.display=stravaRows.length?'block':'none';sourceNotice.textContent=stravaRows.length?`${stravaRows.length} stored activit${stravaRows.length===1?'y is':'ies are'} marked as Strava-sourced${stravaGaps.length?` · ${stravaGaps.length} ${stravaGaps.length===1?'has':'have'} missing duration or expected HR fields`:''}. Focus::Flow reads Intervals—not Strava directly. Importing original FIT/TCX files or a Strava archive into Intervals can provide data that Strava's API terms may prevent Intervals from forwarding.`:'';}if(!count){note.textContent=getIntervalsApiKey()?'Connected. The first sync will backfill your complete Intervals.icu history.':'Connect Intervals.icu to check import coverage.';return;}const cap=count>=5000?' · local history limit reached (newest 5,000 kept)':'';note.textContent=`${runs} run${runs===1?'':'s'} stored · ${durationCount}/${count} include duration · ${hrCount}/${count} include recorded HR${completed?` · full-history pass ${new Date(completed).toLocaleDateString()}`:' · full-history pass pending'}${cap} · newest 80 shown below`;
-      }
-      function renderActivitiesPanel(){
-        const key=getIntervalsApiKey(),dot=document.getElementById('intervalsStatusDot'),txt=document.getElementById('intervalsStatusText'),form=document.getElementById('intervalsConnectForm'),actions=document.getElementById('intervalsConnectedActions');
-        if(dot)dot.classList.toggle('connected',!!key);if(txt&&!intervalsSyncInFlight)txt.textContent=key?'connected':'not connected';if(form)form.style.display=key?'none':'block';if(actions)actions.style.display=key?'block':'none';
-        const last=document.getElementById('intervalsLastSync');if(last)last.textContent=intervalsLastSyncAt?`last sync ${new Date(intervalsLastSyncAt).toLocaleString()}`:'connected · first sync pending';
-        const cutoff=Date.now()-30*86400000,recent30=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff);
-        const c=document.getElementById('activity30Count'),h=document.getElementById('activity30Hours'),l=document.getElementById('activity30Load');if(c)c.textContent=recent30.length||'—';if(h)h.textContent=recent30.length?(recent30.reduce((x,a)=>x+a.moving_time,0)/3600).toFixed(1):'—';if(l){const vals=recent30.filter(a=>a.training_load!=null);l.textContent=vals.length?Math.round(vals.reduce((x,a)=>x+a.training_load,0)):'—';}
-        const awardIndex=buildActivityAwardIndex();renderActivityCoverage();renderActivityTrendSummary();
-        renderPersonalBests(awardIndex);renderHeartRateRanges();renderAerobicBaselines();renderActivityAnalysis();
-        const list=document.getElementById('activityList');if(!list)return;if(!importedActivities.length){list.innerHTML=`<div class="activity-empty">${key?'Connected. Sync will import your Intervals.icu training history.':'Connect Intervals.icu once and your activities will appear here automatically.'}</div>`;return;}
-        list.innerHTML=importedActivities.slice(0,80).map(a=>renderActivityRow(a,awardIndex.get(String(a.id))||[])).join('');bindActivityResponseControls(list);
-      }
-      function setupIntervalsImport(){
-        document.getElementById('intervalsConnectBtn')?.addEventListener('click',async()=>{const input=document.getElementById('intervalsApiKeyInput'),key=input?.value.trim();if(!key){showToast('paste your Intervals.icu API key first');return;}setIntervalsApiKey(key);if(input)input.value='';renderActivitiesPanel();const ok=await syncIntervalsActivities();if(!ok){setIntervalsApiKey('');renderActivitiesPanel();}});
-        document.getElementById('intervalsSyncBtn')?.addEventListener('click',()=>syncIntervalsActivities());
-        document.getElementById('intervalsFullSyncBtn')?.addEventListener('click',()=>syncIntervalsActivities({full:true}));
-        document.getElementById('intervalsRebuildBtn')?.addEventListener('click',rebuildIntervalsHistory);
-        document.getElementById('intervalsDisconnectBtn')?.addEventListener('click',()=>{setIntervalsApiKey('');renderActivitiesPanel();showToast('Intervals.icu disconnected — imported history stays in Focus::Flow');});
-        document.getElementById('manualActivityAddBtn')?.addEventListener('click',addManualActivity);
-        const manualDate=document.getElementById('manualActivityDate');if(manualDate&&!manualDate.value)manualDate.value=getToday();
-        document.getElementById('pbRangeTabs')?.addEventListener('click',e=>{const btn=e.target.closest('[data-pb-range]');if(!btn)return;personalBestRange=btn.dataset.pbRange;renderPersonalBests();});
-        document.getElementById('powerUnitToggle')?.addEventListener('click',e=>{const btn=e.target.closest('[data-power-unit]');if(!btn)return;if(btn.dataset.powerUnit==='wkg'&&!getMostRecentBodyweight()){showToast('log bodyweight in Recovery first — W/kg needs your weight');return;}powerDisplayUnit=btn.dataset.powerUnit;renderPersonalBests();});
-        renderActivitiesPanel();
-        setTimeout(()=>{if(getIntervalsApiKey())syncIntervalsActivities({silent:true});},2400);
-        if(intervalsAutoSyncTimer)clearInterval(intervalsAutoSyncTimer);intervalsAutoSyncTimer=setInterval(()=>{if(getIntervalsApiKey()&&!document.hidden)syncIntervalsActivities({silent:true});},30*60*1000);
-      }
-
-      function switchPanel(p){
-        const panelChanged=activePanel!==p;
-        activePanel=p;
-        document.body.dataset.activePanel=p;
-        document.querySelectorAll('.panel-tab').forEach(b=>b.classList.toggle('active',b.dataset.panel===p));
-        const primaryPanels=['today','recovery','habits','tasks'],moreBtn=document.getElementById('mobileMoreBtn');if(moreBtn)moreBtn.classList.toggle('active',!primaryPanels.includes(p));
-        closeMobileMore();
-        document.querySelectorAll('.panel').forEach(el=>el.classList.remove('active'));
-        document.getElementById(`panel-${p}`)?.classList.add('active');
-        if(p==='stats'){drawFocusChart();requestAnimationFrame(()=>drawHeatmap());}
-        if(p==='habits'){drawHabitCheckGraph();syncHabitGraphListHeight();}
-        if(p==='recovery'){renderRecoveryTab();}
-        if(p==='activities'){renderActivitiesPanel();}
-        if(p==='books'){renderBooks();}
-        if(p==='lifting'){renderLiftingTab();}
-        if(p==='money'){renderMoney();}
-        if(p==='goals'&&!hasSeenGoalsTutorial)openGoalsTutorial();
-        if(p==='today')requestAnimationFrame(scrollScheduleToNow);
-        if(panelChanged&&p!=='today')window.scrollTo({top:0,left:0,behavior:'auto'});
-        updateMiniTimerBar();
-        saveData();
-      }
-
-      function formatMoney(value){const n=Number(value);return Number.isFinite(n)&&value!==''?new Intl.NumberFormat(undefined,{style:'currency',currency:'CAD',maximumFractionDigits:0}).format(n):'—';}
-      function formatMoneyExact(value){const n=Number(value);return Number.isFinite(n)?new Intl.NumberFormat(undefined,{style:'currency',currency:'CAD',minimumFractionDigits:2,maximumFractionDigits:2}).format(n):'—';}
-      function ensureMoneyState(){
-        if(!moneyState||typeof moneyState!=='object')moneyState={};
-        if(!Array.isArray(moneyState.accounts))moneyState.accounts=[{id:'money-chequing',name:'Chequing',type:'cash',openingBalance:''},{id:'money-card-1',name:'Credit card 1',type:'credit',openingBalance:''},{id:'money-card-2',name:'Credit card 2',type:'credit',openingBalance:''},{id:'money-loc',name:'Line of credit',type:'loc',openingBalance:''}];
-        if(!Array.isArray(moneyState.transactions))moneyState.transactions=[];
-        if(!['purchase','paycheck','payment'].includes(moneyState.entryType))moneyState.entryType='purchase';
-      }
-      function getMoneyAccount(id){return moneyState.accounts.find(a=>String(a.id)===String(id));}
-      function isMoneyDebtAccount(account){return account&&['credit','loc'].includes(account.type);}
-      function getMoneyAccountBalance(account){
-        let balance=Number(account.openingBalance)||0;
-        moneyState.transactions.forEach(tx=>{const amount=Number(tx.amount)||0;if(tx.type==='purchase'&&tx.accountId===account.id)balance+=isMoneyDebtAccount(account)?amount:-amount;else if(tx.type==='paycheck'&&tx.accountId===account.id)balance+=amount;else if(tx.type==='payment'){if(tx.accountId===account.id)balance-=amount;if(tx.toAccountId===account.id)balance=Math.max(0,balance-amount);}});return Math.round(balance*100)/100;
-      }
-      function moneyMonthKey(date=new Date()){return`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;}
-      function renderMoneyAccountOptions(){
-        ensureMoneyState();const type=moneyState.entryType,accountSelect=document.getElementById('moneyEntryAccount'),toSelect=document.getElementById('moneyEntryToAccount');if(!accountSelect||!toSelect)return;
-        const previous=accountSelect.value,previousTo=toSelect.value,fromAccounts=type==='paycheck'?moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)):type==='payment'?moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)):moneyState.accounts,toAccounts=moneyState.accounts.filter(isMoneyDebtAccount),options=list=>list.map(a=>`<option value="${escapeHtml(String(a.id))}">${escapeHtml(a.name)}</option>`).join('');accountSelect.innerHTML=options(fromAccounts);toSelect.innerHTML=options(toAccounts);if(fromAccounts.some(a=>String(a.id)===previous))accountSelect.value=previous;if(toAccounts.some(a=>String(a.id)===previousTo))toSelect.value=previousTo;
-      }
-      function setMoneyEntryType(type){
-        if(!['purchase','paycheck','payment'].includes(type))type='purchase';moneyState.entryType=type;document.querySelectorAll('#moneyEntryType [data-money-type]').forEach(b=>b.classList.toggle('active',b.dataset.moneyType===type));document.getElementById('moneyEntryCategoryWrap').style.display=type==='purchase'?'block':'none';document.getElementById('moneyEntryToAccountWrap').style.display=type==='payment'?'block':'none';document.getElementById('moneyEntryAccountWrap').firstChild.textContent=type==='payment'?'pay from':type==='paycheck'?'deposit to':'account';document.getElementById('moneyAddEntryBtn').textContent=type==='purchase'?'add purchase':type==='paycheck'?'add paycheck':'record payment';renderMoneyAccountOptions();saveData();
-      }
-      function renderMoney(){
-        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};
-        Object.entries(map).forEach(([id,key])=>{const el=document.getElementById(id);if(el&&document.activeElement!==el)el.value=moneyState[key]??'';});
-        const monthInput=document.getElementById('moneyLedgerMonth'),month=moneyState.ledgerMonth||moneyMonthKey();moneyState.ledgerMonth=month;if(monthInput&&document.activeElement!==monthInput)monthInput.value=month;const monthTransactions=moneyState.transactions.filter(tx=>String(tx.date||'').startsWith(month)),income=monthTransactions.filter(tx=>tx.type==='paycheck').reduce((s,tx)=>s+(Number(tx.amount)||0),0),out=monthTransactions.filter(tx=>tx.type==='purchase').reduce((s,tx)=>s+(Number(tx.amount)||0),0),cash=moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)).reduce((s,a)=>s+getMoneyAccountBalance(a),0),debt=moneyState.accounts.filter(isMoneyDebtAccount).reduce((s,a)=>s+getMoneyAccountBalance(a),0),invested=Number(moneyState.invested)||0,netFlow=income-out,netPosition=cash+invested-debt,set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-        const monthDate=new Date(`${month}-02T12:00:00`);set('moneyMonthLabel',monthDate.toLocaleDateString(undefined,{month:'long',year:'numeric'}));set('moneyIncomeSummary',income?formatMoney(income):'—');set('moneyOutSummary',out?formatMoney(out):'—');set('moneyCashSummary',formatMoney(cash));set('moneyDebtSummary',formatMoney(debt));
-        const planFill=document.getElementById('moneyPlanBarFill');if(planFill)planFill.style.width=`${income?Math.min(100,out/income*100):0}%`;
-        set('moneyPlanMessage',!moneyState.transactions.length?'Start with the current balance or amount owed on each account, then add the next real entry.':`${monthDate.toLocaleDateString(undefined,{month:'long'})} cash flow is ${netFlow>=0?'+':''}${formatMoney(netFlow)}. Across cash, tracked debt and investments, the current net position is ${formatMoney(netPosition)}. Card payments are transfers, so they are not counted twice as spending.`);
-        const saved=Number(moneyState.goalSaved)||0,target=Number(moneyState.goalTarget)||0,goalPct=target?Math.min(100,saved/target*100):0,goalFill=document.getElementById('moneyGoalProgressFill');if(goalFill)goalFill.style.width=`${goalPct}%`;
-        set('moneyGoalMessage',target?`${moneyState.goalName||'Goal'}: ${formatMoney(saved)} of ${formatMoney(target)} · ${Math.round(goalPct)}%. ${saved>=target?'Target reached; choose what this money should do next.':`${formatMoney(Math.max(0,target-saved))} remaining.`}`:'A financial goal belongs here because this is where the next contribution becomes concrete. Bigger life direction can still live on Goals.');
-        const contribution=Number(moneyState.contribution)||0;set('moneyProjection',contribution?`${formatMoney(contribution*12)} of deposits over the next 12 months; ${formatMoney(invested+contribution*12)} total before any market movement.`:'Add a usual contribution to see twelve months of deposits—without assuming market returns.');
-        const accountList=document.getElementById('moneyAccountList');accountList.innerHTML='';moneyState.accounts.forEach(account=>{const row=document.createElement('div');row.className='money-account-row';const balance=getMoneyAccountBalance(account),typeLabel=account.type==='credit'?'credit card':account.type==='loc'?'line of credit':account.type==='savings'?'savings':'cash / chequing';row.innerHTML=`<div class="money-account-name">${escapeHtml(account.name)}<span>${typeLabel}</span></div><div class="money-account-balance ${isMoneyDebtAccount(account)?'debt':''}">${isMoneyDebtAccount(account)?`${formatMoney(balance)} owed`:formatMoney(balance)}</div><button type="button" class="money-ledger-delete" title="remove account">×</button><label class="money-account-opening"><span>starting ${isMoneyDebtAccount(account)?'amount owed':'balance'}</span><input class="search-input money-input" type="number" inputmode="decimal" step="0.01" min="0" value="${account.openingBalance??''}" placeholder="0.00"></label>`;const openingInput=row.querySelector('input');openingInput.addEventListener('input',e=>{account.openingBalance=e.target.value;saveData();});openingInput.addEventListener('change',renderMoney);row.querySelector('button').addEventListener('click',()=>removeMoneyAccount(account.id));accountList.appendChild(row);});
-        renderMoneyAccountOptions();setMoneyEntryTypeVisualOnly(moneyState.entryType);
-        const categoryList=document.getElementById('moneyCategoryList'),purchases=monthTransactions.filter(tx=>tx.type==='purchase'),categoryTotals={};purchases.forEach(tx=>{const category=tx.category||'Other';categoryTotals[category]=(categoryTotals[category]||0)+(Number(tx.amount)||0);});const maxCategory=Math.max(0,...Object.values(categoryTotals));categoryList.innerHTML=Object.keys(categoryTotals).length?Object.entries(categoryTotals).sort((a,b)=>b[1]-a[1]).map(([category,total])=>`<div class="money-category-row"><span>${escapeHtml(category)}</span><span class="money-category-track"><span style="width:${maxCategory?total/maxCategory*100:0}%"></span></span><strong>${formatMoney(total)}</strong></div>`).join(''):'<div class="money-empty">Categories appear after your first purchase in this month.</div>';
-        const ledger=document.getElementById('moneyLedgerList'),sorted=monthTransactions.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(b.createdAt||'').localeCompare(String(a.createdAt||'')));ledger.innerHTML='';if(!sorted.length)ledger.innerHTML='<div class="money-empty">No entries in this month yet. Add a paycheck or purchase above.</div>';sorted.forEach(tx=>{const from=getMoneyAccount(tx.accountId),to=getMoneyAccount(tx.toAccountId),row=document.createElement('div');row.className='money-ledger-row';const meta=tx.type==='payment'?`${from?.name||'account'} → ${to?.name||'debt account'}`:`${tx.category||tx.type} · ${from?.name||'unknown account'}`,sign=tx.type==='paycheck'?'+':tx.type==='purchase'?'-':'';row.innerHTML=`<div class="money-ledger-date">${escapeHtml(new Date((tx.date||getToday())+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'}))}</div><div class="money-ledger-main">${escapeHtml(tx.description||tx.type)}<span>${escapeHtml(meta)}</span></div><div class="money-ledger-amount ${tx.type==='paycheck'?'income':''}">${sign}${formatMoneyExact(tx.amount)}</div><button type="button" class="money-ledger-delete" title="remove entry">×</button>`;row.querySelector('button').addEventListener('click',()=>showConfirm(`Remove ${tx.description||tx.type} for ${formatMoneyExact(tx.amount)}?`,()=>{moneyState.transactions=moneyState.transactions.filter(x=>x.id!==tx.id);saveData();renderMoney();showToast('money entry removed');},'remove'));ledger.appendChild(row);});
-      }
-      function setMoneyEntryTypeVisualOnly(type){document.querySelectorAll('#moneyEntryType [data-money-type]').forEach(b=>b.classList.toggle('active',b.dataset.moneyType===type));document.getElementById('moneyEntryCategoryWrap').style.display=type==='purchase'?'block':'none';document.getElementById('moneyEntryToAccountWrap').style.display=type==='payment'?'block':'none';const label=document.getElementById('moneyEntryAccountWrap');if(label)label.childNodes[0].textContent=type==='payment'?'pay from':type==='paycheck'?'deposit to':'account';const add=document.getElementById('moneyAddEntryBtn');if(add)add.textContent=type==='purchase'?'add purchase':type==='paycheck'?'add paycheck':'record payment';}
-      function addMoneyEntry(){
-        ensureMoneyState();const type=moneyState.entryType,date=document.getElementById('moneyEntryDate').value||getToday(),amount=Number(document.getElementById('moneyEntryAmount').value),description=document.getElementById('moneyEntryDescription').value.trim()||(type==='paycheck'?'paycheck':type==='payment'?'account payment':'purchase'),category=document.getElementById('moneyEntryCategory').value||'Other',accountId=document.getElementById('moneyEntryAccount').value,toAccountId=document.getElementById('moneyEntryToAccount').value;if(!amount||amount<=0){showToast('enter the amount first');return;}if(!accountId){showToast('add or choose an account first');return;}if(type==='payment'&&!toAccountId){showToast('choose the debt account receiving the payment');return;}moneyState.transactions.push({id:generateId(),type,date,amount:Math.round(amount*100)/100,description,category:type==='purchase'?category:null,accountId,toAccountId:type==='payment'?toAccountId:null,createdAt:new Date().toISOString()});document.getElementById('moneyEntryAmount').value='';document.getElementById('moneyEntryDescription').value='';moneyState.ledgerMonth=date.slice(0,7);saveData();renderMoney();showToast(type==='purchase'?'purchase added':type==='paycheck'?'paycheck added':'account payment recorded');
-      }
-      function addMoneyAccount(){const name=document.getElementById('moneyNewAccountName').value.trim(),type=document.getElementById('moneyNewAccountType').value;if(!name){showToast('name the account first');return;}moneyState.accounts.push({id:`money-${generateId()}`,name,type,openingBalance:''});document.getElementById('moneyNewAccountName').value='';saveData();renderMoney();showToast(`${name} added`);}
-      function removeMoneyAccount(id){const account=getMoneyAccount(id);if(!account)return;if(moneyState.transactions.some(tx=>tx.accountId===id||tx.toAccountId===id)){showToast('remove or move this account’s entries before deleting it');return;}showConfirm(`Remove ${account.name}?`,()=>{moneyState.accounts=moneyState.accounts.filter(a=>a.id!==id);saveData();renderMoney();showToast('account removed');},'remove');}
-      function setupMoney(){
-        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};Object.entries(map).forEach(([id,key])=>document.getElementById(id)?.addEventListener('input',e=>{moneyState[key]=e.target.value;renderMoney();saveData();}));document.getElementById('moneyEntryType')?.addEventListener('click',e=>{const btn=e.target.closest('[data-money-type]');if(btn)setMoneyEntryType(btn.dataset.moneyType);});document.getElementById('moneyAddEntryBtn')?.addEventListener('click',addMoneyEntry);document.getElementById('moneyAddAccountBtn')?.addEventListener('click',addMoneyAccount);document.getElementById('moneyLedgerMonth')?.addEventListener('change',e=>{moneyState.ledgerMonth=e.target.value;saveData();renderMoney();});const dateInput=document.getElementById('moneyEntryDate');if(dateInput&&!dateInput.value)dateInput.value=getToday();renderMoney();
-      }
-      function setRecoveryEntryStage(stage='morning'){
-        if(!['morning','later','all'].includes(stage))stage='morning';body.dataset.entryStageCurrent=stage;document.querySelectorAll('#recoveryEntryModeTabs [data-entry-stage]').forEach(b=>b.classList.toggle('active',b.dataset.entryStage===stage));
-      }
-      function setupMobileTabSwipe(){
-        const shell=document.querySelector('.app-shell'),order=['today','habits','recovery','tasks','lifting','activities','money','goals','books','stats'];if(!shell)return;let start=null;
-        const ignored=el=>el?.closest('input,textarea,select,button,a,canvas,svg,.panel-tabs,.sort-tabs,.heatmap-wrap,.training-load-strip,.notepad-popover,[contenteditable="true"]');
-        shell.addEventListener('touchstart',e=>{if(body.dataset.viewMode!=='mobile'||e.touches.length!==1||ignored(e.target)||document.querySelector('.settings-overlay.open'))return;const t=e.touches[0];start={x:t.clientX,y:t.clientY,time:Date.now()};},{passive:true});
-        shell.addEventListener('touchend',e=>{if(!start||!e.changedTouches.length)return;const t=e.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y,elapsed=Date.now()-start.time;start=null;if(Math.abs(dx)<75||Math.abs(dy)>55||elapsed>700)return;const index=order.indexOf(activePanel),next=index+(dx<0?1:-1);if(index<0||next<0||next>=order.length)return;switchPanel(order[next]);const panel=document.getElementById(`panel-${order[next]}`);panel?.classList.add(dx<0?'swipe-enter-left':'swipe-enter-right');setTimeout(()=>panel?.classList.remove('swipe-enter-left','swipe-enter-right'),220);document.querySelector(`.panel-tab[data-panel="${order[next]}"]`)?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});},{passive:true});
-      }
-
-      function updateSettingsPlanningUI(){
-        const adaptiveBtn=document.getElementById('settingsAdaptiveFocusToggle');
-        const manualRow=document.getElementById('settingsManualFocusRow');
-        const focusInput=document.getElementById('settingsDailyGoalInput');
-        const sleepInput=document.getElementById('settingsSleepTargetInput');
-        const chainSummary=document.getElementById('settingsChainSummary');
-        if(adaptiveBtn){adaptiveBtn.textContent=adaptiveFocusGoalEnabled?'adaptive':'manual';adaptiveBtn.classList.toggle('active-toggle',adaptiveFocusGoalEnabled);}
-        if(manualRow)manualRow.style.display=adaptiveFocusGoalEnabled?'none':'flex';
-        if(focusInput&&document.activeElement!==focusInput)focusInput.value=dailyGoal;
-        if(sleepInput&&document.activeElement!==sleepInput)sleepInput.value=sleepTargetHours;
-        if(chainSummary)chainSummary.textContent=`${chainConfig.workCount} × ${chainConfig.workMinutes}m focus · ${chainConfig.shortBreak}m break · ${chainConfig.longBreak}m rest`;
-      }
-      function openSettings(){updateSettingsPlanningUI();document.getElementById('settingsOverlay').classList.add('open');}
-      function closeSettings(){document.getElementById('settingsOverlay').classList.remove('open');}
-      function openFeatureGuide(){document.getElementById('featureGuideOverlay').classList.add('open');}
-      function closeFeatureGuide(){document.getElementById('featureGuideOverlay').classList.remove('open');}
-      function addContextHelp(selector,text){
-        const el=document.querySelector(selector);if(!el||el.querySelector('.help-tip'))return;
-        const tip=document.createElement('span');tip.className='help-tip';tip.tabIndex=0;tip.setAttribute('role','button');tip.dataset.help=text;tip.title=text;tip.textContent='?';
-        tip.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();tip.focus();});
-        el.appendChild(tip);
-      }
-      function setContextTitle(selector,text){document.querySelectorAll(selector).forEach(el=>{if(!el.title)el.title=text;});}
-      function installContextHelp(){
-        const tips=[
-          ['#panel-tasks .task-card h2','This is the active working list. Focus tasks can use the timer; todos are quick items that do not need a focus session.'],
-          ['#panel-tasks .task-library-card h2','The library is reusable history: saved task names, usage, focus time, graphs, and notes. It is not the same as your active queue.'],
-          ['#panel-habits .habit-overview-card h2','A compact week view. Daily counts and weekly-frequency targets are both respected when deciding whether a habit is complete.'],
-          ['#panel-habits .habit-library-card h2','Create and edit habits here, including daily count / weekly frequency targets and optional links to recurring tasks.'],
-          ['#panel-habits .habit-graph-card h2','Longer check-in history for one habit at a time. Use the period buttons to switch between 12 weeks, 24 weeks, and a year.'],
-          ['#panel-goals .goal-tier-card[data-tier="short"] h2','Now means active attention. Put only goals you actually want visible in your current working set here.'],
-          ['#panel-goals .goal-tier-card[data-tier="medium"] h2','Next keeps a goal visible without treating it as urgent. Move it to Now when it deserves active attention.'],
-          ['#panel-goals .goal-tier-card[data-tier="long"] h2','Someday is a parking place for goals you still care about but do not want competing for current attention.'],
-          ['#panel-stats .dashboard-card h2','Capacity is the median focus time from recent active days; consistency is the share of the last 30 days with any focus time.'],
-          ['#focusDnaCard h2','Personal Patterns waits for repeated evidence, labels confidence, and keeps direct task states separate from tentative associations. It is not a grade or a causal analysis.'],
-          ['#panel-lifting .lifting-cycle-card h2','There is no fixed split. The app ranks your lift pool and offers the safest useful exposure that fits today.'],
-          ['#panel-lifting .lifting-today-card h2','A minimum-dose prescription: usually one lift, conservative loading, check-off warm-up sets, and a final-set RIR target so strength work does not consume the whole recovery budget.'],
-          ['#panel-lifting .lifting-lifts-card h2','Training max drives prescribed weights. Progression is automatic: +2.5lb for smaller/upper lifts and +5lb for larger lower/posterior lifts after four easy exposures at the same TM.'],
-          ['#panel-lifting .lifting-records-card h2','Preserves historical-high training maxes even when the current working TM regresses after a long layoff, with pound-for-pound context when a recent bodyweight is available.'],
-          ['#panel-recovery .recovery-daily-summary h2','A compact summary of readiness, labour stress, body fatigue, primary training, and whether lifting fits.'],
-          ['#panel-recovery .training-call-card h2','The call is conservative: a caution signal can pull the recommendation easier instead of being averaged away by better signals.'],
-          ['#panel-recovery .recovery-entry-card h2','Enter only what you actually have. Saving updates fields you touched and leaves untouched fields alone.'],
-          ['#panel-recovery .recovery-snapshot-card h2','Freshness is an app heuristic from available HRV, recovery %, sleep, how you feel, and systemic fatigue. Training load is shown separately and is not scored as recovery.'],
-          ['#panel-recovery .recovery-load-card h2','Load ratio compares your 7-day average workout load with your 28-day average. It is used as one signal, not the whole training decision.'],
-          ['#panel-recovery .recovery-sleep-card h2','Sleep debt is accumulated shortfall versus your target; consistency reflects variation in sleep start/end times.'],
-          ['#panel-recovery .recovery-trend-card h2','Switch metrics to see how freshness, feel, fatigue, HRV, load, sleep/recovery, and load ratio change over time.'],
-          ['#panel-books .books-stats-card h2','Reading stats combine your book records and focus time from reading-linked tasks.'],
-          ['#panel-books .books-tasks-card h2','These tasks are treated as reading activities. Starting one can prompt you to choose the book you are currently reading.']
-        ];
-        tips.forEach(([selector,copy])=>addContextHelp(selector,copy));
-        const titles={
-          '#adaptiveFocusGoalToggle':'Switch between an adaptive daily focus center and a fixed manual target.',
-          '#recoveryHrvInput':'HRV is compared with your own prior 30-day baseline once at least five earlier entries exist.',
-          '#recoveryRecoveryInput':'WHOOP recovery % is one input to freshness. The app uses broad green / caution / high-fatigue bands.',
-          '#recoverySleepInput':'WHOOP sleep score is one input to freshness; sleep duration is tracked separately from start/end times.',
-          '#recoveryRpeInput':'Your subjective readiness today. 8–10 supports training, 5–7 is caution, 1–4 pushes recovery.',
-          '#recoveryTrainingRpeInput':'Session RPE is how hard the completed workout felt overall: 1 is very easy and 10 is maximal. It is separate from morning readiness.',
-          '#recoveryWorkHoursInput':'Used with perceived work effort to estimate labour load for the day.',
-          '#recoveryWorkEffortInput':'Perceived physical work difficulty. Work hours × effort forms the labour-load signal.',
-          '#recoverySystemicFatigueInput':'Whole-body fatigue. High values can protect the entire training day, not only lifting.',
-          '#recoveryLegFatigueInput':'Local leg fatigue mainly affects whether lower-body lifting is worth the cost today.',
-          '#recoveryBackFatigueInput':'Local back fatigue mainly affects rows, deadlifts, and posterior-chain choices.',
-          '#recoveryUpperFatigueInput':'Local upper-body fatigue mainly affects pressing, rows, and arm work.',
-          '#recoveryLoadInput':'Legacy day-level cardio load. It is ignored whenever a session-specific manual or Intervals.icu cardio load is available.',
-          '#recoveryStrainInput':'WHOOP strain is stored and graphed but does not replace Intervals.icu workout load in the load-ratio calculation.',
-          '#sleepTargetInput':'Your normal nightly target. Recent short sleep may temporarily add a conservative recovery opportunity.',
-          '#liftingNewLiftMax':'Training max is the current working number used to calculate prescriptions; it can regress after long layoffs while historical highs stay preserved.',
-          '#liftingNewLiftIncrementPreview':'Automatic training-max step based on lift type and your 1.25lb smallest plates. Small/upper lifts use +2.5lb; large lower-body/posterior lifts use +5lb.',
-          '#settingsAdaptiveFocusToggle':'Mirrors the adaptive/manual focus-target control on Today.',
-          '#hubPanelCurrent':'Focus Queue contains deliberate-work tasks that can use the timer; the first item becomes Focus Now.',
-          '#hubPanelTodo':'Todos are quick items that do not need a focus timer.',
-          '#hubPanelDue':'A filtered view of active tasks with a due date today.',
-          '#hubPanelPriority':'A filtered view emphasizing tasks marked with higher priority.'
-        };
-        Object.entries(titles).forEach(([selector,copy])=>setContextTitle(selector,copy));
-        document.querySelectorAll('.panel-tab').forEach(btn=>{const descriptions={today:'daily agenda, current work, habits, schedule and check-in',tasks:'active tasks plus reusable task library',habits:'habit overview, library and check-in history',goals:'now / next / someday goals and linked progress',lifting:'minimum-dose strength recommendations and records',recovery:'recovery inputs, training call, load and sleep trends',activities:'automatically imported Intervals.icu workout history, heart rate, power and pace',money:'a simple monthly plan, financial goal, and investing contribution momentum',books:'reading tracker, notes and reading-linked tasks',stats:'focus history, patterns, level milestones and session log'};btn.title=descriptions[btn.dataset.panel]||btn.dataset.panel;});
-        document.querySelectorAll('#panel-stats .stat-label').forEach(label=>{const map={'completion rate':'completed tasks divided by completed + removed unfinished tasks','estimate accuracy':'average actual task time compared with your timer estimate','current streak':'consecutive calendar days with recorded activity','most focused task':'task name with the most logged focus minutes across history'};const copy=map[label.textContent.trim().toLowerCase()];if(copy)label.title=copy;});
-        document.querySelectorAll('#recoveryIntensityRow .intensity-btn').forEach(btn=>{const map={rest:'No training day. Counts toward weekly history as rest.',easy:'Easy training day. Low intensity / low recovery cost.',medium:'Moderate training day. The app caps these at three in a rolling 7 days.',test:'5k fitness test / maximal benchmark day.',race:'Race or exceptional effort. Used to protect spacing before another test.'};btn.title=map[btn.dataset.intensity]||'';});
-      }
-
-function updateNotificationSettingUI(){
-        const btn=document.getElementById('notifToggleBtn');
-        const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
-        if(isIOS){btn.textContent='not supported on iOS';btn.disabled=true;return;}
-        if(!('Notification' in window)){btn.textContent='not supported';btn.disabled=true;return;}
-        if(Notification.permission==='denied'){btn.textContent='blocked — check browser settings';return;}
-        btn.textContent=(notificationsEnabled&&Notification.permission==='granted')?'enabled — tap to disable':'enable';
-      }
-
-      function toggleNotifications(){
-        if(!('Notification' in window)){showToast('notifications not supported in this browser');return;}
-        if(Notification.permission==='denied'){showToast('notifications are blocked — enable them in your browser settings');return;}
-        if(Notification.permission==='default'){
-          Notification.requestPermission().then(perm=>{
-            if(perm==='granted'){notificationsEnabled=true;showToast('notifications enabled');}
-            else{notificationsEnabled=false;showToast('notifications permission denied');}
-            updateNotificationSettingUI();saveData();
-          });
-          return;
-        }
-        notificationsEnabled=!notificationsEnabled;
-        updateNotificationSettingUI();saveData();
-        showToast(notificationsEnabled?'notifications enabled':'notifications disabled');
-      }
-
-      function sendNotification(title,body){
-        if(!notificationsEnabled)return;
-        if(!('Notification' in window)||Notification.permission!=='granted')return;
-        try{new Notification(title,{body});}catch(e){}
-      }
-
-      function drawHeatmapGrid(wrapId,period,valueFn,dayTarget,isFocusHeatmap,offset){
-        dayTarget=dayTarget||1;
-        offset=offset||0;
-        const wrap=document.getElementById(wrapId);
-        if(!wrap)return;
-        wrap.innerHTML='';
-        const todayStr=getToday();
-        const windowEnd=new Date();
-        const count=period==='all'?365:parseInt(period);
-        if(offset>0)windowEnd.setDate(windowEnd.getDate()-count*offset);
-        const days=[];
-        for(let i=count-1;i>=0;i--){const d=new Date(windowEnd);d.setDate(d.getDate()-i);days.push(toDateStr(d));}
-        const firstDow=new Date(days[0]+'T00:00:00').getDay();
-        const weeks=[];let currentWeek=new Array(firstDow).fill(null);
-        days.forEach((day)=>{const d=new Date(day+'T00:00:00');const dow=d.getDay();currentWeek.push({date:day,value:valueFn(day),dow});if(dow===6){weeks.push(currentWeek);currentWeek=[];}});
-        if(currentWeek.length){while(currentWeek.length<7){currentWeek.push(null);}weeks.push(currentWeek);}
-
-        const availableWidth=wrap.clientWidth||300;
-        const DAY_LABEL_WIDTH=40,COLUMN_WIDTH=32;
-        const CHUNK_SIZE=Math.max(4,Math.floor((availableWidth-DAY_LABEL_WIDTH)/COLUMN_WIDTH));
-        const chunks=[];
-        for(let i=0;i<weeks.length;i+=CHUNK_SIZE){chunks.push(weeks.slice(i,i+CHUNK_SIZE));}
-
-        chunks.forEach(chunkWeeks=>{
-          const chunkDiv=document.createElement('div');chunkDiv.className='heatmap-chunk';
-
-          const monthsRow=document.createElement('div');monthsRow.className='heatmap-months';
-          let lastMonth=null;
-          chunkWeeks.forEach((week,wi)=>{
-            const firstReal=week.find(d=>d);
-            const label=document.createElement('span');
-            if(firstReal){
-              const d=new Date(firstReal.date+'T00:00:00');
-              const month=d.getMonth();
-              if(wi===0||(month!==lastMonth&&d.getDate()<=7)){label.textContent=d.toLocaleDateString('en-US',{month:'short'});lastMonth=month;}
-            }
-            monthsRow.appendChild(label);
-          });
-          chunkDiv.appendChild(monthsRow);
-
-          const row=document.createElement('div');row.className='heatmap-row';
-          const dayLabels=document.createElement('div');dayLabels.className='heatmap-daylabels';
-          ['','Mon','','Wed','','Fri',''].forEach(txt=>{const s=document.createElement('span');s.textContent=txt;dayLabels.appendChild(s);});
-          row.appendChild(dayLabels);
-
-          const gridEl=document.createElement('div');gridEl.className='heatmap-grid';
-          chunkWeeks.forEach(week=>{
-            const weekDiv=document.createElement('div');weekDiv.className='heatmap-week';
-            week.forEach(day=>{
-              const cell=document.createElement('div');cell.className='heatmap-cell';
-              if(!day){cell.style.background='transparent';cell.style.border='1px solid transparent';}
-              else{
-                if(day.date===todayStr)cell.classList.add('today');
-                const val=day.value;
-                if(isFocusHeatmap){let level=0;if(val>0)level=1;if(val>=30)level=2;if(val>=60)level=3;if(val>=120)level=4;cell.style.background=`var(--heat-${level})`;cell.title=`${day.date}: ${val}min`;}
-                else{if(val>=dayTarget&&val>0)cell.classList.add('checked');else if(val>0)cell.classList.add('partial');const statusLabel=val>=dayTarget&&val>0?'full target':val>0?`minimum kept (${val}/${dayTarget})`:'missed';cell.title=`${day.date}: ${statusLabel}`;}
-              }
-              weekDiv.appendChild(cell);
-            });
-            gridEl.appendChild(weekDiv);
-          });
-          row.appendChild(gridEl);
-          chunkDiv.appendChild(row);
-          wrap.appendChild(chunkDiv);
-        });
-      }
-
-      function drawHeatmap(){const mobile=document.body.dataset.viewMode==='mobile'||(document.body.dataset.viewMode!=='desktop'&&window.innerWidth<760),period=mobile?84:168,title=document.getElementById('focusHeatmapTitle'),note=document.getElementById('focusHeatmapNote');if(title)title.textContent=`focus heatmap (${mobile?'12':'24'} weeks)`;if(note)note.textContent=mobile?'twelve weeks · use arrows for earlier history':'six months at a glance · use arrows for earlier history';drawHeatmapGrid('heatmapWrap',period,(day)=>dailyHistory[day]?.focusMinutes||0,1,true,heatmapOffset);updateHeatmapNavUI('heatmapNavBack','heatmapNavForward','heatmapRangeLabel',heatmapOffset,period,getFirstRecordedDay(dailyHistory));}
-      function drawHabitCheckGraph(){
-        const habit=bgHabits.find(h=>h.id===selectedHabitForGraph),summary=document.getElementById('habitHistorySummary'),insight=document.getElementById('habitHistoryInsight');
-        if(!habit){habitCheckWrap.innerHTML='';habitGraphName.textContent='select a habit';if(summary)summary.textContent='Choose one of the suggested habits to see why its pattern matters.';if(insight)insight.style.display='none';updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',0,parseInt(habitCheckPeriod),getToday());return;}
-        habitGraphName.textContent=habit.name;
-        const stats=getHabitPeriodStats(habit,30),pattern=getHabitPatternReason(habit);
-        if(summary)summary.textContent=`last 30 days: target met ${stats.full} day${stats.full===1?'':'s'} · showed up ${stats.showed} day${stats.showed===1?'':'s'} · ${stats.creditPct}% effort credit`;
-        if(insight){insight.style.display='grid';insight.innerHTML=`<div class="habit-history-insight-key">${escapeHtml(pattern.tag)}</div><div class="habit-history-insight-text">${escapeHtml(pattern.insight)} <strong>${escapeHtml(pattern.action)}</strong></div>`;}
-        drawHeatmapGrid('habitCheckWrap',habitCheckPeriod,(day)=>getHabitDayCount(habit,day),getHabitDayTarget(habit),false,habitCheckOffset);
-        updateHeatmapNavUI('habitCheckNavBack','habitCheckNavForward','habitCheckRangeLabel',habitCheckOffset,parseInt(habitCheckPeriod),getFirstRecordedDay(habit.history));
-      }
-      function updateHeatmapNavUI(backId,fwdId,labelId,offset,windowDays,firstDay){
-        const backBtn=document.getElementById(backId),fwdBtn=document.getElementById(fwdId),label=document.getElementById(labelId);
-        if(!backBtn||!fwdBtn||!label)return;
-        fwdBtn.disabled=offset===0;
-        const windowEnd=new Date();windowEnd.setDate(windowEnd.getDate()-windowDays*offset);
-        const windowStart=new Date(windowEnd);windowStart.setDate(windowStart.getDate()-windowDays+1);
-        label.textContent=`${formatRangeDate(toDateStr(windowStart))} – ${formatRangeDate(toDateStr(windowEnd))}`;
-        backBtn.disabled=windowEnd<new Date(firstDay+'T00:00:00');
-      }
-      function navigateHeatmapBack(){heatmapOffset++;drawHeatmap();saveData();}
-      function navigateHeatmapForward(){if(heatmapOffset>0){heatmapOffset--;drawHeatmap();saveData();}}
-      function navigateHabitCheckBack(){habitCheckOffset++;drawHabitCheckGraph();saveData();}
-      function navigateHabitCheckForward(){if(habitCheckOffset>0){habitCheckOffset--;drawHabitCheckGraph();saveData();}}
-
-      function getSortedHabitsForGraph(){
-        let list=bgHabits.slice();
-        if(habitGraphSort==='frequent')list.sort((a,b)=>Object.keys(b.history).length-Object.keys(a.history).length||a.name.localeCompare(b.name));
-        else if(habitGraphSort==='recent')list.sort((a,b)=>{const la=Object.keys(a.history).sort().pop()||'';const lb=Object.keys(b.history).sort().pop()||'';if(!la&&!lb)return a.name.localeCompare(b.name);if(!la)return 1;if(!lb)return-1;return lb.localeCompare(la);});
-        else list.sort((a,b)=>a.name.localeCompare(b.name));
-        return list;
-      }
-
-      function renderHabitGraphList(){
-        habitGraphList.innerHTML='';
-        const list=getSortedHabitsForGraph();
-        const picker=document.getElementById('habitGraphPicker');
-        if(picker){picker.innerHTML='<option value="">select a habit</option>';list.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(h=>{const opt=document.createElement('option');opt.value=h.id;opt.textContent=h.name;opt.selected=selectedHabitForGraph===h.id;picker.appendChild(opt);});}
-        renderHabitHistoryReasons();
-        if(!list.length){habitGraphList.innerHTML='<li class="empty-library">no habits yet</li>';syncHabitGraphListHeight();return;}
-        list.forEach(h=>{
-          const li=document.createElement('li');li.className='library-item';
-          if(selectedHabitForGraph===h.id)li.classList.add('selected');
-          const info=document.createElement('div');info.className='lib-info';
-          const name=document.createElement('span');name.className='lib-name';name.textContent=h.name;
-          const count=Object.keys(h.history).length;
-          const lastDate=Object.keys(h.history).sort().pop();
-          const meta=document.createElement('span');meta.className='lib-meta';
-          meta.innerHTML=`<span class="lib-count">${count}x</span> · ${lastDate||'never'}`;
-          info.appendChild(name);info.appendChild(meta);
-          li.appendChild(info);
-          li.addEventListener('click',()=>{selectedHabitForGraph=selectedHabitForGraph===h.id?null:h.id;habitCheckOffset=0;renderHabitGraphList();drawHabitCheckGraph();saveData();});
-          habitGraphList.appendChild(li);
-        });
-        syncHabitGraphListHeight();
-      }
-      function syncListHeight(cardEl,listEl,trailingEl){
-        if(!cardEl||!listEl)return;
-        requestAnimationFrame(()=>{
-          const cardRect=cardEl.getBoundingClientRect();
-          const listRect=listEl.getBoundingClientRect();
-          const cardPaddingBottom=parseFloat(getComputedStyle(cardEl).paddingBottom)||0;
-          let bottomBoundary=cardRect.bottom-cardPaddingBottom;
-          if(trailingEl){
-            const trailingRect=trailingEl.getBoundingClientRect();
-            const trailingMarginTop=parseFloat(getComputedStyle(trailingEl).marginTop)||0;
-            bottomBoundary=trailingRect.top-trailingMarginTop;
-          }
-          const available=bottomBoundary-listRect.top;
-          if(available>50)listEl.style.maxHeight=available+'px';
-        });
-      }
-      function syncHabitGraphListHeight(){
-        syncListHeight(document.querySelector('.habit-graph-card'),habitGraphList,null);
-      }
-
-      function addBgHabit(){const tx=habitInput.value.trim();if(!tx)return;const nh={id:generateId(),name:tx,history:{},targetPerWeek:7,timesPerDay:1,created:getToday()};bgHabits.push(nh);habitInput.value='';if(!selectedHabitForGraph)selectedHabitForGraph=nh.id;renderBgHabits();renderHabitGraphList();drawHabitCheckGraph();saveData();showToast(`habit added: ${tx}`);}
-      function deleteBgHabit(id){const h=bgHabits.find(h=>h.id===id);showConfirm(`Delete "${h?h.name:'this habit'}"? Its check-in history will be lost.`,()=>{bgHabits=bgHabits.filter(h=>h.id!==id);if(selectedHabitForGraph===id){selectedHabitForGraph=bgHabits.length>0?bgHabits[0].id:null;}goals.forEach(g=>{if(g.linkedHabitIds&&g.linkedHabitIds.includes(id))g.linkedHabitIds=g.linkedHabitIds.filter(hid=>hid!==id);});renderBgHabits();renderHabitGraphList();renderLibrary();renderGoals();saveData();});}
-      function getHabitDayTarget(h){return h.timesPerDay||1;}
-      function getHabitDayCount(h,date){const v=h.history[date];if(v===true)return 1;if(typeof v==='number')return v;return 0;}
-      function incrementHabitDay(h,date){const target=getHabitDayTarget(h);const current=getHabitDayCount(h,date);const next=current>=target?0:current+1;if(next===0)delete h.history[date];else h.history[date]=next;}
-      function toggleBgHabit(id){const h=bgHabits.find(h=>h.id===id);if(!h)return;checkOffHabit(h,getToday());if(navigator.vibrate){try{navigator.vibrate(15);}catch(e){}}renderBgHabits();saveData();updateStats();drawHabitCheckGraph();renderGoals();}
-      function renameBgHabit(id,newName){const h=bgHabits.find(h=>h.id===id);if(!h||!newName.trim())return;h.name=newName.trim();renderBgHabits();renderHabitGraphList();saveData();}
-      function getMondayOf(date){const dow=date.getDay();const monOffset=dow===0?6:dow-1;const monday=new Date(date);monday.setDate(monday.getDate()-monOffset);return monday;}
-      function getWeekCheckinCountForMonday(h,monday){const target=getHabitDayTarget(h);let count=0;for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(d.getDate()+i);const ds=toDateStr(d);if(getHabitDayCount(h,ds)>=target)count++;}return count;}
-      function getHabitStreak(h){
-        const weeklyTarget=h.targetPerWeek||7;
-        const dayTarget=getHabitDayTarget(h);
-        const today=new Date();
-        if(weeklyTarget>=7){
-          let streak=0;
-          for(let i=0;i<365;i++){const d=new Date(today);d.setDate(d.getDate()-i);const ds=toDateStr(d);if(getHabitDayCount(h,ds)>=dayTarget){streak++;}else if(i>0){break;}}
-          return streak;
-        }
-        const thisMonday=getMondayOf(today);
-        let streak=0;
-        for(let w=0;w<52;w++){
-          const monday=new Date(thisMonday);monday.setDate(monday.getDate()-w*7);
-          const met=getWeekCheckinCountForMonday(h,monday)>=weeklyTarget;
-          if(met){streak++;}
-          else if(w>0){break;}
-        }
-        return streak;
-      }
-      function getHabitDaysBehind(h){
-        const weeklyTarget=h.targetPerWeek||7;
-        const dayTarget=getHabitDayTarget(h);
-        const today=new Date();
-        if(weeklyTarget>=7){
-          let missed=0;
-          for(let i=1;i<=14;i++){const d=new Date(today);d.setDate(d.getDate()-i);const ds=toDateStr(d);if(getHabitDayCount(h,ds)<dayTarget)missed++;else break;}
-          return missed;
-        }
-        const expectedGapDays=Math.round(7/weeklyTarget);
-        for(let i=0;i<60;i++){
-          const d=new Date(today);d.setDate(d.getDate()-i);
-          const ds=toDateStr(d);
-          if(getHabitDayCount(h,ds)>=dayTarget)return Math.max(0,i-expectedGapDays);
-        }
-        return 60;
-      }
-      function getHabitConsistency30d(h){
-        const weeklyTarget=h.targetPerWeek||7;
-        const dayTarget=getHabitDayTarget(h);
-        const today=new Date();
-        if(weeklyTarget>=7){
-          const daysSinceCreated=h.created?Math.floor((today-new Date(h.created+'T00:00:00'))/86400000)+1:Infinity;
-          const totalDays=Math.max(1,Math.min(30,daysSinceCreated));
-          let creditSum=0;
-          for(let i=0;i<totalDays;i++){const d=new Date(today);d.setDate(d.getDate()-i);const ds=toDateStr(d);creditSum+=Math.min(1,getHabitDayCount(h,ds)/dayTarget);}
-          return Math.round(creditSum/totalDays*100);
-        }
-        const thisMonday=getMondayOf(today);
-        const weeksSinceCreated=h.created?Math.floor((today-new Date(h.created+'T00:00:00'))/(7*86400000))+1:Infinity;
-        const totalWeeks=Math.max(1,Math.min(4,weeksSinceCreated));
-        let creditWeeks=0;
-        for(let w=1;w<=totalWeeks;w++){
-          const monday=new Date(thisMonday);monday.setDate(monday.getDate()-w*7);
-          let weekCredit=0;for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(d.getDate()+i);weekCredit+=Math.min(1,getHabitDayCount(h,toDateStr(d))/dayTarget);}creditWeeks+=Math.min(weeklyTarget,weekCredit)/weeklyTarget;
-        }
-        return Math.round(creditWeeks/totalWeeks*100);
-      }
-      function getHabitPeriodStats(h,days=30,endOffset=0){
-        const target=getHabitDayTarget(h),today=new Date(),recordedDates=Object.keys(h.history||{}).sort(),startStr=recordedDates.length&&(!h.created||recordedDates[0]<h.created)?recordedDates[0]:h.created,created=startStr?new Date(startStr+'T00:00:00'):null;
-        let full=0,minimum=0,showed=0,credit=0,eligible=0;
-        for(let i=endOffset;i<endOffset+days;i++){
-          const d=new Date(today);d.setDate(d.getDate()-i);
-          if(created&&d<created)continue;
-          const count=getHabitDayCount(h,toDateStr(d));
-          eligible++;
-          if(count>0){showed++;credit+=Math.min(1,count/target);if(count>=target)full++;else minimum++;}
-        }
-        const expected=(h.targetPerWeek||7)>=7?eligible:Math.max(1,Math.round(eligible/7*(h.targetPerWeek||7)));
-        return{full,minimum,showed,credit,eligible,expected,creditPct:expected?Math.round(Math.min(expected,credit)/expected*100):0};
-      }
-      function getHabitPatternReason(h){
-        const recent=getHabitPeriodStats(h,7),prior=getHabitPeriodStats(h,7,7),month=getHabitPeriodStats(h,30);
-        if(month.minimum>0&&month.full===0)return{rank:110,tag:'effort deserves credit',why:`${month.minimum} minimum-kept day${month.minimum===1?'':'s'}`,insight:`You showed up ${month.showed} day${month.showed===1?'':'s'} even though the full target did not happen. That is not zero.`,action:'Useful next step: protect the smaller version first; the full target can be the bonus.'};
-        if(month.minimum>=3)return{rank:100+month.minimum,tag:'minimum kept',why:`${month.minimum} partial day${month.minimum===1?'':'s'} are easy to miss`,insight:`There are ${month.minimum} days where you did part of the habit. Those attempts reveal a version you can still do on hard days.`,action:'Useful next step: decide whether that smaller version should be your bad-day minimum.'};
-        if(recent.credit>prior.credit+0.75)return{rank:90+recent.credit,tag:'momentum',why:'more effort than the prior week',insight:'Your effort credit has moved up compared with the week before.',action:'Useful next step: keep the same cue and avoid making the habit harder yet.'};
-        if(prior.showed>0&&recent.showed<prior.showed)return{rank:85+(prior.showed-recent.showed),tag:'changed pattern',why:'showing up less than last week',insight:'This habit appeared less often than it did the week before. That is information, not a failure.',action:'Useful next step: reconnect it to the easiest reliable moment in your day.'};
-        if(recent.showed===0)return{rank:75,tag:'easy restart',why:'no check-ins this week yet',insight:'This habit has been quiet this week.',action:'Useful next step: do the smallest recognizable version once; no catching up required.'};
-        return{rank:50+recent.credit,tag:'steady pattern',why:`showed up ${recent.showed}/7 days`,insight:`This habit is showing a fairly steady recent pattern with ${recent.creditPct}% effort credit.`,action:'Useful next step: keep the cue stable and let repetition do the work.'};
-      }
-      function renderHabitHistoryReasons(){
-        const wrap=document.getElementById('habitHistoryReasons');
-        if(!wrap)return;
-        wrap.innerHTML='';
-        bgHabits.map(h=>({habit:h,reason:getHabitPatternReason(h)})).sort((a,b)=>b.reason.rank-a.reason.rank).slice(0,3).forEach(({habit,reason})=>{
-          const btn=document.createElement('button');btn.className='habit-history-reason'+(selectedHabitForGraph===habit.id?' selected':'');btn.type='button';
-          btn.innerHTML=`<span class="habit-history-reason-tag">${escapeHtml(reason.tag)}</span><span class="habit-history-reason-name">${escapeHtml(habit.name)}</span><span class="habit-history-reason-why">${escapeHtml(reason.why)}</span>`;
-          btn.addEventListener('click',()=>{selectedHabitForGraph=habit.id;habitCheckOffset=0;renderHabitGraphList();drawHabitCheckGraph();saveData();});
-          wrap.appendChild(btn);
-        });
-      }
-
-      // --- Recovery / biometric fatigue engine ---
-      function getMetricAvg(metricKey,days,referenceDateStr){
-        const vals=[];
-        const refDate=new Date(referenceDateStr+'T00:00:00');
-        for(let i=0;i<days;i++){
-          const d=new Date(refDate);d.setDate(d.getDate()-i);
-          const ds=toDateStr(d);
-          const rec=biometrics[ds];
-          const value=metricKey==='load'?getEffectiveTrainingLoad(ds):(rec&&rec[metricKey]);
-          if(value!=null&&value!=='')vals.push(Number(value));
-        }
-        if(!vals.length)return null;
-        return vals.reduce((a,b)=>a+b,0)/vals.length;
-      }
-      function getHrvBaseline(referenceDateStr){
-        const vals=[];
-        const refDate=new Date(referenceDateStr+'T00:00:00');
-        for(let i=1;i<=30;i++){
-          const d=new Date(refDate);d.setDate(d.getDate()-i);
-          const ds=toDateStr(d);
-          const rec=biometrics[ds];
-          if(rec&&rec.hrv!=null&&rec.hrv!=='')vals.push(Number(rec.hrv));
-        }
-        if(vals.length<5)return null;
-        const mean=vals.reduce((a,b)=>a+b,0)/vals.length;
-        const variance=vals.reduce((a,b)=>a+Math.pow(b-mean,2),0)/vals.length;
-        return{mean,stddev:Math.sqrt(variance),n:vals.length};
-      }
-      function getHrvStatus(referenceDateStr){
-        const rec=biometrics[referenceDateStr];
-        if(!rec||rec.hrv==null||rec.hrv==='')return null;
-        const baseline=getHrvBaseline(referenceDateStr);
-        if(!baseline)return null;
-        const z=(Number(rec.hrv)-baseline.mean)/(baseline.stddev||1);
-        if(z>=-1)return'green';
-        if(z>=-2)return'yellow';
-        return'red';
-      }
-      function mixHexColor(from,to,amount){
-        const parse=hex=>hex.replace('#','').match(/.{2}/g).map(x=>parseInt(x,16)),a=parse(from),b=parse(to),t=Math.max(0,Math.min(1,amount));
-        return'#'+a.map((v,i)=>Math.round(v+(b[i]-v)*t).toString(16).padStart(2,'0')).join('');
-      }
-      function getHrvChartState(value,baseline){
-        if(value==null||!baseline)return{status:null,color:'#5ec98a'};
-        const z=(Number(value)-baseline.mean)/(baseline.stddev||1);
-        if(z>=1)return{status:'above usual',color:mixHexColor('#5ec98a','#6ea8d8',Math.min(1,(z-1)/1.5))};
-        if(z>=-0.65)return{status:'usual',color:'#5ec98a'};
-        if(z>=-1.5)return{status:'caution',color:mixHexColor('#5ec98a','#d4a94a',(-z-0.65)/0.85)};
-        return{status:'concerning',color:mixHexColor('#d4a94a','#e05a5a',Math.min(1,(-z-1.5)/1.25))};
-      }
-      function getPercentStatus(val){
-        if(val==null||val==='')return null;
-        const v=Number(val);
-        if(v>=67)return'green';
-        if(v>=34)return'yellow';
-        return'red';
-      }
-      function getACWR(referenceDateStr){
-        const acute=getMetricAvg('load',7,referenceDateStr),chronic=getMetricAvg('load',28,referenceDateStr);
-        if(acute==null||!chronic)return null;
-        return{ratio:acute/chronic,acute,chronic};
-      }
-      function getDisplayedACWR(referenceDateStr){
-        if(trainingLoadView!=='cardio')return getACWR(referenceDateStr);
-        const avg=days=>{let sum=0;for(let i=0;i<days;i++)sum+=getTrainingLoadBreakdown(getDateStrFromReference(referenceDateStr,i)).other||0;return sum/days;};
-        const acute=avg(7),chronic=avg(28);return chronic?{ratio:acute/chronic,acute,chronic}:null;
-      }
-      function getDateStrFromReference(referenceDateStr,daysAgo){const d=new Date(referenceDateStr+'T12:00:00');d.setDate(d.getDate()-daysAgo);return toDateStr(d);}
-      function getACWRStatus(ratio){
-        if(ratio==null)return null;
-        if(ratio>=0.8&&ratio<=1.3)return'green';
-        if(ratio>1.5||ratio<0.5)return'red';
-        return'yellow';
-      }
-      function getRpeStatus(val){
-        if(val==null||val==='')return null;
-        const v=Number(val);
+        return rows.length?{secs:rows.map(x=>x
+... 116079 bytes omitted ...
+  const v=Number(val);
         if(v>=8)return'green';
         if(v>=5)return'yellow';
         return'red';
@@ -8065,7 +7334,10 @@ function updateNotificationSettingUI(){
       }
       function getWeekCheckinCount(h){return getWeekCheckinCountForMonday(h,getMondayOf(new Date()));}
       function setHabitFrequency(id,freq){const h=bgHabits.find(h=>h.id===id);if(!h)return;h.targetPerWeek=freq;renderBgHabits();saveData();}
-      function setHabitDailyTarget(id,val){const h=bgHabits.find(h=>h.id===id);if(!h)return;h.timesPerDay=val;renderBgHabits();saveData();}
+      function setHabitDailyTarget(id,val){const h=bgHabits.find(h=>h.id===id);if(!h)return;h.timesPerDay=val;h.targetValue=val;resetHabitSortSnapshots();renderBgHabits();saveData();}
+      function setHabitType(id,type){const h=bgHabits.find(h=>h.id===id);if(!h)return;h.habitType=type;h.targetValue=type==='avoidance'?1:(type==='duration'?10:1);h.timesPerDay=h.targetValue;resetHabitSortSnapshots();renderBgHabits();saveData();}
+      function resetHabitSortSnapshots(){overviewSortSnapshot=[];habitOrderSnapshot=[];todayHabitOrderSnapshot=[];}
+      function applyStableHabitOrder(list,snapshot,sorter){const ids=new Set(list.map(h=>String(h.id)));let ordered=snapshot.filter(id=>ids.has(String(id)));list.forEach(h=>{if(!ordered.some(id=>String(id)===String(h.id)))ordered.push(h.id);});if(!snapshot.length&&sorter)ordered=list.slice().sort(sorter).map(h=>h.id);const pos=new Map(ordered.map((id,i)=>[String(id),i]));return{list:list.slice().sort((a,b)=>(pos.get(String(a.id))??9999)-(pos.get(String(b.id))??9999)),ids:ordered};}
       function createHabitOverviewReorderButtons(index){
         const c=document.createElement('div');c.className='reorder-buttons';
         const up=document.createElement('button');up.className='reorder-btn';up.textContent='▲';up.disabled=index===0;
@@ -8084,12 +7356,14 @@ function updateNotificationSettingUI(){
       function moveHabit(index,direction){const newIndex=index+direction;if(newIndex<0||newIndex>=bgHabits.length)return;const moved=bgHabits.splice(index,1)[0];bgHabits.splice(newIndex,0,moved);renderBgHabits();saveData();}
       function createHabitReorderButtons(index){const c=document.createElement('div');c.className='reorder-buttons';const up=document.createElement('button');up.className='reorder-btn';up.textContent='▲';up.disabled=index===0;up.addEventListener('click',e=>{e.stopPropagation();moveHabit(index,-1);});const down=document.createElement('button');down.className='reorder-btn';down.textContent='▼';down.disabled=index===bgHabits.length-1;down.addEventListener('click',e=>{e.stopPropagation();moveHabit(index,1);});c.appendChild(up);c.appendChild(down);return c;}
       function createHabitFreqSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';[1,2,3,4,5,6,7].forEach(n=>{const opt=document.createElement('option');opt.value=n;opt.textContent=n===7?'daily':`${n}x/wk`;if((h.targetPerWeek||7)===n)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitFrequency(h.id,parseInt(sel.value));});return sel;}
-      function createHabitDailyTargetSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';[1,2].forEach(n=>{const opt=document.createElement('option');opt.value=n;opt.textContent=n===1?'1x/day':'2x/day';if((h.timesPerDay||1)===n)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitDailyTarget(h.id,parseInt(sel.value));});return sel;}
+      function createHabitTypeSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';[['check','check off'],['count','count'],['duration','minutes'],['avoidance','avoid']].forEach(([value,label])=>{const opt=document.createElement('option');opt.value=value;opt.textContent=label;if(getHabitType(h)===value)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitType(h.id,sel.value);});return sel;}
+      function createHabitDailyTargetSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';const type=getHabitType(h),values=type==='duration'?[5,10,15,20,30,45,60]:type==='count'?[1,2,3,5,10,15,20]:[1,2];values.forEach(n=>{if(type==='avoidance'&&n>1)return;const opt=document.createElement('option');opt.value=n;opt.textContent=type==='duration'?`${n} min`:type==='count'?`${n} times`:n===1?'once':'twice';if(getHabitDayTarget(h)===n)opt.selected=true;sel.appendChild(opt);});sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitDailyTarget(h.id,parseInt(sel.value));});return sel;}
       function createHabitControlsRow(h){
         const row=document.createElement('div');row.className='habit-controls-row';
+        const type=document.createElement('label');type.className='habit-setting-field';type.textContent='track as';type.appendChild(createHabitTypeSelect(h));
         const weekly=document.createElement('label');weekly.className='habit-setting-field';weekly.textContent='days / week';weekly.appendChild(createHabitFreqSelect(h));
-        const daily=document.createElement('label');daily.className='habit-setting-field';daily.textContent='times / day';daily.appendChild(createHabitDailyTargetSelect(h));
-        row.appendChild(weekly);row.appendChild(daily);return row;
+        const daily=document.createElement('label');daily.className='habit-setting-field';daily.textContent=getHabitType(h)==='duration'?'daily minutes':'daily target';daily.appendChild(createHabitDailyTargetSelect(h));
+        row.appendChild(type);row.appendChild(weekly);row.appendChild(daily);return row;
       }
       let habitOverviewRefreshTimer=null;
       function scheduleHabitOverviewRefresh(){if(habitOverviewRefreshTimer)clearTimeout(habitOverviewRefreshTimer);habitOverviewRefreshTimer=setTimeout(()=>{habitOverviewRefreshTimer=null;renderBgHabits();renderHabitGraphList();if(selectedHabitForGraph)drawHabitCheckGraph();},600);}
@@ -8115,8 +7389,8 @@ function updateNotificationSettingUI(){
         headerRow.appendChild(headerCells);
         grid.appendChild(headerRow);
         let displayHabitsOv=bgHabits;
-        if(overviewSort==='az')displayHabitsOv=bgHabits.slice().sort((a,b)=>a.name.localeCompare(b.name));
-        else if(overviewSort==='streak'||overviewSort==='consistency')displayHabitsOv=bgHabits.slice().sort((a,b)=>getHabitConsistency30d(b)-getHabitConsistency30d(a));
+        if(overviewSort==='az'){const stable=applyStableHabitOrder(bgHabits,overviewSortSnapshot,(a,b)=>a.name.localeCompare(b.name));displayHabitsOv=stable.list;overviewSortSnapshot=stable.ids;}
+        else if(overviewSort==='streak'||overviewSort==='consistency'){const sign=overviewSortDirection==='asc'?1:-1,stable=applyStableHabitOrder(bgHabits,overviewSortSnapshot,(a,b)=>sign*(getHabitConsistency30d(a)-getHabitConsistency30d(b))||a.name.localeCompare(b.name));displayHabitsOv=stable.list;overviewSortSnapshot=stable.ids;}
         displayHabitsOv.forEach(h=>{
           const index=bgHabits.indexOf(h);
           const row=document.createElement('div');row.className='overview-row habit-week-row';
@@ -8147,7 +7421,7 @@ function updateNotificationSettingUI(){
           const label=document.createElement('div');label.className='overview-label-cell';label.title=h.name;
           const dailyTarget=getHabitDayTarget(h),weeklyTarget=h.targetPerWeek||7;
           let freqText=weeklyTarget>=7?'daily':`${weeklyTarget}x/wk`;
-          if(dailyTarget>1)freqText+=` · ${dailyTarget}x/day`;
+          freqText+=` · ${getHabitTargetLabel(h)}`;
           const daysBehind=getHabitDaysBehind(h);
           const nameRow=document.createElement('div');nameRow.className='overview-name-row';
           const nameSpan=document.createElement('span');nameSpan.className='overview-name-text';nameSpan.textContent=h.name;
@@ -8177,13 +7451,14 @@ function updateNotificationSettingUI(){
             const cell=document.createElement('button');
             cell.className='overview-cell'+(done?' done':'')+(partial?' partial':'')+(d===todayStr?' today':'');
             cell.textContent=done?'✓':partial?`${cnt}/${target}`:'';
-            cell.title=`${h.name} — ${d}: ${done?'full target':partial?`minimum kept (${cnt}/${target})`:'missed'}`;
+            const emptyLabel=d>=todayStr?'not logged yet':'missed';
+            cell.title=`${h.name} — ${d}: ${done?'full target':partial?`minimum kept (${cnt}/${target} ${getHabitUnit(h,cnt)})`:emptyLabel}`;
             cell.setAttribute('aria-label',cell.title);
             cell.addEventListener('click',()=>{
               checkOffHabit(h,d);
               const next=getHabitDayCount(h,d),isDone=next>=target&&next>0,isPartial=next>0&&!isDone;
-              cell.classList.toggle('done',isDone);cell.classList.toggle('partial',isPartial);cell.textContent=isDone?'✓':isPartial?`${next}/${target}`:'';cell.title=`${h.name} — ${d}: ${isDone?'full target':isPartial?`minimum kept (${next}/${target})`:'missed'}`;cell.setAttribute('aria-label',cell.title);
-              saveData();updateStats();scheduleHabitOverviewRefresh();
+              cell.classList.toggle('done',isDone);cell.classList.toggle('partial',isPartial);cell.textContent=isDone?'✓':isPartial?`${next}/${target}`:'';cell.title=`${h.name} — ${d}: ${isDone?'full target':isPartial?`minimum kept (${next}/${target} ${getHabitUnit(h,next)})`:d>=todayStr?'not logged yet':'missed'}`;cell.setAttribute('aria-label',cell.title);
+              saveData();updateLevelDisplay();renderTodayPanel();renderGoals();scheduleHabitOverviewRefresh();
             });
             cellsRow.appendChild(cell);
           });
@@ -8218,8 +7493,8 @@ function updateNotificationSettingUI(){
         if(!displayHabits.length){habitList.innerHTML=`<li class="empty-habits">${habitSearchQuery.trim()?'no matches':'no habits yet'}</li>`;return;}
         const todayStr0=getToday();
         const isHabitDone=(h)=>{const t=getHabitDayTarget(h),c=getHabitDayCount(h,todayStr0);return c>=t;};
-        if(habitOrderSort==='incomplete')displayHabits=displayHabits.slice().sort((a,b)=>(isHabitDone(a)?1:0)-(isHabitDone(b)?1:0));
-        else if(habitOrderSort==='complete')displayHabits=displayHabits.slice().sort((a,b)=>(isHabitDone(b)?1:0)-(isHabitDone(a)?1:0));
+        if(habitOrderSort==='incomplete'){const stable=applyStableHabitOrder(displayHabits,habitOrderSnapshot,(a,b)=>(isHabitDone(a)?1:0)-(isHabitDone(b)?1:0));displayHabits=stable.list;habitOrderSnapshot=stable.ids;}
+        else if(habitOrderSort==='complete'){const stable=applyStableHabitOrder(displayHabits,habitOrderSnapshot,(a,b)=>(isHabitDone(b)?1:0)-(isHabitDone(a)?1:0));displayHabits=stable.list;habitOrderSnapshot=stable.ids;}
         displayHabits.forEach(h=>{
           const index=bgHabits.indexOf(h),target=getHabitDayTarget(h),count=getHabitDayCount(h,todayStr0),done=count>=target,partial=count>0&&!done,freq=h.targetPerWeek||7;
           const li=document.createElement('li');li.className='habit-item';if(done)li.classList.add('done');
@@ -8229,15 +7504,16 @@ function updateNotificationSettingUI(){
           btn.addEventListener('click',e=>{e.stopPropagation();toggleBgHabit(h.id);});
           const info=document.createElement('div');info.className='lib-info';
           const name=document.createElement('span');name.className='lib-name';name.textContent=(h.linkedTask?'linked · ':'')+h.name;if(h.linkedTask)name.title='linked to task: '+h.linkedTask;
+          const typeBadge=document.createElement('span');typeBadge.className='habit-type-badge';typeBadge.textContent=getHabitType(h)==='duration'?'minutes':getHabitType(h)==='avoidance'?'avoid':getHabitType(h)==='count'?'count':'check off';
           const weekCount=getWeekCheckinCount(h),ratePct=getHabitConsistency30d(h),meta=document.createElement('span');meta.className='lib-meta';
           const recentStats=getHabitPeriodStats(h,7);
-          meta.innerHTML=`this week <span class="lib-count${weekCount>=freq?' goal-met':''}">${weekCount}/${freq} full</span> · showed up <span class="lib-count">${recentStats.showed}/7</span> · effort credit <span class="lib-count">${ratePct}%</span>`+(target>1?` · today ${count}/${target}`:'');
+          meta.innerHTML=`this week <span class="lib-count${weekCount>=freq?' goal-met':''}">${weekCount}/${freq} full</span> · showed up <span class="lib-count">${recentStats.showed}/7</span> · effort credit <span class="lib-count">${ratePct}%</span>`+(target>1?` · today ${count}/${target} ${getHabitUnit(h,count)}`:'');
           const details=document.createElement('details');details.className='habit-settings';const summary=document.createElement('summary');summary.textContent='settings';details.appendChild(summary);
           const settingsBody=document.createElement('div');settingsBody.className='habit-settings-body';settingsBody.appendChild(createHabitControlsRow(h));
           const editBtn=document.createElement('button');editBtn.className='edit-btn';editBtn.textContent='edit';editBtn.addEventListener('click',e=>{e.stopPropagation();startEditHabit(h.id,li,name);});
           const del=document.createElement('button');del.className='delete-habit-btn';del.textContent='delete';del.addEventListener('click',e=>{e.stopPropagation();deleteBgHabit(h.id);});
           settingsBody.appendChild(editBtn);settingsBody.appendChild(del);if(habitOrderSort==='manual')settingsBody.appendChild(createHabitReorderButtons(index));details.appendChild(settingsBody);
-          info.appendChild(name);info.appendChild(meta);info.appendChild(details);li.appendChild(btn);li.appendChild(info);habitList.appendChild(li);
+          info.appendChild(name);info.appendChild(typeBadge);info.appendChild(meta);info.appendChild(details);li.appendChild(btn);li.appendChild(info);habitList.appendChild(li);
         });
       }
       function startEditHabit(id,li,nameSpan){const origName=nameSpan.textContent;const inp=document.createElement('input');inp.className='edit-input';inp.value=origName;nameSpan.replaceWith(inp);inp.focus();inp.select();const commit=()=>{const newName=inp.value.trim();if(newName&&newName!==origName){renameBgHabit(id,newName);}else{renderBgHabits();}};inp.addEventListener('blur',commit);inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}if(e.key==='Escape'){inp.value=origName;commit();}});}
@@ -8281,7 +7557,7 @@ function updateNotificationSettingUI(){
         }else{
           const reusable=bgHabits.find(h=>h.name===taskName&&!h.linkedTask);
           if(reusable){reusable.linkedTask=taskName;}
-          else{bgHabits.push({id:generateId(),name:taskName,history:{},targetPerWeek:7,timesPerDay:1,linkedTask:taskName});}
+          else{bgHabits.push({id:generateId(),name:taskName,history:{},targetPerWeek:7,timesPerDay:1,habitType:'check',targetValue:1,linkedTask:taskName});}
           showToast(`now tracking "${taskName}" as a habit`);
         }
         renderLibrary();renderBgHabits();renderHabitGraphList();saveData();
@@ -8570,7 +7846,7 @@ function updateNotificationSettingUI(){
         set('xpSrcChains',xpFromChains);
         set('xpSrcTotal',xpFromFocus+xpFromTasks+xpFromHabits+xpFromGoals+xpFromChains);
       }
-      function updateStats(){statTodayFocus.textContent=todayFocusMinutes+'m';statSessionsToday.textContent=todaySessions;statTasksCompleted.textContent=tasksCompletedCount;statCompletionRate.textContent=getCompletionRateText();statAvgPerSession.textContent=todaySessions>0?Math.round(todayFocusMinutes/todaySessions)+'m':'--';statEstimateAccuracy.textContent=getEstimateAccuracyText();let maxMinutes=0,fav='--';Object.entries(taskHabitHistory).forEach(([n,days])=>{const total=Object.values(days).reduce((s,d)=>s+(d.minutes||0),0);if(total>maxMinutes){maxMinutes=total;fav=n;}});statFavoriteTask.textContent=fav;if(fav!=='--')statFavoriteTask.classList.add('favorite-task');else statFavoriteTask.classList.remove('favorite-task');statStreak.textContent=streakDays+(streakDays===1?' day':' days');updateChainTotals();updateLevelDisplay();updateXPSourcesUI();updateDashboard();totalFocusTimeSpan.textContent=totalFocusMinutes;drawFocusChart();drawHeatmap();drawHabitCheckGraph();renderLibrary();renderBgHabits();renderSessionLog();updateTabTitle();renderFocusDNA();}
+      function updateStats(){statTodayFocus.textContent=todayFocusMinutes+'m';statSessionsToday.textContent=todaySessions;statTasksCompleted.textContent=tasksCompletedCount;statCompletionRate.textContent=getCompletionRateText();statAvgPerSession.textContent=todaySessions>0?Math.round(todayFocusMinutes/todaySessions)+'m':'--';statEstimateAccuracy.textContent=getEstimateAccuracyText();let maxMinutes=0,fav='--';Object.entries(taskHabitHistory).forEach(([n,days])=>{const total=Object.values(days).reduce((s,d)=>s+(d.minutes||0),0);if(total>maxMinutes){maxMinutes=total;fav=n;}});statFavoriteTask.textContent=fav;if(fav!=='--')statFavoriteTask.classList.add('favorite-task');else statFavoriteTask.classList.remove('favorite-task');statStreak.textContent=formatRelativeDay(getLastFocusDate());updateChainTotals();updateLevelDisplay();updateXPSourcesUI();updateDashboard();renderStatsInterpretations();totalFocusTimeSpan.textContent=totalFocusMinutes;drawFocusChart();drawHeatmap();drawHabitCheckGraph();renderLibrary();renderBgHabits();renderSessionLog();updateTabTitle();renderFocusDNA();}
 
       function recordDailyFocus(m){const t=getToday();if(!dailyHistory[t])dailyHistory[t]={focusMinutes:0,sessions:0};dailyHistory[t].focusMinutes+=m;dailyHistory[t].sessions+=1;const h=new Date().getHours();hourlyFocus[h]=(hourlyFocus[h]||0)+m;saveData();}
       function trackTaskCompletion(txt){tasksCompletedCount++;addXP(5,'tasks');if(txt){taskNameFrequency[txt]=(taskNameFrequency[txt]||0)+1;taskLastUsed[txt]=getToday();recordTaskHabit(txt,0);const linkedHabit=bgHabits.find(h=>h.linkedTask===txt);if(linkedHabit){const today=getToday(),target=getHabitDayTarget(linkedHabit),count=getHabitDayCount(linkedHabit,today);if(count<target){checkOffHabit(linkedHabit,today);renderBgHabits();renderHabitGraphList();if(selectedHabitForGraph===linkedHabit.id)drawHabitCheckGraph();}}}lastActiveDate=getToday();saveData();updateStats();}
@@ -9300,7 +8576,7 @@ function updateNotificationSettingUI(){
       document.getElementById('taskSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){taskSort=e.target.dataset.sort;document.querySelectorAll('#taskSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTasks();updateTaskControlsSummary();saveData();}});
       document.getElementById('newTaskTypeTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){document.querySelectorAll('#newTaskTypeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b===e.target));updateTaskControlsSummary();}});
       updateTaskControlsSummary();
-      document.getElementById('habitSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){habitOrderSort=e.target.dataset.sort;document.querySelectorAll('#habitSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderBgHabits();saveData();}});
+      document.getElementById('habitSortTabs').addEventListener('click',e=>{const btn=e.target.closest('.sort-btn');if(btn){habitOrderSort=btn.dataset.sort;habitOrderSnapshot=[];document.querySelectorAll('#habitSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderBgHabits();saveData();}});
       document.getElementById('libSearchInput').addEventListener('input',e=>{libSearchQuery=e.target.value;renderLibrary();});
       document.getElementById('habitSearchInput').addEventListener('input',e=>{habitSearchQuery=e.target.value;renderBgHabits();});
       document.getElementById('sessionSearchInput').addEventListener('input',e=>{sessionSearchQuery=e.target.value;renderSessionLog();});
@@ -9367,6 +8643,7 @@ function updateNotificationSettingUI(){
       document.getElementById('confirmCancelBtn').addEventListener('click',closeConfirm);
       document.getElementById('confirmOkBtn').addEventListener('click',()=>{const cb=confirmCallback;closeConfirm();if(cb)cb();});
       document.getElementById('showWelcomeBtn').addEventListener('click',openWelcome);
+      document.getElementById('onboardingDismissBtn').addEventListener('click',closeWelcome);
       document.getElementById('showLastRecapBtn').addEventListener('click',()=>{
         const today=new Date();const dow=today.getDay();const monOffset=dow===0?6:dow-1;
         const thisMonday=new Date(today);thisMonday.setDate(thisMonday.getDate()-monOffset);
@@ -9396,12 +8673,12 @@ function updateNotificationSettingUI(){
       document.getElementById('mobileMoreBackdrop').addEventListener('click',closeMobileMore);
       document.getElementById('reloadAppBtn').addEventListener('click',()=>{location.reload();});
       document.getElementById('headerReloadBtn').addEventListener('click',()=>{location.reload();});
-      document.getElementById('todayHabitSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){todayHabitSort=e.target.dataset.sort;document.querySelectorAll('#todayHabitSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTodayHabits();saveData();}});
+      document.getElementById('todayHabitSortTabs').addEventListener('click',e=>{const btn=e.target.closest('.sort-btn');if(btn){todayHabitSort=btn.dataset.sort;todayHabitOrderSnapshot=[];document.querySelectorAll('#todayHabitSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTodayHabits();saveData();}});
       document.getElementById('todayDueSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){todayDueSort=e.target.dataset.sort;document.querySelectorAll('#todayDueSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTodayDue();saveData();}});
       document.getElementById('todayPrioritySortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){todayPrioritySort=e.target.dataset.sort;document.querySelectorAll('#todayPrioritySortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTodayPriorities();saveData();}});
       document.getElementById('todayHubTabs').addEventListener('click',e=>{const btn=e.target.closest('.hub-tab-btn');if(btn)switchTodayHubTab(btn.dataset.hub);});
       document.getElementById('todoSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){todoSort=e.target.dataset.sort;document.querySelectorAll('#todoSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderTodayTodos();saveData();}});
-      document.getElementById('overviewSortTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn')){overviewSort=e.target.dataset.sort;document.querySelectorAll('#overviewSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderHabitOverview();saveData();}});
+      document.getElementById('overviewSortTabs').addEventListener('click',e=>{const btn=e.target.closest('.sort-btn');if(!btn)return;const nextSort=btn.dataset.sort;if(nextSort==='consistency'&&overviewSort==='consistency')overviewSortDirection=overviewSortDirection==='desc'?'asc':'desc';else if(nextSort==='consistency')overviewSortDirection='desc';overviewSort=nextSort;overviewSortSnapshot=[];const arrow=document.getElementById('overviewSortArrow');if(arrow)arrow.textContent=overviewSortDirection==='desc'?'↓':'↑';document.querySelectorAll('#overviewSortTabs .sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderHabitOverview();saveData();});
       document.getElementById('viewModeTabs').addEventListener('click',e=>{if(e.target.classList.contains('sort-btn'))setViewMode(e.target.dataset.mode);});
       function getKnownTaskNames(){const names=new Set();Object.keys(taskNameFrequency).forEach(n=>names.add(n));tasks.forEach(t=>names.add(t.text));return Array.from(names);}
       function getKnownHabitNames(){return bgHabits.map(h=>h.name);}
@@ -9613,13 +8890,12 @@ function updateNotificationSettingUI(){
         el.innerHTML='';
         if(!bgHabits.length){el.innerHTML='<li class="empty-habits">no habits yet</li>';return;}
         const todayStr=getToday();
-        const remaining=bgHabits.filter(h=>{const target=getHabitDayTarget(h),count=getHabitDayCount(h,todayStr);return count<target;});
-        if(todayHabitSort==='az')remaining.sort((a,b)=>a.name.localeCompare(b.name));
-        else if(todayHabitSort==='streak')remaining.sort((a,b)=>getHabitStreak(b)-getHabitStreak(a));
-        if(!remaining.length){el.innerHTML='<li class="empty-habits">all habits done for today</li>';return;}
-        remaining.forEach(h=>{
-          const target=getHabitDayTarget(h),count=getHabitDayCount(h,todayStr),partial=count>0;
-          const li=document.createElement('li');li.className='habit-item';
+        let displayHabits=bgHabits.slice();
+        if(todayHabitSort==='az'){const stable=applyStableHabitOrder(displayHabits,todayHabitOrderSnapshot,(a,b)=>a.name.localeCompare(b.name));displayHabits=stable.list;todayHabitOrderSnapshot=stable.ids;}
+        else if(todayHabitSort==='effort'){const stable=applyStableHabitOrder(displayHabits,todayHabitOrderSnapshot,(a,b)=>getHabitConsistency30d(b)-getHabitConsistency30d(a)||a.name.localeCompare(b.name));displayHabits=stable.list;todayHabitOrderSnapshot=stable.ids;}
+        displayHabits.forEach(h=>{
+          const target=getHabitDayTarget(h),count=getHabitDayCount(h,todayStr),partial=count>0&&count<target,done=count>=target;
+          const li=document.createElement('li');li.className='habit-item'+(done?' done':'');
           const pct=Math.min(100,Math.round((count/target)*100));
           const circumference=75.4;
           const offset=circumference-(pct/100)*circumference;
@@ -9632,7 +8908,7 @@ function updateNotificationSettingUI(){
           const meta=document.createElement('span');meta.className='lib-meta';
           const consistency30d=getHabitConsistency30d(h);
           const consistencyColor=getProgressColor(consistency30d);
-          meta.innerHTML=(target>1?`${count}/${target} today`:'not yet')+` · <span style="color:${consistencyColor};" title="consistent ${consistency30d}% of the last 30 days">30d: ${consistency30d}%</span>`;
+          meta.innerHTML=(done?'full target':partial?`minimum kept · ${count}/${target} ${getHabitUnit(h,count)}`:'not logged yet')+` · <span style="color:${consistencyColor};" title="effort credit across the last 30 days">30d effort: ${consistency30d}%</span>`;
           info.appendChild(name);info.appendChild(meta);
           const weekStrip=document.createElement('div');weekStrip.className='habit-week-strip';
           for(let i=6;i>=0;i--){
@@ -9887,7 +9163,7 @@ function updateNotificationSettingUI(){
         const done=tasks.filter(t=>t.completed&&t.completedAt===today).length;
         if(evening)evening.innerHTML=[row('done',`${done} task${done===1?'':'s'} · ${todayFocusMinutes}m focused`),row('body',body.max==null?'fatigue not logged':body.max>=9?'high fatigue':body.max>=7?'moderate fatigue':'low fatigue'),row('tomorrow',plan.time?`${formatClock(plan.time)} ${plan.type} wake`:'open wake time'),row('tonight',wind?`${formatClock(wind)} wind-down · ${formatClock(asleep)} asleep`:`aim for ${formatDurationHours(opportunity.opportunityHours)} sleep opportunity`)].join('');
       }
-      function renderTodayPanel(){renderTodayCurrentNext();renderTodayTodos();renderTodayDue();renderTodayPriorities();renderTodayHabits();renderTodayGoal();updateGlanceCard();updateHubTabCounts();updateTodayNowCard();renderDailyRhythm();renderDailyCheckin();}
+      function renderTodayPanel(){renderProgressiveOnboarding();renderTodayCurrentNext();renderTodayTodos();renderTodayDue();renderTodayPriorities();renderTodayHabits();renderTodayGoal();updateGlanceCard();updateHubTabCounts();updateTodayNowCard();renderDailyRhythm();renderDailyCheckin();}
       function switchTodayHubTab(tab){
         todayHubTab=tab;
         const panels={current:'hubPanelCurrent',todo:'hubPanelTodo',due:'hubPanelDue',priority:'hubPanelPriority'};
@@ -11286,3 +10562,4 @@ function updateNotificationSettingUI(){
   </script>
 </body>
 </html>
+
