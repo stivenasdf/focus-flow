@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.140 adaptive scheduling and cross-app next move -->
+<!-- Focus::Flow deployment marker: v1.141 activity repair, running analysis and durable notes -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1169,7 +1169,7 @@
     [data-theme="cyberspace"] .notepad-toggle-btn, [data-theme="midnight"] .notepad-toggle-btn, [data-theme="cadence"] .notepad-toggle-btn, [data-theme="slate"] .notepad-toggle-btn { background: rgba(0, 0, 0, 0.32); }
     .notepad-toggle-btn:hover { opacity: 1; border-color: var(--main-color); }
     .notepad-toggle-btn.active { background: rgba(0, 206, 124, 0.1); border-color: var(--main-color); color: var(--main-color); opacity: 1; }
-    .notepad-popover { position: fixed; top: 70px; right: 20px; width: 280px; z-index: 2500; background: var(--sub-alt-color); border: 1px solid var(--border-color); border-radius: 0.8rem; box-shadow: 0 0 12px var(--main-glow), 0 10px 30px rgba(0,0,0,0.3); padding: 0.6rem; }
+    .notepad-popover { position: fixed; top: 70px; right: 20px; width: 280px; min-width:240px; max-width:min(720px,calc(100vw - 24px)); z-index: 2500; background: var(--sub-alt-color); border: 1px solid var(--border-color); border-radius: 0.8rem; box-shadow: 0 0 12px var(--main-glow), 0 10px 30px rgba(0,0,0,0.3); padding: 0.6rem; resize:horizontal; overflow:auto; }
     .notepad-popover.pinned { box-shadow: 0 0 30px var(--main-glow), 0 15px 40px rgba(0,0,0,0.45); }
     .notepad-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.68rem; color: var(--text-color); opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; }
     .notepad-popover.pinned .notepad-header { cursor: grab; }
@@ -1178,6 +1178,10 @@
     .notepad-header-btns button { background: none; border: none; color: var(--text-color); opacity: 0.6; cursor: pointer; font-size: 0.62rem; padding: 0.1rem 0.3rem; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
     .notepad-header-btns button:hover { opacity: 1; color: var(--main-color); }
     .notepad-header-btns #notepadPinBtn.is-pinned { opacity: 1; color: var(--main-color); }
+    .notepad-tools { display:flex; gap:.3rem; align-items:center; margin-bottom:.45rem; }
+    .notepad-tool-btn { border:1px solid var(--border-color); border-radius:.42rem; background:var(--bg-color); color:var(--text-color); opacity:.68; cursor:pointer; padding:.18rem .42rem; font:.58rem 'JetBrains Mono',monospace; }
+    .notepad-tool-btn:hover { opacity:1; border-color:var(--main-color); color:var(--main-color); }
+    .notepad-save-state { margin-left:auto; font:.52rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.42; }
     #notepadTextarea { width: 100%; min-height: 140px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.5rem 0.6rem; color: var(--text-color); font-size: 0.75rem; outline: none; font-family: 'Lexend Deca', sans-serif; resize: vertical; opacity: 0.88; }
     #notepadTextarea::-webkit-scrollbar { width: 4px; }
     #notepadTextarea::-webkit-scrollbar-track { background: transparent; }
@@ -1185,7 +1189,9 @@
     #notepadTextarea::-webkit-scrollbar-thumb:hover { background: var(--main-color); }
     #notepadTextarea:focus { border-color: var(--main-color); box-shadow: 0 0 10px var(--main-glow); }
     #notepadTextarea::placeholder { color: var(--text-color); opacity: 0.3; }
-    [data-view-mode="mobile"] .notepad-popover { width: calc(100vw - 40px); right: 20px; left: 20px; }
+    [data-view-mode="mobile"] .notepad-popover { top:62px !important; width:calc(100vw - 24px) !important; min-width:0; max-width:none; right:12px !important; left:12px !important; max-height:calc(100vh - 74px); resize:none; }
+    [data-view-mode="mobile"] .notepad-popover.pinned .notepad-header { cursor:default; }
+    [data-view-mode="mobile"] #notepadTextarea { min-height:42vh; max-height:calc(100vh - 190px); resize:none; }
 
     /* Activity import + aerobic history */
     .activities-grid { display:grid; grid-template-columns: 340px minmax(0,1fr); gap:1.25rem; align-items:start; }
@@ -1205,6 +1211,14 @@
     .activity-coverage-label { margin-top:.18rem; color:var(--text-color); opacity:.48; font-size:.5rem; line-height:1.3; text-transform:uppercase; letter-spacing:.04em; }
     .activity-coverage-note { margin-top:.55rem; color:var(--text-color); opacity:.58; font-size:.58rem; line-height:1.5; }
     .activity-sync-actions { display:flex; gap:.45rem; margin-top:.65rem; flex-wrap:wrap; }
+    .manual-activity-card { grid-column:1/-1; }
+    .manual-activity-grid { display:grid; grid-template-columns:1.25fr .85fr .8fr .8fr .8fr .8fr; gap:.5rem; margin-top:.7rem; align-items:end; }
+    .manual-activity-grid .recovery-input-group { min-width:0; }
+    .manual-activity-grid .recovery-input-group label { display:block; margin-bottom:.2rem; font-size:.52rem; opacity:.58; text-transform:uppercase; }
+    .manual-activity-actions { display:flex; align-items:center; gap:.45rem; flex-wrap:wrap; }
+    .manual-activity-note { margin-top:.5rem; color:var(--text-color); opacity:.55; font-size:.56rem; line-height:1.45; }
+    [data-view-mode="mobile"] .manual-activity-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    [data-view-mode="mobile"] .manual-activity-grid .wide-mobile { grid-column:1/-1; }
     .activity-summary-stat { border:1px solid var(--border-color); border-radius:.65rem; padding:.55rem .6rem; background:var(--bg-color); color:var(--text-color); }
     .activity-summary-value { font-family:'JetBrains Mono',monospace; font-size:1rem; font-weight:700; color:var(--text-color); }
     .activity-summary-label { font-size:.55rem; color:var(--text-color); opacity:.52; text-transform:uppercase; margin-top:.18rem; }
@@ -1943,6 +1957,7 @@
     .power-curve-path { fill:none; stroke:var(--main-color); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
     .power-curve-label { fill:var(--text-color); opacity:.55; font:9px 'JetBrains Mono',monospace; }
     .power-curve-empty { color:var(--text-color); opacity:.5; font-size:.62rem; padding:1rem 0; text-align:center; }
+    .run-curve-path { fill:none; stroke:var(--sub-color); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
     #activityAnalysisCard { grid-column:1/-1; }
     .activity-adaptation-summary { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.7rem; align-items:center; margin:.7rem 0; padding:.7rem .75rem; border:1px solid var(--border-color); border-radius:.75rem; background:color-mix(in srgb,var(--bg-color) 94%,var(--main-color) 6%); }
     .activity-adaptation-badge { min-width:88px; border:1px solid var(--border-color); border-radius:999px; padding:.28rem .52rem; text-align:center; color:var(--text-color); font:650 .58rem 'JetBrains Mono',monospace; text-transform:uppercase; }
@@ -1953,6 +1968,7 @@
     .activity-adaptation-text { color:var(--text-color); font-size:.64rem; line-height:1.5; }
     .activity-analysis-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.7rem; }
     .activity-analysis-panel { min-width:0; border:1px solid var(--border-color); border-radius:.75rem; padding:.65rem; background:var(--bg-color); }
+    .activity-analysis-panel.wide { grid-column:1/-1; }
     .activity-analysis-title { color:var(--sub-color); font-size:.61rem; text-transform:uppercase; letter-spacing:.35px; }
     .activity-analysis-subtitle { min-height:2.7em; margin:.25rem 0 .4rem; color:var(--text-color); opacity:.55; font-size:.53rem; line-height:1.35; }
     .activity-analysis-svg { width:100%; height:185px; display:block; }
@@ -2166,7 +2182,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.140 understands plans across days and recurring workweeks, rescues missed plans without creating overdue clutter, and combines time, priorities, habits, recovery and training into one Best Next Move.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.141 adds activity repair and manual entry, a running pace-duration curve, clearer Body Battery and cardio-only load, science-safe load-ratio language, and a Notes window that stays put across desktop and mobile.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -2309,11 +2325,11 @@
         <details class="feature-guide-item">
           <summary>recovery &amp; training call</summary>
           <div class="feature-guide-body">
-            <p><strong>freshness</strong> is a 0–100 app heuristic built from the signals you have logged: HRV relative to your own baseline, WHOOP recovery %, sleep, load ratio, and how you feel. WHOOP sleep score is preferred; if it is missing but sleep start/end are logged, duration versus your target is used as a fallback. Missing signals are simply left out; the score is not a medical measurement.</p>
+            <p><strong>freshness</strong> is a 0–100 app heuristic built from the recovery signals you have logged: HRV relative to your own baseline, WHOOP recovery %, sleep, how you feel, and systemic fatigue. Training load stays separate as context rather than being scored as recovery. WHOOP sleep score is preferred; if it is missing but sleep start/end are logged, duration versus your target is used as a fallback. Missing signals are left out; the score is not a medical measurement.</p>
             <p><strong>training sessions</strong> keep lifting and cardio separate. A lift appears automatically when its exposure is logged; runs, rides, and rows come from Intervals.icu or from a manual session if they will not sync. Each session keeps its own load and session RPE. The old daily load fallback is used only when no session-specific cardio load exists.</p>
             <p><strong>HRV</strong> needs at least five previous entries before the app colors it against your own 30-day baseline. WHOOP recovery and sleep use three broad bands; how-you-feel gives extra weight to your subjective read of the day.</p>
             <p><strong>load ratio</strong> is the 7-day average workout load divided by the 28-day average. The app treats roughly 0.8–1.3 as its normal zone, 0.5–0.79 / 1.31–1.5 as caution, and values below 0.5 or above 1.5 as high deviation.</p>
-            <p><strong>training call</strong> is deliberately conservative. Weekly volume, freshness, labour load, physical fatigue, load ratio, consecutive training days, yesterday's session size, medium-day count, and test spacing can all pull the call easier. One caution signal can be enough; the app does not average a hard warning away.</p>
+            <p><strong>training call</strong> is deliberately conservative. Weekly volume, freshness, labour load, physical fatigue, consecutive training days, yesterday's session size, medium-day count, and test spacing can pull the call easier. The recent/base load ratio stays visible but does not prescribe training by itself.</p>
           </div>
         </details>
         <details class="feature-guide-item">
@@ -2453,13 +2469,13 @@
       <div class="recovery-guide-flow" role="img" aria-label="Recovery inputs flow into Recovery Signals and Body Battery, which combine with safety constraints to produce the Training Call and longer-term outlook.">
         <div class="recovery-guide-node"><b>1 · inputs</b><span>Sleep, HRV, feel, fatigue, work, health flags, cardio load, lifting and session responses.</span></div><div class="recovery-guide-arrow">→</div>
         <div class="recovery-guide-node"><b>2 · interpretations</b><span>Recovery Signals describe today. Body Battery estimates reserve after demands. Neither is a medical measurement.</span></div><div class="recovery-guide-arrow">→</div>
-        <div class="recovery-guide-node"><b>3 · decisions</b><span>Training Call chooses the safest useful action. Outlook shows possibilities. Deload Risk watches multi-week patterns.</span></div>
+        <div class="recovery-guide-node"><b>3 · decisions</b><span>Training Call chooses a conservative useful action. Outlook shows possibilities. Deload Risk watches multi-week patterns.</span></div>
       </div>
       <div class="recovery-guide-grid">
         <div class="recovery-guide-item"><b>Recovery Signals</b><span>A weighted daily composite of the signals actually available. Missing inputs are omitted rather than treated as perfect.</span></div>
         <div class="recovery-guide-item"><b>Body Battery · estimated</b><span>Starts from morning recovery, then subtracts expected or logged work and recommended or logged training.</span></div>
         <div class="recovery-guide-item"><b>Training Call</b><span>Uses the most conservative important constraint. Illness, injury, severe fatigue or workload can override a decent composite score.</span></div>
-        <div class="recovery-guide-item"><b>Training load</b><span>Acute is the 7-day daily average. Chronic is the 28-day daily average. Cardio-only is a viewing lens; lifting remains in Recovery.</span></div>
+        <div class="recovery-guide-item"><b>Training load</b><span>Recent is the 7-day daily average and base is the 28-day daily average. Their ratio is descriptive context—not a validated safe zone or injury predictor. Cardio-only excludes lifting and work.</span></div>
         <div class="recovery-guide-item"><b>7-day outlook</b><span>Not a fixed plan. Each day shows a possible training level and a load range anchored to your chronic base.</span></div>
         <div class="recovery-guide-item"><b>Deload risk</b><span>Looks for several longer-term warning patterns agreeing. Low means no meaningful deload pattern is currently detected.</span></div>
         <div class="recovery-guide-item"><b>Automatic HR flags</b><span>Compare HR with your earlier sessions at similar pace or power. One flag is low-weight; repetition matters more.</span></div>
@@ -2493,10 +2509,12 @@
         <div class="notepad-header" id="notepadHeader">
           <span>notes</span>
           <div class="notepad-header-btns">
+            <button id="notepadResetBtn" title="reset window position and width">reset</button>
             <button id="notepadPinBtn" title="keep open as a floating window">pin</button>
             <button id="notepadCloseBtn" title="close">✕</button>
           </div>
         </div>
+        <div class="notepad-tools" aria-label="Simple note editing tools"><button class="notepad-tool-btn" type="button" data-note-insert="bullet" title="insert bullet">• list</button><button class="notepad-tool-btn" type="button" data-note-insert="check" title="insert checkbox">☐ check</button><button class="notepad-tool-btn" type="button" data-note-insert="time" title="insert current date and time">time</button><span class="notepad-save-state" id="notepadSaveState">saved locally</span></div>
         <textarea id="notepadTextarea" placeholder="jot something down..."></textarea>
       </div>
 
@@ -3149,7 +3167,7 @@
                 <div class="capacity-ledger" id="capacityLedger"></div>
               </div>
             </div>
-            <div class="capacity-note">Your estimated readiness reserve after today’s demands. It is a Focus::Flow planning estimate, not Garmin’s live physiological Body Battery.</div>
+            <div class="capacity-note" id="capacityTrainingProjection">Your estimated readiness reserve after today’s demands. It is a Focus::Flow planning estimate, not Garmin’s live physiological Body Battery.</div>
           </div>
 
           <div class="recovery-card recovery-load-card">
@@ -3157,22 +3175,22 @@
             <div class="training-load-view-toggle" id="trainingLoadViewToggle"><button class="sort-btn active" data-load-view="all">all training</button><button class="sort-btn" data-load-view="cardio">cardio only</button></div>
             <div class="lifting-load-note">Lifting is shown as estimated strength stress: a conservative fatigue contribution based on the prescribed sets, relative load and final-set RIR. It is useful beside cardio load, but it is not a direct TSS conversion. Use “cardio only” when you want the endurance chronic-load view.</div>
             <div class="recovery-acwr-row">
-              <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="acuteLoadValue">--</div><div class="recovery-acwr-label">acute (7d avg)</div></div>
-              <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="chronicLoadValue">--</div><div class="recovery-acwr-label">chronic (28d avg)</div></div>
+              <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="acuteLoadValue">--</div><div class="recovery-acwr-label">recent (7d avg)</div></div>
+              <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="chronicLoadValue">--</div><div class="recovery-acwr-label">chronic base (28d avg)</div></div>
               <div class="recovery-acwr-stat"><div class="recovery-acwr-value" id="acwrValue">--</div><div class="recovery-acwr-label">ratio</div></div>
             </div>
             <div class="recovery-acwr-bar-track"><div class="recovery-acwr-bar-fill" id="acwrBarFill"></div></div>
-            <div class="recovery-acwr-bar-labels"><span>low</span><span>typical range</span><span>high</span></div>
+            <div class="recovery-acwr-bar-labels"><span>below base</span><span>near base</span><span>above base</span></div>
             <div class="recovery-acwr-caption" id="acwrCaption"></div>
             <div class="training-load-detail-grid">
               <div class="training-load-detail"><div class="training-load-detail-label">4-week base</div><div class="training-load-detail-value" id="trainingLoadBaseTrend">--</div></div>
               <div class="training-load-detail"><div class="training-load-detail-label">last 7 days</div><div class="training-load-detail-value" id="trainingLoadMix">--</div></div>
-              <div class="training-load-detail"><div class="training-load-detail-label">work today</div><div class="training-load-detail-value" id="trainingLoadWork">--</div></div>
+              <div class="training-load-detail" id="trainingLoadWorkDetail"><div class="training-load-detail-label">work today</div><div class="training-load-detail-value" id="trainingLoadWork">--</div></div>
             </div>
             <div class="training-load-strip-wrap">
               <div class="training-call-subheading">last 7 days — where the stress came from</div>
               <div class="training-load-strip" id="trainingLoadStressStrip"></div>
-              <div class="training-load-strip-legend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--text-color);opacity:.5;"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
+              <div class="training-load-strip-legend" id="trainingLoadStripLegend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--text-color);opacity:.5;"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
             </div>
             <div class="recovery-acwr-caption" id="chronicTrendCaption" style="display:none;"></div>
             <div class="training-load-warning" id="trainingLoadWarning" style="display:none;"></div>
@@ -3243,9 +3261,9 @@
               <div class="goals-intro-note" style="margin-top:.5rem;">Find it near the bottom of Intervals.icu Settings. Paste it once on this browser/device. It is excluded from Focus::Flow backups and cloud sync, so a different device needs its own one-time paste.</div>
             </div>
             <div id="intervalsConnectedActions" style="display:none;">
-              <div class="activity-sync-actions"><button class="btn primary small" id="intervalsSyncBtn">sync recent</button><button class="btn small" id="intervalsFullSyncBtn">sync all history</button><button class="btn small" id="intervalsDisconnectBtn">disconnect</button></div>
+              <div class="activity-sync-actions"><button class="btn primary small" id="intervalsSyncBtn">sync recent</button><button class="btn small" id="intervalsFullSyncBtn">sync all history</button><button class="btn small" id="intervalsRebuildBtn" title="Use once after replacing a Strava route with original files or a direct device source">rebuild imported history</button><button class="btn small" id="intervalsDisconnectBtn">disconnect</button></div>
               <div class="goals-intro-note" id="intervalsLastSync" style="margin-top:.5rem;">not synced yet</div>
-              <div class="goals-intro-note" style="margin-top:.35rem;">Auto-sync runs when Focus::Flow opens and about every 30 minutes while it stays open.</div>
+              <div class="goals-intro-note" style="margin-top:.35rem;">Auto-sync runs when Focus::Flow opens and about every 30 minutes while it stays open. After rerouting old activities away from Strava, use rebuild imported history once; a browser reload is not required.</div>
             </div>
             <div class="activity-trend-block">
               <div class="activity-trend-title">what gets imported</div>
@@ -3253,6 +3271,22 @@
             </div>
               </div>
             </details>
+          </div>
+          <div class="activity-card manual-activity-card">
+            <div class="card-header-title">Add one activity manually</div>
+            <div class="goals-intro-note" style="margin-top:.35rem;">For a session that will not arrive through Intervals.icu. It enters Activity history and Recovery as cardio load, without touching synced activities.</div>
+            <div class="manual-activity-grid">
+              <div class="recovery-input-group wide-mobile"><label for="manualActivityName">name</label><input class="search-input" id="manualActivityName" placeholder="easy run, commute..." autocomplete="off"></div>
+              <div class="recovery-input-group"><label for="manualActivityDate">date</label><input class="search-input" id="manualActivityDate" type="date"></div>
+              <div class="recovery-input-group"><label for="manualActivityType">type</label><select class="search-input" id="manualActivityType"><option value="Run">run</option><option value="Ride">ride</option><option value="Rowing">rowing</option><option value="Other">other cardio</option></select></div>
+              <div class="recovery-input-group"><label for="manualActivityDuration">minutes</label><input class="search-input" id="manualActivityDuration" type="number" min="1" step="1" inputmode="numeric" placeholder="45"></div>
+              <div class="recovery-input-group"><label for="manualActivityDistance">distance km</label><input class="search-input" id="manualActivityDistance" type="number" min="0" step="0.01" inputmode="decimal" placeholder="optional"></div>
+              <div class="recovery-input-group"><label for="manualActivityHr">average HR</label><input class="search-input" id="manualActivityHr" type="number" min="30" max="240" step="1" inputmode="numeric" placeholder="optional"></div>
+              <div class="recovery-input-group"><label for="manualActivityLoad">training load</label><input class="search-input" id="manualActivityLoad" type="number" min="0" step="0.1" inputmode="decimal" placeholder="optional"></div>
+              <div class="recovery-input-group"><label for="manualActivityRpe">session RPE</label><select class="search-input" id="manualActivityRpe"><option value="">optional</option><option value="1">1 · very easy</option><option value="2">2 · easy</option><option value="3">3 · comfortable</option><option value="4">4 · steady</option><option value="5">5 · moderate</option><option value="6">6 · challenging</option><option value="7">7 · hard</option><option value="8">8 · very hard</option><option value="9">9 · near-maximal</option><option value="10">10 · maximal</option></select></div>
+              <div class="manual-activity-actions wide-mobile"><button class="btn primary small" id="manualActivityAddBtn" type="button">add activity</button></div>
+            </div>
+            <div class="manual-activity-note">If load is blank and duration + RPE are present, Focus::Flow uses session-RPE (minutes × RPE) and scales it to an internal app-load estimate. The raw session-RPE load is kept in the activity detail.</div>
           </div>
           <div class="activity-card activity-pb-card">
             <div class="card-header-title">Personal bests</div>
@@ -3269,6 +3303,10 @@
             <div class="power-curve-card">
               <div class="power-curve-head"><div class="power-curve-title">cycling power-duration curve</div><div class="power-curve-note" id="powerCurveNote">selected range · logarithmic time axis</div></div>
               <div id="powerCurveWrap"><div class="power-curve-empty">Sync power activities to draw the curve.</div></div>
+            </div>
+            <div class="power-curve-card">
+              <div class="power-curve-head"><div class="power-curve-title">running pace-duration curve</div><div class="power-curve-note" id="runCurveNote">selected range · lower pace is faster</div></div>
+              <div id="runCurveWrap"><div class="power-curve-empty">Sync run pace curves to draw the curve.</div></div>
             </div>
             <div class="activity-trend-block" id="achievementFeedBlock" style="display:none;">
               <div class="activity-trend-title">activity awards</div>
@@ -3310,6 +3348,7 @@
               <section class="activity-analysis-panel"><div class="activity-analysis-title">running · pace / HR</div><div class="activity-analysis-subtitle" id="runEfficiencySubtitle">Faster pace at a similar heart rate is the useful direction.</div><div id="runEfficiencyChart"><div class="activity-analysis-empty">Sync runs with duration, distance, and average HR.</div></div></section>
               <section class="activity-analysis-panel"><div class="activity-analysis-title">cycling · power / HR</div><div class="activity-analysis-subtitle" id="rideEfficiencySubtitle">More power at a similar heart rate is the useful direction.</div><div id="rideEfficiencyChart"><div class="activity-analysis-empty">Sync rides with average power and heart rate.</div></div></section>
               <section class="activity-analysis-panel"><div class="activity-analysis-title">heart-rate decoupling</div><div class="activity-analysis-subtitle" id="decouplingSubtitle">Lower drift during steady aerobic work is usually preferable.</div><div id="decouplingChart"><div class="activity-analysis-empty">Sync activities that include decoupling.</div></div></section>
+              <section class="activity-analysis-panel wide"><div class="activity-analysis-title">running · 8-week volume and efficiency</div><div class="activity-analysis-subtitle" id="runningProgressSubtitle">Weekly distance is shown as bars; the line tracks pace per heartbeat from runs with usable HR.</div><div id="runningProgressChart"><div class="activity-analysis-empty">Sync runs with duration and distance; heart rate adds the efficiency line.</div></div></section>
             </div>
             <div class="activity-analysis-footnote" id="activityAnalysisFootnote">Focus::Flow compares recent sessions with your own earlier data. Heat, terrain, fatigue, workout structure, sensors, and indoor/outdoor conditions can all move these numbers.</div>
           </div>
@@ -3401,7 +3440,7 @@
       let bgHabits=[],totalXP=0,dailyGoal=90;
       let dailyGoalBonusDate=null;
       let xpFromFocus=0,xpFromTasks=0,xpFromHabits=0,xpFromGoals=0,xpFromChains=0;
-      let notepadContent='',notepadPinned=false,notepadPosX=null,notepadPosY=null;
+      let notepadContent='',notepadPinned=false,notepadPosX=null,notepadPosY=null,notepadWidth=280;
       let todayHabitSort='manual',todoSort='manual';
       let overviewSort='manual';
       let adaptiveGoalEnabled=false;
@@ -3427,8 +3466,8 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.140';
-      const APP_RELEASE_DATE='2026-08-13';
+      const APP_VERSION='1.141';
+      const APP_RELEASE_DATE='2026-08-14';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
       document.getElementById('settingsReleaseLabel').textContent=`Released ${new Date(APP_RELEASE_DATE+'T12:00:00').toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})}`;
@@ -3597,6 +3636,7 @@
         document.body.setAttribute('data-view-mode',effective);
         document.querySelectorAll('#viewModeTabs .sort-btn').forEach(b=>b.classList.remove('active'));
         document.querySelector(`#viewModeTabs .sort-btn[data-mode="${viewMode}"]`)?.classList.add('active');
+        if(typeof positionNotepad==='function'&&document.getElementById('notepadPopover')?.style.display!=='none')positionNotepad();
       }
       function setViewMode(mode){
         viewMode=mode;
@@ -3609,7 +3649,7 @@
       }
 
       let saveFailureWarned=false;
-      function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,scheduleCommitments,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingLoadModelVersion,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
+      function buildStateSnapshot(){return {appVersion:APP_VERSION,appReleaseDate:APP_RELEASE_DATE,totalFocusMinutes,todayFocusMinutes,todaySessions,sessionsCompleted,tasksCompletedCount,taskNameFrequency,taskLastUsed,streakDays,lastActiveDate,todayDate:getToday(),dailyHistory,taskHabitHistory,librarySort,tasks,taskTimeLog,chainConfig,chainActive,chainSessionIndex,selectedTaskForGraph,soundEnabled,currentTheme,bgHabits,totalXP,dailyGoalBonusDate,focusPeriod,habitCheckPeriod,dailyGoal,hourlyFocus,selectedHabitForGraph,focusMode,habitGraphSort,activePanel,notificationsEnabled,sessionLog,lastSessionLogId,estimateAccuracyLog,tasksAbandonedCount,taskFilter,chartOffset,heatmapOffset,habitCheckOffset,overviewOffset,hasSeenWelcome,taskSort,recurringTasks,lastRecapWeek,taskWeeklyGoal,habitOrderSort,xpFromFocus,xpFromTasks,xpFromHabits,xpFromGoals,xpFromChains,notepadContent,notepadPinned,notepadPosX,notepadPosY,notepadWidth,todayHabitSort,todoSort,overviewSort,adaptiveGoalEnabled,adaptiveFocusGoalEnabled,todayDueSort,todayPrioritySort,goals,taskSchedule,scheduleDate,scheduleCommitments,viewMode,collapsedCardKeys:Array.from(collapsedCardKeys),todayHubTab,completionEvents,biometrics,importedActivities,intervalsBestRecords,intervalsLastSyncAt,recoveryChartPeriod,recoveryChartMetric,sleepTargetHours,recoveryChartOffset,breakOvertimeLog,books,bookStatusFilter,hasSeenGoalsTutorial,liftingLifts,liftingSequencePosition,liftingCycleNumber,liftingHistory,liftingLoadModelVersion,liftingPendingLiftIds,liftingWarmupChecks,dailyCheckins,currentTaskId,taskTimeLimits,taskTimerRemaining,activeTimer:{running:isRunning,mode:currentMode,targetTimestamp:timerTargetTimestamp,timeLeftSeconds,sessionTotalSeconds,taskTimerTargetTimestamp}};}
       function buildCloudStateSnapshot(){const state=buildStateSnapshot();delete state.importedActivities;delete state.intervalsLastSyncAt;return state;}
       const buildStateSnapshotCore=buildStateSnapshot;
       buildStateSnapshot=function(){const state=buildStateSnapshotCore();state.sessionResponses=sessionResponses;state.manualTrainingSessions=manualTrainingSessions;state.trainingCallSnapshots=trainingCallSnapshots;state.wakeSchedule=wakeSchedule;state.wakeOverride=wakeOverride;state.weeklyReviews=weeklyReviews;return state;};
@@ -3622,7 +3662,7 @@
           setTimeout(()=>showToast(`yesterday: ${yMin}m focused · ${ySessions} session${ySessions===1?'':'s'} · ${yTasks} task${yTasks===1?'':'s'} done`),1200);
         }
         todayFocusMinutes=0;todaySessions=0;hourlyFocus={};if(d.lastActiveDate){const ld=new Date(d.lastActiveDate),td=new Date(today),df=Math.floor((td-ld)/(1000*60*60*24));if(df===1)streakDays=(d.streakDays||0)+1;else if(df===0)streakDays=d.streakDays||0;else streakDays=1;}else streakDays=1;}else{todayFocusMinutes=d.todayFocusMinutes||0;todaySessions=d.todaySessions||0;streakDays=d.streakDays||0;hourlyFocus=d.hourlyFocus||{};}
-      totalFocusMinutes=d.totalFocusMinutes||0;sessionsCompleted=d.sessionsCompleted||0;tasksCompletedCount=d.tasksCompletedCount||0;taskNameFrequency=d.taskNameFrequency||{};taskLastUsed=d.taskLastUsed||{};lastActiveDate=d.lastActiveDate||null;dailyHistory=d.dailyHistory||{};taskHabitHistory=d.taskHabitHistory||{};librarySort=d.librarySort||'frequent';tasks=d.tasks||[];taskTimeLog=d.taskTimeLog||{};selectedTaskForGraph=d.selectedTaskForGraph||null;soundEnabled=d.soundEnabled!==undefined?d.soundEnabled:true;currentTheme=d.currentTheme||'cyberspace';bgHabits=d.bgHabits||[];totalXP=d.totalXP!==undefined?d.totalXP:(d.totalFocusMinutes||0);dailyGoalBonusDate=d.dailyGoalBonusDate||null;focusPeriod=d.focusPeriod||7;habitCheckPeriod=d.habitCheckPeriod||84;dailyGoal=d.dailyGoal||90;selectedHabitForGraph=d.selectedHabitForGraph||null;focusMode=(d.focusMode==='nudge')?'pause':(d.focusMode||'auto');habitGraphSort=d.habitGraphSort||'frequent';activePanel=d.activePanel||'tasks';notificationsEnabled=d.notificationsEnabled!==undefined?d.notificationsEnabled:false;sessionLog=d.sessionLog||[];lastSessionLogId=d.lastSessionLogId||null;estimateAccuracyLog=d.estimateAccuracyLog||[];tasksAbandonedCount=d.tasksAbandonedCount||0;taskFilter=d.taskFilter||'active';chartOffset=d.chartOffset||0;heatmapOffset=d.heatmapOffset||0;habitCheckOffset=d.habitCheckOffset||0;overviewOffset=d.overviewOffset||0;hasSeenWelcome=d.hasSeenWelcome!==undefined?d.hasSeenWelcome:false;taskSort=d.taskSort||'manual';recurringTasks=d.recurringTasks||{};lastRecapWeek=d.lastRecapWeek||null;taskWeeklyGoal=d.taskWeeklyGoal||10;habitOrderSort=d.habitOrderSort||'manual';xpFromFocus=d.xpFromFocus||0;xpFromTasks=d.xpFromTasks||0;xpFromHabits=d.xpFromHabits||0;xpFromGoals=d.xpFromGoals||0;xpFromChains=d.xpFromChains||0;notepadContent=d.notepadContent||'';notepadPinned=d.notepadPinned||false;notepadPosX=null;notepadPosY=null;todayHabitSort=d.todayHabitSort||'manual';todoSort=d.todoSort||'manual';overviewSort=d.overviewSort||'manual';adaptiveGoalEnabled=d.adaptiveGoalEnabled||false;adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled!==undefined?d.adaptiveFocusGoalEnabled:true;todayDueSort=d.todayDueSort||'date';todayPrioritySort=d.todayPrioritySort||'priority';goals=d.goals||[];taskSchedule=d.taskSchedule||{};scheduleDate=d.scheduleDate||null;viewMode=d.viewMode||'auto';collapsedCardKeys=new Set(d.collapsedCardKeys||[]);todayHubTab=d.todayHubTab||'current';completionEvents=d.completionEvents||[];biometrics=d.biometrics||{};importedActivities=d.importedActivities||[];intervalsBestRecords=d.intervalsBestRecords||{run:{},ride:{},runRanks:{},rideRanks:{},lastSyncAt:null};intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsLastSyncAt=d.intervalsLastSyncAt||null;recoveryChartPeriod=d.recoveryChartPeriod||14;recoveryChartMetric=d.recoveryChartMetric||'freshness';sleepTargetHours=d.sleepTargetHours||8;recoveryChartOffset=d.recoveryChartOffset||0;breakOvertimeLog=d.breakOvertimeLog||[];books=d.books||[];bookStatusFilter=d.bookStatusFilter||'reading';hasSeenGoalsTutorial=d.hasSeenGoalsTutorial!==undefined?d.hasSeenGoalsTutorial:false;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}else{liftingLifts=[];}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;else liftingSequencePosition=0;liftingCycleNumber=d.liftingCycleNumber!==undefined?d.liftingCycleNumber:1;liftingHistory=d.liftingHistory||[];liftingPendingLiftIds=d.liftingPendingLiftIds||[];liftingWarmupChecks=d.liftingWarmupChecks||{};dailyCheckins=d.dailyCheckins||{};currentTaskId=d.currentTaskId!==undefined?d.currentTaskId:null;taskTimeLimits=d.taskTimeLimits||{};taskTimerRemaining=d.taskTimerRemaining||{};
+      totalFocusMinutes=d.totalFocusMinutes||0;sessionsCompleted=d.sessionsCompleted||0;tasksCompletedCount=d.tasksCompletedCount||0;taskNameFrequency=d.taskNameFrequency||{};taskLastUsed=d.taskLastUsed||{};lastActiveDate=d.lastActiveDate||null;dailyHistory=d.dailyHistory||{};taskHabitHistory=d.taskHabitHistory||{};librarySort=d.librarySort||'frequent';tasks=d.tasks||[];taskTimeLog=d.taskTimeLog||{};selectedTaskForGraph=d.selectedTaskForGraph||null;soundEnabled=d.soundEnabled!==undefined?d.soundEnabled:true;currentTheme=d.currentTheme||'cyberspace';bgHabits=d.bgHabits||[];totalXP=d.totalXP!==undefined?d.totalXP:(d.totalFocusMinutes||0);dailyGoalBonusDate=d.dailyGoalBonusDate||null;focusPeriod=d.focusPeriod||7;habitCheckPeriod=d.habitCheckPeriod||84;dailyGoal=d.dailyGoal||90;selectedHabitForGraph=d.selectedHabitForGraph||null;focusMode=(d.focusMode==='nudge')?'pause':(d.focusMode||'auto');habitGraphSort=d.habitGraphSort||'frequent';activePanel=d.activePanel||'tasks';notificationsEnabled=d.notificationsEnabled!==undefined?d.notificationsEnabled:false;sessionLog=d.sessionLog||[];lastSessionLogId=d.lastSessionLogId||null;estimateAccuracyLog=d.estimateAccuracyLog||[];tasksAbandonedCount=d.tasksAbandonedCount||0;taskFilter=d.taskFilter||'active';chartOffset=d.chartOffset||0;heatmapOffset=d.heatmapOffset||0;habitCheckOffset=d.habitCheckOffset||0;overviewOffset=d.overviewOffset||0;hasSeenWelcome=d.hasSeenWelcome!==undefined?d.hasSeenWelcome:false;taskSort=d.taskSort||'manual';recurringTasks=d.recurringTasks||{};lastRecapWeek=d.lastRecapWeek||null;taskWeeklyGoal=d.taskWeeklyGoal||10;habitOrderSort=d.habitOrderSort||'manual';xpFromFocus=d.xpFromFocus||0;xpFromTasks=d.xpFromTasks||0;xpFromHabits=d.xpFromHabits||0;xpFromGoals=d.xpFromGoals||0;xpFromChains=d.xpFromChains||0;notepadContent=d.notepadContent||'';notepadPinned=d.notepadPinned||false;notepadPosX=Number.isFinite(Number(d.notepadPosX))?Number(d.notepadPosX):null;notepadPosY=Number.isFinite(Number(d.notepadPosY))?Number(d.notepadPosY):null;notepadWidth=Math.max(240,Math.min(720,Number(d.notepadWidth)||280));todayHabitSort=d.todayHabitSort||'manual';todoSort=d.todoSort||'manual';overviewSort=d.overviewSort||'manual';adaptiveGoalEnabled=d.adaptiveGoalEnabled||false;adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled!==undefined?d.adaptiveFocusGoalEnabled:true;todayDueSort=d.todayDueSort||'date';todayPrioritySort=d.todayPrioritySort||'priority';goals=d.goals||[];taskSchedule=d.taskSchedule||{};scheduleDate=d.scheduleDate||null;viewMode=d.viewMode||'auto';collapsedCardKeys=new Set(d.collapsedCardKeys||[]);todayHubTab=d.todayHubTab||'current';completionEvents=d.completionEvents||[];biometrics=d.biometrics||{};importedActivities=d.importedActivities||[];intervalsBestRecords=d.intervalsBestRecords||{run:{},ride:{},runRanks:{},rideRanks:{},lastSyncAt:null};intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsLastSyncAt=d.intervalsLastSyncAt||null;recoveryChartPeriod=d.recoveryChartPeriod||14;recoveryChartMetric=d.recoveryChartMetric||'freshness';sleepTargetHours=d.sleepTargetHours||8;recoveryChartOffset=d.recoveryChartOffset||0;breakOvertimeLog=d.breakOvertimeLog||[];books=d.books||[];bookStatusFilter=d.bookStatusFilter||'reading';hasSeenGoalsTutorial=d.hasSeenGoalsTutorial!==undefined?d.hasSeenGoalsTutorial:false;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}else{liftingLifts=[];}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;else liftingSequencePosition=0;liftingCycleNumber=d.liftingCycleNumber!==undefined?d.liftingCycleNumber:1;liftingHistory=d.liftingHistory||[];liftingPendingLiftIds=d.liftingPendingLiftIds||[];liftingWarmupChecks=d.liftingWarmupChecks||{};dailyCheckins=d.dailyCheckins||{};currentTaskId=d.currentTaskId!==undefined?d.currentTaskId:null;taskTimeLimits=d.taskTimeLimits||{};taskTimerRemaining=d.taskTimerRemaining||{};
       scheduleCommitments=Array.isArray(d.scheduleCommitments)?d.scheduleCommitments:[];
       Object.values(taskSchedule).forEach(s=>{if(s&&!s.date)s.date=scheduleDate||getToday();});
       intervalsBestRecords.runTopEfforts=intervalsBestRecords.runTopEfforts||{};
@@ -3688,7 +3728,7 @@
         if(validationError){showToast(`invalid backup file — ${validationError}`);return;}
         try{
           if(d.totalFocusMinutes!==undefined)totalFocusMinutes=d.totalFocusMinutes;if(d.todayFocusMinutes!==undefined)todayFocusMinutes=d.todayFocusMinutes;if(d.todaySessions!==undefined)todaySessions=d.todaySessions;if(d.sessionsCompleted!==undefined)sessionsCompleted=d.sessionsCompleted;if(d.tasksCompletedCount!==undefined)tasksCompletedCount=d.tasksCompletedCount;if(d.taskNameFrequency)taskNameFrequency=d.taskNameFrequency;if(d.taskLastUsed)taskLastUsed=d.taskLastUsed;if(d.streakDays!==undefined)streakDays=d.streakDays;if(d.lastActiveDate)lastActiveDate=d.lastActiveDate;if(d.dailyHistory)dailyHistory=d.dailyHistory;if(d.taskHabitHistory)taskHabitHistory=d.taskHabitHistory;if(d.tasks)tasks=d.tasks;if(d.taskTimeLog)taskTimeLog=d.taskTimeLog;if(d.chainConfig){chainConfig=d.chainConfig;document.getElementById('chainWorkCount').value=chainConfig.workCount;document.getElementById('chainWorkMinutes').value=chainConfig.workMinutes;document.getElementById('chainShortBreak').value=chainConfig.shortBreak;document.getElementById('chainLongBreak').value=chainConfig.longBreak;}if(d.chainActive!==undefined)chainActive=d.chainActive;if(d.chainSessionIndex!==undefined)chainSessionIndex=d.chainSessionIndex;if(d.soundEnabled!==undefined){soundEnabled=d.soundEnabled;if(!soundEnabled){soundToggle.classList.add('muted');soundToggle.textContent='🔕';}else{soundToggle.classList.remove('muted');soundToggle.textContent='🔔';}}if(d.currentTheme)applyTheme(d.currentTheme);if(d.bgHabits)bgHabits=d.bgHabits;if(d.totalXP!==undefined)totalXP=d.totalXP;else if(d.totalFocusMinutes!==undefined)totalXP=d.totalFocusMinutes;if(d.dailyGoalBonusDate!==undefined)dailyGoalBonusDate=d.dailyGoalBonusDate;if(d.focusPeriod)focusPeriod=d.focusPeriod;if(d.habitCheckPeriod)habitCheckPeriod=d.habitCheckPeriod;if(d.dailyGoal!==undefined){dailyGoal=d.dailyGoal;goalInput.value=dailyGoal;}if(d.hourlyFocus)hourlyFocus=d.hourlyFocus;if(d.selectedHabitForGraph!==undefined)selectedHabitForGraph=d.selectedHabitForGraph;if(d.focusMode)focusMode=(d.focusMode==='nudge')?'pause':d.focusMode;if(d.habitGraphSort)habitGraphSort=d.habitGraphSort;if(d.activePanel){activePanel=d.activePanel;switchPanel(activePanel);}if(d.notificationsEnabled!==undefined){notificationsEnabled=d.notificationsEnabled;updateNotificationSettingUI();}if(d.sessionLog)sessionLog=d.sessionLog;if(d.lastSessionLogId!==undefined)lastSessionLogId=d.lastSessionLogId;if(d.estimateAccuracyLog)estimateAccuracyLog=d.estimateAccuracyLog;if(d.tasksAbandonedCount!==undefined)tasksAbandonedCount=d.tasksAbandonedCount;if(d.taskFilter)taskFilter=d.taskFilter;if(d.chartOffset!==undefined)chartOffset=d.chartOffset;if(d.heatmapOffset!==undefined)heatmapOffset=d.heatmapOffset;if(d.habitCheckOffset!==undefined)habitCheckOffset=d.habitCheckOffset;if(d.overviewOffset!==undefined)overviewOffset=d.overviewOffset;if(d.hasSeenWelcome!==undefined)hasSeenWelcome=d.hasSeenWelcome;if(d.taskSort)taskSort=d.taskSort;if(d.recurringTasks)recurringTasks=d.recurringTasks;if(d.lastRecapWeek!==undefined)lastRecapWeek=d.lastRecapWeek;if(d.taskWeeklyGoal!==undefined)taskWeeklyGoal=d.taskWeeklyGoal;if(d.habitOrderSort)habitOrderSort=d.habitOrderSort;if(d.xpFromFocus!==undefined)xpFromFocus=d.xpFromFocus;if(d.xpFromTasks!==undefined)xpFromTasks=d.xpFromTasks;if(d.xpFromHabits!==undefined)xpFromHabits=d.xpFromHabits;if(d.xpFromGoals!==undefined)xpFromGoals=d.xpFromGoals;if(d.xpFromChains!==undefined)xpFromChains=d.xpFromChains;if(d.notepadContent!==undefined)notepadContent=d.notepadContent;if(d.notepadPinned!==undefined)notepadPinned=d.notepadPinned;if(d.todayHabitSort)todayHabitSort=d.todayHabitSort;if(d.todoSort)todoSort=d.todoSort;if(d.overviewSort)overviewSort=d.overviewSort;if(d.adaptiveGoalEnabled!==undefined)adaptiveGoalEnabled=d.adaptiveGoalEnabled;if(d.adaptiveFocusGoalEnabled!==undefined)adaptiveFocusGoalEnabled=d.adaptiveFocusGoalEnabled;if(d.todayDueSort)todayDueSort=d.todayDueSort;if(d.todayPrioritySort)todayPrioritySort=d.todayPrioritySort;if(d.goals)goals=d.goals;if(d.taskSchedule)taskSchedule=d.taskSchedule;if(d.scheduleDate!==undefined)scheduleDate=d.scheduleDate;if(d.viewMode){viewMode=d.viewMode;applyViewMode();}if(d.collapsedCardKeys)collapsedCardKeys=new Set(d.collapsedCardKeys);if(d.todayHubTab)todayHubTab=d.todayHubTab;if(d.completionEvents)completionEvents=d.completionEvents;if(d.biometrics)biometrics=d.biometrics;if(d.recoveryChartPeriod)recoveryChartPeriod=d.recoveryChartPeriod;if(d.recoveryChartMetric)recoveryChartMetric=d.recoveryChartMetric;if(d.sleepTargetHours!==undefined)sleepTargetHours=d.sleepTargetHours;if(d.recoveryChartOffset!==undefined)recoveryChartOffset=d.recoveryChartOffset;if(d.breakOvertimeLog)breakOvertimeLog=d.breakOvertimeLog;if(d.books)books=d.books;if(d.bookStatusFilter)bookStatusFilter=d.bookStatusFilter;if(d.hasSeenGoalsTutorial!==undefined)hasSeenGoalsTutorial=d.hasSeenGoalsTutorial;if(d.librarySort)librarySort=d.librarySort;if(d.selectedTaskForGraph!==undefined)selectedTaskForGraph=d.selectedTaskForGraph;if(d.liftingLifts){liftingLifts=d.liftingLifts.map(l=>{const inc=getAutoLiftIncrement(l.name);return {...l,trainingMax:roundToLoadStep(l.trainingMax),allTimeMax:roundToLoadStep(l.allTimeMax||l.trainingMax),increment:inc,incrementMode:'auto'};});}if(d.liftingSequencePosition!==undefined)liftingSequencePosition=d.liftingSequencePosition;else if(d.liftingCycleWeek!==undefined)liftingSequencePosition=d.liftingCycleWeek*3;if(d.liftingCycleNumber!==undefined)liftingCycleNumber=d.liftingCycleNumber;if(d.liftingHistory)liftingHistory=d.liftingHistory;if(d.liftingPendingLiftIds)liftingPendingLiftIds=d.liftingPendingLiftIds;if(d.liftingWarmupChecks)liftingWarmupChecks=d.liftingWarmupChecks;if(d.dailyCheckins)dailyCheckins=d.dailyCheckins;if(d.currentTaskId!==undefined)currentTaskId=d.currentTaskId;if(d.taskTimeLimits)taskTimeLimits=d.taskTimeLimits;if(d.taskTimerRemaining)taskTimerRemaining=d.taskTimerRemaining;
-          if(Array.isArray(d.scheduleCommitments))scheduleCommitments=d.scheduleCommitments;Object.values(taskSchedule).forEach(s=>{if(s&&!s.date)s.date=scheduleDate||getToday();});
+          if(Array.isArray(d.scheduleCommitments))scheduleCommitments=d.scheduleCommitments;Object.values(taskSchedule).forEach(s=>{if(s&&!s.date)s.date=scheduleDate||getToday();});if(d.notepadPosX!==undefined)notepadPosX=Number.isFinite(Number(d.notepadPosX))?Number(d.notepadPosX):null;if(d.notepadPosY!==undefined)notepadPosY=Number.isFinite(Number(d.notepadPosY))?Number(d.notepadPosY):null;if(d.notepadWidth!==undefined)notepadWidth=Math.max(240,Math.min(720,Number(d.notepadWidth)||280));
           if(Array.isArray(d.importedActivities))importedActivities=d.importedActivities;if(d.intervalsBestRecords){intervalsBestRecords=d.intervalsBestRecords;intervalsBestRecords.runRanks=intervalsBestRecords.runRanks||{};intervalsBestRecords.rideRanks=intervalsBestRecords.rideRanks||{};intervalsBestRecords.runTopEfforts=intervalsBestRecords.runTopEfforts||{};}if(d.intervalsLastSyncAt!==undefined)intervalsLastSyncAt=d.intervalsLastSyncAt;
           liftingLoadModelVersion=Number(d.liftingLoadModelVersion)||1;migrateLiftingLoadModel();if(d.sessionResponses)sessionResponses=d.sessionResponses;if(d.manualTrainingSessions)manualTrainingSessions=d.manualTrainingSessions;
           saveData();updateStats();renderTasks();renderLibrary();renderBgHabits();updateLevelDisplay();renderHabitGraphList();updateFocusModeUI();updateSessionNoteUI();renderSessionLog();drawFocusChart();drawHeatmap();drawHabitCheckGraph();renderActivitiesPanel();showToast('data imported successfully');
@@ -3916,7 +3956,17 @@
 
       function openWelcome(){document.getElementById('welcomeOverlay').classList.add('open');}
 
-      function openNotepad(){document.getElementById('notepadPopover').style.display='block';document.getElementById('notepadToggleBtn').classList.add('active');}
+      function isMobileLayout(){return document.body.getAttribute('data-view-mode')==='mobile';}
+      function positionNotepad(){
+        const pop=document.getElementById('notepadPopover');if(!pop)return;
+        if(isMobileLayout()){pop.style.left='';pop.style.top='';pop.style.right='';pop.style.width='';return;}
+        pop.style.width=Math.max(240,Math.min(720,notepadWidth||280))+'px';
+        if(notepadPinned&&notepadPosX!==null&&notepadPosY!==null){
+          const x=Math.max(0,Math.min(window.innerWidth-pop.offsetWidth,notepadPosX)),y=Math.max(0,Math.min(window.innerHeight-pop.offsetHeight,notepadPosY));
+          pop.style.left=x+'px';pop.style.top=y+'px';pop.style.right='auto';
+        }else{pop.style.left='';pop.style.top='';pop.style.right='';}
+      }
+      function openNotepad(){const pop=document.getElementById('notepadPopover');pop.style.display='block';positionNotepad();document.getElementById('notepadToggleBtn').classList.add('active');}
       function closeNotepad(){document.getElementById('notepadPopover').style.display='none';document.getElementById('notepadToggleBtn').classList.remove('active');}
       function toggleNotepad(){const pop=document.getElementById('notepadPopover');if(pop.style.display==='none'||!pop.style.display)openNotepad();else closeNotepad();}
       function togglePinNotepad(){
@@ -3925,12 +3975,14 @@
         pop.classList.toggle('pinned',notepadPinned);
         pinBtn.classList.toggle('is-pinned',notepadPinned);
         pinBtn.textContent=notepadPinned?'unpin':'pin';
-        if(notepadPinned){
-          if(notepadPosX!==null&&notepadPosY!==null){pop.style.left=notepadPosX+'px';pop.style.top=notepadPosY+'px';pop.style.right='auto';}
-        }else{
-          pop.style.left='';pop.style.top='';pop.style.right='';
-        }
+        positionNotepad();
         saveData();
+      }
+      function resetNotepadWindow(){notepadPosX=null;notepadPosY=null;notepadWidth=280;const pop=document.getElementById('notepadPopover');pop.style.width='';pop.style.left='';pop.style.top='';pop.style.right='';positionNotepad();saveData();showToast('notes window reset');}
+      function insertNotepadText(kind){
+        const ta=document.getElementById('notepadTextarea');if(!ta)return;const prefix=ta.selectionStart>0&&ta.value[ta.selectionStart-1]!=='\n'?'\n':'';
+        const insert=kind==='bullet'?`${prefix}• `:kind==='check'?`${prefix}☐ `:`${prefix}${new Date().toLocaleString()} — `;
+        ta.setRangeText(insert,ta.selectionStart,ta.selectionEnd,'end');ta.focus();notepadContent=ta.value;saveData();
       }
       let notepadInitialRestoreDone=false;
       function restoreNotepadState(){
@@ -3941,12 +3993,12 @@
         if(notepadPinned){
           const pop=document.getElementById('notepadPopover'),pinBtn=document.getElementById('notepadPinBtn');
           pop.classList.add('pinned');pinBtn.classList.add('is-pinned');pinBtn.textContent='unpin';
-          if(notepadPosX!==null&&notepadPosY!==null){pop.style.left=notepadPosX+'px';pop.style.top=notepadPosY+'px';pop.style.right='auto';}
+          openNotepad();positionNotepad();
         }
       }
       let notepadDragging=false,notepadDragOffsetX=0,notepadDragOffsetY=0;
       function notepadDragStart(clientX,clientY){
-        if(!notepadPinned)return;
+        if(!notepadPinned||isMobileLayout())return;
         notepadDragging=true;
         const pop=document.getElementById('notepadPopover'),rect=pop.getBoundingClientRect();
         notepadDragOffsetX=clientX-rect.left;notepadDragOffsetY=clientY-rect.top;
@@ -4124,6 +4176,14 @@
         const yTicks=[0,.5,1].map(f=>minV+(maxV-minV)*f);
         wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cycling power-duration curve for ${escapeHtml(rangeLabel)}">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${ctx.unit==='W/kg'?v.toFixed(1):Math.round(v)}</text>`).join('')}${xTicks.map(s=>`<line class="power-curve-grid" x1="${x(s)}" x2="${x(s)}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${x(s)}" y="${H-8}" text-anchor="middle">${xLabels[s]}</text>`).join('')}<path class="power-curve-path" d="${path}"></path></svg>`;
       }
+      function renderRunPaceDurationCurve(rangeData){
+        const wrap=document.getElementById('runCurveWrap'),note=document.getElementById('runCurveNote');if(!wrap)return;const rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[personalBestRange]||personalBestRange;
+        if(note)note.textContent=`${rangeLabel} · best mean pace by effort duration · lower is faster`;
+        const specs=[['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]],rows=specs.map(([label,distance])=>{const sec=Number(rangeData?.run?.[label]);return{label,distance,sec,pace:sec>0?sec/(distance/1000):null};}).filter(x=>x.sec>0&&x.pace>0).sort((a,b)=>a.sec-b.sec);
+        if(rows.length<2){wrap.innerHTML='<div class="power-curve-empty">At least two run best-effort distances are needed for this range.</div>';return;}
+        const W=720,H=190,L=52,R=16,T=12,B=30,x0=Math.log(rows[0].sec),x1=Math.log(rows[rows.length-1].sec),minP=Math.min(...rows.map(x=>x.pace))*.96,maxP=Math.max(...rows.map(x=>x.pace))*1.04,x=s=>L+(Math.log(s)-x0)/(x1-x0)*(W-L-R),y=p=>T+(p-minP)/(maxP-minP)*(H-T-B),path=rows.map((p,i)=>`${i?'L':'M'}${x(p.sec).toFixed(1)},${y(p.pace).toFixed(1)}`).join(' '),paceLabel=p=>`${Math.floor(p/60)}:${String(Math.round(p%60)).padStart(2,'0')}`;
+        const yTicks=[minP,(minP+maxP)/2,maxP];wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Running pace-duration curve for ${escapeHtml(rangeLabel)}">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${paceLabel(v)}</text>`).join('')}${rows.map(p=>`<line class="power-curve-grid" x1="${x(p.sec)}" x2="${x(p.sec)}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${x(p.sec)}" y="${H-8}" text-anchor="middle">${escapeHtml(p.label)}</text>`).join('')}<path class="run-curve-path" d="${path}"></path>${rows.map(p=>`<circle cx="${x(p.sec)}" cy="${y(p.pace)}" r="3.5" style="fill:var(--main-color);stroke:var(--bg-color);stroke-width:1"><title>${escapeHtml(p.label)} · ${fmtPbTime(p.sec)} · ${paceLabel(p.pace)}/km</title></circle>`).join('')}</svg>`;
+      }
       function renderPersonalBests(awardIndex){
         const run=document.getElementById('runPbGrid'),ride=document.getElementById('ridePbGrid'),status=document.getElementById('pbSyncStatus');if(!run||!ride)return;
         const rangeData=getSelectedPersonalBestData(),ctx=getPowerDisplayContext(),runOrder=['1k','1 mile','5k','10k','half','marathon'],rideOrder=['5 sec','1 min','5 min','20 min','60 min'];
@@ -4133,6 +4193,7 @@
         if(status){if(!getIntervalsApiKey())status.textContent='Connect Intervals.icu to load personal records automatically.';else if(!intervalsBestRecords.lastSyncAt)status.textContent='connected · personal-best sync pending';else status.textContent=`${rangeLabel} records synced ${new Date(intervalsBestRecords.lastSyncAt).toLocaleString()}${ctx.unit==='W/kg'?(ctx.kg?' · W/kg uses your latest logged bodyweight':' · log bodyweight in Recovery to use W/kg'):''}`;}
         document.querySelectorAll('#pbRangeTabs .sort-btn').forEach(b=>b.classList.toggle('active',b.dataset.pbRange===personalBestRange));document.querySelectorAll('#powerUnitToggle .power-unit-btn').forEach(b=>b.classList.toggle('active',b.dataset.powerUnit===powerDisplayUnit));
         renderPowerDurationCurve(rangeData);
+        renderRunPaceDurationCurve(rangeData);
         renderAchievementFeed(awardIndex);
       }
       function fmtHrRange(vals){vals=vals.filter(v=>Number.isFinite(v));if(!vals.length)return '—';const lo=Math.round(Math.min(...vals)),hi=Math.round(Math.max(...vals));return lo===hi?`${lo}`:`${lo}–${hi}`;}
@@ -4158,11 +4219,19 @@
       }
       function renderDecouplingChart(rows){
         const el=document.getElementById('decouplingChart');if(!el)return;const points=rows.slice().sort((a,b)=>String(a.start_date_local).localeCompare(String(b.start_date_local))).slice(-28).map(a=>({a,value:Number(a.decoupling)})).filter(p=>Number.isFinite(p.value));if(points.length<3){el.innerHTML='<div class="activity-analysis-empty">At least three activities with decoupling are needed.</div>';return;}const W=360,H=185,L=34,R=12,T=10,B=27,min=Math.min(-5,...points.map(p=>p.value)),max=Math.max(10,...points.map(p=>p.value)),x=i=>L+(i/Math.max(1,points.length-1))*(W-L-R),y=v=>T+(max-v)/(max-min)*(H-T-B),path=points.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(' '),zero=y(0);el.innerHTML=`<svg class="activity-analysis-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Heart-rate decoupling across recent activities"><line class="activity-analysis-axis" x1="${L}" x2="${W-R}" y1="${zero}" y2="${zero}"></line><path class="activity-analysis-line" d="${path}"></path>${points.map((p,i)=>`<circle class="activity-analysis-dot ${i===points.length-1?'latest':''}" cx="${x(i)}" cy="${y(p.value)}" r="${i===points.length-1?4:3}"><title>${escapeHtml(String(p.a.start_date_local||'').slice(0,10))} · ${p.value.toFixed(1)}%</title></circle>`).join('')}<text class="activity-analysis-label" x="${L-4}" y="${y(max)+3}" text-anchor="end">${max.toFixed(0)}%</text><text class="activity-analysis-label" x="${L-4}" y="${zero+3}" text-anchor="end">0%</text><text class="activity-analysis-label" x="${W-R}" y="${H-8}" text-anchor="end">oldest → newest</text></svg>`;}
+      function renderRunningProgress(rows){
+        const el=document.getElementById('runningProgressChart'),subtitle=document.getElementById('runningProgressSubtitle');if(!el)return;const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate()),dow=today.getDay(),thisMonday=new Date(today);thisMonday.setDate(today.getDate()-(dow===0?6:dow-1));
+        const weeks=Array.from({length:8},(_,i)=>{const start=new Date(thisMonday);start.setDate(start.getDate()-(7-i)*7);const end=new Date(start);end.setDate(end.getDate()+7);return{start,end,km:0,eff:[],count:0};});
+        rows.forEach(a=>{const d=new Date(String(a.start_date_local||'').slice(0,10)+'T12:00:00'),w=weeks.find(x=>d>=x.start&&d<x.end);if(!w)return;w.km+=(Number(a.distance)||0)/1000;w.count++;if(a.average_heartrate>0&&a.distance>0&&a.moving_time>0)w.eff.push((a.distance/a.moving_time)/a.average_heartrate);});
+        if(!weeks.some(w=>w.km>0)){el.innerHTML='<div class="activity-analysis-empty">No runs with usable distance in the last eight weeks.</div>';return;}const W=720,H=190,L=38,R=18,T=12,B=30,plotW=W-L-R,slot=plotW/weeks.length,barW=Math.min(44,slot*.56),maxKm=Math.max(1,...weeks.map(w=>w.km))*1.12,yKm=v=>H-B-v/maxKm*(H-T-B),effRows=weeks.map((w,i)=>({i,value:medianNumber(w.eff)})).filter(x=>x.value!=null),effMin=effRows.length?Math.min(...effRows.map(x=>x.value))*.98:0,effMax=effRows.length?Math.max(...effRows.map(x=>x.value))*1.02:1,yEff=v=>T+(effMax-v)/Math.max(.000001,effMax-effMin)*(H-T-B),x=i=>L+slot*i+slot/2,path=effRows.map((p,i)=>`${i?'L':'M'}${x(p.i).toFixed(1)},${yEff(p.value).toFixed(1)}`).join(' '),fmtWeek=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+        el.innerHTML=`<svg class="activity-analysis-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Eight weeks of running distance and heart-rate efficiency"><line class="activity-analysis-axis" x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}"></line>${weeks.map((w,i)=>`<rect x="${x(i)-barW/2}" y="${yKm(w.km)}" width="${barW}" height="${Math.max(1,H-B-yKm(w.km))}" rx="3" style="fill:var(--main-color);opacity:${w.km?'.38':'.08'}"><title>${fmtWeek(w.start)} · ${w.km.toFixed(1)} km · ${w.count} run${w.count===1?'':'s'}</title></rect><text class="activity-analysis-label" x="${x(i)}" y="${H-8}" text-anchor="middle">${fmtWeek(w.start)}</text>`).join('')}${effRows.length>1?`<path class="run-curve-path" d="${path}"></path>${effRows.map(p=>`<circle cx="${x(p.i)}" cy="${yEff(p.value)}" r="3.5" style="fill:var(--sub-color)"><title>${fmtWeek(weeks[p.i].start)} · pace/HR efficiency ${p.value.toFixed(4)}</title></circle>`).join('')}`:''}<text class="activity-analysis-label" x="${L-5}" y="${T+3}" text-anchor="end">${maxKm.toFixed(0)}km</text><text class="activity-analysis-label" x="${L-5}" y="${H-B+3}" text-anchor="end">0</text></svg>`;
+        if(subtitle){const split=Math.max(1,Math.floor(effRows.length/2)),early=medianNumber(effRows.slice(0,split).map(x=>x.value)),late=medianNumber(effRows.slice(split).map(x=>x.value));subtitle.textContent=effRows.length>=2&&early&&late?`Weekly distance bars · pace-per-heartbeat line ${late>=early?'+':''}${((late-early)/early*100).toFixed(1)}% from earlier to recent available weeks. Compare similar terrain and conditions.`:'Weekly distance bars · add HR to more runs and weeks to establish the pace-per-heartbeat trend.';}
+      }
       function renderActivityAnalysis(){
         const cardio=importedActivities.filter(a=>activitySportGroup(a)!=='other'),runs=cardio.filter(a=>activitySportGroup(a)==='run'&&a.distance>0&&a.moving_time>0&&a.average_heartrate>0),rides=cardio.filter(a=>activitySportGroup(a)==='ride'&&a.average_watts>0&&a.average_heartrate>0),drift=cardio.filter(a=>Number.isFinite(a.decoupling));
         const runEfficiency=a=>(a.distance/a.moving_time)/a.average_heartrate,rideEfficiency=a=>a.average_watts/a.average_heartrate,runCmp=getAdaptationComparison(runs,runEfficiency),rideCmp=getAdaptationComparison(rides,rideEfficiency),driftCmp=getAdaptationComparison(drift,a=>Math.abs(a.decoupling),true);
         renderActivityScatter('runEfficiencyChart',runs,a=>a.average_heartrate,a=>a.moving_time/(a.distance/1000),{lowerYBetter:true,xLabel:'HR →',yFormat:v=>formatAwardPace(v).replace('/km',''),tooltip:p=>`${Math.round(p.x)} bpm · ${formatAwardPace(p.y)}`,empty:'Sync at least three runs with duration, distance, and average HR.',aria:'Running pace compared with average heart rate'});
-        renderActivityScatter('rideEfficiencyChart',rides,a=>a.average_heartrate,a=>a.average_watts,{xLabel:'HR →',yFormat:v=>`${Math.round(v)}W`,tooltip:p=>`${Math.round(p.x)} bpm · ${Math.round(p.y)} W`,empty:'Sync at least three rides with average power and heart rate.',aria:'Cycling average power compared with average heart rate'});renderDecouplingChart(drift);
+        renderActivityScatter('rideEfficiencyChart',rides,a=>a.average_heartrate,a=>a.average_watts,{xLabel:'HR →',yFormat:v=>`${Math.round(v)}W`,tooltip:p=>`${Math.round(p.x)} bpm · ${Math.round(p.y)} W`,empty:'Sync at least three rides with average power and heart rate.',aria:'Cycling average power compared with average heart rate'});renderDecouplingChart(drift);renderRunningProgress(runs);
         const runSub=document.getElementById('runEfficiencySubtitle'),rideSub=document.getElementById('rideEfficiencySubtitle'),driftSub=document.getElementById('decouplingSubtitle');if(runSub)runSub.textContent=runCmp.available?`${runCmp.change>=0?'+':''}${runCmp.change.toFixed(1)}% recent run efficiency across ${runCmp.count} sessions.`:`${runs.length}/6 usable runs · faster at similar HR is the useful direction.`;if(rideSub)rideSub.textContent=rideCmp.available?`${rideCmp.change>=0?'+':''}${rideCmp.change.toFixed(1)}% recent ride efficiency across ${rideCmp.count} sessions.`:`${rides.length}/6 usable rides · more power at similar HR is the useful direction.`;if(driftSub)driftSub.textContent=driftCmp.available?`${driftCmp.change>=0?'+':''}${driftCmp.change.toFixed(1)}% change toward lower absolute drift across ${driftCmp.count} sessions.`:`${drift.length}/6 usable activities · lower absolute drift is usually preferable.`;
         const summary=document.getElementById('activityAdaptationSummary');if(!summary)return;const signals=[['running',runCmp],['cycling',rideCmp]].filter(([,x])=>x.available),badge=summary.querySelector('.activity-adaptation-badge'),text=summary.querySelector('.activity-adaptation-text');if(!signals.length){badge.className='activity-adaptation-badge insufficient';badge.textContent='not enough data';text.textContent='At least three older and three recent sessions with usable HR plus pace or power are needed before Focus::Flow comments on adaptation.';return;}const improving=signals.filter(([,x])=>x.change>=3),watch=signals.filter(([,x])=>x.change<=-3),parts=signals.map(([name,x])=>`${name} ${x.change>=0?'+':''}${x.change.toFixed(1)}%`);let level='stable',label='mostly stable',message='Recent aerobic efficiency is broadly similar to the earlier half of your available sessions.';if(improving.length&&!watch.length){level='improving';label='possible adaptation';message='Recent activity-level efficiency is moving in a positive direction.';}else if(watch.length&&!improving.length){level='watch';label='watch trend';message='Recent activity-level efficiency is lower than the earlier comparison group; fatigue, conditions, terrain, or workout type may explain it.';}else if(improving.length&&watch.length){message='Running and cycling are moving in different directions, so the adaptation signal is mixed.';}badge.className=`activity-adaptation-badge ${level}`;badge.textContent=label;text.textContent=`${message} ${parts.join(' · ')}. Treat this as a pattern worth watching, not proof by itself.`;
       }
@@ -4206,6 +4275,27 @@
           if(!opts.silent)showToast(`Intervals.icu sync failed — ${msg.includes('Failed to fetch')?'browser/network blocked the direct connection':msg}`);return false;
         }finally{intervalsSyncInFlight=false;}
       }
+      async function rebuildIntervalsHistory(){
+        if(!getIntervalsApiKey()){showToast('connect Intervals.icu first');return;}
+        const keepManual=()=>{
+          importedActivities=importedActivities.filter(a=>String(a?.source||'').toLowerCase()==='manual entry');
+          setIntervalsHistoryBackfillAt('');intervalsLastSyncAt=null;saveData();renderActivitiesPanel();
+          syncIntervalsActivities({full:true});
+        };
+        showConfirm('Rebuild imported history now? Synced copies will be cleared and fetched again from Intervals.icu. Manual entries stay. Use this once after you replace a Strava route with original files or a direct device source.',keepManual,'rebuild');
+      }
+      function addManualActivity(){
+        const name=document.getElementById('manualActivityName')?.value.trim(),date=document.getElementById('manualActivityDate')?.value||getToday(),type=document.getElementById('manualActivityType')?.value||'Other',minutes=Number(document.getElementById('manualActivityDuration')?.value),distanceKm=Number(document.getElementById('manualActivityDistance')?.value)||0,avgHr=Number(document.getElementById('manualActivityHr')?.value)||null,enteredLoad=Number(document.getElementById('manualActivityLoad')?.value),rpeValue=document.getElementById('manualActivityRpe')?.value,rpe=rpeValue?Number(rpeValue):null;
+        if(!name){showToast('give the activity a short name');return;}if(!Number.isFinite(minutes)||minutes<=0){showToast('add the activity duration');return;}
+        const sessionRpeAu=rpe?Math.round(minutes*rpe):null,estimatedFromRpe=!(enteredLoad>0)&&sessionRpeAu!=null,trainingLoad=enteredLoad>0?Math.round(enteredLoad*10)/10:estimatedFromRpe?Math.round(sessionRpeAu/10*10)/10:null;
+        if(trainingLoad==null){showToast('add training load or a session RPE');return;}
+        const row={id:`manual-${generateId()}`,name,type,start_date_local:`${date}T12:00:00`,distance:Math.max(0,distanceKm)*1000,moving_time:Math.round(minutes*60),elapsed_time:Math.round(minutes*60),elevation:0,average_speed:distanceKm>0?distanceKm*1000/(minutes*60):0,average_heartrate:avgHr&&avgHr>=30&&avgHr<=240?Math.round(avgHr):null,max_heartrate:null,has_heartrate:!!avgHr,average_watts:null,weighted_watts:null,training_load:trainingLoad,intensity:null,efficiency:null,decoupling:null,cadence:null,session_rpe:rpe,session_rpe_au:sessionRpeAu,load_estimated_from_rpe:estimatedFromRpe,source:'manual entry',stream_types:[],hr_zone_times:[]};
+        mergeImportedActivities([row]);['manualActivityName','manualActivityDuration','manualActivityDistance','manualActivityHr','manualActivityLoad'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});const rpeEl=document.getElementById('manualActivityRpe');if(rpeEl)rpeEl.value='';saveData();renderActivitiesPanel();renderRecoveryTab();showToast(estimatedFromRpe?`activity added · app load ${trainingLoad} from ${sessionRpeAu} session-RPE AU`:'activity added to history and Recovery');
+      }
+      function removeManualActivity(id){
+        const activity=importedActivities.find(a=>String(a.id)===String(id));if(!activity||String(activity.source).toLowerCase()!=='manual entry')return;
+        showConfirm(`Delete manual activity “${activity.name}”?`,()=>{importedActivities=importedActivities.filter(a=>String(a.id)!==String(id));delete sessionResponses[String(id)];saveData();renderActivitiesPanel();renderRecoveryTab();showToast('manual activity removed');});
+      }
       function renderActivityTrendSummary(){
         const el=document.getElementById('activityTrendSummary');if(!el)return;
         const recent=importedActivities.slice(0,16);if(recent.length<2){el.innerHTML='';return;}
@@ -4230,17 +4320,18 @@
       function isStravaSourcedActivity(a){return /strava/i.test(String(a?.source||''));}
       function activityHasSourceGap(a){return !(Number(a?.moving_time)>0)||(a?.has_heartrate&&!(Number(a?.average_heartrate)>0));}
       function renderActivityDetail(a){
-        const stats=[],add=(label,value)=>{if(value!=null&&value!==''&&value!=='—')stats.push({label,value});};add('sport',a.type);add('duration',formatActivityDuration(a.moving_time));if(a.elapsed_time>0)add('elapsed',formatActivityDuration(a.elapsed_time));if(a.distance>0)add('distance',`${(a.distance/1000).toFixed(2)} km`);if(/run/i.test(a.type)){add('average pace',formatRunPace(a));}else if(a.average_speed>0)add('average speed',`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate>0)add('average HR',`${Math.round(a.average_heartrate)} bpm`);if(a.max_heartrate>0)add('maximum HR',`${Math.round(a.max_heartrate)} bpm`);if(a.average_watts>0)add('average power',`${Math.round(a.average_watts)} W`);if(a.weighted_watts>0)add('normalized power',`${Math.round(a.weighted_watts)} W`);if(a.training_load!=null)add('training load',Math.round(a.training_load));if(a.intensity!=null)add('intensity',`${Math.round(a.intensity)}%`);if(a.efficiency!=null)add('efficiency factor',Number(a.efficiency).toFixed(2));if(a.decoupling!=null)add('HR decoupling',`${Number(a.decoupling).toFixed(1)}%`);if(a.cadence!=null)add('average cadence',Math.round(a.cadence));if(a.elevation>0)add('elevation gain',`${Math.round(a.elevation)} m`);if(a.session_rpe!=null)add('session RPE',`${Math.round(a.session_rpe)}/10`);if(a.source)add('original source',a.source);
+        const stats=[],add=(label,value)=>{if(value!=null&&value!==''&&value!=='—')stats.push({label,value});};add('sport',a.type);add('duration',formatActivityDuration(a.moving_time));if(a.elapsed_time>0)add('elapsed',formatActivityDuration(a.elapsed_time));if(a.distance>0)add('distance',`${(a.distance/1000).toFixed(2)} km`);if(/run/i.test(a.type)){add('average pace',formatRunPace(a));}else if(a.average_speed>0)add('average speed',`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate>0)add('average HR',`${Math.round(a.average_heartrate)} bpm`);if(a.max_heartrate>0)add('maximum HR',`${Math.round(a.max_heartrate)} bpm`);if(a.average_watts>0)add('average power',`${Math.round(a.average_watts)} W`);if(a.weighted_watts>0)add('normalized power',`${Math.round(a.weighted_watts)} W`);if(a.training_load!=null)add(a.load_estimated_from_rpe?'Focus::Flow load estimate':'training load',Math.round(a.training_load));if(a.session_rpe_au!=null)add('session-RPE load',`${Math.round(a.session_rpe_au)} AU`);if(a.intensity!=null)add('intensity',`${Math.round(a.intensity)}%`);if(a.efficiency!=null)add('efficiency factor',Number(a.efficiency).toFixed(2));if(a.decoupling!=null)add('HR decoupling',`${Number(a.decoupling).toFixed(1)}%`);if(a.cadence!=null)add('average cadence',Math.round(a.cadence));if(a.elevation>0)add('elevation gain',`${Math.round(a.elevation)} m`);if(a.session_rpe!=null)add('session RPE',`${Math.round(a.session_rpe)}/10`);if(a.source)add('original source',a.source);
         const zones=Array.isArray(a.hr_zone_times)?a.hr_zone_times.map(Number).filter(x=>x>=0):[],total=zones.reduce((x,y)=>x+y,0),zoneBar=total?`<div class="activity-detail-zones" title="HR-zone time: ${zones.map((s,i)=>`Z${i+1} ${Math.round(s/60)}m`).join(' · ')}">${zones.map((s,i)=>`<span class="activity-detail-zone" style="width:${(s/total*100).toFixed(2)}%;opacity:${Math.min(1,.38+i*.13)}"></span>`).join('')}</div>`:'';return `<details class="activity-detail"><summary>view full activity summary</summary><div class="activity-detail-body">${stats.map(s=>`<div class="activity-detail-stat"><div class="activity-detail-value">${escapeHtml(s.value)}</div><div class="activity-detail-label">${escapeHtml(s.label)}</div></div>`).join('')}${zoneBar}</div></details>`;
       }
       function renderActivityRow(a,awards=[]){
         const metrics=[];metrics.push(formatActivityDuration(a.moving_time));if(a.distance)metrics.push(`${(a.distance/1000).toFixed(a.distance>=10000?1:2)} km`);if(/run/i.test(a.type)){const pace=formatRunPace(a);if(pace)metrics.push(pace);}else if(a.average_speed)metrics.push(`${(a.average_speed*3.6).toFixed(1)} km/h`);if(a.average_heartrate!=null)metrics.push(`HR ${Math.round(a.average_heartrate)} avg`);if(a.max_heartrate!=null)metrics.push(`${Math.round(a.max_heartrate)} max`);if(a.average_watts!=null)metrics.push(`${Math.round(a.average_watts)} W avg`);if(a.weighted_watts!=null)metrics.push(`${Math.round(a.weighted_watts)} W NP`);if(a.training_load!=null)metrics.push(`load ${Math.round(a.training_load)}`);if(a.session_rpe!=null)metrics.push(`RPE ${Math.round(a.session_rpe)}/10`);if(a.decoupling!=null)metrics.push(`decouple ${a.decoupling.toFixed(1)}%`);
-        const sourceWarning=isStravaSourcedActivity(a)&&activityHasSourceGap(a)?'<div class="activity-source-warning">Some summary fields are missing on this Strava-sourced activity. Focus::Flow can only use the fields Intervals is permitted to forward.</div>':'';return `<div class="activity-row"><div class="activity-row-head" role="button" tabindex="0" aria-label="Open details for ${escapeHtml(a.name)}"><div><div class="activity-row-name">${escapeHtml(a.name)}</div><div class="activity-source">${escapeHtml(a.type)}${a.source?' · '+escapeHtml(a.source):''}</div></div><div><div class="activity-row-date">${a.start_date_local?new Date(a.start_date_local).toLocaleDateString(undefined,{month:'short',day:'numeric'}):''}</div><div class="activity-source" style="text-align:right;">details</div></div></div><div class="activity-metrics">${metrics.map(m=>`<span class="activity-metric">${escapeHtml(m)}</span>`).join('')}</div>${renderActivityAwards(awards)}${sourceWarning}${renderActivityDetail(a)}${renderActivityResponse(a)}</div>`;
+        const sourceWarning=isStravaSourcedActivity(a)&&activityHasSourceGap(a)?'<div class="activity-source-warning">Some summary fields are missing on this Strava-sourced activity. Focus::Flow can only use the fields Intervals is permitted to forward.</div>':'',manualDelete=String(a.source||'').toLowerCase()==='manual entry'?`<button class="btn small activity-manual-delete" data-manual-activity-id="${encodeURIComponent(String(a.id))}">delete manual entry</button>`:'';return `<div class="activity-row"><div class="activity-row-head" role="button" tabindex="0" aria-label="Open details for ${escapeHtml(a.name)}"><div><div class="activity-row-name">${escapeHtml(a.name)}</div><div class="activity-source">${escapeHtml(a.type)}${a.source?' · '+escapeHtml(a.source):''}</div></div><div><div class="activity-row-date">${a.start_date_local?new Date(a.start_date_local).toLocaleDateString(undefined,{month:'short',day:'numeric'}):''}</div><div class="activity-source" style="text-align:right;">details</div></div></div><div class="activity-metrics">${metrics.map(m=>`<span class="activity-metric">${escapeHtml(m)}</span>`).join('')}</div>${renderActivityAwards(awards)}${sourceWarning}${renderActivityDetail(a)}${renderActivityResponse(a)}${manualDelete}</div>`;
       }
       function bindActivityResponseControls(list){
         list.querySelectorAll('.activity-row-head').forEach(head=>{const toggle=()=>{const details=head.closest('.activity-row')?.querySelector('.activity-detail');if(details)details.open=!details.open;};head.addEventListener('click',toggle);head.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});});
         list.querySelectorAll('.activity-response-toggle').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`);if(form)form.classList.toggle('open');}));
         list.querySelectorAll('.activity-response-save').forEach(btn=>btn.addEventListener('click',()=>{const form=list.querySelector(`[data-response-form="${btn.dataset.responseId}"]`),id=decodeURIComponent(btn.dataset.responseId);if(!form)return;const activity=importedActivities.find(a=>String(a.id)===id),activityDate=String(activity?.start_date_local||'').slice(0,10),value=f=>form.querySelector(`[data-field="${f}"]`)?.value||'',previous=sessionResponses[id]||{};let predictedLevel=previous.predictedLevel||trainingCallSnapshots[activityDate]?.level||'';if(!predictedLevel&&activityDate){try{predictedLevel=getTrainingCallData(activityDate).level;}catch(e){}}sessionResponses[id]={...previous,activityId:id,activityDate,activityType:activity?.type||'',predictedLevel,feel:value('feel'),physiology:value('physiology'),outcome:value('outcome'),reason:value('reason'),mismatchReason:value('mismatchReason'),updatedAt:new Date().toISOString()};saveData();renderActivitiesPanel();updateTrainingCallCard();renderDeloadWatch();renderTrainingOutlook();showToast('session response saved');}));
+        list.querySelectorAll('.activity-manual-delete').forEach(btn=>btn.addEventListener('click',()=>removeManualActivity(decodeURIComponent(btn.dataset.manualActivityId))));
       }
       function renderActivityCoverage(){
         const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;},rows=importedActivities.filter(a=>a?.start_date_local),count=importedActivities.length,durationCount=importedActivities.filter(a=>Number(a.moving_time)>0).length,hrCount=importedActivities.filter(a=>Number(a.average_heartrate)>0||Number(a.max_heartrate)>0).length,runs=importedActivities.filter(a=>/run/i.test(a.type)).length;
@@ -4262,7 +4353,10 @@
         document.getElementById('intervalsConnectBtn')?.addEventListener('click',async()=>{const input=document.getElementById('intervalsApiKeyInput'),key=input?.value.trim();if(!key){showToast('paste your Intervals.icu API key first');return;}setIntervalsApiKey(key);if(input)input.value='';renderActivitiesPanel();const ok=await syncIntervalsActivities();if(!ok){setIntervalsApiKey('');renderActivitiesPanel();}});
         document.getElementById('intervalsSyncBtn')?.addEventListener('click',()=>syncIntervalsActivities());
         document.getElementById('intervalsFullSyncBtn')?.addEventListener('click',()=>syncIntervalsActivities({full:true}));
+        document.getElementById('intervalsRebuildBtn')?.addEventListener('click',rebuildIntervalsHistory);
         document.getElementById('intervalsDisconnectBtn')?.addEventListener('click',()=>{setIntervalsApiKey('');renderActivitiesPanel();showToast('Intervals.icu disconnected — imported history stays in Focus::Flow');});
+        document.getElementById('manualActivityAddBtn')?.addEventListener('click',addManualActivity);
+        const manualDate=document.getElementById('manualActivityDate');if(manualDate&&!manualDate.value)manualDate.value=getToday();
         document.getElementById('pbRangeTabs')?.addEventListener('click',e=>{const btn=e.target.closest('[data-pb-range]');if(!btn)return;personalBestRange=btn.dataset.pbRange;renderPersonalBests();});
         document.getElementById('powerUnitToggle')?.addEventListener('click',e=>{const btn=e.target.closest('[data-power-unit]');if(!btn)return;if(btn.dataset.powerUnit==='wkg'&&!getMostRecentBodyweight()){showToast('log bodyweight in Recovery first — W/kg needs your weight');return;}powerDisplayUnit=btn.dataset.powerUnit;renderPersonalBests();});
         renderActivitiesPanel();
@@ -4331,7 +4425,7 @@
           ['#panel-recovery .recovery-daily-summary h2','A compact summary of readiness, labour stress, body fatigue, primary training, and whether lifting fits.'],
           ['#panel-recovery .training-call-card h2','The call is conservative: a caution signal can pull the recommendation easier instead of being averaged away by better signals.'],
           ['#panel-recovery .recovery-entry-card h2','Enter only what you actually have. Saving updates fields you touched and leaves untouched fields alone.'],
-          ['#panel-recovery .recovery-snapshot-card h2','Freshness is an app heuristic from available HRV, recovery %, sleep score, load ratio, and how you feel. It is not a medical score.'],
+          ['#panel-recovery .recovery-snapshot-card h2','Freshness is an app heuristic from available HRV, recovery %, sleep, how you feel, and systemic fatigue. Training load is shown separately and is not scored as recovery.'],
           ['#panel-recovery .recovery-load-card h2','Load ratio compares your 7-day average workout load with your 28-day average. It is used as one signal, not the whole training decision.'],
           ['#panel-recovery .recovery-sleep-card h2','Sleep debt is accumulated shortfall versus your target; consistency reflects variation in sleep start/end times.'],
           ['#panel-recovery .recovery-trend-card h2','Switch metrics to see how freshness, feel, fatigue, HRV, load, sleep/recovery, and load ratio change over time.'],
@@ -4846,7 +4940,7 @@ function updateNotificationSettingUI(){
         return{...values,max,avg,status};
       }
       const RECOVERY_STATUS_PENALTY={green:0,yellow:1,red:2.2};
-      const RECOVERY_FLAG_WEIGHTS={hrv:1,recovery:1,sleep:1,acwr:1,rpe:1.5,systemicFatigue:1.5};
+      const RECOVERY_FLAG_WEIGHTS={hrv:1,recovery:1,sleep:1,rpe:1.5,systemicFatigue:1.5};
       function getFreshnessData(referenceDateStr){
         const rec=biometrics[referenceDateStr]||{};
         const hrvStatus=getHrvStatus(referenceDateStr);
@@ -4862,7 +4956,8 @@ function updateNotificationSettingUI(){
         const rpeStatus=getRpeStatus(rec.rpe);
         const systemicFatigue=clampFatigueValue(rec.systemicFatigue);
         const systemicFatigueStatus=systemicFatigue==null?null:(systemicFatigue>=8?'red':systemicFatigue>=6?'yellow':'green');
-        const flags={hrv:hrvStatus,recovery:recoveryStatus,sleep:sleepStatus,acwr:acwrStatus,rpe:rpeStatus,systemicFatigue:systemicFatigueStatus};
+        // Load ratio stays visible as training context, but is not scored as a recovery signal: the ratio has not been validated as a safe-zone or injury predictor.
+        const flags={hrv:hrvStatus,recovery:recoveryStatus,sleep:sleepStatus,rpe:rpeStatus,systemicFatigue:systemicFatigueStatus};
         const known=Object.entries(flags).filter(([k,v])=>v!=null);
         if(known.length<2)return{score:null,label:'not enough data yet',hrvStatus,recoveryStatus,sleepStatus,acwrStatus,acwrInfo,rpeStatus,systemicFatigueStatus,dataPoints:known.length};
         const totalWeight=known.reduce((sum,[k])=>sum+RECOVERY_FLAG_WEIGHTS[k],0);
@@ -5080,7 +5175,7 @@ function updateNotificationSettingUI(){
         else if(freshness.label==='fatigued — prioritize recovery'){tier=0;reasons.push('freshness signals are showing fatigue today');}
         else if(freshness.label==='showing signs of fatigue'){tier=1;reasons.push('a few freshness signals are a bit off today');}
         else{tier=2;}
-        factors.push({label:'freshness',status:freshness.score==null?null:(freshness.label==='fatigued — prioritize recovery'?'red':freshness.label==='showing signs of fatigue'?'yellow':'green'),detail:freshness.score==null?'not enough data logged yet':`${freshness.label} (score ${freshness.score})`,explain:'your composite readiness score (0-100), built from available HRV, sleep, recovery %, load ratio, and how you feel — this is the single biggest input into today\u2019s call.'});
+        factors.push({label:'freshness',status:freshness.score==null?null:(freshness.label==='fatigued — prioritize recovery'?'red':freshness.label==='showing signs of fatigue'?'yellow':'green'),detail:freshness.score==null?'not enough data logged yet':`${freshness.label} (score ${freshness.score})`,explain:'your composite recovery heuristic (0-100), built from available HRV, sleep, recovery %, how you feel, and systemic fatigue. Training load is deliberately kept separate from this score.'});
         const todayRec=biometrics[referenceDateStr]||{};
         const healthFlag=todayRec.healthFlag||'none';
         if(healthFlag==='illness'){tier=0;reasons.push('illness is flagged today — structured training is held back regardless of an optimistic readiness score');}
@@ -5115,14 +5210,13 @@ function updateNotificationSettingUI(){
         }
         const modalityExposureCount=Object.keys(TRAINING_MODALITY_META).reduce((n,m)=>n+getTrainingModalityExposures(m).filter(x=>x.date<referenceDateStr).length,0);
         factors.push({label:'modality acclimation',status:modalityRecovery.length?'yellow':modalityExposureCount?'green':null,detail:modalityRecovery.length?`re-entry buffer: ${modalityRecovery.map(x=>`${TRAINING_MODALITY_META[x.modality].label} ${x.bufferDays-x.daysSince}d`).join(' · ')}`:'no re-entry buffer active',explain:'running, cycling, rowing, weights, and plyometrics keep separate recent-exposure histories. after a layoff, the first few sessions get a temporary same-modality recovery buffer; that buffer fades after repeated manageable exposures.'});
-        if(acwrStatus==='red'&&tier>1){tier=1;reasons.push('training load ratio is well outside its usual range');}
-        factors.push({label:'load ratio',status:acwrStatus,detail:acwrInfo?`${acwrInfo.ratio.toFixed(2)} — ${acwrStatus}`:'not enough data yet',explain:'your last 7 days of training load compared to your last 28 — green means you\u2019re not ramping volume up or down too fast relative to your own recent normal.'});
+        factors.push({label:'recent / base load',status:acwrStatus==='green'?'green':acwrStatus?'yellow':null,detail:acwrInfo?`${acwrInfo.ratio.toFixed(2)} — ${acwrStatus==='green'?'near recent base':acwrInfo.ratio>1?'above recent base':'below recent base'}`:'not enough data yet',explain:'describes your last 7-day average relative to your 28-day average. It is context only: Focus::Flow does not treat a fixed ratio band as a proven safe zone or injury predictor.'});
         if(consecutiveDays>=3&&tier>0){tier=tier-1;reasons.push(`${consecutiveDays} days in a row without a rest day`);}
         factors.push({label:'consecutive days',status:consecutiveDays>=3?'yellow':'green',detail:`${consecutiveDays} day${consecutiveDays===1?'':'s'} in a row`,explain:'how many days in a row you\u2019ve trained without a rest day — 3 or more in a row pulls the call toward something easier, since fatigue compounds without a break in between.'});
         const yesterday=new Date(refDate);yesterday.setDate(yesterday.getDate()-1);
         const spikeInfo=getSessionSpikeInfo(toDateStr(yesterday));
         if(spikeInfo&&spikeInfo.isSpike&&tier>0){tier=tier-1;reasons.push(`yesterday's session was ${spikeInfo.ratio.toFixed(1)}x your typical load — easing off today gives that a chance to settle`);}
-        factors.push({label:'session spike',status:spikeInfo?(spikeInfo.isSpike?'yellow':'green'):null,detail:spikeInfo?`yesterday's load ${spikeInfo.load} vs your typical session ${Math.round(spikeInfo.avgSession)} (${spikeInfo.ratio.toFixed(1)}x)`:'not enough data yet',explain:'compares yesterday\u2019s training load to your typical single session (averaged from training days over the last 28) — a session 1.5x bigger than normal counts as a spike, since a sudden jump in one day\u2019s volume is a known injury risk even when your weekly total still looks fine.'});
+        factors.push({label:'session departure',status:spikeInfo?(spikeInfo.isSpike?'yellow':'green'):null,detail:spikeInfo?`yesterday's load ${spikeInfo.load} vs your typical session ${Math.round(spikeInfo.avgSession)} (${spikeInfo.ratio.toFixed(1)}x)`:'not enough data yet',explain:'compares yesterday with your own recent training-day average. A large departure triggers one conservative easier-day nudge, but it is not presented as an injury prediction and the 1.5x marker is an app heuristic.'});
         const sessionAnomaly=getRecentSessionAnomaly(referenceDateStr);
         if(sessionAnomaly&&tier>1){tier=1;reasons.push(`${sessionAnomaly.daysAgo===1?'yesterday’s':'a recent'} session had an unusual cardiovascular response — monitoring it before another harder effort`);}
         factors.push({label:'cardiovascular response',status:sessionAnomaly?'yellow':null,detail:sessionAnomaly?`${sessionAnomaly.physiology==='high'?'unusually high':'unusually low'} HR · ${sessionAnomaly.outcome==='stopped'?'stopped early':sessionAnomaly.outcome||'outcome not logged'}`:'no recent anomaly reported',explain:'keeps how the session felt separate from what your cardiovascular system did. one reported anomaly can hold back harder training briefly, but it does not force a rest day or diagnose a cause.'});
@@ -5145,7 +5239,7 @@ function updateNotificationSettingUI(){
             const daysSinceExceptional=getDaysSinceLastExceptionalEffort(referenceDateStr);
             const exceptionalClear=daysSinceExceptional>=7;
             factors.push({label:'how you feel',status:feelStatus,detail:feelStatus==null?'not logged today':`${rec.rpe}/10`,explain:'your self-rated readiness for today specifically — this carries extra weight for the test suggestion, since a max effort deserves a gut-check beyond what the numbers alone say.'});
-            factors.push({label:'load stability (3d)',status:acuteStable?'green':'yellow',detail:acuteStable?'steady':'not steady yet',explain:'whether your load ratio has stayed in the green zone for the last 3 days — a test only gets suggested if your recent training has actually been stable, not just today.'});
+            factors.push({label:'load stability (3d)',status:acuteStable?'green':'yellow',detail:acuteStable?'near your recent base':'outside your recent base',explain:'a conservative app rule that asks for three days near your own recent load base before suggesting a maximal test. It is not a validated injury-safety threshold.'});
             factors.push({label:'hard-effort spacing',status:exceptionalClear?'green':'yellow',detail:daysSinceExceptional===Infinity?'no recent race/test':`${daysSinceExceptional}d since race/test`,explain:'a 5k test is held back for at least a week after any race or test, even if the 42-day 5k cadence itself is due.'});
             if(feelStatus==='green'&&acuteStable&&exceptionalClear){
               level='test';
@@ -5634,7 +5728,7 @@ function updateNotificationSettingUI(){
       }
       function getEstimatedCapacityData(referenceDateStr){
         const freshness=getFreshnessData(referenceDateStr),rec=biometrics[referenceDateStr]||{};
-        if(freshness.score==null)return{score:null,status:'waiting for enough morning recovery data',rows:[]};
+        if(freshness.score==null)return{score:null,status:'waiting for enough morning recovery data',rows:[],projection:'Log at least two morning recovery signals before Focus::Flow estimates today’s reserve.'};
         const energy=Number(rec.morningEnergy)||null,soreness=Number(rec.morningSoreness)||null,motivation=Number(rec.morningMotivation)||null;
         const subjectiveAdjust=(energy==null?0:(energy-3)*6)+(soreness==null?0:(3-soreness)*3)+(motivation==null?0:(motivation-3)*2);
         const start=Math.max(5,Math.min(100,Math.round(freshness.score+subjectiveAdjust)));
@@ -5647,9 +5741,12 @@ function updateNotificationSettingUI(){
         const plannedTrainingDrain={rest:0,easy:7,medium:15,test:22}[trainingCall.level]||0;
         const trainingDrain=loggedTraining?Math.min(35,Math.round(loggedTraining*.35)):plannedTrainingDrain;
         const trainingLabel=loggedTraining?'logged training':`${trainingCall.level} call allowance`;
-        const score=Math.max(0,Math.min(100,start-workDrain-trainingDrain));
+        const beforeTraining=Math.max(0,Math.min(100,start-workDrain));
+        const score=Math.max(0,Math.min(100,beforeTraining-trainingDrain));
         const status=score>=70?'good reserve':score>=45?'limited reserve':score>=25?'low reserve':'protect what remains';
-        return{score,status,rows:[
+        const callLabel={rest:'rest call',easy:'prescribed easy training',medium:'prescribed medium training',test:'prescribed test'}[trainingCall.level]||'prescribed training';
+        const projection=loggedTraining?`With today’s logged training included, estimated reserve is about ${score}/100. This is a planning heuristic, not Garmin’s physiological Body Battery.`:trainingDrain?`If you complete the ${callLabel}, estimated reserve is about ${score}/100; without that training demand it is about ${beforeTraining}/100. This is a planning heuristic, not Garmin’s physiological Body Battery.`:`Today’s ${callLabel} adds no planned training drain, leaving estimated reserve near ${score}/100. This is a planning heuristic, not Garmin’s physiological Body Battery.`;
+        return{score,status,beforeTraining,trainingDrain,loggedTraining,trainingLevel:trainingCall.level,projection,rows:[
           {label:`morning start (readiness ${freshness.score})`,value:start},
           {label:workLabel,value:-workDrain},
           {label:trainingLabel,value:-trainingDrain},
@@ -5657,14 +5754,15 @@ function updateNotificationSettingUI(){
         ]};
       }
       function updateEstimatedCapacity(){
-        const fill=document.getElementById('capacityBatteryFill'),value=document.getElementById('capacityBatteryValue'),status=document.getElementById('capacityStatus'),ledger=document.getElementById('capacityLedger');
+        const fill=document.getElementById('capacityBatteryFill'),value=document.getElementById('capacityBatteryValue'),status=document.getElementById('capacityStatus'),ledger=document.getElementById('capacityLedger'),projection=document.getElementById('capacityTrainingProjection');
         if(!fill||!value||!status||!ledger)return;
         const data=getEstimatedCapacityData(getToday());
-        if(data.score==null){fill.style.height='0';value.textContent='--';status.textContent=data.status;ledger.innerHTML='<div class="capacity-ledger-row"><span>need</span><strong>2+ recovery signals</strong></div>';return;}
+        if(data.score==null){fill.style.height='0';value.textContent='--';status.textContent=data.status;ledger.innerHTML='<div class="capacity-ledger-row"><span>need</span><strong>2+ recovery signals</strong></div>';if(projection)projection.textContent=data.projection;return;}
         fill.style.height=`${Math.max(0,data.score-5)}%`;
         fill.style.background=data.score>=70?'#5ec98a':data.score>=45?'#d4a94a':'#e05a5a';
         value.textContent=data.score;status.textContent=data.status;
         ledger.innerHTML=data.rows.map(r=>`<div class="capacity-ledger-row${r.total?' total':''}"><span>${escapeHtml(r.label)}</span><strong>${r.value>0&&!r.total&&!r.label.startsWith('morning start')?'+':''}${r.value}</strong></div>`).join('');
+        if(projection)projection.textContent=data.projection;
       }
       function setRecoverySummaryValue(id,text,status){
         const el=document.getElementById(id);if(!el)return;
@@ -5802,8 +5900,10 @@ function updateNotificationSettingUI(){
         days.forEach(d=>{const x=biometrics[d]&&biometrics[d].actualIntensity;if(x&&counts[x]!=null)counts[x]++;});
         const mix=document.getElementById('trainingLoadMix');
         if(mix){const bits=[];if(counts.easy)bits.push(`${counts.easy} easy`);if(counts.medium)bits.push(`${counts.medium} medium`);if(counts.test)bits.push(`${counts.test} test`);if(counts.race)bits.push(`${counts.race} race`);if(counts.rest)bits.push(`${counts.rest} rest`);mix.textContent=bits.length?bits.join(' · '):'no sessions logged';}
-        const work=getWorkStressData(today),workEl=document.getElementById('trainingLoadWork');
+        const work=getWorkStressData(today),workEl=document.getElementById('trainingLoadWork'),workDetail=document.getElementById('trainingLoadWorkDetail'),legend=document.getElementById('trainingLoadStripLegend');
+        if(workDetail)workDetail.style.display=trainingLoadView==='cardio'?'none':'';
         if(workEl)workEl.textContent=work.score==null?'not logged':`${work.status==='red'?'high':work.status==='yellow'?'moderate':'low'}${work.hours!=null?` · ${work.hours}h`:''}`;
+        if(legend)legend.innerHTML=trainingLoadView==='cardio'?'<span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio only · job and lifting excluded</span>':'<span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--text-color);opacity:.5;"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span>';
         const strip=document.getElementById('trainingLoadStressStrip');
         if(strip){
           strip.innerHTML='';
@@ -5823,11 +5923,11 @@ function updateNotificationSettingUI(){
               if(liftingShown){const seg=document.createElement('div');seg.className='training-load-segment lifting';seg.style.height=(Math.min(liftingShown,trainingVals[i])/trainingVals[i]*100)+'%';tb.appendChild(seg);}
             }
             const wb=document.createElement('div');wb.className='training-load-bar work';wb.style.height=(workVals[i]?Math.max(8,workVals[i]/wMax*100):4)+'%';wb.style.opacity=workVals[i]?0.78:0.12;
-            bars.appendChild(tb);bars.appendChild(wb);
+            bars.appendChild(tb);if(trainingLoadView!=='cardio')bars.appendChild(wb);
             const label=document.createElement('div');label.className='training-load-day-label';label.textContent=new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'narrow'});
             const fmtLoad=v=>v?Math.round(v*10)/10:'--';
             const sourceText=loadBreakdowns[i].sources.length?` · source: ${loadBreakdowns[i].sources.join(' + ')}`:'';
-            day.title=`${d} — total training ${fmtLoad(trainingVals[i])} (cardio / other ${fmtLoad(otherTrainingVals[i])}, lifting ${fmtLoad(liftingVals[i])})${sourceText}; work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
+            day.title=trainingLoadView==='cardio'?`${d} — cardio only ${fmtLoad(trainingVals[i])}${sourceText}; lifting and job stress excluded`:`${d} — total training ${fmtLoad(trainingVals[i])} (cardio / other ${fmtLoad(otherTrainingVals[i])}, lifting ${fmtLoad(liftingVals[i])})${sourceText}; work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
             day.appendChild(bars);day.appendChild(label);strip.appendChild(day);
           });
         }
@@ -5851,10 +5951,9 @@ function updateNotificationSettingUI(){
         barFill.style.display='block';
         barFill.style.left=Math.min(100,acwrInfo.ratio/2*100)+'%';
         barFill.style.background=status==='green'?'#5ec98a':status==='yellow'?'#d4a94a':'#e05a5a';
-        if(status==='green')caption.textContent=`${trainingLoadView==='cardio'?'cardio':'combined'} load is within your typical range; chronic load is the 28-day base.`;
-        else if(status==='red'&&acwrInfo.ratio>1.5)caption.textContent='recent workout load is well above your usual base. this often shows up as fatigue a day or two later, even if today feels fine.';
-        else if(status==='red')caption.textContent='recent workout load has dropped well below your usual base.';
-        else caption.textContent='a bit outside your typical training range.';
+        if(status==='green')caption.textContent=`${trainingLoadView==='cardio'?'cardio':'combined'} recent load is near your 28-day base. this is descriptive—not a proven safety zone.`;
+        else if(acwrInfo.ratio>1)caption.textContent='recent workout load is above your own 28-day base. use the direction alongside recovery and session response; the ratio alone does not predict injury.';
+        else caption.textContent='recent workout load is below your own 28-day base. this may reflect recovery, detraining, or simply a lighter phase.';
         const trendCaption=document.getElementById('chronicTrendCaption');
         if(trendCaption){
           const past=getACWR(toDateStr((()=>{const d=new Date();d.setDate(d.getDate()-28);return d;})()));
@@ -5871,7 +5970,7 @@ function updateNotificationSettingUI(){
           const spike=getSessionSpikeInfo(todayStr);
           if(spike&&spike.isSpike){
             warningEl.style.display='block';
-            warningEl.textContent=`today's load (${spike.load}) is ${spike.ratio.toFixed(1)}x your typical session (~${Math.round(spike.avgSession)}, your 28-day norm). loads above about 1.5x your norm are where injury risk climbs fastest — for sustainable, consistent training, single sessions that stay closer to your norm and build gradually tend to hold up better than occasional big spikes.`;
+            warningEl.textContent=`today's load (${spike.load}) is ${spike.ratio.toFixed(1)}x your typical training-day load (~${Math.round(spike.avgSession)} over 28 days). Focus::Flow marks 1.5x as a large personal departure and nudges the next day easier; this is an app heuristic, not an injury-risk prediction.`;
           }else{
             warningEl.style.display='none';
           }
@@ -6960,7 +7059,7 @@ function updateNotificationSettingUI(){
         const tc=getComputedStyle(body).getPropertyValue('--text-color').trim();
         if(recoveryChartMetric==='acwr'){
           const explainerEl=document.getElementById('recoveryMetricExplainer');
-          if(explainerEl){explainerEl.style.display='block';explainerEl.textContent='green = typical training range · amber = somewhat outside it · red = well outside it, in either direction. staying in green means keeping your recent 7-day training load within about 80-130% of your last 28-day average — the safest way is avoiding sudden jumps in volume, not staying still.';}
+          if(explainerEl){explainerEl.style.display='block';explainerEl.textContent='Near-base = the recent 7-day average is about 80–130% of the 28-day average; amber/red only show larger departures. The bands are descriptive app heuristics, not validated safety or injury-risk zones.';}
           drawAcwrDetailChart(days,ctx,w,h,tc,mc,sc);
           updateRecoveryChartNavUI(days);
           return;
@@ -7011,7 +7110,7 @@ function updateNotificationSettingUI(){
           bodyfatigue:'1 = fresh and 10 = wrecked. this chart separates systemic, legs, back, and upper-body fatigue so the app can distinguish “don\'t train hard” from “a tiny low-cost lift is still fine.”',
           hrv:series[0]&&series[0].normalRange?'every bar now uses the same visible personal baseline: green is usual, amber-to-red is progressively below usual, and teal is above usual. either direction is context, not a diagnosis; repeated trends matter more than one reading.':'once you\'ve logged about 5 days of HRV, this chart will shade your own normal range so you can compare the trend with your history, not a generic number.',
           sleep:'67+ is whoop\'s own "well recovered" cutoff for both sleep and recovery %. consistently below it usually means more sleep or lighter days, not more caffeine.',
-          acwr:'green = typical training range · amber = somewhat outside it · red = well outside it, in either direction. staying in green means keeping your recent 7-day training load within about 80-130% of your last 28-day average — the safest way is avoiding sudden jumps in volume, not staying still.'
+          acwr:'Near-base = the recent 7-day average is about 80–130% of the 28-day average; amber/red only show larger departures. The bands are descriptive app heuristics, not validated safety or injury-risk zones.'
         };
         const explainerEl=document.getElementById('recoveryMetricExplainer');
         if(explainerEl){
@@ -8417,14 +8516,17 @@ function updateNotificationSettingUI(){
       });
       document.getElementById('notepadToggleBtn').addEventListener('click',toggleNotepad);
       document.getElementById('notepadPinBtn').addEventListener('click',togglePinNotepad);
+      document.getElementById('notepadResetBtn').addEventListener('click',resetNotepadWindow);
       document.getElementById('notepadCloseBtn').addEventListener('click',closeNotepad);
-      document.getElementById('notepadTextarea').addEventListener('input',(e)=>{notepadContent=e.target.value;saveData();});
+      document.querySelectorAll('[data-note-insert]').forEach(btn=>btn.addEventListener('click',()=>insertNotepadText(btn.dataset.noteInsert)));
+      document.getElementById('notepadTextarea').addEventListener('input',(e)=>{notepadContent=e.target.value;const state=document.getElementById('notepadSaveState');if(state)state.textContent='saving…';saveData();if(state)setTimeout(()=>state.textContent='saved locally',260);});
       document.getElementById('notepadHeader').addEventListener('mousedown',(e)=>{if(e.target.tagName==='BUTTON')return;notepadDragStart(e.clientX,e.clientY);e.preventDefault();});
       document.getElementById('notepadHeader').addEventListener('touchstart',(e)=>{if(e.target.tagName==='BUTTON')return;const t=e.touches[0];notepadDragStart(t.clientX,t.clientY);},{passive:true});
       document.addEventListener('mousemove',(e)=>notepadDragMove(e.clientX,e.clientY));
       document.addEventListener('touchmove',(e)=>{if(notepadDragging){const t=e.touches[0];notepadDragMove(t.clientX,t.clientY);}},{passive:true});
       document.addEventListener('mouseup',notepadDragEnd);
       document.addEventListener('touchend',notepadDragEnd);
+      if('ResizeObserver' in window){let noteResizeTimer=null;new ResizeObserver(entries=>{if(isMobileLayout())return;const width=Math.round(entries[0]?.contentRect.width||0);if(width>=240&&Math.abs(width-notepadWidth)>2){notepadWidth=width;clearTimeout(noteResizeTimer);noteResizeTimer=setTimeout(saveData,260);}}).observe(document.getElementById('notepadPopover'));}
       let notepadOutsideDown=false;
       document.addEventListener('mousedown',(e)=>{
         const pop=document.getElementById('notepadPopover'),btn=document.getElementById('notepadToggleBtn');
