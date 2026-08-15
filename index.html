@@ -1761,6 +1761,7 @@
     [data-view-mode="mobile"] .books-grid { grid-template-columns:minmax(0,1fr); }
     [data-view-mode="mobile"] .recovery-card { padding:.9rem; }
     [data-view-mode="mobile"] .recovery-daily-summary-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    [data-view-mode="mobile"] #summaryLifting { white-space:normal; overflow:visible; text-overflow:clip; line-height:1.35; }
     [data-view-mode="mobile"] .recovery-summary-stat { min-width:0; padding:.55rem; }
     [data-view-mode="mobile"] .training-call-row { flex-direction:column; align-items:stretch; gap:.75rem; }
     [data-view-mode="mobile"] .training-call-badge { align-self:flex-start; min-width:72px; min-height:72px; }
@@ -2494,6 +2495,33 @@
     .money-account-opening { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:.65rem; color:var(--text-color); font-size:.52rem; opacity:.72; }
     .money-account-opening input { width:132px!important; min-width:0; margin:0!important; opacity:1; }
     .money-account-balance.debt { color:#d4a94a; }
+    .money-account-details { grid-column:1/-1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.45rem; padding-top:.48rem; border-top:1px solid var(--border-color); }
+    .money-account-details label { display:grid; gap:.22rem; color:var(--text-color); opacity:.72; font-size:.49rem; line-height:1.35; }
+    .money-account-details input,.money-account-details select { width:100%!important; min-width:0; margin:0!important; opacity:1; }
+    .money-account-toggle { min-height:36px; display:flex!important; grid-template-columns:none!important; flex-direction:row!important; align-items:center; gap:.42rem!important; padding:.35rem .48rem; border:1px solid var(--border-color); border-radius:.55rem; }
+    .money-account-toggle input { width:auto!important; margin:0!important; accent-color:var(--main-color); }
+    .money-priority-card { border-color:color-mix(in srgb,var(--main-color) 40%,var(--border-color)); background:linear-gradient(145deg,color-mix(in srgb,var(--bg-color) 95%,var(--main-color) 5%),var(--sub-alt-color)); }
+    .money-priority-hero { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.75rem; align-items:start; margin:.65rem 0 .8rem; padding:.78rem; border:1px solid var(--border-color); border-radius:.78rem; background:color-mix(in srgb,var(--bg-color) 94%,var(--main-color) 6%); }
+    .money-priority-badge { display:inline-flex; align-items:center; min-height:25px; padding:.22rem .48rem; border:1px solid currentColor; border-radius:999px; color:var(--main-color); font:.7rem 'JetBrains Mono',monospace; white-space:nowrap; }
+    .money-priority-badge.caution { color:#d4a94a; }
+    .money-priority-badge.stop { color:var(--error-color); }
+    .money-priority-action { color:var(--text-color); font-size:.78rem; font-weight:760; line-height:1.35; }
+    .money-priority-reason { margin-top:.25rem; color:var(--text-color); opacity:.62; font-size:.56rem; line-height:1.52; }
+    .money-priority-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.46rem; }
+    .money-priority-stat { min-width:0; padding:.62rem; border:1px solid var(--border-color); border-radius:.65rem; }
+    .money-priority-stat span { display:block; color:var(--text-color); opacity:.48; font-size:.47rem; line-height:1.3; text-transform:uppercase; letter-spacing:.05em; }
+    .money-priority-stat strong { display:block; margin-top:.25rem; color:var(--text-color); font:.72rem 'JetBrains Mono',monospace; line-height:1.3; overflow-wrap:anywhere; }
+    .money-priority-controls { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.48rem; margin-top:.7rem; }
+    .money-priority-controls label { color:var(--text-color); font-size:.51rem; line-height:1.35; }
+    .money-priority-controls small { display:block; margin-top:.18rem; opacity:.45; font-size:.45rem; line-height:1.35; }
+    .money-priority-steps { display:grid; gap:.38rem; margin-top:.7rem; }
+    .money-priority-step { display:grid; grid-template-columns:26px minmax(0,1fr) auto; gap:.52rem; align-items:center; padding:.52rem .58rem; border:1px solid var(--border-color); border-radius:.62rem; color:var(--text-color); opacity:.52; }
+    .money-priority-step.active { opacity:1; border-color:var(--main-color); background:color-mix(in srgb,var(--bg-color) 91%,var(--main-color) 9%); }
+    .money-priority-step.done { opacity:.38; }
+    .money-priority-step-index { width:24px; height:24px; display:grid; place-items:center; border:1px solid currentColor; border-radius:50%; font:.55rem 'JetBrains Mono',monospace; }
+    .money-priority-step strong { display:block; font-size:.58rem; line-height:1.35; }
+    .money-priority-step span { display:block; margin-top:.1rem; font-size:.48rem; line-height:1.4; opacity:.58; }
+    .money-priority-step em { font:normal .51rem 'JetBrains Mono',monospace; white-space:nowrap; }
     .money-account-edit { display:grid; grid-template-columns:1fr 1fr auto; gap:.38rem; margin-top:.6rem; }
     .money-category-list { display:grid; gap:.38rem; margin-top:.65rem; }
     .money-category-row { display:grid; grid-template-columns:100px minmax(0,1fr) auto; gap:.5rem; align-items:center; color:var(--text-color); font-size:.55rem; }
@@ -2510,8 +2538,8 @@
     .money-ledger-delete { width:28px; height:28px; border:1px solid transparent; border-radius:.45rem; background:transparent; color:var(--text-color); opacity:.4; cursor:pointer; }
     .money-ledger-delete:hover { opacity:1; color:var(--error-color); border-color:var(--border-color); }
     .money-empty { padding:.85rem; border:1px dashed var(--border-color); border-radius:.68rem; color:var(--text-color); opacity:.5; font-size:.58rem; line-height:1.5; text-align:center; }
-    @media(max-width:900px){.money-grid-v147{grid-template-columns:1fr}.money-wide{grid-column:auto}.money-summary-grid.v147{grid-template-columns:1fr 1fr}.money-entry-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:520px){.money-entry-grid{grid-template-columns:1fr}.money-entry-grid .wide{grid-column:auto}.money-account-row{grid-template-columns:minmax(0,1fr) auto}.money-account-row .money-ledger-delete{grid-column:2}.money-account-edit{grid-template-columns:1fr}.money-ledger-row{grid-template-columns:60px minmax(0,1fr) auto}.money-ledger-delete{grid-column:3}.money-summary-grid.v147{grid-template-columns:1fr 1fr}}
+    @media(max-width:900px){.money-grid-v147{grid-template-columns:1fr}.money-wide{grid-column:auto}.money-summary-grid.v147{grid-template-columns:1fr 1fr}.money-entry-grid{grid-template-columns:1fr 1fr}.money-priority-stats,.money-priority-controls{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.money-entry-grid{grid-template-columns:1fr}.money-entry-grid .wide{grid-column:auto}.money-account-row{grid-template-columns:minmax(0,1fr) auto}.money-account-row .money-ledger-delete{grid-column:2}.money-account-edit{grid-template-columns:1fr}.money-ledger-row{grid-template-columns:60px minmax(0,1fr) auto}.money-ledger-delete{grid-column:3}.money-summary-grid.v147{grid-template-columns:1fr 1fr}.money-account-details,.money-priority-stats,.money-priority-controls{grid-template-columns:1fr}.money-priority-hero{grid-template-columns:1fr}.money-priority-step{grid-template-columns:26px minmax(0,1fr)}.money-priority-step em{grid-column:2;white-space:normal}}
 
     /* v1.148: stable habits, explanatory Stats, and pressure-free milestones. */
     .onboarding-card { grid-column:1/-1; border-color:color-mix(in srgb,var(--main-color) 42%,var(--border-color)); background:linear-gradient(135deg,color-mix(in srgb,var(--bg-color) 92%,var(--main-color) 8%),var(--sub-alt-color)); }
@@ -2722,7 +2750,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.152 keeps today’s HRV bar fully visible, adds progressive feel and fatigue colors, exposes Recovery weighting and overlap handling, previews the exact effect of clearing learned adjustments, makes large sleep-deficit responses concrete, and gives Body Battery a small time-awake trajectory.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.153 recognizes a completed lift before offering another, gives open mornings a consistency-first sleep suggestion, adds a rate-aware debt / emergency-fund / investing sequence, makes fatigue deltas explicit, and shows HRV’s rolling personal thresholds through time.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -3508,6 +3536,24 @@
             <div class="money-plan-bar"><span id="moneyPlanBarFill"></span></div>
             <div class="money-plan-message" id="moneyPlanMessage">Add an account balance, then your next paycheck or purchase.</div>
           </section>
+          <section class="money-card money-wide money-priority-card">
+            <div class="money-card-head"><div><div class="money-kicker">decision guide</div><h2>what should the next dollar do?</h2></div><span>minimums → buffer → expensive debt → full fund → compare</span></div>
+            <div class="money-priority-hero"><div class="money-priority-badge" id="moneyPriorityBadge">building picture</div><div><div class="money-priority-action" id="moneyPriorityAction">Add rates and essential purchases to get a useful order.</div><div class="money-priority-reason" id="moneyPriorityReason">This planning guide distinguishes required payments, emergency cash, high-interest debt, financing and long-term investing. It does not move money.</div></div></div>
+            <div class="money-priority-stats">
+              <div class="money-priority-stat"><span>essential monthly costs</span><strong id="moneyEssentialMonthly">—</strong></div>
+              <div class="money-priority-stat"><span>emergency fund</span><strong id="moneyEmergencyCurrent">—</strong></div>
+              <div class="money-priority-stat"><span>automatic target</span><strong id="moneyEmergencyTarget">—</strong></div>
+              <div class="money-priority-stat"><span>highest debt rate</span><strong id="moneyHighestDebtRate">—</strong></div>
+            </div>
+            <div class="money-priority-controls">
+              <label>emergency target<select class="search-input money-input" id="moneyEmergencyMonthsInput"><option value="3">3 months</option><option value="6">6 months</option></select><small>Canada’s consumer agency suggests roughly 3–6 months of regular expenses.</small></label>
+              <label>essential-cost override<input class="search-input money-input" id="moneyEssentialOverrideInput" type="number" inputmode="decimal" min="0" step="25" placeholder="auto from entries"><small>Optional. Leave blank to use Housing, Groceries, Transport, Health and recorded debt minimums.</small></label>
+              <label>monthly emergency contribution<input class="search-input money-input" id="moneyEmergencyContributionInput" type="number" inputmode="decimal" min="0" step="25" placeholder="0"><small>Used with the emergency account’s interest rate for the 12-month estimate.</small></label>
+              <label>conservative investment return<input class="search-input money-input" id="moneyExpectedReturnInput" type="number" inputmode="decimal" min="0" max="30" step="0.1" placeholder="not guaranteed"><small>Planning assumption only. Debt interest is certain; investment returns are not.</small></label>
+            </div>
+            <div class="money-priority-steps" id="moneyPrioritySteps"></div>
+            <div class="money-disclaimer" id="moneyPriorityDisclaimer">Educational planning view, not individualized financial advice. Verify loan prepayment terms, taxes, employer matching and account rules before acting.</div>
+          </section>
           <section class="money-card">
             <h2>add one entry</h2>
             <div class="money-plan-message">Most days this is only description, amount and account.</div>
@@ -3526,7 +3572,7 @@
             <div class="money-card-head"><h2>accounts</h2><span>starting balance + entries</span></div>
             <div class="money-plan-message">Cash balances are money available. Credit cards and the line of credit are amounts owed.</div>
             <div class="money-account-list" id="moneyAccountList"></div>
-            <div class="money-account-edit"><input class="search-input money-input" id="moneyNewAccountName" placeholder="new account name"><select class="search-input money-input" id="moneyNewAccountType"><option value="cash">cash / chequing</option><option value="savings">savings</option><option value="credit">credit card</option><option value="loc">line of credit</option></select><button type="button" class="btn" id="moneyAddAccountBtn">add</button></div>
+            <div class="money-account-edit"><input class="search-input money-input" id="moneyNewAccountName" placeholder="new account name"><select class="search-input money-input" id="moneyNewAccountType"><option value="cash">cash / chequing</option><option value="savings">savings</option><option value="credit">credit card</option><option value="loc">line of credit</option><option value="loan">loan</option><option value="financing">financing</option></select><button type="button" class="btn" id="moneyAddAccountBtn">add</button></div>
           </section>
           <section class="money-card">
             <div class="money-card-head"><h2>where purchases went</h2><span>selected month</span></div>
@@ -3541,7 +3587,7 @@
             <h2>investing momentum</h2>
             <div class="money-fields"><label>invested balance<input class="search-input money-input" id="moneyInvestedInput" type="number" inputmode="decimal" min="0" step="100"></label><label>usual monthly contribution<input class="search-input money-input" id="moneyContributionInput" type="number" inputmode="decimal" min="0" step="25"></label></div>
             <div class="money-projection" id="moneyProjection">Add a contribution to see twelve months of deposits—without assuming market returns.</div>
-            <div class="money-disclaimer">Planning view only, not investment advice. Market returns are deliberately excluded from this first version.</div>
+            <div class="money-disclaimer">Planning view only, not investment advice. Contributions are concrete; any return entered above is an uncertain comparison assumption, not a promise.</div>
           </section>
           <section class="money-card money-wide">
             <div class="money-ledger-controls"><div><h2>entries</h2><div class="money-plan-message">Payments move money between your accounts and do not count as new spending.</div></div><input class="search-input money-input" id="moneyLedgerMonth" type="month" style="width:auto;"></div>
@@ -4172,7 +4218,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.152';
+      const APP_VERSION='1.153';
       const APP_RELEASE_DATE='2026-08-15';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -4194,7 +4240,7 @@
       let completionEvents=[];
       let biometrics={};
       let recoveryDrafts=(()=>{try{return JSON.parse(localStorage.getItem('focus-flow-recovery-drafts')||'{}')||{};}catch(e){return{};}})();
-      let moneyState={income:'',bills:'',flexible:'',goalName:'',goalSaved:'',goalTarget:'',invested:'',contribution:'',entryType:'purchase',accounts:[{id:'money-chequing',name:'Chequing',type:'cash',openingBalance:''},{id:'money-card-1',name:'Credit card 1',type:'credit',openingBalance:''},{id:'money-card-2',name:'Credit card 2',type:'credit',openingBalance:''},{id:'money-loc',name:'Line of credit',type:'loc',openingBalance:''}],transactions:[],ledgerMonth:''};
+      let moneyState={income:'',bills:'',flexible:'',goalName:'',goalSaved:'',goalTarget:'',invested:'',contribution:'',expectedReturn:'',essentialMonthlyOverride:'',emergencyContribution:'',emergencyMonths:3,entryType:'purchase',accounts:[{id:'money-chequing',name:'Chequing',type:'cash',openingBalance:'',annualRate:'',minimumPayment:'',emergencyFund:false,extraPaymentAllowed:true},{id:'money-card-1',name:'Credit card 1',type:'credit',openingBalance:'',annualRate:'',minimumPayment:'',emergencyFund:false,extraPaymentAllowed:true},{id:'money-card-2',name:'Credit card 2',type:'credit',openingBalance:'',annualRate:'',minimumPayment:'',emergencyFund:false,extraPaymentAllowed:true},{id:'money-loc',name:'Line of credit',type:'loc',openingBalance:'',annualRate:'',minimumPayment:'',emergencyFund:false,extraPaymentAllowed:true}],transactions:[],ledgerMonth:''};
       let importedActivities=[];
       let deletedActivityIds=[];
       let pendingActivityReplacementId=null;
@@ -5229,16 +5275,61 @@
       function ensureMoneyState(){
         if(!moneyState||typeof moneyState!=='object')moneyState={};
         if(!Array.isArray(moneyState.accounts))moneyState.accounts=[{id:'money-chequing',name:'Chequing',type:'cash',openingBalance:''},{id:'money-card-1',name:'Credit card 1',type:'credit',openingBalance:''},{id:'money-card-2',name:'Credit card 2',type:'credit',openingBalance:''},{id:'money-loc',name:'Line of credit',type:'loc',openingBalance:''}];
+        moneyState.accounts=moneyState.accounts.map(account=>({...account,annualRate:account.annualRate??'',minimumPayment:account.minimumPayment??'',emergencyFund:!isMoneyDebtAccount(account)&&account.emergencyFund===true,extraPaymentAllowed:account.extraPaymentAllowed!==undefined?account.extraPaymentAllowed:['credit','loc'].includes(account.type)}));
         if(!Array.isArray(moneyState.transactions))moneyState.transactions=[];
         if(!['purchase','paycheck','payment'].includes(moneyState.entryType))moneyState.entryType='purchase';
+        moneyState.emergencyMonths=[3,6].includes(Number(moneyState.emergencyMonths))?Number(moneyState.emergencyMonths):3;
+        moneyState.expectedReturn=moneyState.expectedReturn??'';moneyState.essentialMonthlyOverride=moneyState.essentialMonthlyOverride??'';moneyState.emergencyContribution=moneyState.emergencyContribution??'';
       }
       function getMoneyAccount(id){return moneyState.accounts.find(a=>String(a.id)===String(id));}
-      function isMoneyDebtAccount(account){return account&&['credit','loc'].includes(account.type);}
+      function isMoneyDebtAccount(account){return account&&['credit','loc','loan','financing'].includes(account.type);}
+      function getMoneyAccountTypeLabel(account){return account.type==='credit'?'credit card':account.type==='loc'?'line of credit':account.type==='loan'?'loan':account.type==='financing'?'financing':account.type==='savings'?'savings':'cash / chequing';}
       function getMoneyAccountBalance(account){
         let balance=Number(account.openingBalance)||0;
         moneyState.transactions.forEach(tx=>{const amount=Number(tx.amount)||0;if(tx.type==='purchase'&&tx.accountId===account.id)balance+=isMoneyDebtAccount(account)?amount:-amount;else if(tx.type==='paycheck'&&tx.accountId===account.id)balance+=amount;else if(tx.type==='payment'){if(tx.accountId===account.id)balance-=amount;if(tx.toAccountId===account.id)balance=Math.max(0,balance-amount);}});return Math.round(balance*100)/100;
       }
       function moneyMonthKey(date=new Date()){return`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;}
+      function getMoneyEssentialData(){
+        const essentialCategories=new Set(['Groceries','Transport','Housing','Health','Debt / interest']),currentMonth=moneyMonthKey(),groups={};
+        moneyState.transactions.filter(tx=>tx.type==='purchase'&&essentialCategories.has(tx.category)&&tx.date&&tx.date<=getToday()).forEach(tx=>{const month=String(tx.date).slice(0,7);groups[month]=(groups[month]||0)+(Number(tx.amount)||0);});
+        const completed=Object.keys(groups).filter(month=>month<currentMonth).sort().slice(-3),usedMonths=completed.length?completed:(groups[currentMonth]!=null?[currentMonth]:[]),purchaseMonthly=usedMonths.length?usedMonths.reduce((sum,month)=>sum+groups[month],0)/usedMonths.length:null,minimums=moneyState.accounts.filter(isMoneyDebtAccount).reduce((sum,a)=>sum+(Number(a.minimumPayment)||0),0),override=Number(moneyState.essentialMonthlyOverride),monthly=override>0?override:(purchaseMonthly==null?(minimums||null):purchaseMonthly+minimums);
+        return{monthly,purchaseMonthly,minimums,usedMonths,source:override>0?'manual override':usedMonths.length?`${usedMonths.length} logged month${usedMonths.length===1?'':'s'} + debt minimums`:'not enough essential purchases'};
+      }
+      function getEmergencyFundData(){
+        const essential=getMoneyEssentialData(),accounts=moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)&&a.emergencyFund),balances=accounts.map(a=>({account:a,balance:Math.max(0,getMoneyAccountBalance(a))})),current=balances.reduce((sum,x)=>sum+x.balance,0),weightedRate=current?balances.reduce((sum,x)=>sum+x.balance*(Number(x.account.annualRate)||0),0)/current:Math.max(0,...accounts.map(a=>Number(a.annualRate)||0)),months=Number(moneyState.emergencyMonths)||3,target=essential.monthly?essential.monthly*months:null,starterTarget=essential.monthly||null,monthlyContribution=Math.max(0,Number(moneyState.emergencyContribution)||0),monthlyRate=Math.max(0,weightedRate)/100/12,factor=Math.pow(1+monthlyRate,12),interest12=current*(factor-1),future=current*factor+(monthlyContribution?(monthlyRate?monthlyContribution*((factor-1)/monthlyRate):monthlyContribution*12):0);
+        return{essential,accounts,current,weightedRate,months,target,starterTarget,monthlyContribution,interest12,future};
+      }
+      function getMoneyDebtData(month){
+        const accounts=moneyState.accounts.filter(isMoneyDebtAccount).map(account=>({account,balance:Math.max(0,getMoneyAccountBalance(account)),rate:account.annualRate===''||account.annualRate==null?null:Math.max(0,Number(account.annualRate)||0),minimum:Math.max(0,Number(account.minimumPayment)||0)})).filter(x=>x.balance>.005).sort((a,b)=>(b.rate??-1)-(a.rate??-1)),payments=moneyState.transactions.filter(tx=>tx.type==='payment'&&String(tx.date||'').startsWith(month)).reduce((sum,tx)=>sum+(Number(tx.amount)||0),0);
+        return{accounts,highest:accounts.find(x=>x.rate!=null)||accounts[0]||null,total:accounts.reduce((sum,x)=>sum+x.balance,0),minimums:accounts.reduce((sum,x)=>sum+x.minimum,0),payments,unknownRates:accounts.filter(x=>x.rate==null)};
+      }
+      function getMoneyPriorityPlan(month,income,out){
+        const emergency=getEmergencyFundData(),debts=getMoneyDebtData(month),monthlyRoom=income-out-debts.minimums,returnRate=moneyState.expectedReturn===''?null:Math.max(0,Number(moneyState.expectedReturn)||0),starterReady=emergency.starterTarget!=null&&emergency.current>=emergency.starterTarget,fullReady=emergency.target!=null&&emergency.current>=emergency.target,expensive=debts.accounts.find(x=>x.rate!=null&&(['credit','loc'].includes(x.account.type)||x.rate>=8)),steps=[
+          {title:'Cover this month + required minimums',detail:'Use the selected month’s paychecks and purchases, plus the minimum payment entered on each debt.',value:income?`${formatMoney(monthlyRoom)} after minimums`:'needs paychecks'},
+          {title:'Build a starter cash buffer',detail:'Focus::Flow uses one month of essential costs as a transparent starter-buffer heuristic before aggressive extra payments.',value:emergency.starterTarget?`${formatMoney(emergency.current)} / ${formatMoney(emergency.starterTarget)}`:'needs essentials'},
+          {title:'Attack the most expensive debt',detail:'Highest interest first normally minimizes interest. Revolving credit is treated as expensive until cleared.',value:debts.highest&&debts.highest.rate!=null?`${debts.highest.account.name} · ${debts.highest.rate.toFixed(1)}%`:(debts.total?'needs APR':'no debt')},
+          {title:`Complete the ${emergency.months}-month emergency fund`,detail:'Keep emergency money accessible. Savings interest is included in the projection, but does not reduce the target itself.',value:emergency.target?`${formatMoney(emergency.current)} / ${formatMoney(emergency.target)}`:'needs essentials'},
+          {title:'Compare financing early vs investing',detail:'Debt payoff is a guaranteed return equal to the APR; investing is uncertain. Loan penalties, taxes and matching still need a human check.',value:debts.highest&&debts.highest.rate!=null&&returnRate!=null?`${debts.highest.rate.toFixed(1)}% debt vs ${returnRate.toFixed(1)}% assumed`:'needs rates'}
+        ];
+        let active=0,badge='step 1',badgeClass='caution',action='Complete the monthly picture first',reason='Add this month’s paychecks, essential purchases and each debt’s minimum payment before directing extra money.';
+        if(income>0&&monthlyRoom>=0){
+          if(!emergency.starterTarget){active=1;badge='set the baseline';action='Build the essential-cost estimate';reason='Log Housing, Groceries, Transport and Health purchases, or enter an essential-cost override. The emergency target cannot be honest without that number.';}
+          else if(!starterReady){active=1;badge='step 2 · starter buffer';action=`Build ${formatMoney(Math.max(0,emergency.starterTarget-emergency.current))} of starter emergency cash`;reason=`One month of tracked essential costs is ${formatMoney(emergency.starterTarget)}. This starter step is an app planning heuristic that reduces the chance an ordinary surprise goes straight back onto credit.`;}
+          else if(debts.total&&debts.unknownRates.length){active=2;badge='rates needed';action='Add the APR to every debt account';reason=`${debts.unknownRates.map(x=>x.account.name).join(', ')} cannot be ranked yet. The highest-interest-first calculation needs those rates.`;}
+          else if(expensive){active=2;badge='step 3 · expensive debt';action=`Direct extra debt money to ${expensive.account.name}`;reason=`Its ${expensive.rate.toFixed(1)}% APR is the highest expensive balance currently tracked. Keep required minimums on every account; this extra-payment order is the interest-saving route.`;}
+          else if(!fullReady){active=3;badge=`step 4 · ${emergency.months}-month fund`;action=`Build ${formatMoney(Math.max(0,emergency.target-emergency.current))} more emergency cash`;reason=`The automatic target is ${emergency.months} × ${formatMoney(emergency.essential.monthly)} of essential monthly costs. At ${emergency.weightedRate.toFixed(2)}%, the current emergency balance earns roughly ${formatMoneyExact(emergency.interest12)} over 12 months before new contributions.`;}
+          else{active=4;badge='step 5 · compare';badgeClass='';if(!debts.total){action='No tracked debt remains — long-term investing can take the next contribution';reason='The selected emergency target is funded. Keep short-term goals liquid and use the investing plan only for money that can stay invested.';}else if(debts.highest&&['loan','financing'].includes(debts.highest.account.type)&&!debts.highest.account.extraPaymentAllowed){action=`Check ${debts.highest.account.name} prepayment terms before paying it early`;reason='The rate comparison is not enough when financing may have a penalty or restricted extra-payment terms.';}else if(returnRate==null){action='Enter a conservative investment return to compare with the remaining debt';reason=`The highest remaining APR is ${debts.highest.rate.toFixed(1)}%. Paying it down produces a certain interest saving; an investment estimate is uncertain.`;}else if(debts.highest.rate>=returnRate){action=`Extra payment on ${debts.highest.account.name} has the stronger certain rate`;reason=`Its ${debts.highest.rate.toFixed(1)}% guaranteed interest saving is at least the ${returnRate.toFixed(1)}% investment assumption. Taxes and account rules are not modeled.`;}else{action='The investment estimate is higher, but the choice is not automatic';reason=`The ${returnRate.toFixed(1)}% assumed investment return exceeds ${debts.highest.account.name} at ${debts.highest.rate.toFixed(1)}%, but returns can disappoint while debt savings are guaranteed. Use risk tolerance, taxes and loan terms to decide.`;}}
+        }
+        steps.forEach((step,i)=>step.state=i<active?'done':i===active?'active':'');
+        return{emergency,debts,monthlyRoom,returnRate,steps,active,badge,badgeClass,action,reason};
+      }
+      function renderMoneyPriority(month,income,out){
+        const plan=getMoneyPriorityPlan(month,income,out),set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;},badge=document.getElementById('moneyPriorityBadge');if(badge){badge.textContent=plan.badge;badge.className=`money-priority-badge ${plan.badgeClass}`.trim();}set('moneyPriorityAction',plan.action);set('moneyPriorityReason',plan.reason);set('moneyEssentialMonthly',plan.emergency.essential.monthly?`${formatMoney(plan.emergency.essential.monthly)} · ${plan.emergency.essential.source}`:'needs entries');set('moneyEmergencyCurrent',plan.emergency.accounts.length?`${formatMoney(plan.emergency.current)} · ${plan.emergency.weightedRate.toFixed(2)}%`:'mark a cash/savings account');set('moneyEmergencyTarget',plan.emergency.target?`${formatMoney(plan.emergency.target)} · ${plan.emergency.months} months`:'needs essentials');set('moneyHighestDebtRate',plan.debts.highest?plan.debts.highest.rate==null?`${plan.debts.highest.account.name} · add APR`:`${plan.debts.highest.account.name} · ${plan.debts.highest.rate.toFixed(1)}%`:'no tracked debt');
+        const steps=document.getElementById('moneyPrioritySteps');if(steps)steps.innerHTML=plan.steps.map((step,i)=>`<div class="money-priority-step ${step.state}"><div class="money-priority-step-index">${i+1}</div><div><strong>${escapeHtml(step.title)}</strong><span>${escapeHtml(step.detail)}</span></div><em>${escapeHtml(step.value)}</em></div>`).join('');
+        const note=document.getElementById('moneyPriorityDisclaimer');if(note){const future=plan.emergency.accounts.length?` With ${formatMoney(plan.emergency.monthlyContribution)} monthly contributions and the entered savings rate, the 12-month emergency balance is about ${formatMoney(plan.emergency.future)}.`:'';note.textContent=`Educational planning view, not individualized financial advice.${future} Verify loan prepayment terms, taxes, employer matching and account rules before acting.`;}
+      }
+      function refreshMoneyPriorityOnly(){const month=moneyState.ledgerMonth||moneyMonthKey(),transactions=moneyState.transactions.filter(tx=>String(tx.date||'').startsWith(month)),income=transactions.filter(tx=>tx.type==='paycheck').reduce((sum,tx)=>sum+(Number(tx.amount)||0),0),out=transactions.filter(tx=>tx.type==='purchase').reduce((sum,tx)=>sum+(Number(tx.amount)||0),0);renderMoneyPriority(month,income,out);}
+      function updateMoneyAccountField(input,commit=false){const row=input&&input.closest('[data-money-account-id]'),account=row&&getMoneyAccount(row.dataset.moneyAccountId);if(!input||!account)return;const field=input.dataset.moneyAccountField;account[field]=input.type==='checkbox'?input.checked:input.value;saveData();if(input.type==='checkbox')refreshMoneyPriorityOnly();else if(commit)renderMoney();}
       function renderMoneyAccountOptions(){
         ensureMoneyState();const type=moneyState.entryType,accountSelect=document.getElementById('moneyEntryAccount'),toSelect=document.getElementById('moneyEntryToAccount');if(!accountSelect||!toSelect)return;
         const previous=accountSelect.value,previousTo=toSelect.value,fromAccounts=type==='paycheck'?moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)):type==='payment'?moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)):moneyState.accounts,toAccounts=moneyState.accounts.filter(isMoneyDebtAccount),options=list=>list.map(a=>`<option value="${escapeHtml(String(a.id))}">${escapeHtml(a.name)}</option>`).join('');accountSelect.innerHTML=options(fromAccounts);toSelect.innerHTML=options(toAccounts);if(fromAccounts.some(a=>String(a.id)===previous))accountSelect.value=previous;if(toAccounts.some(a=>String(a.id)===previousTo))toSelect.value=previousTo;
@@ -5247,16 +5338,18 @@
         if(!['purchase','paycheck','payment'].includes(type))type='purchase';moneyState.entryType=type;document.querySelectorAll('#moneyEntryType [data-money-type]').forEach(b=>b.classList.toggle('active',b.dataset.moneyType===type));document.getElementById('moneyEntryCategoryWrap').style.display=type==='purchase'?'block':'none';document.getElementById('moneyEntryToAccountWrap').style.display=type==='payment'?'block':'none';document.getElementById('moneyEntryAccountWrap').firstChild.textContent=type==='payment'?'pay from':type==='paycheck'?'deposit to':'account';document.getElementById('moneyAddEntryBtn').textContent=type==='purchase'?'add purchase':type==='paycheck'?'add paycheck':'record payment';renderMoneyAccountOptions();saveData();
       }
       function renderMoney(){
-        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};
+        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution',moneyExpectedReturnInput:'expectedReturn',moneyEssentialOverrideInput:'essentialMonthlyOverride',moneyEmergencyContributionInput:'emergencyContribution'};
         Object.entries(map).forEach(([id,key])=>{const el=document.getElementById(id);if(el&&document.activeElement!==el)el.value=moneyState[key]??'';});
+        const emergencyMonthsInput=document.getElementById('moneyEmergencyMonthsInput');if(emergencyMonthsInput&&document.activeElement!==emergencyMonthsInput)emergencyMonthsInput.value=String(moneyState.emergencyMonths||3);
         const monthInput=document.getElementById('moneyLedgerMonth'),month=moneyState.ledgerMonth||moneyMonthKey();moneyState.ledgerMonth=month;if(monthInput&&document.activeElement!==monthInput)monthInput.value=month;const monthTransactions=moneyState.transactions.filter(tx=>String(tx.date||'').startsWith(month)),income=monthTransactions.filter(tx=>tx.type==='paycheck').reduce((s,tx)=>s+(Number(tx.amount)||0),0),out=monthTransactions.filter(tx=>tx.type==='purchase').reduce((s,tx)=>s+(Number(tx.amount)||0),0),cash=moneyState.accounts.filter(a=>!isMoneyDebtAccount(a)).reduce((s,a)=>s+getMoneyAccountBalance(a),0),debt=moneyState.accounts.filter(isMoneyDebtAccount).reduce((s,a)=>s+getMoneyAccountBalance(a),0),invested=Number(moneyState.invested)||0,netFlow=income-out,netPosition=cash+invested-debt,set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
         const monthDate=new Date(`${month}-02T12:00:00`);set('moneyMonthLabel',monthDate.toLocaleDateString(undefined,{month:'long',year:'numeric'}));set('moneyIncomeSummary',income?formatMoney(income):'—');set('moneyOutSummary',out?formatMoney(out):'—');set('moneyCashSummary',formatMoney(cash));set('moneyDebtSummary',formatMoney(debt));
         const planFill=document.getElementById('moneyPlanBarFill');if(planFill)planFill.style.width=`${income?Math.min(100,out/income*100):0}%`;
         set('moneyPlanMessage',!moneyState.transactions.length?'Start with the current balance or amount owed on each account, then add the next real entry.':`${monthDate.toLocaleDateString(undefined,{month:'long'})} cash flow is ${netFlow>=0?'+':''}${formatMoney(netFlow)}. Across cash, tracked debt and investments, the current net position is ${formatMoney(netPosition)}. Card payments are transfers, so they are not counted twice as spending.`);
+        renderMoneyPriority(month,income,out);
         const saved=Number(moneyState.goalSaved)||0,target=Number(moneyState.goalTarget)||0,goalPct=target?Math.min(100,saved/target*100):0,goalFill=document.getElementById('moneyGoalProgressFill');if(goalFill)goalFill.style.width=`${goalPct}%`;
         set('moneyGoalMessage',target?`${moneyState.goalName||'Goal'}: ${formatMoney(saved)} of ${formatMoney(target)} · ${Math.round(goalPct)}%. ${saved>=target?'Target reached; choose what this money should do next.':`${formatMoney(Math.max(0,target-saved))} remaining.`}`:'A financial goal belongs here because this is where the next contribution becomes concrete. Bigger life direction can still live on Goals.');
         const contribution=Number(moneyState.contribution)||0;set('moneyProjection',contribution?`${formatMoney(contribution*12)} of deposits over the next 12 months; ${formatMoney(invested+contribution*12)} total before any market movement.`:'Add a usual contribution to see twelve months of deposits—without assuming market returns.');
-        const accountList=document.getElementById('moneyAccountList');accountList.innerHTML='';moneyState.accounts.forEach(account=>{const row=document.createElement('div');row.className='money-account-row';const balance=getMoneyAccountBalance(account),typeLabel=account.type==='credit'?'credit card':account.type==='loc'?'line of credit':account.type==='savings'?'savings':'cash / chequing';row.innerHTML=`<div class="money-account-name">${escapeHtml(account.name)}<span>${typeLabel}</span></div><div class="money-account-balance ${isMoneyDebtAccount(account)?'debt':''}">${isMoneyDebtAccount(account)?`${formatMoney(balance)} owed`:formatMoney(balance)}</div><button type="button" class="money-ledger-delete" title="remove account">×</button><label class="money-account-opening"><span>starting ${isMoneyDebtAccount(account)?'amount owed':'balance'}</span><input class="search-input money-input" type="number" inputmode="decimal" step="0.01" min="0" value="${account.openingBalance??''}" placeholder="0.00"></label>`;const openingInput=row.querySelector('input');openingInput.addEventListener('input',e=>{account.openingBalance=e.target.value;saveData();});openingInput.addEventListener('change',renderMoney);row.querySelector('button').addEventListener('click',()=>removeMoneyAccount(account.id));accountList.appendChild(row);});
+        const accountList=document.getElementById('moneyAccountList');accountList.innerHTML='';moneyState.accounts.forEach(account=>{const row=document.createElement('div');row.className='money-account-row';row.dataset.moneyAccountId=account.id;const debtAccount=isMoneyDebtAccount(account),balance=getMoneyAccountBalance(account),typeLabel=getMoneyAccountTypeLabel(account),rateLabel=debtAccount?'APR (%)':'interest earned (%)',details=debtAccount?`<label>${rateLabel}<input class="search-input money-input" data-money-account-field="annualRate" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="${account.annualRate??''}" placeholder="0.0"></label><label>minimum monthly payment<input class="search-input money-input" data-money-account-field="minimumPayment" type="number" inputmode="decimal" min="0" step="1" value="${account.minimumPayment??''}" placeholder="0"></label><label class="money-account-toggle"><input data-money-account-field="extraPaymentAllowed" type="checkbox" ${account.extraPaymentAllowed?'checked':''}><span>extra payments confirmed penalty-free</span></label>`:`<label>${rateLabel}<input class="search-input money-input" data-money-account-field="annualRate" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="${account.annualRate??''}" placeholder="0.0"></label><label class="money-account-toggle"><input data-money-account-field="emergencyFund" type="checkbox" ${account.emergencyFund?'checked':''}><span>count this as emergency fund</span></label>`;row.innerHTML=`<div class="money-account-name">${escapeHtml(account.name)}<span>${typeLabel}</span></div><div class="money-account-balance ${debtAccount?'debt':''}">${debtAccount?`${formatMoney(balance)} owed`:formatMoney(balance)}</div><button type="button" class="money-ledger-delete" title="remove account">×</button><label class="money-account-opening"><span>starting ${debtAccount?'amount owed':'balance'}</span><input class="search-input money-input" data-money-account-field="openingBalance" type="number" inputmode="decimal" step="0.01" min="0" value="${account.openingBalance??''}" placeholder="0.00"></label><div class="money-account-details">${details}</div>`;row.querySelectorAll('[data-money-account-field]').forEach(input=>{input.oninput=()=>updateMoneyAccountField(input,false);input.onchange=()=>updateMoneyAccountField(input,true);});row.querySelector('button').addEventListener('click',()=>removeMoneyAccount(account.id));accountList.appendChild(row);});
         renderMoneyAccountOptions();setMoneyEntryTypeVisualOnly(moneyState.entryType);
         const categoryList=document.getElementById('moneyCategoryList'),purchases=monthTransactions.filter(tx=>tx.type==='purchase'),categoryTotals={};purchases.forEach(tx=>{const category=tx.category||'Other';categoryTotals[category]=(categoryTotals[category]||0)+(Number(tx.amount)||0);});const maxCategory=Math.max(0,...Object.values(categoryTotals));categoryList.innerHTML=Object.keys(categoryTotals).length?Object.entries(categoryTotals).sort((a,b)=>b[1]-a[1]).map(([category,total])=>`<div class="money-category-row"><span>${escapeHtml(category)}</span><span class="money-category-track"><span style="width:${maxCategory?total/maxCategory*100:0}%"></span></span><strong>${formatMoney(total)}</strong></div>`).join(''):'<div class="money-empty">Categories appear after your first purchase in this month.</div>';
         const ledger=document.getElementById('moneyLedgerList'),sorted=monthTransactions.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(b.createdAt||'').localeCompare(String(a.createdAt||'')));ledger.innerHTML='';if(!sorted.length)ledger.innerHTML='<div class="money-empty">No entries in this month yet. Add a paycheck or purchase above.</div>';sorted.forEach(tx=>{const from=getMoneyAccount(tx.accountId),to=getMoneyAccount(tx.toAccountId),row=document.createElement('div');row.className='money-ledger-row';const meta=tx.type==='payment'?`${from?.name||'account'} → ${to?.name||'debt account'}`:`${tx.category||tx.type} · ${from?.name||'unknown account'}`,sign=tx.type==='paycheck'?'+':tx.type==='purchase'?'-':'';row.innerHTML=`<div class="money-ledger-date">${escapeHtml(new Date((tx.date||getToday())+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'}))}</div><div class="money-ledger-main">${escapeHtml(tx.description||tx.type)}<span>${escapeHtml(meta)}</span></div><div class="money-ledger-amount ${tx.type==='paycheck'?'income':''}">${sign}${formatMoneyExact(tx.amount)}</div><button type="button" class="money-ledger-delete" title="remove entry">×</button>`;row.querySelector('button').addEventListener('click',()=>showConfirm(`Remove ${tx.description||tx.type} for ${formatMoneyExact(tx.amount)}?`,()=>{moneyState.transactions=moneyState.transactions.filter(x=>x.id!==tx.id);saveData();renderMoney();showToast('money entry removed');},'remove'));ledger.appendChild(row);});
@@ -5265,10 +5358,10 @@
       function addMoneyEntry(){
         ensureMoneyState();const type=moneyState.entryType,date=document.getElementById('moneyEntryDate').value||getToday(),amount=Number(document.getElementById('moneyEntryAmount').value),description=document.getElementById('moneyEntryDescription').value.trim()||(type==='paycheck'?'paycheck':type==='payment'?'account payment':'purchase'),category=document.getElementById('moneyEntryCategory').value||'Other',accountId=document.getElementById('moneyEntryAccount').value,toAccountId=document.getElementById('moneyEntryToAccount').value;if(!amount||amount<=0){showToast('enter the amount first');return;}if(!accountId){showToast('add or choose an account first');return;}if(type==='payment'&&!toAccountId){showToast('choose the debt account receiving the payment');return;}moneyState.transactions.push({id:generateId(),type,date,amount:Math.round(amount*100)/100,description,category:type==='purchase'?category:null,accountId,toAccountId:type==='payment'?toAccountId:null,createdAt:new Date().toISOString()});document.getElementById('moneyEntryAmount').value='';document.getElementById('moneyEntryDescription').value='';moneyState.ledgerMonth=date.slice(0,7);saveData();renderMoney();showToast(type==='purchase'?'purchase added':type==='paycheck'?'paycheck added':'account payment recorded');
       }
-      function addMoneyAccount(){const name=document.getElementById('moneyNewAccountName').value.trim(),type=document.getElementById('moneyNewAccountType').value;if(!name){showToast('name the account first');return;}moneyState.accounts.push({id:`money-${generateId()}`,name,type,openingBalance:''});document.getElementById('moneyNewAccountName').value='';saveData();renderMoney();showToast(`${name} added`);}
+      function addMoneyAccount(){const name=document.getElementById('moneyNewAccountName').value.trim(),type=document.getElementById('moneyNewAccountType').value;if(!name){showToast('name the account first');return;}moneyState.accounts.push({id:`money-${generateId()}`,name,type,openingBalance:'',annualRate:'',minimumPayment:'',emergencyFund:false,extraPaymentAllowed:['credit','loc'].includes(type)});document.getElementById('moneyNewAccountName').value='';saveData();renderMoney();showToast(`${name} added`);}
       function removeMoneyAccount(id){const account=getMoneyAccount(id);if(!account)return;if(moneyState.transactions.some(tx=>tx.accountId===id||tx.toAccountId===id)){showToast('remove or move this account’s entries before deleting it');return;}showConfirm(`Remove ${account.name}?`,()=>{moneyState.accounts=moneyState.accounts.filter(a=>a.id!==id);saveData();renderMoney();showToast('account removed');},'remove');}
       function setupMoney(){
-        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution'};Object.entries(map).forEach(([id,key])=>document.getElementById(id)?.addEventListener('input',e=>{moneyState[key]=e.target.value;renderMoney();saveData();}));document.getElementById('moneyEntryType')?.addEventListener('click',e=>{const btn=e.target.closest('[data-money-type]');if(btn)setMoneyEntryType(btn.dataset.moneyType);});document.getElementById('moneyAddEntryBtn')?.addEventListener('click',addMoneyEntry);document.getElementById('moneyAddAccountBtn')?.addEventListener('click',addMoneyAccount);document.getElementById('moneyLedgerMonth')?.addEventListener('change',e=>{moneyState.ledgerMonth=e.target.value;saveData();renderMoney();});const dateInput=document.getElementById('moneyEntryDate');if(dateInput&&!dateInput.value)dateInput.value=getToday();renderMoney();
+        ensureMoneyState();const map={moneyGoalNameInput:'goalName',moneyGoalSavedInput:'goalSaved',moneyGoalTargetInput:'goalTarget',moneyInvestedInput:'invested',moneyContributionInput:'contribution',moneyExpectedReturnInput:'expectedReturn',moneyEssentialOverrideInput:'essentialMonthlyOverride',moneyEmergencyContributionInput:'emergencyContribution'};Object.entries(map).forEach(([id,key])=>document.getElementById(id)?.addEventListener('input',e=>{moneyState[key]=e.target.value;renderMoney();saveData();}));document.getElementById('moneyEmergencyMonthsInput')?.addEventListener('change',e=>{moneyState.emergencyMonths=Number(e.target.value)||3;renderMoney();saveData();});document.getElementById('moneyEntryType')?.addEventListener('click',e=>{const btn=e.target.closest('[data-money-type]');if(btn)setMoneyEntryType(btn.dataset.moneyType);});document.getElementById('moneyAddEntryBtn')?.addEventListener('click',addMoneyEntry);document.getElementById('moneyAddAccountBtn')?.addEventListener('click',addMoneyAccount);document.getElementById('moneyLedgerMonth')?.addEventListener('change',e=>{moneyState.ledgerMonth=e.target.value;saveData();renderMoney();});const dateInput=document.getElementById('moneyEntryDate');if(dateInput&&!dateInput.value)dateInput.value=getToday();renderMoney();
       }
       function setRecoveryEntryStage(stage='morning'){
         if(!['morning','later','all'].includes(stage))stage='morning';body.dataset.entryStageCurrent=stage;document.querySelectorAll('#recoveryEntryModeTabs [data-entry-stage]').forEach(b=>b.classList.toggle('active',b.dataset.entryStage===stage));
@@ -6219,8 +6312,11 @@ function updateNotificationSettingUI(){
         const lastDate=liftingHistory[liftingHistory.length-1].date;
         return Math.round((new Date(referenceDateStr+'T00:00:00')-new Date(lastDate+'T00:00:00'))/86400000);
       }
+      function getCompletedLiftsForDate(dateStr){return(liftingHistory||[]).filter(h=>h&&h.kind==='exposure'&&h.date===dateStr);}
       function getLiftingSuitability(dateStr,trainingCallLevel){
         if(!liftingLifts.length)return null;
+        const completed=getCompletedLiftsForDate(dateStr);
+        if(completed.length){const names=Array.from(new Set(completed.map(h=>h.liftName||'strength exposure')));return{status:'great',completed:true,text:`lift complete: ${names.join(' + ')}. Its estimated load is already in Recovery; Focus::Flow is not prescribing another lift today.`};}
         if(trainingCallLevel==='rest')return{status:'skip',text:'lift: skip today — the recovery call is already rest, so strength work does not get to spend extra fatigue.'};
         if(trainingCallLevel==='test')return{status:'skip',text:'lift: skip if you take the 5k test — save the recovery budget for the maximal effort.'};
         const recommendation=getLiftingRecommendation(dateStr,trainingCallLevel);
@@ -6651,10 +6747,10 @@ function updateNotificationSettingUI(){
         if(history.length<3)return{text:`baseline building · ${history.length}/3 prior check-ins`,className:''};
         const typical=medianNumber(history),delta=Number(currentValue)-typical,recent=history.slice(-2).concat(Number(currentValue)),recentChange=recent.length>=3?recent[recent.length-1]-recent[0]:0;
         const direction=recentChange>=1?'rising':recentChange<=-1?'easing':'steady';
-        const typicalLabel=Number.isInteger(typical)?String(typical):typical.toFixed(1);
-        if(delta>=.75)return{text:`${direction} · ${delta.toFixed(1)} above 7d typical (${typicalLabel})`,className:'higher'};
-        if(delta<=-.75)return{text:`${direction} · ${Math.abs(delta).toFixed(1)} below 7d typical (${typicalLabel})`,className:'lower'};
-        return{text:`${direction} · near 7d typical (${typicalLabel})`,className:''};
+        const currentLabel=Number(currentValue).toFixed(1),typicalLabel=Number(typical).toFixed(1),deltaLabel=`${delta>=0?'+':'−'}${Math.abs(delta).toFixed(1)}`,equation=`today ${currentLabel} − 7d typical ${typicalLabel} = ${deltaLabel}`;
+        if(delta>=.75)return{text:`${equation} · ${direction}`,className:'higher'};
+        if(delta<=-.75)return{text:`${equation} · ${direction}`,className:'lower'};
+        return{text:`${equation} · ${direction}`,className:''};
       }
       function updateFatigueMap(){
         const rows=document.getElementById('fatigueMapRows');if(!rows)return;
@@ -6793,6 +6889,15 @@ function updateNotificationSettingUI(){
         el.classList.remove('good','caution','bad');
         if(status)el.classList.add(status);
       }
+      function getOpenWakeSleepAdvice(referenceDateStr){
+        const info=getSleepWindowSummary(referenceDateStr,7),opportunity=getSleepRecoveryOpportunity(referenceDateStr),rec=biometrics[referenceDateStr]||{};let wake='',source='';
+        if(info.loggedNights>=3&&info.avgEnd!=null){let total=Math.round(info.avgEnd)+18*60;total=((total%1440)+1440)%1440;wake=`${String(Math.floor(total/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;source='your recent 7-day wake average';}
+        else if(rec.sleepEnd){wake=normalizeFlexibleTime(rec.sleepEnd,'end')||'';source='the wake time logged today';}
+        else{const scheduled=(wakeSchedule||[]).filter(x=>x&&x.type!=='open'&&x.time).map(x=>{const[h,m]=x.time.split(':').map(Number);return h*60+m;});if(scheduled.length){const mins=Math.round(medianNumber(scheduled));wake=`${String(Math.floor(mins/60)).padStart(2,'0')}:${String(mins%60).padStart(2,'0')}`;source='your usual non-open wake schedule';}}
+        if(!wake)return{wake:'',windDown:'',targetAsleep:'',opportunity,source:'',text:`Tomorrow is open. Protect about ${formatDurationHours(opportunity.opportunityHours)} in bed; a precise consistency time needs a few logged wake times.`};
+        const targetAsleep=shiftClock(wake,-Math.round(opportunity.opportunityHours*60)),windDown=shiftClock(targetAsleep,-45),debt=opportunity.deficit&&opportunity.deficit.hours>=2?` while addressing ${opportunity.deficit.hours.toFixed(1)}h of rolling sleep deficit`:'';
+        return{wake,windDown,targetAsleep,opportunity,source,text:`Tomorrow stays open; for consistency${debt}, aim to wake near ${formatClock(wake)}, be asleep near ${formatClock(targetAsleep)}, and begin winding down around ${formatClock(windDown)}. Recommendation uses ${source}.`};
+      }
       function updateRecoveryDailySummary(){
         const today=getToday();
         const freshness=getFreshnessData(today);
@@ -6812,9 +6917,12 @@ function updateNotificationSettingUI(){
         const capacityEl=document.getElementById('summaryCapacity');if(capacityEl)capacityEl.title=capacity.score==null?'Current reserve is waiting for morning signals.':`Current estimated reserve from morning signals, logged work/training${capacity.awake&&capacity.awake.known?', and a visible ordinary-time-awake allowance':''}. Body Battery forecasts about ${capacity.forecastScore}/100 after the rest of today’s modeled plan.`;
         const tomorrowDate=new Date(today+'T00:00:00');tomorrowDate.setDate(tomorrowDate.getDate()+1);
         const tomorrowPlan=getWakePlanForDate(toDateStr(tomorrowDate));
+        let openSleepAdvice=null;
         if(tomorrowPlan.type==='open'||!tomorrowPlan.time){
-          setRecoverySummaryValue('summaryWindDown','open',null);
-          setRecoverySummaryValue('summaryTargetAsleep','open',null);
+          openSleepAdvice=getOpenWakeSleepAdvice(today);
+          setRecoverySummaryValue('summaryWindDown',openSleepAdvice.windDown?`open · ~${formatClock(openSleepAdvice.windDown)}`:'open',openSleepAdvice.windDown?'good':null);
+          setRecoverySummaryValue('summaryTargetAsleep',openSleepAdvice.targetAsleep?`open · ~${formatClock(openSleepAdvice.targetAsleep)}`:'open',openSleepAdvice.targetAsleep?'good':null);
+          const windEl=document.getElementById('summaryWindDown'),asleepEl=document.getElementById('summaryTargetAsleep');if(windEl)windEl.title=openSleepAdvice.text;if(asleepEl)asleepEl.title=openSleepAdvice.text;
         }else{
           const sleepOpportunity=getSleepRecoveryOpportunity(today);
           const targetAsleep=shiftClock(tomorrowPlan.time,-Math.round(sleepOpportunity.opportunityHours*60));
@@ -6830,7 +6938,9 @@ function updateNotificationSettingUI(){
         const level=call&&call.level?call.level:'--';
         setRecoverySummaryValue('summaryTrainingCall',level,level==='rest'?'caution':level==='easy'?'caution':'good');
         let liftText='--',liftStatus=null;
-        if(call&&call.level){
+        const completedLifts=getCompletedLiftsForDate(today);
+        if(completedLifts.length){const names=Array.from(new Set(completedLifts.map(h=>h.liftName||'lift')));liftText=names.length===1?`completed · ${names[0]}`:`completed · ${names.length} lifts`;liftStatus='good';}
+        else if(call&&call.level){
           const rec=getLiftingRecommendation(today,call.level);
           if(call.level==='rest'||call.level==='test'){liftText='skip';liftStatus='caution';}
           else if(rec){liftText=rec.lift.name;liftStatus='good';}
@@ -6844,7 +6954,9 @@ function updateNotificationSettingUI(){
           if(work.status==='red')parts.push('work stress is high');
           if(bodyMax!=null&&bodyMax>=8)parts.push('local fatigue is elevated');
           if(call&&call.level&&!(level==='rest'&&freshness.score!=null&&freshness.score>=60))parts.push(`primary prescription: ${call.level}`);
-          if(liftText&&liftText!=='--')parts.push(liftText==='skip'?'lifting stays off the table':`minimum-dose lift: ${liftText}`);
+          if(completedLifts.length)parts.push(`lifting completed and its load is included`);
+          else if(liftText&&liftText!=='--')parts.push(liftText==='skip'?'lifting stays off the table':`minimum-dose lift: ${liftText}`);
+          if(openSleepAdvice)parts.push(openSleepAdvice.text);
           g.textContent=parts.length?parts.join(' · '):'log today\'s recovery and work data to build the daily picture.';
         }
       }
@@ -8213,9 +8325,9 @@ function updateNotificationSettingUI(){
           series=[{label:'feel',color:mc,vals,normalRange:[8,10],isBar:true,statusForIndex:(i)=>vals[i]==null?null:getRpeStatus(vals[i]),colorForIndex:(i)=>getFeelChartColor(vals[i])}];
         }
         else if(recoveryChartMetric==='hrv'){
-          const baseline=getHrvBaseline(getToday());
           const vals=days.map(d=>{const r=biometrics[d];return r&&r.hrv!=null?Number(r.hrv):null;});
-          series=[{label:'hrv',color:mc,vals,normalRange:baseline?[baseline.mean-baseline.stddev,baseline.mean+baseline.stddev]:null,isBar:true,statusForIndex:(i)=>getHrvChartState(vals[i],baseline).status,colorForIndex:(i)=>getHrvChartState(vals[i],baseline).color}];
+          const baselines=days.map(d=>getHrvBaseline(d)),lowVals=baselines.map(b=>b?b.mean-b.stddev:null),highVals=baselines.map(b=>b?b.mean+b.stddev:null),meanVals=baselines.map(b=>b?b.mean:null);
+          series=[{label:'hrv',color:mc,vals,dynamicRange:{baselines,lowVals,highVals,meanVals},isBar:true,statusForIndex:(i)=>getHrvChartState(vals[i],baselines[i]).status,colorForIndex:(i)=>getHrvChartState(vals[i],baselines[i]).color}];
         }
         else if(recoveryChartMetric==='bodyfatigue'){
           const wholeVals=days.map(d=>getBodyFatigueData(d).systemic),legVals=days.map(d=>getBodyFatigueData(d).legs),backVals=days.map(d=>getBodyFatigueData(d).back),upperVals=days.map(d=>getBodyFatigueData(d).upper);
@@ -8235,12 +8347,12 @@ function updateNotificationSettingUI(){
             {label:'recovery',color:sc,vals:recVals,normalRange:[67,100],isBar:true,barOpacity:0.62,statusForIndex:(i)=>recVals[i]==null?null:getPercentStatus(recVals[i]),colorForIndex:(i)=>getPercentChartColor(recVals[i])}
           ];
         }
-        const allVals=series.flatMap(s=>s.vals).filter(v=>v!=null);
+        const allVals=series.flatMap(s=>s.vals).filter(v=>v!=null),scaleVals=[...allVals,...series.flatMap(s=>s.normalRange||[]),...series.flatMap(s=>s.dynamicRange?[...s.dynamicRange.lowVals,...s.dynamicRange.highVals,...s.dynamicRange.meanVals]:[]).filter(v=>v!=null)];
         const metricExplainers={
           freshness:'green zone (75+) is where the four signals below are mostly in good shape together. dropping out of it usually means catching up on sleep or easing training load helps more than pushing through.',
           feel:'8-10 is the range worth aiming for. every bar now changes progressively from red through amber to green instead of jumping between three hard colors. if you\'re consistently below that, it often means you need more recovery time before your next hard effort, regardless of what the other numbers say.',
           bodyfatigue:'1 = fresh and 10 = wrecked. point colors now progress from green through amber to red. this chart separates whole-body, legs, back, and upper-body fatigue so the app can distinguish “don\'t train hard” from “a tiny low-cost lift is still fine.”',
-          hrv:series[0]&&series[0].normalRange?'every bar now uses the same visible personal baseline: green is usual, amber-to-red is progressively below usual, and teal is above usual. either direction is context, not a diagnosis; repeated trends matter more than one reading.':'once you\'ve logged about 5 days of HRV, this chart will shade your own normal range so you can compare the trend with your history, not a generic number.',
+          hrv:series[0]&&series[0].dynamicRange&&series[0].dynamicRange.baselines.some(Boolean)?'the shaded ribbon is the personal usual range that existed on each date, calculated only from the prior 30 days. its dashed center line shows how your rolling baseline itself moved. each bar is colored against that day’s baseline, not today’s threshold. repeated trends matter more than one reading.':'once you\'ve logged about 5 prior HRV readings, this chart will draw the personal range and baseline that existed on each date.',
           sleep:'67+ is whoop\'s own "well recovered" cutoff for both sleep and recovery %. consistently below it usually means more sleep or lighter days, not more caffeine.',
           acwr:'Near-base = the recent 7-day average is about 80–130% of the 28-day average; amber/red only show larger departures. The bands are descriptive app heuristics, not validated safety or injury-risk zones.'
         };
@@ -8260,7 +8372,7 @@ function updateNotificationSettingUI(){
         }
         const isAcwr=recoveryChartMetric==='acwr';
         const isBodyFatigue=recoveryChartMetric==='bodyfatigue';
-        const dataMin=Math.min(...allVals),dataMax=Math.max(...allVals);
+        const dataMin=Math.min(...scaleVals),dataMax=Math.max(...scaleVals);
         const zoomPadding=(dataMax-dataMin)*0.15||dataMax*0.1||1;
         const maxVal=isBodyFatigue?10:(isAcwr?Math.max(2.2,...allVals):dataMax+zoomPadding),minVal=isBodyFatigue?1:(isAcwr?0:Math.max(0,dataMin-zoomPadding));
         const m={top:16,right:28,bottom:22,left:32},cw=w-m.left-m.right,ch=h-m.top-m.bottom;
@@ -8276,7 +8388,7 @@ function updateNotificationSettingUI(){
           ctx.globalAlpha=1;
         }else{
           series.forEach(s=>{
-            if(!s.normalRange)return;
+            if(!s.normalRange||s.dynamicRange)return;
             const[lo,hi]=s.normalRange;
             const yTop=valToY(Math.min(hi,maxVal)),yBottom=valToY(Math.max(lo,minVal));
             if(yBottom<=yTop)return;
@@ -8285,11 +8397,19 @@ function updateNotificationSettingUI(){
           });
           ctx.globalAlpha=1;
         }
+        series.forEach(s=>{
+          if(!s.dynamicRange)return;const range=s.dynamicRange,segments=[];let segment=[];
+          range.baselines.forEach((baseline,i)=>{if(baseline&&range.lowVals[i]!=null&&range.highVals[i]!=null){if(segment.length&&i!==segment[segment.length-1]+1){segments.push(segment);segment=[];}segment.push(i);}else if(segment.length){segments.push(segment);segment=[];}});if(segment.length)segments.push(segment);
+          segments.forEach(indices=>{if(!indices.length)return;ctx.beginPath();indices.forEach((i,j)=>{const x=m.left+(days.length>1?cw/(days.length-1):0)*i,y=valToY(range.highVals[i]);if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});indices.slice().reverse().forEach(i=>{const x=m.left+(days.length>1?cw/(days.length-1):0)*i,y=valToY(range.lowVals[i]);ctx.lineTo(x,y);});ctx.closePath();ctx.fillStyle=s.color;ctx.globalAlpha=.11;ctx.fill();});
+          ctx.strokeStyle=s.color;ctx.globalAlpha=.58;ctx.lineWidth=1.2;ctx.setLineDash([3,3]);ctx.beginPath();let started=false;range.meanVals.forEach((v,i)=>{if(v==null){started=false;return;}const x=m.left+(days.length>1?cw/(days.length-1):0)*i,y=valToY(v);if(!started){ctx.moveTo(x,y);started=true;}else ctx.lineTo(x,y);});ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
+        });
         ctx.strokeStyle=tc;ctx.globalAlpha=0.06;ctx.lineWidth=1;
         for(let i=0;i<=4;i++){const y=m.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(m.left,y);ctx.lineTo(w-m.right,y);ctx.stroke();}
         ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='10px "JetBrains Mono",monospace';ctx.textAlign='right';
         for(let i=0;i<=4;i++){const val=maxVal-(maxVal-minVal)/4*i,y=m.top+(ch/4)*i;ctx.fillText(isAcwr?val.toFixed(1):String(Math.round(val)),m.left-4,y+3);}
         ctx.globalAlpha=1;
+        const thresholdDefs=recoveryChartMetric==='freshness'?[{value:75,label:'ready 75',color:'#5ec98a'}]:recoveryChartMetric==='feel'?[{value:8,label:'good 8',color:'#5ec98a'}]:recoveryChartMetric==='bodyfatigue'?[{value:7,label:'caution 7',color:'#d4a94a'},{value:9,label:'high 9',color:'#e05a5a'}]:recoveryChartMetric==='sleep'?[{value:67,label:'good 67',color:'#5ec98a'}]:[];
+        thresholdDefs.forEach(t=>{if(t.value<minVal||t.value>maxVal)return;const y=valToY(t.value);ctx.strokeStyle=t.color;ctx.globalAlpha=.42;ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(m.left,y);ctx.lineTo(w-m.right,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=t.color;ctx.globalAlpha=.72;ctx.font='8px "JetBrains Mono",monospace';ctx.textAlign='right';ctx.fillText(t.label,w-m.right-2,Math.max(m.top+8,y-3));});ctx.globalAlpha=1;
         const stepX=days.length>1?cw/(days.length-1):0;
         const labelEvery=Math.max(1,Math.ceil(days.length/6));
         ctx.textAlign='center';
@@ -8314,7 +8434,8 @@ function updateNotificationSettingUI(){
               ctx.fillStyle=color;ctx.globalAlpha=s.barOpacity!=null?s.barOpacity:0.85;
               const barTop=Math.min(y,baseY),barHeight=Math.max(1,Math.abs(baseY-y));
               ctx.fillRect(x-barW/2,barTop,barW,barHeight);
-              recoveryChartHitboxes.push({x:x-barW/2,y:barTop,w:barW,h:barHeight,text:`${days[i]}\n${s.label}: ${Math.round(v*10)/10}${status?' — '+status:''}`});
+              const baseline=s.dynamicRange&&s.dynamicRange.baselines[i],baselineText=baseline?`\n30d baseline: ${baseline.mean.toFixed(1)}\nusual range: ${(baseline.mean-baseline.stddev).toFixed(1)}–${(baseline.mean+baseline.stddev).toFixed(1)}`:'';
+              recoveryChartHitboxes.push({x:x-barW/2,y:barTop,w:barW,h:barHeight,text:`${days[i]}\n${s.label}: ${Math.round(v*10)/10}${status?' — '+status:''}${baselineText}`});
             });
           });
           ctx.globalAlpha=1;
@@ -8355,8 +8476,9 @@ function updateNotificationSettingUI(){
             let legendHtml='';
             if(barSeries.length>1)legendHtml+=barSeries.map(s=>`<span data-series="${s.label}"><span class="legend-dot" style="background:var(--text-color);opacity:${s.barOpacity!=null?s.barOpacity:0.85};"></span> ${s.label}</span>`).join('');
             if(lineSeries.length)legendHtml+=lineSeries.map(s=>`<span data-series="${s.label}"><span class="legend-dot" style="background:${s.color};"></span> ${s.label}</span>`).join('');
-            if(barSeries.length&&recoveryChartMetric==='hrv')legendHtml+='<span><span class="legend-dot hrv-gradient-dot"></span> progressively below usual</span><span><span class="legend-dot" style="background:#5ec98a;"></span> usual</span><span><span class="legend-dot" style="background:#6ea8d8;"></span> above usual</span>';
+            if(barSeries.length&&recoveryChartMetric==='hrv')legendHtml+='<span><span class="legend-dot hrv-gradient-dot"></span> progressively below usual</span><span><span class="legend-dot" style="background:#5ec98a;"></span> rolling usual ribbon</span><span><span class="legend-line" style="border-top-color:var(--main-color);border-top-style:dashed;"></span> 30d baseline</span><span><span class="legend-dot" style="background:#6ea8d8;"></span> above usual</span>';
             else if(barSeries.length)legendHtml+='<span><span class="legend-dot" style="background:#5ec98a;"></span> good</span><span><span class="legend-dot" style="background:#d4a94a;"></span> caution</span><span><span class="legend-dot" style="background:#e05a5a;"></span> concerning</span>';
+            if(thresholdDefs.length)legendHtml+='<span><span class="legend-line" style="border-top-color:var(--text-color);border-top-style:dashed;"></span> visible threshold</span>';
             if(hasTrendLine)legendHtml+='<span data-action="trend"><span class="legend-line"></span> trend</span>';
             legendEl.innerHTML=legendHtml;
           }else{
