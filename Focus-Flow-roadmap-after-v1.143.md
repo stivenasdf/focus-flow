@@ -283,14 +283,18 @@ Missing activity load now follows a visible one-score hierarchy: imported source
 
 Status: implemented on August 15, 2026. The maximum-weekly-cardio field now uses a themed 0.5-hour stepper, autosaves inline and does not queue a toast for every adjustment. Run and bike remain the stable top-level sports so history, load and records do not fragment; virtual run and virtual bike are shown as context labels and remain eligible for the appropriate sport analysis. Virtual-run elevation remains excluded. Running displays prefer min/km pace everywhere while speed is retained only as an internal arithmetic representation. Activity-load guidance now distinguishes consistent output-based TSS-style stress from HR and RPE response-based fallbacks, with one method selected rather than multiple methods added together.
 
-## v1.162 — Goals, Books and review loop
+## v1.162 — Automatic performance thresholds
+
+Status: implemented on August 15, 2026. Cycling automatic mode prefers the latest Intervals-supplied activity threshold, then falls back to a transparent recent two-parameter power-curve fit and its modelled 60-minute power. Running automatic mode fits the standard two-parameter distance–time relationship from qualifying 1–5 km best efforts lasting roughly 2–20 minutes, exposing critical speed, D′, fit quality, source points and confidence. Manual overrides remain exact. Actual records never decay; after 42 days without fresh dated evidence, only the working automatic threshold eases by 0.5% per 30 days, capped at 5%. Missing, low-confidence or stale evidence produces an in-app refresh reminder, while a 5 km test remains conditional on the existing Recovery-approved test window rather than being forced by the model. A new inspectable critical-speed chart shows the source points and fitted line.
+
+## v1.163 — Goals, Books and review loop
 
 - Complete goal status, next milestone, evidence, obstacle planning, review cadence and archive.
 - Connect goals to actual task, habit, reading, training and Money evidence.
 - Complete key book learnings, finish reflection, spaced review and reading-goal pacing.
 - Refine Weekly Review, Morning Brief and Evening Shutdown into one low-effort planning loop.
 
-## v1.163 — Cross-app personal intelligence
+## v1.164 — Cross-app personal intelligence
 
 - Build What Focus::Flow has learned about me with evidence links and confidence.
 - Improve What should I do now using the mature task, schedule, training and recovery systems.
@@ -307,4 +311,3 @@ Status: implemented on August 15, 2026. The maximum-weekly-cardio field now uses
 - Automatic bank connectivity before the manual/CSV Money model proves useful.
 - Full calorie and macro tracking inside Focus::Flow.
 - Continuous theme colour blending; fixed, tested phase changes remain safer for contrast and identity.
-
