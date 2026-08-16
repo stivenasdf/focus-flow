@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.180 evidence-based adaptive leg recovery reset -->
+<!-- Focus::Flow deployment marker: v1.183 readable text, adaptive leg-reset completion, and spacious task details -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -3247,7 +3247,7 @@
     .leg-recovery-dose,.leg-recovery-gate,.leg-recovery-reassess{border:1px solid var(--border-color);background:color-mix(in srgb,var(--bg-color) 84%,var(--main-color) 16%);border-radius:10px;padding:.75rem}
     .leg-recovery-dose strong,.leg-recovery-gate strong,.leg-recovery-reassess strong{display:block;color:var(--main-color);margin-bottom:.3rem}
     .leg-recovery-dose span,.leg-recovery-gate span,.leg-recovery-reassess span{display:block;line-height:1.5;color:var(--text-color);opacity:.82}
-    .leg-recovery-methods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin-top:.7rem}
+    .leg-recovery-methods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.55rem;margin-top:.7rem}
     .leg-recovery-method{appearance:none;text-align:left;border:1px solid var(--border-color);border-radius:10px;background:color-mix(in srgb,var(--bg-color) 92%,var(--text-color) 8%);color:var(--text-color);padding:.7rem;cursor:pointer;min-height:88px}
     .leg-recovery-method:hover,.leg-recovery-method.selected{border-color:var(--main-color);background:color-mix(in srgb,var(--bg-color) 78%,var(--main-color) 22%)}
     .leg-recovery-method b{display:block;color:var(--main-color);margin-bottom:.24rem}
@@ -3274,7 +3274,9 @@
     .leg-recovery-evidence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-top:.6rem}
     .leg-recovery-evidence-grid div{border-left:2px solid var(--border-color);padding-left:.55rem;line-height:1.45;color:var(--text-color);opacity:.8;font-size:.78rem}
     .leg-recovery-evidence a{color:var(--main-color)}
-    @media(max-width:760px){.leg-recovery-head{align-items:flex-start}.leg-recovery-plan,.leg-recovery-methods,.leg-recovery-evidence-grid,.leg-recovery-reassess-row{grid-template-columns:1fr}.leg-recovery-method{min-height:0}.leg-recovery-actions .btn{width:100%;justify-content:center}}
+    @media(max-width:900px){.leg-recovery-methods{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.leg-recovery-head{align-items:flex-start}.leg-recovery-plan,.leg-recovery-evidence-grid,.leg-recovery-reassess-row{grid-template-columns:1fr}.leg-recovery-method{min-height:0}.leg-recovery-actions .btn{width:100%;justify-content:center}}
+    @media(max-width:520px){.leg-recovery-methods{grid-template-columns:1fr}}
     :where(button,a,input,select,textarea,summary,[tabindex]):focus-visible { outline:2px solid var(--sub-color)!important; outline-offset:2px; }
     :where(button,input,select,textarea):disabled { cursor:not-allowed; opacity:.5; }
     .money-payoff-grid { display:grid; grid-template-columns:minmax(0,.8fr) repeat(2,minmax(0,1fr)); gap:.65rem; margin-top:.7rem; }
@@ -3327,6 +3329,30 @@
     .pattern-decision { margin-top:.4rem; color:var(--sub-color); font-size:.49rem; line-height:1.4; }
     @media(max-width:900px){.money-payoff-grid,.nutrition-grid{grid-template-columns:1fr}.nutrition-card.wide,.nutrition-intro{grid-column:auto}.money-snapshot-row{grid-template-columns:85px 1fr 1fr}.money-snapshot-row span:nth-of-type(3){display:none}}
     @media(max-width:620px){.nutrition-intro{display:block}.nutrition-check-row{grid-template-columns:1fr}.nutrition-fuel-grid{grid-template-columns:1fr}.nutrition-history{grid-template-columns:repeat(4,minmax(0,1fr))}.recovery-audit-row{grid-template-columns:1fr}.money-payoff-grid{grid-template-columns:1fr}}
+
+    /* v1.183: readable text is the default, not an optional accessibility afterthought. */
+    html{font-size:17px}
+    body :is(small,label,[class*="-kicker"],[class*="-eyebrow"],[class*="-subtitle"],[class*="-copy"],[class*="-note"],[class*="-hint"],[class*="-meta"],[class*="-label"],[class*="-caption"],[class*="-confidence"],[class*="-badge"],[class*="-chip"],[class*="-legend"],[class*="-footnote"],[class*="-detail"],[class*="-reason"],[class*="-status"],[class*="-freq"],[class*="-description"],[class*="-explainer"]){font-size:.72rem!important;line-height:1.45}
+    body :is(.btn.small,.sort-btn,.panel-tab,.task-text-btn,.task-outcome-btn,.subtask-toggle,.edit-btn,.delete-task-btn,.task-start-focus){font-size:.76rem!important;line-height:1.25}
+    body :is(input,select,textarea){font-size:.72rem!important}
+    .sidebar-section-label,.sidebar-utility-meta,.today-now-signal-label,.recovery-summary-stat-label,.recovery-signal-label,.task-overview-label,.task-coach-label{font-size:.72rem!important}
+    .recovery-signal-value,.rhythm-value,.task-coach-value,.activity-threshold-detail,.training-call-plain-context{font-size:.72rem!important;line-height:1.5}
+    .training-call-test-gauge-text,.recovery-audit-total,.recovery-cold-start{font-size:13px!important;line-height:1.45}
+    .activity-stream-label{font-size:12px}.activity-stream-stat,.activity-stream-time{font-size:11px}.activity-stream-live-unit,.activity-stream-detector-label{font-size:10px}.effort-library-chart-label{font-size:11px}
+    .readable-text-floor.readable-text-floor{font-size:14px!important}
+
+    /* Expanded work should use the desktop canvas and the page should remain scrollable. */
+    #panel-tasks .tasks-panel-grid{align-items:start}
+    #panel-tasks .task-workbench-card{min-height:0;max-height:none;overflow:visible}
+    #panel-tasks .task-workbench-card>.task-list{max-height:none;overflow:visible}
+    @media(min-width:1000px){
+      body:not([data-view-mode="mobile"]) #panel-tasks .task-workbench-card>.task-list:has(.task-lane-section.has-expanded) .task-lane-section{grid-column:1/-1}
+      body:not([data-view-mode="mobile"]) #panel-tasks .task-workbench-card>.task-list:has(.task-lane-section.has-expanded) .task-lane-section.has-expanded{grid-row:1}
+      body:not([data-view-mode="mobile"]) #panel-tasks .task-lane-section.has-expanded .task-details-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+      body:not([data-view-mode="mobile"]) #panel-tasks .task-lane-section.has-expanded .task-details-panel{padding:1rem;gap:.75rem}
+      body:not([data-view-mode="mobile"]) #panel-tasks .task-lane-section.has-expanded .task-details-section{padding:.72rem}
+      body:not([data-view-mode="mobile"]) #panel-tasks .task-library-card{position:sticky;top:1rem}
+    }
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
   </style>
 </head>
@@ -3508,7 +3534,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.182 makes Recovery substantially faster with indexed daily load calculations, prevents provisional running thresholds from inflating pace load, simplifies the load-ratio chart, keeps long-period dates inside the plot, improves automatic habit planning, makes Money easier to read, and uses historical bodyweight for pound-for-pound records.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.183 establishes a readable text floor across the app, makes task details use the available desktop space without clipping the queue, and treats low leg fatigue as a completed adaptive target while elevated fatigue stays open until reassessment.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -4562,6 +4588,7 @@
             <div class="leg-recovery-methods" id="legRecoveryMethods">
               <button type="button" class="leg-recovery-method" data-leg-method="elevation"><b>legs elevated</b><small>Low-effort comfort option. Evidence for exercise recovery is very limited.</small></button>
               <button type="button" class="leg-recovery-method" data-leg-method="foam"><b>easy foam rolling</b><small>May make your legs feel a little less sore and help them move more freely. Keep the pressure comfortable.</small></button>
+              <button type="button" class="leg-recovery-method" data-leg-method="massage"><b>gentle self-massage</b><small>Use light, comfortable pressure only. Stop for pain, numbness, unusual swelling, or worsening symptoms.</small></button>
               <button type="button" class="leg-recovery-method" data-leg-method="boots"><b>compression boots</b><small>May make soreness feel a little better. Follow the device instructions for pressure and time.</small></button>
             </div>
             <div class="leg-recovery-actions"><button type="button" class="btn primary" id="legRecoveryCompleteBtn">complete selected reset</button><span class="leg-recovery-completed" id="legRecoveryCompleted"></span></div>
@@ -5244,7 +5271,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.182';
+      const APP_VERSION='1.183';
       const APP_RELEASE_DATE='2026-08-16';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -9881,7 +9908,6 @@ function updateNotificationSettingUI(){
         renderRecoveryCalibration();
         renderRecoveryDecisionHistory();
         renderWeightTrend();
-        renderHeartRateContext();
         updateRecoveryColdStart();
         drawRecoveryChart();
         recoveryHasRendered=true;recoveryRenderedDate=getToday();
@@ -9917,7 +9943,7 @@ function updateNotificationSettingUI(){
         const loadKnown=loadVals.filter(v=>v!=null);
         const strainKnown=strainVals.filter(v=>v!=null);
         if(!loadKnown.length&&!strainKnown.length){
-          ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='10px "Lexend Deca",sans-serif';ctx.textAlign='center';
+          ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='11px "Lexend Deca",sans-serif';ctx.textAlign='center';
           ctx.fillText('no data logged in this period yet',w/2,h/2);ctx.globalAlpha=1;
           if(legendEl)legendEl.style.display='none';
           return;
@@ -9937,7 +9963,7 @@ function updateNotificationSettingUI(){
         ctx.strokeStyle=tc;ctx.globalAlpha=0.06;ctx.lineWidth=1;
         for(let i=0;i<=4;i++){const y=m.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(m.left,y);ctx.lineTo(w-m.right,y);ctx.stroke();}
         ctx.globalAlpha=1;
-        ctx.font='9px "JetBrains Mono",monospace';ctx.textAlign='right';
+        ctx.font='11px "JetBrains Mono",monospace';ctx.textAlign='right';
         if(loadKnown.length){
           for(let i=0;i<=4;i++){const val=loadMax-(loadMax-loadMin)/4*i,y=m.top+(ch/4)*i;ctx.fillStyle=mc;ctx.globalAlpha=0.7;ctx.fillText(String(Math.round(val)),m.left-4,y+3);}
         }
@@ -9948,7 +9974,7 @@ function updateNotificationSettingUI(){
         ctx.globalAlpha=1;
         const stepX=days.length>1?cw/(days.length-1):0;
         const labelEvery=Math.max(1,Math.ceil(days.length/6));
-        ctx.textAlign='center';ctx.font='10px "JetBrains Mono",monospace';
+        ctx.textAlign='center';ctx.font='11px "JetBrains Mono",monospace';
         days.forEach((d,i)=>{if(i%labelEvery===0||i===days.length-1){const x=m.left+stepX*i;ctx.textAlign=i===0?'left':i===days.length-1?'right':'center';ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.fillText(d.slice(5),x,h-6);}});ctx.textAlign='center';
         ctx.globalAlpha=1;
         const drawSeries=(vals,toY,color,label)=>{
@@ -9999,7 +10025,7 @@ function updateNotificationSettingUI(){
         const ratioKnown=ratioVals.filter(v=>v!=null);
         const loadKnown=[...acuteVals,...chronicVals,...loadVals].filter(v=>v!=null);
         if(!ratioKnown.length&&!loadKnown.length){
-          ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='10px "Lexend Deca",sans-serif';ctx.textAlign='center';
+          ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='11px "Lexend Deca",sans-serif';ctx.textAlign='center';
           ctx.fillText('no data logged in this period yet',w/2,h/2);ctx.globalAlpha=1;
           if(legendEl)legendEl.style.display='none';
           return;
@@ -10020,7 +10046,7 @@ function updateNotificationSettingUI(){
         ctx.strokeStyle=tc;ctx.globalAlpha=0.06;ctx.lineWidth=1;
         for(let i=0;i<=4;i++){const y=m.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(m.left,y);ctx.lineTo(w-m.right,y);ctx.stroke();}
         ctx.globalAlpha=1;
-        ctx.font='9px "JetBrains Mono",monospace';ctx.textAlign='right';
+        ctx.font='11px "JetBrains Mono",monospace';ctx.textAlign='right';
         for(let i=0;i<=4;i++){const val=ratioMax-(ratioMax-ratioMin)/4*i,y=m.top+(ch/4)*i;ctx.fillStyle=mc;ctx.globalAlpha=0.7;ctx.fillText(val.toFixed(1),m.left-4,y+3);}
         if(loadKnown.length){
           ctx.textAlign='left';
@@ -10029,7 +10055,7 @@ function updateNotificationSettingUI(){
         ctx.globalAlpha=1;
         const stepX=days.length>1?cw/(days.length-1):0;
         const labelEvery=Math.max(1,Math.ceil(days.length/6));
-        ctx.textAlign='center';ctx.font='10px "JetBrains Mono",monospace';
+        ctx.textAlign='center';ctx.font='11px "JetBrains Mono",monospace';
         days.forEach((d,i)=>{if(i%labelEvery===0||i===days.length-1){const x=m.left+stepX*i;ctx.textAlign=i===0?'left':i===days.length-1?'right':'center';ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.fillText(d.slice(5),x,h-6);}});ctx.textAlign='center';
         ctx.globalAlpha=1;
         const drawLine=(vals,toY,color,width,dashed,alpha)=>{
@@ -10148,7 +10174,7 @@ function updateNotificationSettingUI(){
         }
         const legendEl=document.getElementById('recoveryChartLegend');
         if(!allVals.length){
-          ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='10px "Lexend Deca",sans-serif';ctx.textAlign='center';
+          ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='11px "Lexend Deca",sans-serif';ctx.textAlign='center';
           ctx.fillText('no data logged in this period yet',w/2,h/2);ctx.globalAlpha=1;
           if(legendEl)legendEl.style.display='none';
           updateRecoveryChartNavUI(days);
@@ -10189,11 +10215,11 @@ function updateNotificationSettingUI(){
         });
         ctx.strokeStyle=tc;ctx.globalAlpha=0.06;ctx.lineWidth=1;
         for(let i=0;i<=4;i++){const y=m.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(m.left,y);ctx.lineTo(w-m.right,y);ctx.stroke();}
-        ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='10px "JetBrains Mono",monospace';ctx.textAlign='right';
+        ctx.fillStyle=tc;ctx.globalAlpha=0.4;ctx.font='11px "JetBrains Mono",monospace';ctx.textAlign='right';
         for(let i=0;i<=4;i++){const val=maxVal-(maxVal-minVal)/4*i,y=m.top+(ch/4)*i;ctx.fillText(isAcwr?val.toFixed(1):String(Math.round(val)),m.left-4,y+3);}
         ctx.globalAlpha=1;
         const thresholdDefs=recoveryChartMetric==='freshness'?[{value:75,label:'ready 75',color:'#5ec98a'}]:recoveryChartMetric==='feel'?[{value:8,label:'good 8',color:'#5ec98a'}]:recoveryChartMetric==='bodyfatigue'?[{value:7,label:'caution 7',color:'#d4a94a'},{value:9,label:'high 9',color:'#e05a5a'}]:recoveryChartMetric==='sleep'?[{value:67,label:'good 67',color:'#5ec98a'}]:[];
-        thresholdDefs.forEach(t=>{if(t.value<minVal||t.value>maxVal)return;const y=valToY(t.value);ctx.strokeStyle=t.color;ctx.globalAlpha=.42;ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(m.left,y);ctx.lineTo(w-m.right,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=t.color;ctx.globalAlpha=.72;ctx.font='8px "JetBrains Mono",monospace';ctx.textAlign='right';ctx.fillText(t.label,w-m.right-2,Math.max(m.top+8,y-3));});ctx.globalAlpha=1;
+        thresholdDefs.forEach(t=>{if(t.value<minVal||t.value>maxVal)return;const y=valToY(t.value);ctx.strokeStyle=t.color;ctx.globalAlpha=.42;ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(m.left,y);ctx.lineTo(w-m.right,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=t.color;ctx.globalAlpha=.72;ctx.font='10px "JetBrains Mono",monospace';ctx.textAlign='right';ctx.fillText(t.label,w-m.right-2,Math.max(m.top+10,y-3));});ctx.globalAlpha=1;
         const stepX=days.length>1?cw/(days.length-1):0;
         const labelEvery=Math.max(1,Math.ceil(days.length/6));
         ctx.textAlign='center';
@@ -11020,7 +11046,7 @@ function updateNotificationSettingUI(){
         btn.addEventListener('click',e=>{e.stopPropagation();toggleTaskType(t.id);});
         return btn;
       }
-      function toggleTaskMetaExpand(id){const opening=!expandedTaskMeta.has(id);if(opening)expandedTaskMeta.add(id);else expandedTaskMeta.delete(id);renderTasks();if(opening)requestAnimationFrame(()=>document.querySelector(`[data-task-id="${CSS.escape(String(id))}"]`)?.scrollIntoView({block:'nearest',inline:'nearest'}));}
+      function toggleTaskMetaExpand(id){const opening=!expandedTaskMeta.has(id);expandedTaskMeta.clear();if(opening)expandedTaskMeta.add(id);renderTasks();if(opening)requestAnimationFrame(()=>document.querySelector(`[data-task-id="${CSS.escape(String(id))}"]`)?.scrollIntoView({block:'nearest',inline:'nearest'}));}
       function setTaskOutcome(taskId,outcome){const t=tasks.find(x=>x.id===taskId);if(!t)return;if(outcome==='done'){handleTaskComplete(taskId,true);return;}if(outcome==='resume'){t.outcome='';showToast(`${t.text} is active again`);}else if(outcome==='defer'){t.deferCount=(t.deferCount||0)+1;const d=new Date();d.setDate(d.getDate()+1);t.dueDate=toDateStr(d);t.outcome='deferred';showToast(`${t.text} deferred to tomorrow`);}else if(outcome==='blocked'){t.outcome='blocked';showToast(`${t.text} marked blocked`);}else if(outcome==='drop'){t.outcome='dropped';t.completed=true;t.completedAt=getToday();if(currentTaskId===t.id)currentTaskId=null;showToast(`${t.text} dropped · not counted as completed`);}renderTasks();saveData();}
       function getTaskNextActionPreview(t){const explicit=(t.nextAction||'').trim();if(explicit)return{text:explicit,suggested:false};const sub=(t.subtasks||[]).find(s=>!s.completed&&s.text);if(sub)return{text:sub.text,suggested:false};if(t.outcome==='blocked')return{text:'Name what is blocking this, then choose one action you control.',suggested:true};if((t.deferCount||0)>=2)return{text:'Try one 15-minute first step instead of another identical deferral.',suggested:true};return null;}
       function createTaskIntelligenceBlock(t){const block=document.createElement('div');block.className='task-intelligence';const row=document.createElement('div');row.className='task-next-action-row';const label=document.createElement('label');label.textContent='next action';const input=document.createElement('input');input.className='search-input';input.placeholder='smallest concrete next step...';input.value=t.nextAction||'';input.addEventListener('input',()=>{t.nextAction=input.value.trim();saveData();});row.appendChild(label);row.appendChild(input);block.appendChild(row);const learned=getLearnedTaskEstimate(t.text);if(learned){const estimate=document.createElement('span');estimate.className='task-estimate-chip';estimate.innerHTML=`Usually about ${learned.minutes}m, based on ${learned.samples} completed attempts · <button type="button">use estimate</button>`;estimate.querySelector('button').addEventListener('click',e=>{e.stopPropagation();setTaskTimer(t.id,learned.minutes);});block.appendChild(estimate);}if(t.outcome==='blocked'||(t.deferCount||0)>=2){const preview=getTaskNextActionPreview(t),stuck=document.createElement('span');stuck.className='task-stuck-chip';stuck.textContent=t.outcome==='blocked'?`Blocked · ${preview?.text||'choose one action you control'}`:`Deferred ${t.deferCount} times · ${preview?.text||'try a smaller first step'}`;block.appendChild(stuck);}if(!t.completed){const actions=document.createElement('div');actions.className='task-outcome-row';const options=[['Done','done','done'],['Defer','defer','defer'],[t.outcome==='blocked'?'Resume':'Blocked',t.outcome==='blocked'?'resume':'blocked','blocked'],['Drop','drop','drop']];options.forEach(([labelText,outcome,style])=>{const b=document.createElement('button');b.className=`task-outcome-btn ${style}`;b.textContent=labelText;b.addEventListener('click',e=>{e.stopPropagation();setTaskOutcome(t.id,outcome);});actions.appendChild(b);});block.appendChild(actions);}return block;}
@@ -11863,24 +11889,25 @@ function updateNotificationSettingUI(){
       function getLegRecoveryEntry(dateStr=getToday()){ensureLegRecoveryState();return legRecoveryState.entries[dateStr]||{};}
       function getLegRecoveryPrescription(dateStr=getToday()){
         const fatigue=getBodyFatigueData(dateStr),entry=getLegRecoveryEntry(dateStr),legs=Number(entry.preFatigue||fatigue.legs)||null,call=getTrainingCallData(dateStr),level=legs==null?'waiting':legs>=8?'comfort':legs>=6?'high':legs>=4?'moderate':'optional';
-        const dose=level==='comfort'?{label:'comfort only · choose one',range:'20–30 minutes',elevation:20,foam:10,boots:25}:level==='high'?{label:'higher leg fatigue · choose one',range:'15–20 minutes',elevation:15,foam:8,boots:20}:level==='moderate'?{label:'noticeable leg fatigue · choose one',range:'10–15 minutes',elevation:10,foam:5,boots:15}:level==='optional'?{label:'no reset required',range:'optional 5–10 minutes for comfort',elevation:10,foam:5,boots:15}:{label:'log leg fatigue first',range:'no dose yet',elevation:10,foam:5,boots:15};
+        const dose=level==='comfort'?{label:'comfort only · choose one',range:'20–30 minutes',elevation:20,foam:10,massage:10,boots:25}:level==='high'?{label:'higher leg fatigue · choose one',range:'15–20 minutes',elevation:15,foam:8,massage:8,boots:20}:level==='moderate'?{label:'noticeable leg fatigue · choose one',range:'10–15 minutes',elevation:10,foam:5,massage:5,boots:15}:level==='optional'?{label:'no reset required',range:'optional 5–10 minutes for comfort',elevation:10,foam:5,massage:5,boots:15}:{label:'log leg fatigue first',range:'no dose yet',elevation:10,foam:5,massage:5,boots:15};
+        const methodStats=getLegRecoveryStats(dateStr).byMethod||{},learned=Object.entries(methodStats).filter(([,value])=>value.reassessed>=2).sort((a,b)=>b[1].improvementRate-a[1].improvementRate||(a[1].median??0)-(b[1].median??0))[0],recommendedMethod=learned?.[0]||null;
         const localReason=reason=>/physical fatigue|body-region fatigue|leg fatigue/i.test(String(reason||'')),otherReasons=(call.reasons||[]).filter(reason=>!localReason(reason)),rec=biometrics[dateStr]||{},systemic=Number(fatigue.systemic)||null,work=getWorkStressData(dateStr),healthClear=(rec.healthFlag||'none')==='none',localOnly=call.level==='rest'&&!otherReasons.length&&(call.reasons||[]).some(localReason);
-        return{dateStr,legs,level,dose,call,otherReasons,healthClear,systemic,work,localOnly,entry};
+        return{dateStr,legs,level,dose,call,otherReasons,healthClear,systemic,work,localOnly,entry,recommendedMethod};
       }
-      function getLegRecoveryMethodLabel(method){return{elevation:'legs elevated',foam:'easy foam rolling',boots:'compression boots'}[method]||'recovery reset';}
+      function getLegRecoveryMethodLabel(method){return{elevation:'legs elevated',foam:'easy foam rolling',massage:'gentle self-massage',boots:'compression boots'}[method]||'recovery reset';}
       function getLegRecoveryMethodMinutes(plan,method){return Number(plan.dose[method])||10;}
       function getLegRecoveryStats(referenceDateStr=getToday()){
-        ensureLegRecoveryState();const cutoff=new Date(`${referenceDateStr}T12:00:00`);cutoff.setDate(cutoff.getDate()-29);const cutoffStr=toDateStr(cutoff),entries=Object.entries(legRecoveryState.entries).filter(([date,value])=>date>=cutoffStr&&date<=referenceDateStr&&value?.completedAt),changes=entries.filter(([,value])=>value.postFatigue!=null&&value.preFatigue!=null).map(([,value])=>Number(value.postFatigue)-Number(value.preFatigue)).filter(Number.isFinite),improved=changes.filter(change=>change<0).length,median=changes.length?medianNumber(changes):null;return{completed:entries.length,reassessed:changes.length,improved,median};
+        ensureLegRecoveryState();const cutoff=new Date(`${referenceDateStr}T12:00:00`);cutoff.setDate(cutoff.getDate()-29);const cutoffStr=toDateStr(cutoff),entries=Object.entries(legRecoveryState.entries).filter(([date,value])=>date>=cutoffStr&&date<=referenceDateStr&&value?.completedAt),changes=entries.filter(([,value])=>value.postFatigue!=null&&value.preFatigue!=null).map(([,value])=>Number(value.postFatigue)-Number(value.preFatigue)).filter(Number.isFinite),improved=changes.filter(change=>change<0).length,median=changes.length?medianNumber(changes):null,byMethod={};entries.forEach(([,value])=>{const method=value.method||'unknown',change=value.postFatigue!=null&&value.preFatigue!=null?Number(value.postFatigue)-Number(value.preFatigue):null;if(!byMethod[method])byMethod[method]={completed:0,reassessed:0,improved:0,changes:[]};const stats=byMethod[method];stats.completed++;if(Number.isFinite(change)){stats.reassessed++;stats.changes.push(change);if(change<0)stats.improved++;}});Object.values(byMethod).forEach(stats=>{stats.median=stats.changes.length?medianNumber(stats.changes):null;stats.improvementRate=stats.reassessed?stats.improved/stats.reassessed:0;delete stats.changes;});return{completed:entries.length,reassessed:changes.length,improved,median,byMethod};
       }
       function getLegRecoveryHabitRow(dateStr=getToday()){
-        const plan=getLegRecoveryPrescription(dateStr),entry=plan.entry;if((plan.legs==null||plan.legs<4)&&!entry.completedAt)return null;const stats=getLegRecoveryStats(dateStr),done=!!entry.completedAt,change=entry.postFatigue!=null&&entry.preFatigue!=null&&Number.isFinite(Number(entry.postFatigue))&&Number.isFinite(Number(entry.preFatigue))?Number(entry.postFatigue)-Number(entry.preFatigue):null;return{key:'leg-recovery',name:'adaptive leg recovery reset',done,state:done?'followed':'open',target:`${plan.dose.label} · ${plan.dose.range}`,meta:done?`${getLegRecoveryMethodLabel(entry.method)} completed${change==null?' · reassessment open':` · legs ${entry.preFatigue}→${entry.postFatigue}`}`:`leg fatigue ${plan.legs}/10 · reset still open`,effort:stats.completed?`${stats.completed} reset${stats.completed===1?'':'s'} · ${stats.reassessed?`${stats.improved}/${stats.reassessed} felt better${stats.median!=null?` · median ${stats.median>0?'+':''}${stats.median}`:''}`:'reassessment history building'}`:'history building',panel:'recovery',action:'open leg reset'};
+        const plan=getLegRecoveryPrescription(dateStr),entry=plan.entry;if(plan.legs==null)return null;const stats=getLegRecoveryStats(dateStr),low=plan.legs<4,reassessed=entry.postFatigue!=null&&Number.isFinite(Number(entry.postFatigue))&&Number.isFinite(Number(entry.preFatigue)),done=low||reassessed,change=reassessed?Number(entry.postFatigue)-Number(entry.preFatigue):null,target=low?`no reset needed · leg fatigue ${plan.legs}/10`:`${plan.dose.label} · ${plan.dose.range}`,meta=low?`leg fatigue ${plan.legs}/10 · recovery target already met`:reassessed?`${getLegRecoveryMethodLabel(entry.method)} reassessed · legs ${entry.preFatigue}→${entry.postFatigue}`:entry.completedAt?`${getLegRecoveryMethodLabel(entry.method)} logged · re-rate your legs to finish`:`leg fatigue ${plan.legs}/10 · reset and reassessment still open`;return{key:'leg-recovery',name:'adaptive leg recovery reset',done,state:done?'followed':'open',target,meta,effort:stats.completed?`${stats.completed} reset${stats.completed===1?'':'s'} · ${stats.reassessed?`${stats.improved}/${stats.reassessed} felt better${stats.median!=null?` · median ${stats.median>0?'+':''}${stats.median}`:''}`:'reassessment history building'}`:'history building',panel:'recovery',action:low?'view leg target':'open leg reset'};
       }
       function getLegRecoveryGate(plan){
         const entry=plan.entry,pre=Number(entry.preFatigue),post=entry.postFatigue==null?null:Number(entry.postFatigue),change=post==null?null:post-pre;if(!entry.completedAt)return{protected:true,title:'today’s plan stays in charge',text:'Try one comfort option, then rate the same leg feeling again. Feeling better does not automatically clear you for a workout.'};if(post==null||!Number.isFinite(post))return{protected:true,title:'rate your legs again',text:`${getLegRecoveryMethodLabel(entry.method)} was logged. Rate your legs again before you consider even gentle movement.`};if(!entry.redFlagsClear)return{protected:true,title:'do not train through warning symptoms',text:'You did not confirm that warning symptoms are clear. Keep the original plan and pay attention to pain, swelling, numbness, illness, dizziness, or any new worrying symptom.'};if(pre>=8||post>=7)return{protected:true,title:'comfort only today',text:`Leg fatigue is still ${post}/10. Keep this as comfort care, not a workout test.`};if(plan.call.level==='rest'&&plan.otherReasons.length)return{protected:true,title:'another reason still says rest',text:`Your legs changed from ${pre} to ${post}, but this also matters: ${plan.otherReasons.slice(0,2).map(getPlainTrainingReason).join(' ')} A comfort option cannot cancel that reason.`};if(change<=-2&&post<=4&&plan.healthClear&&(plan.systemic==null||plan.systemic<=4)&&plan.work.status!=='red')return{protected:false,title:'a very easy movement check may be okay',text:`Your legs improved from ${pre} to ${post}. If you have no warning symptoms, you may try 5–10 minutes of very easy spinning. Stop if your legs or symptoms get worse. This does not clear you for a harder workout.`};if(change<0)return{protected:true,title:'a little better, but keep today easy',text:`Your legs improved from ${pre} to ${post}. That is useful, but it does not change today’s training plan.`};return{protected:true,title:'no clear improvement',text:`Your legs changed from ${pre} to ${post}. Do not keep stacking recovery tools to chase a workout. Follow today’s original plan.`};
       }
       function renderLegRecoveryReset(){
         const card=document.getElementById('legRecoveryCard');if(!card)return;const plan=getLegRecoveryPrescription(getToday()),entry=plan.entry,badge=document.getElementById('legRecoveryBadge'),intro=document.getElementById('legRecoveryIntro'),dose=document.getElementById('legRecoveryDose'),complete=document.getElementById('legRecoveryCompleteBtn'),completed=document.getElementById('legRecoveryCompleted'),post=document.getElementById('legRecoveryPostFatigue'),clear=document.getElementById('legRecoveryRedFlagsClear'),reassess=document.getElementById('legRecoveryReassess'),gateEl=document.getElementById('legRecoveryGate');
-        if(badge)badge.textContent=plan.legs==null?'waiting for leg fatigue':`leg fatigue ${plan.legs}/10 · ${plan.level==='comfort'?'comfort only':plan.level==='high'?'higher support':plan.level==='moderate'?'reset suggested':'optional'}`;if(intro)intro.textContent=plan.legs==null?'Log leg fatigue in today’s numbers. When it is elevated, Focus::Flow will offer one short recovery option and record whether it actually changes how your legs feel.':plan.legs<4?`Leg fatigue is ${plan.legs}/10. No recovery-tool habit is needed; ordinary easy movement is enough unless another signal says otherwise.`:`Leg fatigue is ${plan.legs}/10. Choose one option—not all three—then re-rate the same feeling so the app can learn whether it helps you.`;if(dose)dose.innerHTML=`<strong>${escapeHtml(plan.dose.label)}</strong><span>${escapeHtml(plan.dose.range)}. Elevation ${plan.dose.elevation}m · foam rolling ${plan.dose.foam}m · boots ${plan.dose.boots}m. Keep every option comfortable.</span>`;
+        if(badge)badge.textContent=plan.legs==null?'waiting for leg fatigue':`leg fatigue ${plan.legs}/10 · ${plan.level==='comfort'?'comfort only':plan.level==='high'?'higher support':plan.level==='moderate'?'reset suggested':'target met'}`;if(intro)intro.textContent=plan.legs==null?'Log leg fatigue in today’s numbers. Low fatigue completes this adaptive target automatically; higher fatigue asks for one reset and a reassessment.':plan.legs<4?`Leg fatigue is ${plan.legs}/10. That is already a completed adaptive target—no massage, rolling, elevation, or boots are prescribed.`:`Leg fatigue is ${plan.legs}/10. Choose one option, then re-rate the same feeling. The habit stays open until the reassessment is saved.`;if(dose)dose.innerHTML=`<strong>${escapeHtml(plan.dose.label)}</strong><span>${escapeHtml(plan.dose.range)}. Elevation ${plan.dose.elevation}m · foam rolling ${plan.dose.foam}m · self-massage ${plan.dose.massage}m · boots ${plan.dose.boots}m. Keep every option comfortable.${plan.recommendedMethod?` Your recent reassessments favour ${escapeHtml(getLegRecoveryMethodLabel(plan.recommendedMethod))}; that is a personal pattern, not a medical guarantee.`:''}</span>`;
         document.querySelectorAll('#legRecoveryMethods [data-leg-method]').forEach(button=>{button.classList.toggle('selected',entry.method===button.dataset.legMethod);button.disabled=plan.legs==null||plan.legs<4;});if(complete){complete.disabled=plan.legs==null||plan.legs<4;complete.textContent=entry.completedAt?'log selected reset again':'complete selected reset';}if(completed)completed.textContent=entry.completedAt?`${getLegRecoveryMethodLabel(entry.method)} · ${entry.minutes} min logged`:'';if(reassess)reassess.style.display=entry.completedAt?'block':'none';if(post)post.value=entry.postFatigue??'';if(clear)clear.checked=!!entry.redFlagsClear;const gate=getLegRecoveryGate(plan);if(gateEl){gateEl.classList.toggle('protected',gate.protected);gateEl.innerHTML=`<strong>${escapeHtml(gate.title)}</strong><span>${escapeHtml(gate.text)}</span>`;}
       }
       function selectLegRecoveryMethod(method){const plan=getLegRecoveryPrescription(getToday());if(plan.legs==null||plan.legs<4)return;ensureLegRecoveryState();legRecoveryState.entries[getToday()]={...plan.entry,preFatigue:plan.legs,method};saveData();renderLegRecoveryReset();}
@@ -12205,7 +12232,7 @@ function updateNotificationSettingUI(){
         const done=tasks.filter(t=>t.completed&&t.completedAt===today).length;
         if(evening)evening.innerHTML=[row('done',`${done} task${done===1?'':'s'} · ${todayFocusMinutes}m focused`),row('body',body.max==null?'fatigue not logged':body.max>=9?'high fatigue':body.max>=7?'moderate fatigue':'low fatigue'),row('tomorrow',plan.time?`${formatClock(plan.time)} ${plan.type} wake`:'open wake time'),row('tonight',wind?`${formatClock(wind)} wind-down · ${formatClock(asleep)} asleep`:`aim for ${formatDurationHours(opportunity.opportunityHours)} sleep opportunity`)].join('');
       }
-      function renderTodayPanel(){renderProgressiveOnboarding();renderTodayCurrentNext();renderTodayTodos();renderTodayDue();renderTodayPriorities();renderTodayHabits();renderTodayGoal();updateGlanceCard();updateHubTabCounts();updateTodayNowCard();renderDailyRhythm();renderDailyCheckin();}
+      function renderTodayPanel(){renderProgressiveOnboarding();renderTodayCurrentNext();renderTodayTodos();renderTodayPriorities();renderTodayHabits();updateGlanceCard();updateHubTabCounts();updateTodayNowCard();renderDailyRhythm();renderDailyCheckin();}
       function switchTodayHubTab(tab){
         todayHubTab='current';
         const focus=document.getElementById('hubPanelCurrent'),todo=document.getElementById('hubPanelTodo');if(focus)focus.style.display='';if(todo)todo.style.display='';
@@ -13618,6 +13645,26 @@ function updateNotificationSettingUI(){
       window.addEventListener('beforeunload',()=>{saveData();if(timerInterval)clearInterval(timerInterval);});
       window.addEventListener('resize',()=>{if(viewMode==='auto')applyViewMode();drawFocusChart();drawHeatmap();drawHabitCheckGraph();syncHabitGraphListHeight();if(activePanel==='recovery'){drawRecoveryChart();drawSleepDurationChart();}});
       setupIntervalsImport();
+    })();
+  </script>
+  <script>
+    (()=>{
+      const floor=14,ignored='script,style,template,svg defs,svg path,svg line,svg rect,svg circle,svg polyline,svg polygon,canvas,img,br,hr';
+      function applyReadableTextFloor(root=document){
+        const nodes=root.nodeType===1?[root,...root.querySelectorAll('*')]:[...root.querySelectorAll('*')];
+        nodes.forEach(el=>{
+          if(!(el instanceof HTMLElement||el instanceof SVGTextElement)||el.matches(ignored))return;
+          const ownsText=[...el.childNodes].some(node=>node.nodeType===Node.TEXT_NODE&&node.textContent.trim());
+          if(!ownsText&&!el.matches('input,select,textarea,button'))return;
+          const size=Number.parseFloat(getComputedStyle(el).fontSize);
+          if(Number.isFinite(size)&&size<floor)el.classList.add('readable-text-floor');
+        });
+      }
+      requestAnimationFrame(()=>applyReadableTextFloor());
+      new MutationObserver(changes=>changes.forEach(change=>{
+        if(change.type==='characterData'&&change.target.parentElement)applyReadableTextFloor(change.target.parentElement);
+        change.addedNodes.forEach(node=>{if(node.nodeType===Node.ELEMENT_NODE)applyReadableTextFloor(node);});
+      })).observe(document.body,{childList:true,subtree:true,characterData:true});
     })();
   </script>
 </body>
