@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.189 adds durable habit timing windows, editable nutrition dates, and produce/hydration targets -->
+<!-- Focus::Flow deployment marker: v1.190 fixes false training-day evidence, adds protected wind-down habits, and simplifies Recovery typography -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -3493,6 +3493,52 @@
       #todayHabitList .adaptive-habit-row-info{grid-template-columns:1fr;gap:.32rem}
       #todayHabitList .adaptive-habit-context{padding:.3rem 0 0;border-left:0;border-top:1px solid color-mix(in srgb,var(--border-color) 68%,transparent)}
     }
+    /* v1.190: Recovery uses one quiet metadata size, one reading size, and one heading size. */
+    #panel-recovery{
+      --recovery-meta-size:.76rem;
+      --recovery-copy-size:.82rem;
+      --recovery-heading-size:.9rem;
+    }
+    #panel-recovery .recovery-card h2,
+    #panel-recovery .recovery-watch-head h2,
+    #panel-recovery .leg-recovery-head h2{font-size:var(--recovery-heading-size)!important;line-height:1.3}
+    #panel-recovery .training-call-reasons,
+    #panel-recovery .training-call-badge,
+    #panel-recovery .training-call-plain-context,
+    #panel-recovery .training-call-lifting-suggestion,
+    #panel-recovery .activity-recovery-bridge-effect,
+    #panel-recovery .activity-recovery-bridge-empty,
+    #panel-recovery .leg-recovery-intro,
+    #panel-recovery .leg-recovery-dose span,
+    #panel-recovery .leg-recovery-gate span,
+    #panel-recovery .leg-recovery-reassess span,
+    #panel-recovery .leg-recovery-method small,
+    #panel-recovery .recovery-signal-value{font-size:var(--recovery-copy-size)!important;line-height:1.5}
+    #panel-recovery .training-call-confidence,
+    #panel-recovery .training-call-confidence-detail,
+    #panel-recovery .training-call-factor-chip,
+    #panel-recovery .training-evidence-counts,
+    #panel-recovery .training-evidence-confidence,
+    #panel-recovery .training-evidence-label,
+    #panel-recovery .training-call-history-legend,
+    #panel-recovery .training-call-test-gauge-text,
+    #panel-recovery .training-call-week-row span,
+    #panel-recovery .activity-recovery-bridge-eyebrow,
+    #panel-recovery .activity-recovery-bridge-badge,
+    #panel-recovery .activity-recovery-bridge-chip,
+    #panel-recovery .recovery-signal-label,
+    #panel-recovery .leg-recovery-badge,
+    #panel-recovery .leg-recovery-completed,
+    #panel-recovery .leg-recovery-clear,
+    #panel-recovery .leg-recovery-evidence summary,
+    #panel-recovery .leg-recovery-evidence-grid div,
+    #panel-recovery .recovery-input-group{font-size:var(--recovery-meta-size)!important;line-height:1.45}
+    #panel-recovery .leg-recovery-dose strong,
+    #panel-recovery .leg-recovery-gate strong,
+    #panel-recovery .leg-recovery-reassess strong,
+    #panel-recovery .leg-recovery-method b,
+    #panel-recovery .activity-recovery-bridge-title{font-size:var(--recovery-copy-size)!important;line-height:1.35}
+    #panel-recovery .recovery-card :is(button,input,select,textarea){font-size:var(--recovery-copy-size)!important}
     @media(min-width:901px) and (max-width:1199px){body:not([data-view-mode="mobile"]) #panel-tasks .task-library-card{position:static}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
   </style>
@@ -3675,7 +3721,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-            <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.189 adds a simple time-of-day preference for habits, lets Nutrition edit an earlier date, aligns its answer controls, and adds practical produce and hydration targets beside protein and carbohydrate.</div>
+            <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.190 counts only confirmed training sessions, keeps work and empty placeholders out of cardio/streak totals, adds an explicit during-wind-down habit window, and gives Recovery a calmer three-level text hierarchy.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -5416,7 +5462,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.189';
+      const APP_VERSION='1.190';
       const APP_RELEASE_DATE='2026-08-16';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -7897,10 +7943,14 @@ function updateNotificationSettingUI(){
         else label='fresh';
         return{score,label,hrvStatus,restingHrStatus,recoveryStatus,sleepStatus,acwrStatus,acwrInfo,rpeStatus,systemicFatigueStatus,dataPoints:known.length,effectiveWeights};
       }
+      function hasConfirmedCardioOutcome(rec){return !!rec&&rec.actualIntensityConfirmed===true&&['easy','medium','test','race'].includes(rec.actualIntensity);}
       function getCardioDayEvidence(rec,dateStr){
-        const sources=[],imported=(importedActivities||[]).filter(activity=>String(activity?.start_date_local||'').slice(0,10)===dateStr&&!isManualActivitySuperseded(activity)&&['run','ride','row'].includes(activitySportGroup(activity))),manual=getManualSessionsForDate(dateStr).filter(session=>!isManualSessionSuperseded(dateStr,session)&&session.type!=='weights'),actual=['easy','medium','test','race'].includes(rec?.actualIntensity)?rec.actualIntensity:'',modalities=normalizeModalityList(rec?.modalities).filter(modality=>['run','bike','row'].includes(modality));
-        if(imported.length)sources.push(`${imported.length} cardio activit${imported.length===1?'y':'ies'}`);if(manual.length)sources.push(`${manual.length} manual cardio session${manual.length===1?'':'s'}`);if(actual)sources.push(`logged cardio ${actual}`);if(modalities.length)sources.push(`logged ${modalities.join(' + ')}`);
-        const inferredQuality=!actual&&imported.some(activity=>activityLooksLikeQualitySession(activity).quality),mediumOrHard=['medium','test','race'].includes(actual)||inferredQuality||manual.some(session=>Number(session.rpe)>=5);return{trained:sources.length>0,sources:[...new Set(sources)],actualIntensity:actual,mediumOrHard};
+        const sources=[],imported=(importedActivities||[]).filter(activity=>String(activity?.start_date_local||'').slice(0,10)===dateStr&&!isManualActivitySuperseded(activity)&&['run','ride','row'].includes(activitySportGroup(activity))),manual=getManualSessionsForDate(dateStr).filter(session=>!isManualSessionSuperseded(dateStr,session)&&['run','bike','row','other'].includes(String(session.type||'other'))),actual=hasConfirmedCardioOutcome(rec)?rec.actualIntensity:'';
+        if(imported.length)sources.push(`${imported.length} cardio activit${imported.length===1?'y':'ies'}`);
+        if(manual.length)sources.push(`${manual.length} manual cardio session${manual.length===1?'':'s'}`);
+        if(actual)sources.push(`confirmed cardio ${actual}`);
+        const inferredQuality=!actual&&imported.some(activity=>activityLooksLikeQualitySession(activity).quality),mediumOrHard=['medium','test','race'].includes(actual)||inferredQuality||manual.some(session=>Number(session.rpe)>=5);
+        return{trained:sources.length>0,sources:[...new Set(sources)],actualIntensity:actual,mediumOrHard,ignoredLegacyLabel:!!rec?.actualIntensity&&!actual&&!imported.length&&!manual.length};
       }
       function getMediumCountLast7Days(referenceDateStr){
         const refDate=new Date(referenceDateStr+'T00:00:00');let count=0;
@@ -7915,7 +7965,7 @@ function updateNotificationSettingUI(){
       }
       function getLastFiveKTestInfo(referenceDateStr){
         const refDate=new Date(referenceDateStr+'T12:00:00'),candidates=[];
-        for(let i=1;i<=365;i++){const d=new Date(refDate);d.setDate(d.getDate()-i);const ds=toDateStr(d);if(biometrics[ds]&&biometrics[ds].actualIntensity==='test')candidates.push({date:ds,days:i,source:'marked in today’s numbers'});}
+        for(let i=1;i<=365;i++){const d=new Date(refDate);d.setDate(d.getDate()-i);const ds=toDateStr(d),entry=biometrics[ds];if(hasConfirmedCardioOutcome(entry)&&entry.actualIntensity==='test')candidates.push({date:ds,days:i,source:'confirmed in today’s numbers'});}
         (importedActivities||[]).forEach(activity=>{if(!isImportedFiveKTest(activity))return;const date=String(activity.start_date_local||'').slice(0,10);if(!date||date>=referenceDateStr)return;const days=Math.round((refDate-new Date(date+'T12:00:00'))/86400000),manual=/manual/i.test(String(activity.source||''));if(days>=1&&days<=365)candidates.push({date,days,source:manual?'recognized manual 5k':'recognized imported 5k',activityId:String(activity.id)});});
         return candidates.sort((a,b)=>a.days-b.days)[0]||null;
       }
@@ -7930,7 +7980,7 @@ function updateNotificationSettingUI(){
         for(let i=1;i<=365;i++){
           const d=new Date(refDate);d.setDate(d.getDate()-i);
           const ds=toDateStr(d);
-          const intensity=biometrics[ds]&&biometrics[ds].actualIntensity;
+          const entry=biometrics[ds],intensity=hasConfirmedCardioOutcome(entry)?entry.actualIntensity:'';
           if(intensity==='test'||intensity==='race'){closest=i;break;}
         }
         (importedActivities||[]).forEach(activity=>{if(!isImportedExceptionalEffort(activity))return;const date=String(activity.start_date_local||'').slice(0,10);if(!date||date>=referenceDateStr)return;const days=Math.round((new Date(referenceDateStr+'T12:00:00')-new Date(date+'T12:00:00'))/86400000);if(days>=1&&days<closest)closest=days;});
@@ -8021,10 +8071,10 @@ function updateNotificationSettingUI(){
           else{if(old.rpe==null&&Number.isFinite(numericRpe))old.rpe=numericRpe;if(source&&!old.sources.includes(source))old.sources.push(source);}
         };
         Object.entries(biometrics||{}).forEach(([date,rec])=>{
-          if(normalizeModalityList(rec&&rec.modalities).includes(modality))add(date,rec.trainingRpe,'recovery log');
+          if(modality!=='weights'&&hasConfirmedCardioOutcome(rec)&&normalizeModalityList(rec&&rec.modalities).includes(modality))add(date,rec.trainingRpe,'confirmed recovery log');
         });
         (importedActivities||[]).forEach(activity=>{
-          if(modalityFromActivityType(activity.type)===modality)add(activity.start_date_local,activity.session_rpe,'Intervals.icu');
+          if(!isManualActivitySuperseded(activity)&&modalityFromActivityType(activity.type)===modality)add(activity.start_date_local,activity.session_rpe,'Intervals.icu');
         });
         Object.entries(manualTrainingSessions||{}).forEach(([date,sessions])=>{
           (Array.isArray(sessions)?sessions:[]).forEach(session=>{if(session&&session.type===modality)add(date,session.rpe,'manual session');});
@@ -8065,7 +8115,7 @@ function updateNotificationSettingUI(){
         });
         return active;
       }
-      function getWorkoutDayEvidence(rec,dateStr){const sources=[];const imported=(importedActivities||[]).filter(a=>String(a?.start_date_local||'').slice(0,10)===dateStr&&!isManualActivitySuperseded(a));if(imported.length)sources.push(`${imported.length} activit${imported.length===1?'y':'ies'}`);const lifts=(liftingHistory||[]).filter(h=>h?.kind==='exposure'&&h.date===dateStr);if(lifts.length)sources.push(`${lifts.length} lift${lifts.length===1?'':'s'}`);const manual=getManualSessionsForDate(dateStr).filter(session=>!isManualSessionSuperseded(dateStr,session));if(manual.length)sources.push(`${manual.length} manual session${manual.length===1?'':'s'}`);if(rec?.actualIntensity&&rec.actualIntensity!=='rest')sources.push(`logged ${rec.actualIntensity}`);const modalities=normalizeModalityList(rec?.modalities);if(modalities.length)sources.push(`logged ${modalities.join(' + ')}`);if(Number(rec?.load)>0&&Number(rec?.trainingRpe)>0)sources.push('workout load + session RPE');return{trained:sources.length>0,sources:[...new Set(sources)]};}
+      function getWorkoutDayEvidence(rec,dateStr){const sources=[];const imported=(importedActivities||[]).filter(a=>String(a?.start_date_local||'').slice(0,10)===dateStr&&!isManualActivitySuperseded(a)&&['run','ride','row'].includes(activitySportGroup(a)));if(imported.length)sources.push(`${imported.length} cardio activit${imported.length===1?'y':'ies'}`);const lifts=(liftingHistory||[]).filter(h=>h?.kind==='exposure'&&h.date===dateStr);if(lifts.length)sources.push(`${lifts.length} lift${lifts.length===1?'':'s'}`);const manual=getManualSessionsForDate(dateStr).filter(session=>!isManualSessionSuperseded(dateStr,session)&&['run','bike','row','other','weights'].includes(String(session.type||'other')));if(manual.length)sources.push(`${manual.length} manual training session${manual.length===1?'':'s'}`);if(hasConfirmedCardioOutcome(rec))sources.push(`confirmed cardio ${rec.actualIntensity}`);return{trained:sources.length>0,sources:[...new Set(sources)]};}
       function dayHadWorkout(rec,dateStr){return getWorkoutDayEvidence(rec,dateStr).trained;
       }
       function getRecentSessionAnomaly(referenceDateStr){
@@ -8125,7 +8175,7 @@ function updateNotificationSettingUI(){
         }
         const weeklyTarget=5,weeklyCap=6,mediumCap7d=3,testCadenceDays=42,todayCardioEvidence=getCardioDayEvidence(biometrics[referenceDateStr]||{},referenceDateStr);
         const factors=[];
-        const cardioDayAtCeiling=weekCount>=weeklyCap,weekEvidenceText=weekEvidence.map(item=>`${item.date.slice(5)} ${item.sources.join(' + ')}`).join(' · ');factors.push({label:'cardio frequency',status:cardioDayAtCeiling?'red':weekCount>=weeklyTarget?'yellow':'green',detail:`${weekCount}/${weeklyCap} cardio days`,explain:`This is a cardio-only frequency guard: a run, ride, row, manual cardio session, or explicit cardio outcome can count once per date. Lifting and work never use one of the six cardio days. Work still affects fatigue because you cannot opt out of it.${weekEvidenceText?` Evidence: ${weekEvidenceText}.`:''}`});
+        const cardioDayAtCeiling=weekCount>=weeklyCap,weekEvidenceText=weekEvidence.map(item=>`${item.date.slice(5)} ${item.sources.join(' + ')}`).join(' · ');factors.push({label:'cardio frequency',status:cardioDayAtCeiling?'red':weekCount>=weeklyTarget?'yellow':'green',detail:`${weekCount}/${weeklyCap} cardio days`,explain:`This is a cardio-only frequency guard: a run, ride, row, manual cardio session, or cardio outcome you explicitly confirmed can count once per date. A prescription, empty placeholder, older unconfirmed label, lifting session, or work activity cannot use one of the six cardio days.${weekEvidenceText?` Evidence: ${weekEvidenceText}.`:''}`});
         const freshness=getFreshnessData(referenceDateStr);
         const acwrInfo=getACWR(referenceDateStr);
         const acwrStatus=acwrInfo?getACWRStatus(acwrInfo.ratio):null;
@@ -8179,7 +8229,7 @@ function updateNotificationSettingUI(){
         factors.push({label:'recent / base load',status:acwrStatus==='green'?'green':acwrStatus?'yellow':null,detail:acwrInfo?`${acwrInfo.ratio.toFixed(2)} — ${acwrStatus==='green'?'near recent base':acwrInfo.ratio>1?'above recent base':'below recent base'}`:'not enough data yet',explain:'describes your last 7-day average relative to your 28-day average. It is context only: Focus::Flow does not treat a fixed ratio band as a proven safe zone or injury predictor.'});
         factors.push({label:'cardio recent / base',status:cardioAcwrStatus==='green'?'green':cardioAcwrStatus==='red'?'red':cardioAcwrStatus?'yellow':null,detail:cardioAcwrEnough?`${cardioAcwrInfo.ratio.toFixed(2)} cardio-only · ${cardioAcwrInfo.trainedDays} loaded days in 28d`:cardioAcwrInfo?`building history · ${cardioAcwrInfo.trainedDays}/4 loaded days`:'not enough cardio load yet',explain:'compares cardio load only: activity and manual run, ride, row or other-cardio load. Job demand and lifting are excluded. A sharply elevated ratio can hold back harder cardio, but no ratio is treated as proof that training is safe or unsafe.'});
         if(consecutiveDays>=3&&tier>0){tier=tier-1;reasons.push(`${consecutiveDays} consecutive training days (cardio and/or lifting) pull today one step easier to make room for recovery`);}
-        factors.push({label:'consecutive training days',status:consecutiveDays>=3?'yellow':'green',detail:`${consecutiveDays} day${consecutiveDays===1?'':'s'} in a row`,explain:'This is a general recovery streak, not the six-day cardio cap. Cardio and lifting can extend the streak; work never counts as a training day, although its fatigue is handled separately. Three or more consecutive training days makes the next call one step easier.'});
+        factors.push({label:'consecutive training days',status:consecutiveDays>=3?'yellow':'green',detail:`${consecutiveDays} day${consecutiveDays===1?'':'s'} in a row`,explain:'This is the uninterrupted streak immediately before today, not the total number of training days in the last week. A confirmed cardio session or logged lift extends it; a true rest day resets it. Work, prescriptions, and empty activity placeholders never count. Three or more consecutive training days makes the next call one step easier.'});
         const yesterday=new Date(refDate);yesterday.setDate(yesterday.getDate()-1);
         const spikeInfo=getSessionSpikeInfo(toDateStr(yesterday));
         if(spikeInfo&&spikeInfo.isSpike&&tier>0){tier=tier-1;reasons.push(`yesterday's session was ${spikeInfo.ratio.toFixed(1)}x your typical load — easing off today gives that a chance to settle`);}
@@ -8357,7 +8407,7 @@ function updateNotificationSettingUI(){
         }
         const quantifiedCardioDays=(data.weekEvidence||[]).filter(item=>getTrainingLoadBreakdown(item.date).other>0).length,cardioDaysMissingLoad=Math.max(0,data.weekCount-quantifiedCardioDays);
         weekText.textContent=`${data.weekCount} cardio day${data.weekCount===1?'':'s'} this calendar week${cardioDaysMissingLoad?` · ${quantifiedCardioDays} with load`:''} · target ${data.weeklyTarget} / cap ${data.weeklyCap}`;
-        weekText.title=(data.weekEvidence||[]).length?`Counted cardio days: ${(data.weekEvidence||[]).map(item=>`${item.date} · ${item.sources.join(' + ')} · ${getTrainingLoadBreakdown(item.date).other>0?'numeric load available':'cardio recorded, load missing'}`).join(' | ')}. A cardio day can count toward frequency before its load is available. Lifts and work do not use a cardio day.`:'No cardio day is counted yet. Lifts and work do not use the six-day cardio allowance.';
+        weekText.title=(data.weekEvidence||[]).length?`Counted cardio days: ${(data.weekEvidence||[]).map(item=>`${item.date} · ${item.sources.join(' + ')} · ${getTrainingLoadBreakdown(item.date).other>0?'numeric load available':'confirmed session, load missing'}`).join(' | ')}. Only an activity, manual cardio session, or explicitly confirmed cardio outcome can count. Prescriptions, work, lifting, empty placeholders, and older unconfirmed labels do not.`:'No confirmed cardio day is counted yet. Prescriptions, work, lifting, empty placeholders, and older unconfirmed labels do not use the six-day cardio allowance.';
         const fillPct=Math.min(100,(data.weekCount/data.weeklyCap)*100);
         weekFill.style.width=fillPct+'%';
         weekFill.style.background=data.weekCount>=data.weeklyCap?'var(--error-color)':data.weekCount>=data.weeklyTarget?'#d4a94a':'var(--main-color)';
@@ -8698,6 +8748,10 @@ function updateNotificationSettingUI(){
           if(recoveryTouchedFields.has(inputId)){entry[key]=reader(inputId);anyTouched=true;}
         });
         if(recoveryTouchedFields.has('recoveryRhrInput')){entry.restingHrSource=document.getElementById('recoveryRhrSourceInput').value||'hrv4training';}
+        if(recoveryTouchedFields.has('recoveryIntensityInput')){
+          entry.actualIntensityConfirmed=['easy','medium','test','race'].includes(entry.actualIntensity);
+          entry.actualIntensityConfirmedAt=entry.actualIntensityConfirmed?new Date().toISOString():null;
+        }
         if(entry.hasWork===false){entry.workHours=null;entry.workEffort=null;entry.expectedWorkDemand=null;}
         if(entry.restingHr!=null&&(entry.restingHr<30||entry.restingHr>160)){showToast('resting heart rate must be from 30 to 160 bpm');return;}
         const trainingRpe=entry.trainingRpe;
@@ -10506,12 +10560,13 @@ function updateNotificationSettingUI(){
       function getHabitPlanningDurationInfo(h){ensureHabitDurationLearning();if(getHabitType(h)==='duration')return{minutes:Math.max(5,Math.min(90,Math.round((Number(h.targetValue)||10)/5)*5)),source:'target'};const entry=habitDurationLearning.entries[String(h.id)]||{},minutes=Number(entry.minutes)||guessHabitDuration(h);return{minutes:Math.max(1,Math.min(90,minutes)),source:entry.confirmed?(entry.source==='manual'?'manual':'confirmed'):'guess'};}
       function setHabitPlanningDuration(id,value){ensureHabitDurationLearning();const key=String(id);if(!value){delete habitDurationLearning.entries[key];}else{habitDurationLearning.entries[key]={...(habitDurationLearning.entries[key]||{}),minutes:Number(value),confirmed:true,source:'manual',confirmedAt:new Date().toISOString()};}saveData();renderBgHabits({fast:true});maybeAutoBuildAchievableDay();}
       function createHabitDurationSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';const info=getHabitPlanningDurationInfo(h),entry=habitDurationLearning.entries[String(h.id)];const auto=document.createElement('option');auto.value='';auto.textContent=`auto · ${guessHabitDuration(h)} min`;sel.appendChild(auto);HABIT_DURATION_STEPS.forEach(n=>{const opt=document.createElement('option');opt.value=n;opt.textContent=`${n} min`;sel.appendChild(opt);});sel.value=entry?.confirmed?String(info.minutes):'';sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitPlanningDuration(h.id,sel.value);});return sel;}
-      const HABIT_PLANNING_WINDOWS=['morning','afternoon','evening','before-wind-down'];
-      function guessHabitPlanningWindow(h){const name=String(h?.name||'').toLowerCase();return /nasal\s*strip|sleep\s*mask|mouth\s*tape|bedtime|before\s*bed/.test(name)?'before-wind-down':'auto';}
+      const HABIT_PLANNING_WINDOWS=['morning','afternoon','evening','before-wind-down','during-wind-down'];
+      function guessHabitPlanningWindow(h){const name=String(h?.name||'').toLowerCase();return /nasal\s*strip|sleep\s*mask|mouth\s*tape|bedtime|before\s*bed/.test(name)?'during-wind-down':'auto';}
       function getHabitPlanningWindow(h){return HABIT_PLANNING_WINDOWS.includes(h?.planningWindow)?h.planningWindow:guessHabitPlanningWindow(h);}
-      function habitPlanningWindowLabel(value){return{morning:'morning',afternoon:'afternoon',evening:'evening','before-wind-down':'before wind-down',auto:'learn my time'}[value]||'learn my time';}
+      function habitPlanningWindowLabel(value){return{morning:'morning',afternoon:'afternoon',evening:'evening','before-wind-down':'before wind-down','during-wind-down':'during wind-down',auto:'learn my time'}[value]||'learn my time';}
+      function habitPlanningWindowOptionLabel(value){return{morning:'morning',afternoon:'afternoon',evening:'evening · around 6:30','before-wind-down':'before wind-down · finish first','during-wind-down':'during wind-down · sleep setup'}[value]||habitPlanningWindowLabel(value);}
       function setHabitPlanningWindow(id,value){const h=bgHabits.find(habit=>String(habit.id)===String(id));if(!h)return;if(HABIT_PLANNING_WINDOWS.includes(value))h.planningWindow=value;else delete h.planningWindow;scheduleAutoBuildStamp='';saveData();renderBgHabits({fast:true});maybeAutoBuildAchievableDay();}
-      function createHabitPlanningWindowSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';const guess=guessHabitPlanningWindow(h),auto=document.createElement('option');auto.value='';auto.textContent=guess==='before-wind-down'?'auto · before wind-down':'auto · learn timing';sel.appendChild(auto);HABIT_PLANNING_WINDOWS.forEach(value=>{const opt=document.createElement('option');opt.value=value;opt.textContent=habitPlanningWindowLabel(value);sel.appendChild(opt);});sel.value=HABIT_PLANNING_WINDOWS.includes(h?.planningWindow)?h.planningWindow:'';sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitPlanningWindow(h.id,sel.value);});return sel;}
+      function createHabitPlanningWindowSelect(h){const sel=document.createElement('select');sel.className='habit-freq-select';sel.title='Evening is an ordinary early-evening slot. Before wind-down finishes first. During wind-down is reserved for quiet sleep setup such as a nasal strip.';const guess=guessHabitPlanningWindow(h),auto=document.createElement('option');auto.value='';auto.textContent=guess==='during-wind-down'?'auto · during wind-down':'auto · learn timing';sel.appendChild(auto);HABIT_PLANNING_WINDOWS.forEach(value=>{const opt=document.createElement('option');opt.value=value;opt.textContent=habitPlanningWindowOptionLabel(value);sel.appendChild(opt);});sel.value=HABIT_PLANNING_WINDOWS.includes(h?.planningWindow)?h.planningWindow:'';sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();setHabitPlanningWindow(h.id,sel.value);});return sel;}
       function getHabitCompletedDayCount(h){return Object.keys(h?.history||{}).filter(date=>getHabitDayCount(h,date)>=getHabitDayTarget(h)).length;}
       function maybeAskHabitDuration(h){if(!h||getHabitType(h)==='duration'||getHabitCompletedDayCount(h)<3)return;ensureHabitDurationLearning();const entry=habitDurationLearning.entries[String(h.id)]||{};if(entry.confirmed)return;const last=Date.parse(habitDurationLearning.lastPromptAt||'')||0;if(Date.now()-last<14*86400000)return;habitDurationLearning.lastPromptAt=new Date().toISOString();habitDurationLearning.entries[String(h.id)]={...entry,minutes:Number(entry.minutes)||guessHabitDuration(h),confirmed:false,source:'guess',promptedAt:new Date().toISOString()};saveData();renderHabitDurationPrompt(h);}
       function renderHabitDurationPrompt(h){const el=document.getElementById('habitDurationPrompt');if(!el)return;const entry=habitDurationLearning.entries[String(h.id)]||{},minutes=Number(entry.minutes)||guessHabitDuration(h);el.dataset.habitId=String(h.id);el.innerHTML=`<strong>Quick timing check</strong><p>Did “${escapeHtml(h.name)}” take about ${minutes} minute${minutes===1?'':'s'}? This question appears rarely. The app never treats the time between two check-ins as habit duration.</p><div class="habit-duration-actions"><button class="btn small primary" data-duration-answer="yes">yes</button><button class="btn small" data-duration-answer="shorter">shorter</button><button class="btn small" data-duration-answer="longer">longer</button><button class="btn small" data-duration-answer="later">not now</button></div>`;el.querySelectorAll('[data-duration-answer]').forEach(button=>button.addEventListener('click',()=>answerHabitDurationPrompt(button.dataset.durationAnswer)));el.classList.add('show');}
@@ -12151,7 +12206,7 @@ function updateNotificationSettingUI(){
         const host=document.getElementById('adaptiveHabitHistory');if(!host)return;const days=Array.from({length:14},(_,index)=>{const date=new Date(`${getToday()}T12:00:00`);date.setDate(date.getDate()-(13-index));return toDateStr(date);}),byDay=new Map(days.map(date=>[date,getAdaptivePlanHabitRows(date)])),today=byDay.get(getToday())||[];host.innerHTML=`<div class="adaptive-history-head"><strong>adaptive prescription history</strong><span>✓ followed · × rest/skip overridden · · open or unconfirmed</span></div>${['cardio','lifting','primer','active-recovery','leg-recovery'].map(key=>{const current=today.find(row=>row.key===key)||Array.from(byDay.values()).flat().find(row=>row.key===key);if(!current)return'';return `<div class="adaptive-history-row"><div class="adaptive-history-name"><strong>${escapeHtml(current.name)}</strong><span>${escapeHtml(current.target)} · ${escapeHtml(current.effort)}</span></div>${days.map(date=>{const item=(byDay.get(date)||[]).find(row=>row.key===key),state=item?.state||'open',mark=state==='override'?'×':state==='followed'?'✓':'·';return `<span class="adaptive-history-cell ${state}" title="${escapeHtml(`${date} · ${item?.target||'no confirmed prescription'} · ${state}`)}">${mark}</span>`;}).join('')}</div>`;}).join('')}`;
       }
       function getHabitUsualWindow(h){const events=(completionEvents||[]).filter(e=>e.type==='habit'&&e.name===h.name&&Number.isFinite(Number(e.minutes))).slice(-30);if(events.length<4)return null;const median=medianNumber(events.map(e=>Number(e.minutes)));if(median==null)return null;const spread=medianNumber(events.map(e=>Math.abs(Number(e.minutes)-median)))||0;return{minutes:Math.round(median/15)*15,samples:events.length,spread};}
-      function getHabitAdaptiveNote(h){const usual=getHabitUsualWindow(h),reason=getHabitPatternReason(h),duration=getHabitPlanningDurationInfo(h),explicit=HABIT_PLANNING_WINDOWS.includes(h?.planningWindow),windowValue=getHabitPlanningWindow(h),parts=[`Schedule time: about ${duration.minutes} min (${duration.source==='guess'?'a starting guess':'confirmed'}).`];if(explicit)parts.push(`Placed near ${habitPlanningWindowLabel(windowValue)} because you chose that window.`);else if(usual)parts.push(`Usually checked near ${formatScheduleTime(usual.minutes)} from ${usual.samples} check-ins.`);else if(windowValue==='before-wind-down')parts.push('This looks sleep-related, so the starting guess is just before wind-down. You can change “plan near” in this habit’s settings.');if(reason&&reason.tag!=='steady pattern')parts.push(reason.action.replace(/^Useful next step:\s*/i,''));if(!explicit&&!usual&&windowValue==='auto')parts.push('The app will learn the usual time of day from check-ins, but never mistakes the gap between habits for how long one habit took.');return parts.join(' ');}
+      function getHabitAdaptiveNote(h){const usual=getHabitUsualWindow(h),reason=getHabitPatternReason(h),duration=getHabitPlanningDurationInfo(h),explicit=HABIT_PLANNING_WINDOWS.includes(h?.planningWindow),windowValue=getHabitPlanningWindow(h),parts=[`Schedule time: about ${duration.minutes} min (${duration.source==='guess'?'a starting guess':'confirmed'}).`];if(explicit)parts.push(`Placed near ${habitPlanningWindowLabel(windowValue)} because you chose that window.`);else if(usual)parts.push(`Usually checked near ${formatScheduleTime(usual.minutes)} from ${usual.samples} check-ins.`);else if(windowValue==='during-wind-down')parts.push('This looks like sleep setup, so it may sit inside the protected wind-down. You can change “plan near” in this habit’s settings.');else if(windowValue==='before-wind-down')parts.push('This is placed just before the protected wind-down begins.');if(reason&&reason.tag!=='steady pattern')parts.push(reason.action.replace(/^Useful next step:\s*/i,''));if(!explicit&&!usual&&windowValue==='auto')parts.push('The app will learn the usual time of day from check-ins, but never mistakes the gap between habits for how long one habit took.');return parts.join(' ');}
       function renderTodayHabits(){
         const el=document.getElementById('todayHabitList');if(!el)return;
         el.innerHTML='';
@@ -13295,19 +13350,19 @@ function updateNotificationSettingUI(){
       function getAchievableDayCutoff(today){const tomorrow=scheduleDateOffset(today,1),wake=getWakePlanForDate(tomorrow),opportunity=getSleepRecoveryOpportunity(today);if(!wake.time)return 23*60;const asleep=shiftClock(wake.time,-Math.round(opportunity.opportunityHours*60)),wind=shiftClock(asleep,-45),parts=wind.split(':').map(Number),minutes=parts[0]*60+parts[1];return minutes<12*60?24*60:minutes;}
       function getHabitPlanningDuration(h){return getHabitPlanningDurationInfo(h).minutes;}
       function getLearnedTrainingPlanningDuration(kind,callLevel){if(kind==='primer')return 5;if(kind==='lifting'){const recent=(liftingHistory||[]).filter(row=>row.kind==='exposure').slice(-10).map(row=>Number(row.durationMinutes)).filter(value=>value>0);return recent.length>=3?Math.max(15,Math.min(50,Math.round(medianNumber(recent)/5)*5)):25;}const recent=(importedActivities||[]).filter(activity=>!isManualActivitySuperseded(activity)&&activitySportGroup(activity)!=='other').sort((a,b)=>String(b.start_date_local||'').localeCompare(String(a.start_date_local||''))).slice(0,12).map(activity=>getActivityTrainingDurationSeconds(activity)/60).filter(value=>value>=10&&value<=180);if(recent.length>=3)return Math.max(20,Math.min(90,Math.round(medianNumber(recent)/5)*5));return callLevel==='test'?50:callLevel==='medium'?45:30;}
-      function scheduleAutoSignature(){const today=getToday(),call=getTrainingCallData(today),taskBits=tasks.filter(task=>!task.completed).map(task=>[task.id,task.taskType,task.priority,task.dueDate,task.outcome,getTaskPlanningDurationInfo(task).minutes]).join('|'),habitBits=bgHabits.map(habit=>[habit.id,getHabitDayCount(habit,today),getHabitDayTarget(habit),getHabitPlanningDuration(habit),habit.planningWindow||'',guessHabitPlanningWindow(habit)]).join('|'),training=getTrainingLoadBreakdown(today),legEntry=getLegRecoveryEntry(today);return['habit-window-v1',today,call.level,getCallLiftingLevel(call),shouldQuietFitnessHabits(today),taskBits,habitBits,training.total,scheduleCommitments.length,legEntry.completedAt||'',legEntry.postFatigue||''].join('::');}
+      function scheduleAutoSignature(){const today=getToday(),call=getTrainingCallData(today),taskBits=tasks.filter(task=>!task.completed).map(task=>[task.id,task.taskType,task.priority,task.dueDate,task.outcome,getTaskPlanningDurationInfo(task).minutes]).join('|'),habitBits=bgHabits.map(habit=>[habit.id,getHabitDayCount(habit,today),getHabitDayTarget(habit),getHabitPlanningDuration(habit),habit.planningWindow||'',guessHabitPlanningWindow(habit)]).join('|'),training=getTrainingLoadBreakdown(today),legEntry=getLegRecoveryEntry(today);return['habit-window-v2',today,call.level,getCallLiftingLevel(call),shouldQuietFitnessHabits(today),taskBits,habitBits,training.total,scheduleCommitments.length,legEntry.completedAt||'',legEntry.postFatigue||''].join('::');}
       function findPlanningSlot(occupied,duration,preferred,start,end){duration=Math.max(5,Math.ceil(duration/5)*5);const candidates=[];for(let t=Math.max(start,Math.round((preferred-duration/3)/15)*15);t+duration<=end;t+=15)candidates.push(t);for(let t=start;t+duration<=end;t+=15)if(!candidates.includes(t))candidates.push(t);return candidates.find(t=>!occupied.some(x=>t<x.end&&t+duration>x.start))??null;}
-      function getHabitPreferredPlanningMinutes(h,cutoff,duration,index=0){const explicit=HABIT_PLANNING_WINDOWS.includes(h?.planningWindow),usual=!explicit?getHabitUsualWindow(h):null;if(usual)return usual.minutes;const windowValue=getHabitPlanningWindow(h);if(windowValue==='morning')return 9*60;if(windowValue==='afternoon')return 14*60;if(windowValue==='evening')return 18*60+30;if(windowValue==='before-wind-down')return Math.max(18*60,cutoff-Math.max(15,duration));return Math.min(cutoff-duration,18*60+Math.floor(index/2)*15);}
+      function getHabitPreferredPlanningMinutes(h,cutoff,duration,index=0){const explicit=HABIT_PLANNING_WINDOWS.includes(h?.planningWindow),usual=!explicit?getHabitUsualWindow(h):null;if(usual)return usual.minutes;const windowValue=getHabitPlanningWindow(h);if(windowValue==='morning')return 9*60;if(windowValue==='afternoon')return 14*60;if(windowValue==='evening')return 18*60+30;if(windowValue==='before-wind-down')return Math.max(18*60,cutoff-Math.max(15,duration));if(windowValue==='during-wind-down')return Math.min(cutoff+30,cutoff+45-duration);return Math.min(cutoff-duration,18*60+Math.floor(index/2)*15);}
       function buildAchievableDay(options={}){
-        const today=getToday(),now=new Date(),start=Math.max(SCHEDULE_START_HOUR*60,Math.ceil((now.getHours()*60+now.getMinutes()+10)/15)*15),cutoff=Math.min(SCHEDULE_END_HOUR*60,getAchievableDayCutoff(today));Object.keys(taskSchedule).forEach(key=>{const s=taskSchedule[key];if((s?.autoKind||s?.autoPlanned)&&s.date===today)delete taskSchedule[key];});
+        const today=getToday(),now=new Date(),start=Math.max(SCHEDULE_START_HOUR*60,Math.ceil((now.getHours()*60+now.getMinutes()+10)/15)*15),cutoff=Math.min(SCHEDULE_END_HOUR*60,getAchievableDayCutoff(today)),windDownEnd=Math.min(SCHEDULE_END_HOUR*60,cutoff+45);Object.keys(taskSchedule).forEach(key=>{const s=taskSchedule[key];if((s?.autoKind||s?.autoPlanned)&&s.date===today)delete taskSchedule[key];});
         const fixed=getScheduleItemsForDate(today).filter(x=>x.kind==='commitment'||x.kind==='task'),occupied=fixed.map(x=>({start:x.startMinutes,end:x.startMinutes+x.durationMinutes})),call=getTrainingCallData(today),adaptive=getAdaptivePlanHabitRows(today),candidates=[],add=c=>candidates.push(c),focusRemaining=Math.max(0,getAdaptiveFocusTarget().target-todayFocusMinutes),acceptedTiming=getPersonalPatternInsights().insights.find(item=>item.kind==='focus timing'&&patternDecisions[item.id]?.status==='accepted'&&Number.isFinite(item.preferredMinutes)),focusPreferred=acceptedTiming?.preferredMinutes||14*60;
         const cardio=adaptive.find(x=>x.key==='cardio'),lift=adaptive.find(x=>x.key==='lifting'),primer=adaptive.find(x=>x.key==='primer'),activeRecovery=adaptive.find(x=>x.key==='active-recovery'),legReset=adaptive.find(x=>x.key==='leg-recovery');if(cardio&&!cardio.done&&call.level!=='rest')add({kind:'training',sourceId:'cardio',title:`cardio · ${call.level} plan`,duration:getLearnedTrainingPlanningDuration('cardio',call.level),preferred:17*60,priority:100});if(activeRecovery&&!activeRecovery.done)add({kind:'habit',sourceId:'active-recovery',title:'optional very easy bike recovery',duration:15,preferred:16*60+30,priority:97});if(legReset&&!legReset.done){const legPlan=getLegRecoveryPrescription(today);add({kind:'habit',sourceId:'leg-recovery',title:'leg comfort reset',duration:Math.max(10,Math.min(30,legPlan.dose.boots)),preferred:16*60,priority:96});}if(lift&&!lift.done&&!lift.target.startsWith('skip'))add({kind:'training',sourceId:'lifting',title:`strength · ${lift.target}`,duration:getLearnedTrainingPlanningDuration('lifting',call.level),preferred:18*60,priority:92});if(primer&&!primer.done&&!primer.target.startsWith('held'))add({kind:'training',sourceId:'primer',title:`movement primer · ${primer.target}`,duration:getLearnedTrainingPlanningDuration('primer',call.level),preferred:17*60-10,priority:76});
         const linkedFocusNames=new Set(tasks.filter(t=>!t.completed&&t.taskType!=='todo'&&t.outcome!=='blocked').map(t=>String(t.text||'').trim().toLowerCase()));
-        bgHabits.filter(h=>getHabitDayCount(h,today)<getHabitDayTarget(h)&&!linkedFocusNames.has(String(h.linkedTask||'').trim().toLowerCase())).sort((a,b)=>getHabitConsistency30d(a)-getHabitConsistency30d(b)||getHabitPlanningDuration(a)-getHabitPlanningDuration(b)||getHabitDaysBehind(b)-getHabitDaysBehind(a)).slice(0,10).forEach((h,i)=>{const duration=getHabitPlanningDuration(h);add({kind:'habit',sourceId:String(h.id),title:`habit · ${h.name}`,duration,preferred:getHabitPreferredPlanningMinutes(h,cutoff,duration,i),priority:70-getHabitConsistency30d(h)/4+(duration<=10?3:0)});});
+        bgHabits.filter(h=>getHabitDayCount(h,today)<getHabitDayTarget(h)&&!linkedFocusNames.has(String(h.linkedTask||'').trim().toLowerCase())).sort((a,b)=>getHabitConsistency30d(a)-getHabitConsistency30d(b)||getHabitPlanningDuration(a)-getHabitPlanningDuration(b)||getHabitDaysBehind(b)-getHabitDaysBehind(a)).slice(0,10).forEach((h,i)=>{const duration=getHabitPlanningDuration(h),windowValue=getHabitPlanningWindow(h);add({kind:'habit',sourceId:String(h.id),title:`habit · ${h.name}`,duration,preferred:getHabitPreferredPlanningMinutes(h,cutoff,duration,i),allowWindDown:windowValue==='during-wind-down',priority:70-getHabitConsistency30d(h)/4+(duration<=10?3:0)});});
         let focusBudget=focusRemaining;tasks.filter(t=>!t.completed&&t.taskType!=='todo'&&!taskSchedule[t.id]&&t.outcome!=='blocked').slice().sort((a,b)=>{const score=t=>(t.dueDate&&t.dueDate<=today?50:0)+PRIORITY_WEIGHT[t.priority||'none']*10;return score(b)-score(a);}).forEach(t=>{if(focusBudget<10)return;const plan=getTaskPlanningDurationInfo(t),duration=Math.min(focusBudget,Math.max(15,Math.min(60,plan.minutes)));add({kind:'task',task:t,duration,preferred:focusPreferred,priority:80+PRIORITY_WEIGHT[t.priority||'none']*10+(t.dueDate&&t.dueDate<=today?25:0)});focusBudget-=duration;});
         tasks.filter(t=>!t.completed&&t.taskType==='todo'&&!taskSchedule[t.id]&&(t.priority==='high'||(t.dueDate&&t.dueDate<=today))).slice(0,3).forEach((t,i)=>add({kind:'task',task:t,duration:15,preferred:16*60+i*15,priority:75+PRIORITY_WEIGHT[t.priority||'none']*8}));
-        let placed=0,skipped=0;const placedKinds={training:0,habit:0,task:0};candidates.sort((a,b)=>b.priority-a.priority).forEach(c=>{const slot=findPlanningSlot(occupied,c.duration,c.preferred,start,cutoff);if(slot==null){skipped++;return;}occupied.push({start:slot,end:slot+c.duration});if(c.kind==='task')taskSchedule[c.task.id]={date:today,startMinutes:slot,durationMinutes:c.duration,autoPlanned:true};else{const key=`auto:${c.kind}:${c.sourceId}:${today}`;taskSchedule[key]={date:today,startMinutes:slot,durationMinutes:c.duration,autoKind:c.kind,autoTitle:c.title,sourceId:c.sourceId};}placed++;placedKinds[c.kind]++;});
-        const summary=document.getElementById('scheduleAutoSummary'),cutoffText=cutoff>=24*60?'midnight':formatScheduleTime(cutoff),defaultFocusBlock=Math.max(15,Math.min(60,Math.round((Number(chainConfig?.workMinutes)||25)/5)*5));scheduleAutoBuildStamp=scheduleAutoSignature();if(summary)summary.textContent=`${options.automatic?'Updated automatically.':'Plan updated.'} Added ${placed} blocks: ${placedKinds.training} training, ${placedKinds.habit} habits, and ${placedKinds.task} tasks. ${skipped?`${skipped} lower-priority item${skipped===1?' did':'s did'} not fit. `:''}Nothing is placed after ${cutoffText}. An untimed focus task starts as one ${defaultFocusBlock}-minute focus block and adjusts after completed attempts. A linked task and habit are placed once, not twice.`;renderSchedule();renderTasks();saveData();if(!options.silent)showToast(`day plan updated · ${placed} blocks`);
+        let placed=0,skipped=0,windDownPlaced=0;const placedKinds={training:0,habit:0,task:0};candidates.sort((a,b)=>b.priority-a.priority).forEach(c=>{const slot=findPlanningSlot(occupied,c.duration,c.preferred,start,c.allowWindDown?windDownEnd:cutoff);if(slot==null){skipped++;return;}occupied.push({start:slot,end:slot+c.duration});if(c.kind==='task')taskSchedule[c.task.id]={date:today,startMinutes:slot,durationMinutes:c.duration,autoPlanned:true};else{const key=`auto:${c.kind}:${c.sourceId}:${today}`;taskSchedule[key]={date:today,startMinutes:slot,durationMinutes:c.duration,autoKind:c.kind,autoTitle:c.title,sourceId:c.sourceId};}placed++;placedKinds[c.kind]++;if(c.allowWindDown&&slot>=cutoff)windDownPlaced++;});
+        const summary=document.getElementById('scheduleAutoSummary'),cutoffText=cutoff>=24*60?'midnight':formatScheduleTime(cutoff),defaultFocusBlock=Math.max(15,Math.min(60,Math.round((Number(chainConfig?.workMinutes)||25)/5)*5));scheduleAutoBuildStamp=scheduleAutoSignature();if(summary)summary.textContent=`${options.automatic?'Updated automatically.':'Plan updated.'} Added ${placed} blocks: ${placedKinds.training} training, ${placedKinds.habit} habits, and ${placedKinds.task} tasks. ${skipped?`${skipped} lower-priority item${skipped===1?' did':'s did'} not fit. `:''}Tasks, training, and ordinary habits stop by ${cutoffText}.${windDownPlaced?` ${windDownPlaced} sleep-setup habit${windDownPlaced===1?' is':'s are'} allowed inside the protected wind-down because that window was chosen.`:''} An untimed focus task starts as one ${defaultFocusBlock}-minute focus block and adjusts after completed attempts. A linked task and habit are placed once, not twice.`;renderSchedule();renderTasks();saveData();if(!options.silent)showToast(`day plan updated · ${placed} blocks`);
       }
       function maybeAutoBuildAchievableDay(){const signature=scheduleAutoSignature();if(signature===scheduleAutoBuildStamp)return;buildAchievableDay({automatic:true,silent:true});}
       function getUpcomingScheduleItems(days=7){const out=[],today=getToday();for(let i=0;i<days;i++){const date=scheduleDateOffset(today,i);getScheduleItemsForDate(date).forEach(item=>out.push(item));}return out.sort((a,b)=>a.date.localeCompare(b.date)||a.startMinutes-b.startMinutes);}
