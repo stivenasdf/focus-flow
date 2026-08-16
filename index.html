@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.184 restored Today layout, opaque timing prompt, stable habit library, and linked-task planning -->
+<!-- Focus::Flow deployment marker: v1.185 gives Today tasks a calm full-width queue with progressive controls -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -3371,6 +3371,70 @@
       #panel-today .today-card.today-now-card{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "side" "move"}
       [data-view-mode="mobile"] #panel-habits .habit-library-card .habit-list{max-height:60vh;overflow-y:auto}
     }
+
+    /* v1.185: Today is a place to choose and complete work, not edit every setting at once. */
+    #panel-today .today-tasks-hub,
+    #panel-today .today-glance-card{grid-column:1/-1}
+    #panel-today .today-tasks-hub{padding:1rem 1.1rem}
+    #panel-today .today-task-lane-grid{grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);gap:0;align-items:start}
+    #panel-today .today-task-lane{border:0;background:transparent;border-radius:0;padding:.15rem 1.15rem .15rem 0;box-shadow:none}
+    #panel-today .today-task-lane.todo{padding-left:1.15rem;padding-right:0;border-left:1px solid color-mix(in srgb,var(--border-color) 72%,transparent)}
+    #panel-today .today-task-lane-title{align-items:center;margin:0 0 .72rem;gap:1rem;min-height:1.7rem}
+    #panel-today .today-task-lane-title strong{font-size:.86rem!important;line-height:1.2;white-space:nowrap}
+    #panel-today .today-task-lane-title span{font-size:.66rem!important;line-height:1.35;opacity:.52;text-align:right}
+    #panel-today .today-task-lane .quick-add-row{margin-bottom:.72rem;gap:.5rem}
+    #panel-today .today-task-lane .quick-add-row .search-input{min-height:2.45rem;padding:.55rem .72rem;border-radius:.7rem;background:color-mix(in srgb,var(--bg-color) 91%,var(--text-color) 9%)}
+    #panel-today .today-task-lane .quick-add-row .add-btn{width:2.45rem;min-height:2.45rem;padding:0;border-radius:.7rem}
+    #panel-today #todoSortTabs{width:min(100%,360px);margin:.05rem 0 .72rem auto;gap:.35rem}
+    #panel-today #todoSortTabs .sort-btn{padding:.34rem .52rem;border-color:transparent;background:color-mix(in srgb,var(--bg-color) 90%,var(--text-color) 10%);opacity:.62}
+    #panel-today #todoSortTabs .sort-btn.active{border-color:color-mix(in srgb,var(--sub-color) 68%,transparent);background:color-mix(in srgb,var(--sub-color) 10%,transparent);opacity:1}
+    #panel-today .today-hub-panel .task-list{max-height:390px;padding:0 .35rem 0 0;overflow-y:auto}
+    #panel-today .today-tasks-hub .task-item{position:relative;flex-wrap:nowrap;align-items:center;gap:.55rem;padding:.62rem .68rem;margin:0 0 .46rem;border-color:color-mix(in srgb,var(--border-color) 76%,transparent);border-radius:.72rem;background:color-mix(in srgb,var(--bg-color) 93%,var(--text-color) 7%);box-shadow:none;min-height:3.05rem}
+    #panel-today .today-tasks-hub .task-item:hover{border-color:color-mix(in srgb,var(--main-color) 42%,var(--border-color));background:color-mix(in srgb,var(--bg-color) 94%,var(--main-color) 6%)}
+    #panel-today .today-tasks-hub .task-item.current-task-item{border-left:3px solid var(--main-color);padding-left:.56rem}
+    #panel-today .today-tasks-hub .reorder-buttons{display:none}
+    #panel-today .today-tasks-hub .drag-handle{min-width:18px;width:18px;padding:0;opacity:.2;font-size:.78rem}
+    #panel-today .today-tasks-hub .task-checkbox{width:22px;height:22px;border-width:1.5px}
+    #panel-today .today-tasks-hub .task-info{gap:.24rem}
+    #panel-today .today-tasks-hub .task-title-row{gap:.65rem}
+    #panel-today .today-tasks-hub .task-text{font-size:.82rem;line-height:1.35;font-weight:520}
+    #panel-today .today-tasks-hub .task-meta{gap:.35rem;min-height:0}
+    #panel-today .today-tasks-hub .task-meta:empty{display:none}
+    #panel-today .today-tasks-hub .task-time-limit,
+    #panel-today .today-tasks-hub .task-time-spent{font-size:.67rem!important;line-height:1.3;opacity:.7}
+    #panel-today .today-tasks-hub .lib-actions-row{gap:.15rem;opacity:.28;transition:opacity .16s ease}
+    #panel-today .today-tasks-hub .task-item:hover .lib-actions-row,
+    #panel-today .today-tasks-hub .task-item:focus-within .lib-actions-row{opacity:1}
+    #panel-today .today-tasks-hub .lib-actions-row :is(.edit-btn,.delete-task-btn){min-width:1.8rem;min-height:1.8rem;padding:.2rem .34rem;border:0;background:transparent;border-radius:.45rem;font-size:.78rem!important}
+    #panel-today .today-tasks-hub .task-meta.today-task-edit-row{margin-top:.48rem;padding-top:.48rem;border-top:1px solid color-mix(in srgb,var(--border-color) 68%,transparent)}
+    .today-task-preview-chip{display:inline-flex;align-items:center;min-height:1.45rem;padding:.14rem .42rem;border:1px solid color-mix(in srgb,var(--border-color) 75%,transparent);border-radius:999px;color:var(--text-color);font:.65rem/1.2 'JetBrains Mono',monospace;opacity:.66;white-space:nowrap}
+    .today-task-preview-chip.priority-high,.today-task-preview-chip.overdue{color:var(--error-color);border-color:color-mix(in srgb,var(--error-color) 58%,transparent);opacity:.95}
+    .today-task-preview-chip.priority-medium{color:#d4a94a;border-color:color-mix(in srgb,#d4a94a 58%,transparent);opacity:.92}
+    #panel-today .today-glance-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:.85rem 1.25rem;align-items:center}
+    #panel-today .today-glance-card>h2{grid-column:1/-1;margin-bottom:.05rem}
+    #panel-today .today-glance-card .glance-grid{margin-bottom:0}
+    #panel-today .today-glance-card .today-focus-target{margin-top:0}
+    @media(max-width:1050px){
+      #panel-today .today-task-lane-grid{grid-template-columns:1fr}
+      #panel-today .today-task-lane{padding:.1rem 0 1rem}
+      #panel-today .today-task-lane.todo{padding:1rem 0 .1rem;border-left:0;border-top:1px solid color-mix(in srgb,var(--border-color) 72%,transparent)}
+    }
+    @media(max-width:900px){
+      #panel-today .today-glance-card{grid-template-columns:1fr}
+      #panel-today .today-tasks-hub{display:block!important;padding:.8rem}
+      #panel-today .today-tasks-hub,
+      #panel-today .today-glance-card{max-height:none!important;overflow:visible!important}
+      #panel-today .today-hub-panel .task-list{max-height:none}
+      #panel-today .today-tasks-hub .lib-actions-row{opacity:1}
+      #panel-today .today-tasks-hub .drag-handle{opacity:.45}
+      #panel-today .today-task-lane-title span{text-align:left}
+    }
+    @media(max-width:520px){
+      #panel-today .today-task-lane-title{display:block}
+      #panel-today .today-task-lane-title span{display:block;margin-top:.18rem}
+      #panel-today .today-tasks-hub .task-item{gap:.42rem;padding:.58rem .54rem}
+      #panel-today .today-tasks-hub .drag-handle{min-width:15px;width:15px;font-size:.7rem}
+    }
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
   </style>
 </head>
@@ -3552,7 +3616,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.184 restores the intended two-column Focus Now card, lets paired Today and Habits cards keep their natural height, gives the timing question an opaque theme surface, prevents habit deletion from moving the page, and makes linked focus tasks use one clear schedule duration.</div>
+            <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.185 gives Today tasks the full page width, removes redundant reorder buttons, keeps task settings behind a clear details control, and uses calmer spacing and contrast so the queue is easy to scan.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -4024,7 +4088,7 @@
             </section>
             </div>
           </div>
-          <div class="today-card">
+          <div class="today-card today-glance-card">
             <h2>today at a glance</h2>
             <div class="glance-grid">
               <div class="glance-tile"><div class="glance-value" id="glanceTasksValue">0/0</div><div class="glance-label">tasks</div></div>
@@ -5289,7 +5353,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.184';
+      const APP_VERSION='1.185';
       const APP_RELEASE_DATE='2026-08-16';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -12111,7 +12175,7 @@ function updateNotificationSettingUI(){
             meta.appendChild(bookBadge);
           }
           const isMetaExpanded=expandedTaskMeta.has(t.id);
-          const expandBtn=document.createElement('button');expandBtn.className='edit-btn task-expand-btn';expandBtn.textContent=isMetaExpanded?'▾':'▸';expandBtn.title=isMetaExpanded?'collapse details':'expand to edit priority, due date, timer, subtasks, notes';expandBtn.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});
+          const expandBtn=document.createElement('button');expandBtn.className='edit-btn task-expand-btn';expandBtn.textContent=isMetaExpanded?'−':'⋯';expandBtn.title=isMetaExpanded?'close task details':'edit task details';expandBtn.setAttribute('aria-label',expandBtn.title);expandBtn.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});
           const del=document.createElement('button');del.className='delete-task-btn';del.textContent='×';del.title='remove from list — keeps history & library entry';del.addEventListener('click',e=>{e.stopPropagation();deleteTask(t.id);});
           const titleRow=document.createElement('div');titleRow.className='task-title-row';
           const textWrap=document.createElement('span');textWrap.style.cssText='display:flex;align-items:center;min-width:0;flex:1;';
@@ -12121,7 +12185,7 @@ function updateNotificationSettingUI(){
           const actionsRow=document.createElement('div');actionsRow.className='lib-actions-row';actionsRow.appendChild(expandBtn);actionsRow.appendChild(del);titleRow.appendChild(actionsRow);
           info.appendChild(titleRow);info.appendChild(meta);
           if(isMetaExpanded){
-            const editMeta=document.createElement('div');editMeta.className='task-meta';editMeta.style.marginTop='0.3rem';
+            const editMeta=document.createElement('div');editMeta.className='task-meta today-task-edit-row';
             editMeta.appendChild(createTaskTypeToggle(t));
             editMeta.appendChild(createHabitLinkBtn(t.text));
             editMeta.appendChild(createBookLinkBtn(t.text));
@@ -12200,22 +12264,26 @@ function updateNotificationSettingUI(){
         todos.forEach(t=>{
           const index=tasks.indexOf(t);
           const li=document.createElement('li');li.className='task-item';
-          let handle,reorderEl;
+          let handle;
           if(todoSort==='manual'){
             wireTaskDragHandlers(li,index,el);
             handle=document.createElement('span');handle.className='drag-handle';handle.textContent='⋮⋮';
-            reorderEl=createReorderButtons(index);
           }
           const cb=document.createElement('input');cb.type='checkbox';cb.className='task-checkbox';cb.addEventListener('change',()=>handleTaskComplete(t.id,true));
           const info=document.createElement('div');info.className='task-info';
           const ts=document.createElement('span');ts.className='task-text';ts.textContent=t.text;
           const meta=document.createElement('div');meta.className='task-meta';
-          if(t.priority&&t.priority!=='none')meta.appendChild(createPriorityFlag(t.id,t.priority));
-          if(t.dueDate)meta.appendChild(createDueDateControl(t.id,t.dueDate,t.completed));
+          const previewChip=(text,className='')=>{const chip=document.createElement('span');chip.className=`today-task-preview-chip ${className}`.trim();chip.textContent=text;return chip;};
+          if(t.priority&&t.priority!=='none')meta.appendChild(previewChip(`${t.priority} priority`,`priority-${t.priority}`));
+          if(t.dueDate){const overdue=t.dueDate<getToday(),dueText=t.dueDate===getToday()?'due today':`due ${new Date(`${t.dueDate}T12:00:00`).toLocaleDateString(undefined,{month:'short',day:'numeric'})}`;meta.appendChild(previewChip(dueText,overdue?'overdue':''));}
+          const isMetaExpanded=expandedTaskMeta.has(t.id);
+          const expandBtn=document.createElement('button');expandBtn.className='edit-btn task-expand-btn';expandBtn.textContent=isMetaExpanded?'−':'⋯';expandBtn.title=isMetaExpanded?'close task details':'edit task details';expandBtn.setAttribute('aria-label',expandBtn.title);expandBtn.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});
           const del=document.createElement('button');del.className='delete-task-btn';del.textContent='×';del.title='remove from list — keeps history & library entry';del.addEventListener('click',e=>{e.stopPropagation();deleteTask(t.id);});
-          const titleRow=document.createElement('div');titleRow.className='task-title-row';titleRow.appendChild(ts);titleRow.appendChild(del);
+          const titleRow=document.createElement('div');titleRow.className='task-title-row';titleRow.appendChild(ts);
+          const actions=document.createElement('div');actions.className='lib-actions-row';actions.appendChild(expandBtn);actions.appendChild(del);titleRow.appendChild(actions);
           info.appendChild(titleRow);info.appendChild(meta);
-          if(handle)li.appendChild(handle);if(reorderEl)li.appendChild(reorderEl);li.appendChild(cb);li.appendChild(info);
+          if(isMetaExpanded){const editMeta=document.createElement('div');editMeta.className='task-meta today-task-edit-row';editMeta.appendChild(createTaskTypeToggle(t));editMeta.appendChild(createHabitLinkBtn(t.text));editMeta.appendChild(createBookLinkBtn(t.text));editMeta.appendChild(createPriorityFlag(t.id,t.priority));editMeta.appendChild(createDueDateControl(t.id,t.dueDate,t.completed));info.appendChild(editMeta);}
+          if(handle)li.appendChild(handle);li.appendChild(cb);li.appendChild(info);
           el.appendChild(li);
         });
       }
