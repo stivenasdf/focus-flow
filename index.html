@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.171 adaptive interval segmentation, local cycling power records/load, and verified training-day counts -->
+<!-- Focus::Flow deployment marker: v1.172 connected habits, task command center, achievable-day planner, and curve maintenance -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -2218,7 +2218,7 @@
     .power-curve-title { font-size:.62rem; color:var(--sub-color); text-transform:uppercase; letter-spacing:.35px; }
     .power-curve-note { font-size:.54rem; color:var(--text-color); opacity:.5; }
     .power-curve-svg { width:100%; height:180px; display:block; overflow:visible; }
-    #powerCurveWrap,#runCurveWrap { position:relative; min-width:0; }
+    #powerCurveWrap,#runCurveWrap,#curveMaintenancePowerWrap,#curveMaintenanceRunWrap { position:relative; min-width:0; }
     .power-curve-svg.inspectable { cursor:crosshair; touch-action:pan-y; }
     .power-curve-grid { stroke:var(--border-color); stroke-width:1; vector-effect:non-scaling-stroke; }
     .power-curve-path { fill:none; stroke:var(--main-color); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
@@ -2926,6 +2926,70 @@
     #welcomeOverlay { display:none!important; }
     @media(max-width:900px){.onboarding-steps{grid-template-columns:1fr 1fr}.stats-section-heading{display:block}.stats-section-heading p{margin-top:.22rem}.habit-settings-body .habit-controls-row{grid-template-columns:1fr 1fr}}
     @media(max-width:520px){.onboarding-steps{grid-template-columns:1fr}.stats-section-heading{padding-top:.05rem}.stats-section-heading p{font-size:.52rem}.habit-settings-body .habit-controls-row{grid-template-columns:1fr}}
+    /* v1.172 connected planning system */
+    .adaptive-habit-card,.curve-maintenance-card { grid-column:1/-1; }
+    .adaptive-habit-head,.curve-maintenance-head,.task-command-head,.schedule-auto-head { display:flex; align-items:flex-start; justify-content:space-between; gap:.75rem; }
+    .adaptive-habit-copy,.curve-maintenance-copy { color:var(--text-color); opacity:.62; font-size:.62rem; line-height:1.55; max-width:720px; }
+    .adaptive-habit-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.65rem; margin-top:.8rem; }
+    .adaptive-habit-tile { border:1px solid var(--border-color); border-radius:.78rem; padding:.78rem; min-width:0; background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); }
+    .adaptive-habit-tile.done { border-color:color-mix(in srgb,var(--main-color) 58%,var(--border-color)); }
+    .adaptive-habit-top { display:flex; align-items:center; justify-content:space-between; gap:.55rem; }
+    .adaptive-habit-name { font-size:.68rem; font-weight:750; line-height:1.35; }
+    .adaptive-habit-state { flex:0 0 auto; border:1px solid var(--border-color); border-radius:999px; padding:.16rem .42rem; font:.52rem 'JetBrains Mono',monospace; color:var(--sub-color); }
+    .adaptive-habit-state.done { color:var(--main-color); border-color:color-mix(in srgb,var(--main-color) 60%,transparent); }
+    .adaptive-habit-target { margin-top:.45rem; font-size:.62rem; line-height:1.5; color:var(--text-color); }
+    .adaptive-habit-metrics { display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.6rem; }
+    .adaptive-habit-chip { border:1px solid var(--border-color); border-radius:999px; padding:.18rem .42rem; font:.52rem 'JetBrains Mono',monospace; color:var(--text-color); opacity:.72; }
+    .adaptive-habit-action { margin-top:.62rem; width:100%; justify-content:center; }
+    .habit-adaptation-note { margin-top:.35rem; padding:.45rem .52rem; border-left:2px solid var(--sub-color); font-size:.56rem; line-height:1.45; color:var(--text-color); opacity:.67; }
+    .task-command-shell { display:grid; gap:.85rem; min-width:0; }
+    .task-command-shell>* { min-width:0; }
+    .task-command-hero { width:100%; min-width:0; border:1px solid var(--border-color); border-radius:.88rem; padding:.9rem; background:linear-gradient(135deg,color-mix(in srgb,var(--bg-color) 94%,var(--main-color) 6%),var(--bg-color)); }
+    .task-command-title { font-size:.95rem; color:var(--main-color); font-weight:800; }
+    .task-command-subtitle { margin-top:.25rem; font-size:.62rem; line-height:1.5; color:var(--text-color); opacity:.65; max-width:700px; }
+    .task-kind-picker { display:flex; gap:.35rem; flex-wrap:wrap; }
+    .task-kind-picker .sort-btn { flex:1 1 180px; text-align:left; padding:.55rem .62rem; }
+    .task-kind-picker .sort-btn small { display:block; margin-top:.18rem; font-size:.5rem; opacity:.62; text-transform:none; letter-spacing:0; }
+    .task-capture-grid { display:grid; grid-template-columns:minmax(220px,1fr) 150px 145px auto; gap:.45rem; margin-top:.55rem; }
+    .task-capture-grid .task-input,.task-capture-grid .search-input { width:100%; margin:0; min-width:0; }
+    .task-coach-strip { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.45rem; margin-top:.72rem; }
+    .task-coach-cell { border:1px solid var(--border-color); border-radius:.65rem; padding:.55rem .62rem; min-width:0; }
+    .task-coach-label { font:.5rem 'JetBrains Mono',monospace; text-transform:uppercase; color:var(--sub-color); }
+    .task-coach-value { margin-top:.22rem; font-size:.66rem; line-height:1.4; color:var(--text-color); overflow-wrap:anywhere; }
+    .task-lane-header { display:flex; align-items:center; justify-content:space-between; gap:.5rem; padding:.55rem .15rem .35rem; border-bottom:1px solid var(--border-color); margin:.2rem 0 .5rem; }
+    .task-lane-title { font-size:.65rem; color:var(--sub-color); text-transform:uppercase; letter-spacing:.45px; }
+    .task-lane-note { font-size:.52rem; color:var(--text-color); opacity:.48; }
+    .task-start-focus { border:1px solid color-mix(in srgb,var(--main-color) 60%,transparent); color:var(--main-color); background:transparent; border-radius:999px; padding:.24rem .5rem; font-size:.54rem; cursor:pointer; }
+    .task-start-focus:hover { background:color-mix(in srgb,var(--main-color) 12%,transparent); }
+    .task-link-status { margin-left:.25rem; font-size:.52rem; color:var(--sub-color); opacity:.72; }
+    .schedule-auto-box { border:1px solid color-mix(in srgb,var(--border-color) 70%,var(--main-color) 30%); border-radius:.75rem; padding:.7rem .75rem; margin:.7rem 0; background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); }
+    .schedule-auto-title { font-size:.68rem; font-weight:750; color:var(--text-color); }
+    .schedule-auto-copy,.schedule-auto-summary { margin-top:.25rem; font-size:.58rem; line-height:1.5; color:var(--text-color); opacity:.64; }
+    .schedule-auto-summary { opacity:.78; }
+    .schedule-block.adaptive { border-style:dashed; background:color-mix(in srgb,var(--bg-color) 84%,var(--sub-color) 16%); }
+    .schedule-agenda-item.adaptive .schedule-agenda-title::after { content:'adaptive'; margin-left:.35rem; font-size:.48rem; color:var(--sub-color); text-transform:uppercase; }
+    .curve-maintenance-tabs { margin-top:.7rem; }
+    .curve-maintenance-grid { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(230px,.55fr); gap:.8rem; margin-top:.65rem; }
+    .curve-maintenance-chart { border:1px solid var(--border-color); border-radius:.72rem; padding:.68rem; min-width:0; overflow:hidden; }
+    .curve-maintenance-panel { display:none; }
+    .curve-maintenance-panel.active { display:block; }
+    .curve-maintenance-tests { display:grid; gap:.4rem; align-content:start; }
+    .curve-test-row { border:1px solid var(--border-color); border-radius:.62rem; padding:.55rem .62rem; }
+    .curve-test-row.current { border-color:color-mix(in srgb,var(--main-color) 52%,var(--border-color)); }
+    .curve-test-row.stale { border-color:color-mix(in srgb,#d4a94a 55%,var(--border-color)); }
+    .curve-test-top { display:flex; justify-content:space-between; gap:.4rem; font-size:.62rem; color:var(--text-color); }
+    .curve-test-age { font:.5rem 'JetBrains Mono',monospace; color:var(--sub-color); white-space:nowrap; }
+    .curve-test-note { margin-top:.25rem; font-size:.54rem; line-height:1.45; color:var(--text-color); opacity:.62; }
+    .curve-gate-note { border-left:2px solid var(--sub-color); padding:.5rem .58rem; font-size:.56rem; line-height:1.5; color:var(--text-color); opacity:.72; }
+    @media(max-width:900px){.adaptive-habit-grid,.task-coach-strip,.curve-maintenance-grid{grid-template-columns:1fr}.task-capture-grid{grid-template-columns:1fr 1fr}.task-capture-grid .task-input{grid-column:1/-1}.task-capture-grid .add-btn{grid-column:1/-1}.curve-maintenance-chart{overflow-x:auto}.curve-maintenance-chart .power-curve-svg{min-width:620px}}
+    [data-view-mode="mobile"] .adaptive-habit-grid,[data-view-mode="mobile"] .task-coach-strip,[data-view-mode="mobile"] .curve-maintenance-grid{grid-template-columns:1fr}
+    [data-view-mode="mobile"] .task-capture-grid{grid-template-columns:1fr}
+    [data-view-mode="mobile"] .task-capture-grid .task-input,[data-view-mode="mobile"] .task-capture-grid .add-btn{grid-column:auto}
+    [data-view-mode="mobile"] .task-visible-toolbar{flex-direction:column;align-items:stretch}
+    [data-view-mode="mobile"] .task-visible-toolbar .sort-tabs{width:100%}
+    [data-view-mode="mobile"] .adaptive-habit-head,[data-view-mode="mobile"] .curve-maintenance-head,[data-view-mode="mobile"] .schedule-auto-head,[data-view-mode="mobile"] .task-command-head{flex-direction:column}
+    [data-view-mode="mobile"] .task-current-next-btn{align-self:flex-start}
+    [data-view-mode="mobile"] #curveMaintenanceCard .power-curve-svg{min-width:0;width:100%;height:165px}
   </style>
 </head>
 <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
@@ -3105,7 +3169,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.171 detects intervals from changes in recorded output instead of a fixed duration list, so short sprints, distance repeats and long threshold blocks use the same logic. Uploaded cycling power now builds local records and threshold/load evidence, sparse run history shows a provisional weekly baseline, and the weekly cap requires a confirmed training-day source.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.172 connects Recovery prescriptions to Habits, rebuilds Tasks around the focus-work versus to-do distinction, adds an achievable-day planner that protects sleep, and promotes duration-curve maintenance with recovery-gated test suggestions.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -3607,7 +3671,7 @@
           <div class="today-card rhythm-card"><h2>evening shutdown</h2><div class="rhythm-list" id="eveningShutdownList"></div></div>
           <div class="today-card today-habits-card">
             <h2>habits today</h2>
-            <div class="sort-tabs" id="todayHabitSortTabs"><button class="sort-btn active" data-sort="manual">manual</button><button class="sort-btn" data-sort="az">a-z</button><button class="sort-btn" data-sort="effort">30d effort</button></div>
+            <div class="sort-tabs" id="todayHabitSortTabs"><button class="sort-btn active" data-sort="manual">my order</button><button class="sort-btn" data-sort="usual">most usual</button><button class="sort-btn" data-sort="support">needs support</button><button class="sort-btn" data-sort="effort">30d effort</button></div>
             <ul class="habit-list" id="todayHabitList"><li class="empty-habits">no habits yet</li></ul>
           </div>
           <div class="schedule-card">
@@ -3615,6 +3679,7 @@
             <div class="schedule-desc">Write the plan normally: “dentist tomorrow 3 PM,” “gym after work,” or “work 7–4 Monday–Friday.” Focus::Flow handles the structure.</div>
             <div class="quick-add-row"><input type="text" class="search-input" id="scheduleQuickInput" placeholder="dentist tomorrow 3 PM, work 7–4 Monday–Friday..." autocomplete="off" style="margin-bottom:0;"><button class="add-btn" id="scheduleQuickBtn">+</button></div>
             <div class="schedule-understood" id="scheduleUnderstood" aria-live="polite"></div>
+            <div class="schedule-auto-box"><div class="schedule-auto-head"><div><div class="schedule-auto-title">build an achievable day</div><div class="schedule-auto-copy">Places Recovery-approved training, the habits most likely to need support, and your highest-value tasks around fixed commitments. Learned times are suggestions, and wind-down stays protected.</div></div><button class="btn primary small" id="buildAchievableDayBtn">build today</button></div><div class="schedule-auto-summary" id="scheduleAutoSummary">Nothing changes until you build the plan.</div></div>
             <div class="schedule-recovery-list" id="scheduleRecoveryList"></div>
             <div class="schedule-agenda" id="scheduleAgenda"></div>
             <div class="schedule-upcoming" id="scheduleUpcoming"></div>
@@ -3662,27 +3727,17 @@
       <!-- Tasks Panel -->
       <div class="panel" id="panel-tasks">
         <div class="tasks-panel-grid">
-          <div class="task-card task-workbench-card">
-            <div class="task-workbench-head">
-              <div><h2>tasks</h2><div class="task-workbench-kicker">One clear next step, with the machinery tucked away.</div></div>
-              <button class="btn small task-current-next-btn" id="viewCurrentNextBtn">current &amp; next</button>
+          <div class="task-card task-workbench-card task-command-shell">
+            <div class="task-command-hero">
+              <div class="task-command-head"><div><div class="task-command-title">task command center</div><div class="task-command-subtitle">Focus work is measured with the timer. To-dos are simply completed. Capture either one quickly, then let due date, priority, recovery, and learned duration help choose what fits now.</div></div><button class="btn small task-current-next-btn" id="viewCurrentNextBtn">current &amp; next</button></div>
+              <div class="task-kind-picker sort-tabs" id="newTaskTypeTabs" aria-label="Choose task type"><button class="sort-btn active" data-type="focus">focus work<small>needs attention + can use the timer</small></button><button class="sort-btn" data-type="todo">to-do<small>just needs completion</small></button></div>
+              <div class="task-capture-grid"><input type="text" id="taskInput" class="task-input" placeholder="Capture the next concrete action…" autocomplete="off" list="taskSuggestions" /><input type="date" id="taskQuickDue" class="search-input" aria-label="Due date"><select id="taskQuickPriority" class="search-input" aria-label="Priority"><option value="none">no priority</option><option value="high">high priority</option><option value="medium">medium priority</option><option value="low">low priority</option></select><button id="addTaskBtn" class="add-btn">add</button></div>
+              <datalist id="taskSuggestions"></datalist>
+              <div class="task-coach-strip" id="taskCoachStrip"></div>
             </div>
+            <div class="task-visible-toolbar"><div class="sort-tabs" id="taskFilterTabs"><button class="sort-btn active" data-filter="active">active</button><button class="sort-btn" data-filter="completed">completed</button></div><div class="sort-tabs" id="taskSortTabs"><button class="sort-btn active" data-sort="manual">my order</button><button class="sort-btn" data-sort="due">due</button><button class="sort-btn" data-sort="priority">priority</button></div><button class="btn small" id="collapseAllTasksBtn">close details</button><span class="task-visible-toolbar-note" id="taskListViewLabel">manual order</span></div>
+            <span id="taskControlsSummaryState" hidden></span>
             <div class="task-overview-summary" id="taskOverviewSummary" aria-live="polite"></div>
-            <div class="task-input-group task-quick-add"><input type="text" id="taskInput" class="task-input" placeholder="What needs doing?" autocomplete="off" /><button id="addTaskBtn" class="add-btn">add</button></div>
-            <datalist id="taskSuggestions"></datalist>
-            <div class="task-visible-toolbar">
-              <div class="sort-tabs" id="taskFilterTabs"><button class="sort-btn active" data-filter="active">active</button><button class="sort-btn" data-filter="completed">completed</button></div>
-              <span class="task-visible-toolbar-note" id="taskListViewLabel">manual order</span>
-            </div>
-            <details class="task-controls-details">
-              <summary><span>more options</span><span class="preset-label" id="taskControlsSummaryState">focus · manual</span></summary>
-              <div class="task-controls-body">
-                <div class="sort-tabs" id="newTaskTypeTabs" aria-label="Does this task need focused work?"><span class="preset-label">new task</span><button class="sort-btn active" data-type="focus">focus · can use timer</button><button class="sort-btn" data-type="todo">regular to-do</button></div>
-                <div class="quick-timer-presets"><span class="preset-label">timer</span><button class="preset-btn" data-minutes="5">5m</button><button class="preset-btn" data-minutes="10">10m</button><button class="preset-btn" data-minutes="15">15m</button><button class="preset-btn" data-minutes="25">25m</button><button class="preset-btn" data-minutes="30">30m</button><button class="preset-btn" data-minutes="45">45m</button></div>
-                <div class="sort-tabs" id="taskSortTabs"><span class="preset-label">order</span><button class="sort-btn active" data-sort="manual">manual</button><button class="sort-btn" data-sort="due">due date</button><button class="sort-btn" data-sort="priority">priority</button></div>
-                <button class="btn small" id="collapseAllTasksBtn" style="width:100%;justify-content:center;font-size:0.65rem;opacity:0.75;">close all task details</button>
-              </div>
-            </details>
             <ul class="task-list" id="taskList"><li class="empty-tasks">no tasks yet</li></ul>
           </div>
 
@@ -3700,6 +3755,10 @@
       <!-- Habits Panel -->
       <div class="panel" id="panel-habits">
         <div class="habits-panel-grid">
+          <div class="habit-overview-card adaptive-habit-card">
+            <div class="adaptive-habit-head"><div><h2>adaptive habits</h2><div class="adaptive-habit-copy">Recovery changes the useful dose. These rows mirror today’s cardio, movement-primer, and lifting prescriptions so Habits never asks you to remember a separate plan.</div></div><button class="btn small" id="adaptiveHabitsOpenRecovery">open training call</button></div>
+            <div class="adaptive-habit-grid" id="habitAdaptivePlan"></div>
+          </div>
           <div class="habit-overview-card">
             <h2>this week</h2>
             <div class="habit-card-intro">A kinder seven-day view. Full target, minimum kept, and missed are different things; tap a day to correct it.</div>
@@ -4478,6 +4537,14 @@
             <div class="activity-threshold-reminder" id="activityThresholdReminder">Threshold refresh guidance will appear after activity evidence is available.</div>
             <div class="manual-activity-note">Cycling TSS-style load = hours × (normalized power ÷ FTP)² × 100. Running pace-style load = hours × (average speed ÷ threshold speed)² × 100. The speed ratio is used internally for arithmetic; running is displayed as min/km pace. HR and RPE are response-based fallbacks and are never stacked on top. Official TrainingPeaks rTSS additionally needs normalized graded pace; Xert XSS additionally needs Xert’s Fitness Signature and MPA model.</div>
           </div>
+          <div class="activity-card curve-maintenance-card" id="curveMaintenanceCard">
+            <div class="curve-maintenance-head"><div><div class="card-header-title">Curve maintenance</div><div class="curve-maintenance-copy" style="margin-top:.35rem;">Duration curves guide training better than a trophy list because they show which ability is current, stale, or missing. Focus::Flow suggests only one useful check at a time, and Recovery decides whether today is an appropriate quality window.</div></div><button class="btn small" id="curveOpenRecoveryBtn">check Recovery</button></div>
+            <div class="sort-tabs curve-maintenance-tabs" id="curveMaintenanceTabs"><button class="sort-btn active" data-curve-sport="ride">cycling power</button><button class="sort-btn" data-curve-sport="run">running pace</button></div>
+            <div class="curve-maintenance-grid">
+              <div class="curve-maintenance-chart"><section class="curve-maintenance-panel active" data-curve-panel="ride"><div class="activity-analysis-subtitle power-curve-note" id="curveMaintenancePowerNote">all time · hover or tap for exact values</div><div id="curveMaintenancePowerWrap"><div class="power-curve-empty">Sync or upload cycling power to draw the curve.</div></div></section><section class="curve-maintenance-panel" data-curve-panel="run"><div class="activity-analysis-subtitle power-curve-note" id="curveMaintenanceRunNote">all time · lower pace is faster</div><div id="curveMaintenanceRunWrap"><div class="power-curve-empty">Sync or upload run files to draw the curve.</div></div></section></div>
+              <div class="curve-maintenance-tests" id="curveMaintenanceTests"><div class="curve-gate-note">Curve evidence is being checked.</div></div>
+            </div>
+          </div>
           <div class="activity-card activity-pb-card">
             <div class="card-header-title">Personal bests</div>
             <div class="goals-intro-note" style="margin-top:.35rem;">Best efforts come from Intervals.icu curves. Choose a time window to compare your current form with your all-time history; changing the view never overwrites the all-time record.</div>
@@ -4723,7 +4790,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.171';
+      const APP_VERSION='1.172';
       const APP_RELEASE_DATE='2026-08-15';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -4758,7 +4825,7 @@
       let activityLoadSettings={cyclingFtp:null,runThresholdPace:null,cyclingMode:'auto',runMode:'auto'};
       let recoveryExperiments=[];
       let intervalsBestRecords={run:{},ride:{},ranges:{},lastSyncAt:null};
-      let personalBestRange='all',powerDisplayUnit='watts',activityHistoryPage=1,activityHistoryPageSize=10,activityPageSizeUserSet=false,activityAwardsView='recent',activityAwardsMetric='',activityAwardsScope='all',activityDistanceRange='30',decouplingSport='all',activityChartView='run-efficiency',activityAnalysisRange='90',effortTrendSport='run',effortTrendBand='medium',pendingActivityBatch=[],pendingActivityNewBatch=[],lastActivityNewBatch=null,activityNewBatchInFlight=false;
+      let personalBestRange='all',powerDisplayUnit='watts',curveMaintenanceSport='ride',activityHistoryPage=1,activityHistoryPageSize=10,activityPageSizeUserSet=false,activityAwardsView='recent',activityAwardsMetric='',activityAwardsScope='all',activityDistanceRange='30',decouplingSport='all',activityChartView='run-efficiency',activityAnalysisRange='90',effortTrendSport='run',effortTrendBand='medium',pendingActivityBatch=[],pendingActivityNewBatch=[],lastActivityNewBatch=null,activityNewBatchInFlight=false;
       let activityTraceDbPromise=null,activityTraceMigrationInFlight=false,activityTraceMigrationQueued=false,activityDerivativeUpgradeInFlight=false,activityDerivativeUpgradeQueued=false,activityChartObserver=null,activityChartRenderQueued=false,activityAwardCache={revision:-1,index:null},activityHealthCache={revision:-1,items:[]},activityDataRevision=0,activityHealthView='attention';
       let recoveryHasRendered=false,recoveryRenderedDate='',recoveryNavigationTimer=null;
       let intervalsLastSyncAt=null;
@@ -5635,9 +5702,9 @@
         const showPoint=(point)=>{const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;if(!rect.width||!vb.width)return;line?.setAttribute('x1',point.chartX);line?.setAttribute('x2',point.chartX);line?.setAttribute('y1',12);line?.setAttribute('y2',vb.height-28);if(line)line.style.display='block';dot?.setAttribute('cx',point.chartX);dot?.setAttribute('cy',point.chartY);if(dot)dot.style.display='block';const content=formatPoint(point);tooltip.innerHTML=`<strong>${escapeHtml(content.title)}</strong>${content.lines.map(escapeHtml).join('<br>')}`;tooltip.style.display='block';const screen=screenPoint(point.chartX,point.chartY),pixelX=screen.x-rect.left,pixelY=screen.y-rect.top,tipWidth=Math.min(190,Math.max(118,tooltip.offsetWidth||140));tooltip.style.left=`${Math.max(4,Math.min(rect.width-tipWidth-4,pixelX-tipWidth/2))}px`;tooltip.style.top=`${Math.max(50,pixelY-8)}px`;};
         const inspect=(event)=>{const matrix=svg.getScreenCTM();if(!matrix)return;const p=svg.createSVGPoint();p.x=event.clientX;p.y=event.clientY;const local=p.matrixTransform(matrix.inverse()),point=rows.reduce((best,row)=>!best||Math.abs(row.chartX-local.x)<Math.abs(best.chartX-local.x)?row:best,null);if(point)showPoint(point);};const hide=()=>{tooltip.style.display='none';if(line)line.style.display='none';if(dot)dot.style.display='none';};svg.addEventListener('pointermove',inspect);svg.addEventListener('pointerdown',inspect);svg.addEventListener('pointerleave',e=>{if(e.pointerType!=='touch')hide();});svg.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const current=Number(svg.dataset.inspectIndex)||0,next=Math.max(0,Math.min(rows.length-1,current+(e.key==='ArrowRight'?1:-1)));svg.dataset.inspectIndex=String(next);showPoint(rows[next]);});svg.tabIndex=0;svg.addEventListener('focus',()=>showPoint(rows[Number(svg.dataset.inspectIndex)||0]));svg.addEventListener('blur',hide);
       }
-      function renderPowerDurationCurve(rangeData){
-        const wrap=document.getElementById('powerCurveWrap'),note=document.getElementById('powerCurveNote');if(!wrap)return;
-        const curve=rangeData?.rideCurve,ctx=getPowerDisplayContext(),rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[personalBestRange]||personalBestRange;
+      function renderPowerDurationCurve(rangeData,wrapId='powerCurveWrap',noteId='powerCurveNote',rangeKey=personalBestRange){
+        const wrap=document.getElementById(wrapId),note=document.getElementById(noteId);if(!wrap)return;
+        const curve=rangeData?.rideCurve,ctx=getPowerDisplayContext(),rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[rangeKey]||rangeKey;
         if(note)note.textContent=`${rangeLabel} · ${ctx.unit}${ctx.unit==='W/kg'?' from latest bodyweight':''} · hover or tap for exact values`;
         if(!curve||!Array.isArray(curve.secs)||curve.secs.length<2){wrap.innerHTML='<div class="power-curve-empty">No power curve is available for this range yet.</div>';return;}
         const rows=curve.secs.map((sec,i)=>({sec:Number(sec),value:Number(curve.values[i])*ctx.factor})).filter(x=>x.sec>0&&x.value>0).sort((a,b)=>a.sec-b.sec);if(rows.length<2){wrap.innerHTML='<div class="power-curve-empty">No power curve is available for this range yet.</div>';return;}
@@ -5645,15 +5712,23 @@
         const x=s=>L+(Math.log(s)-x0)/(x1-x0)*(W-L-R),y=v=>T+(maxV-v)/(maxV-minV)*(H-T-B);rows.forEach(p=>{p.chartX=x(p.sec);p.chartY=y(p.value);});const path=rows.map((p,i)=>`${i?'L':'M'}${p.chartX.toFixed(1)},${p.chartY.toFixed(1)}`).join(' ');
         const xTicks=[5,60,300,1200,3600,14400].filter(s=>s>=rows[0].sec&&s<=rows[rows.length-1].sec),xLabels={5:'5s',60:'1m',300:'5m',1200:'20m',3600:'1h',14400:'4h'};
         const yTicks=[0,.5,1].map(f=>minV+(maxV-minV)*f);
-        wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cycling power-duration curve for ${escapeHtml(rangeLabel)}. Use the cursor, touch, or arrow keys to inspect exact values.">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${ctx.unit==='W/kg'?v.toFixed(1):Math.round(v)}</text>`).join('')}${xTicks.map(s=>`<line class="power-curve-grid" x1="${x(s)}" x2="${x(s)}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${x(s)}" y="${H-8}" text-anchor="middle">${xLabels[s]}</text>`).join('')}<path class="power-curve-path" d="${path}"></path><line class="curve-inspector-line" style="display:none"></line><circle class="curve-inspector-dot" r="5" style="display:none"></circle></svg>`;appendActivityChartLegend('powerCurveWrap',[{type:'line',label:`best mean cycling power · ${rangeLabel}`}]);bindDurationCurveInspector(wrap,rows,p=>({title:formatCurveDuration(p.sec),lines:[`${ctx.unit==='W/kg'?p.value.toFixed(2):Math.round(p.value)} ${ctx.unit}`,rangeLabel]}));
+        wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cycling power-duration curve for ${escapeHtml(rangeLabel)}. Use the cursor, touch, or arrow keys to inspect exact values.">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${ctx.unit==='W/kg'?v.toFixed(1):Math.round(v)}</text>`).join('')}${xTicks.map(s=>`<line class="power-curve-grid" x1="${x(s)}" x2="${x(s)}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${x(s)}" y="${H-8}" text-anchor="middle">${xLabels[s]}</text>`).join('')}<path class="power-curve-path" d="${path}"></path><line class="curve-inspector-line" style="display:none"></line><circle class="curve-inspector-dot" r="5" style="display:none"></circle></svg>`;appendActivityChartLegend(wrapId,[{type:'line',label:`best mean cycling power · ${rangeLabel}`}]);bindDurationCurveInspector(wrap,rows,p=>({title:formatCurveDuration(p.sec),lines:[`${ctx.unit==='W/kg'?p.value.toFixed(2):Math.round(p.value)} ${ctx.unit}`,rangeLabel]}));
       }
-      function renderRunPaceDurationCurve(rangeData){
-        const wrap=document.getElementById('runCurveWrap'),note=document.getElementById('runCurveNote');if(!wrap)return;const rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[personalBestRange]||personalBestRange;
+      function renderRunPaceDurationCurve(rangeData,wrapId='runCurveWrap',noteId='runCurveNote',rangeKey=personalBestRange){
+        const wrap=document.getElementById(wrapId),note=document.getElementById(noteId);if(!wrap)return;const rangeLabel={all:'all time',365:'1 year',90:'90 days',30:'30 days'}[rangeKey]||rangeKey;
         if(note)note.textContent=`${rangeLabel} · lower pace is faster · hover or tap for exact values`;
         const specs=[['1k',1000],['1 mile',1609],['5k',5000],['10k',10000],['half',21097],['marathon',42195]],rows=specs.map(([label,distance])=>{const sec=Number(rangeData?.run?.[label]);return{label,distance,sec,pace:sec>0?sec/(distance/1000):null};}).filter(x=>x.sec>0&&x.pace>0).sort((a,b)=>a.sec-b.sec);
         if(rows.length<2){wrap.innerHTML='<div class="power-curve-empty">At least two run best-effort distances are needed for this range.</div>';return;}
         const W=720,H=190,L=52,R=16,T=12,B=30,x0=Math.log(rows[0].sec),x1=Math.log(rows[rows.length-1].sec),minP=Math.min(...rows.map(x=>x.pace))*.96,maxP=Math.max(...rows.map(x=>x.pace))*1.04,x=s=>L+(Math.log(s)-x0)/(x1-x0)*(W-L-R),y=p=>T+(p-minP)/(maxP-minP)*(H-T-B),paceLabel=p=>`${Math.floor(p/60)}:${String(Math.round(p%60)).padStart(2,'0')}`;rows.forEach(p=>{p.chartX=x(p.sec);p.chartY=y(p.pace);});const path=rows.map((p,i)=>`${i?'L':'M'}${p.chartX.toFixed(1)},${p.chartY.toFixed(1)}`).join(' ');
-        const yTicks=[minP,(minP+maxP)/2,maxP];wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Running pace-duration curve for ${escapeHtml(rangeLabel)}. Use the cursor, touch, or arrow keys to inspect exact values.">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${paceLabel(v)}</text>`).join('')}${rows.map(p=>`<line class="power-curve-grid" x1="${p.chartX}" x2="${p.chartX}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${p.chartX}" y="${H-8}" text-anchor="middle">${escapeHtml(p.label)}</text>`).join('')}<path class="run-curve-path" d="${path}"></path>${rows.map(p=>`<circle cx="${p.chartX}" cy="${p.chartY}" r="3.5" style="fill:var(--main-color);stroke:var(--bg-color);stroke-width:1"><title>${escapeHtml(p.label)} · ${fmtPbTime(p.sec)} · ${paceLabel(p.pace)}/km</title></circle>`).join('')}<line class="curve-inspector-line" style="display:none"></line><circle class="curve-inspector-dot" r="5" style="display:none"></circle></svg>`;appendActivityChartLegend('runCurveWrap',[{type:'line',label:`best available running pace · ${rangeLabel}`}]);bindDurationCurveInspector(wrap,rows,p=>({title:p.label,lines:[`${fmtPbTime(p.sec)} total`,`${paceLabel(p.pace)}/km`,rangeLabel]}));
+        const yTicks=[minP,(minP+maxP)/2,maxP];wrap.innerHTML=`<svg class="power-curve-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Running pace-duration curve for ${escapeHtml(rangeLabel)}. Use the cursor, touch, or arrow keys to inspect exact values.">${yTicks.map(v=>`<line class="power-curve-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"></line><text class="power-curve-label" x="${L-6}" y="${y(v)+3}" text-anchor="end">${paceLabel(v)}</text>`).join('')}${rows.map(p=>`<line class="power-curve-grid" x1="${p.chartX}" x2="${p.chartX}" y1="${T}" y2="${H-B}"></line><text class="power-curve-label" x="${p.chartX}" y="${H-8}" text-anchor="middle">${escapeHtml(p.label)}</text>`).join('')}<path class="run-curve-path" d="${path}"></path>${rows.map(p=>`<circle cx="${p.chartX}" cy="${p.chartY}" r="3.5" style="fill:var(--main-color);stroke:var(--bg-color);stroke-width:1"><title>${escapeHtml(p.label)} · ${fmtPbTime(p.sec)} · ${paceLabel(p.pace)}/km</title></circle>`).join('')}<line class="curve-inspector-line" style="display:none"></line><circle class="curve-inspector-dot" r="5" style="display:none"></circle></svg>`;appendActivityChartLegend(wrapId,[{type:'line',label:`best available running pace · ${rangeLabel}`}]);bindDurationCurveInspector(wrap,rows,p=>({title:p.label,lines:[`${fmtPbTime(p.sec)} total`,`${paceLabel(p.pace)}/km`,rangeLabel]}));
+      }
+      function getCurveMaintenanceData(){const base=intervalsBestRecords.ranges?.all||{run:intervalsBestRecords.run||{}},data={run:{...(base.run||{})},rideCurve:getMergedCyclingPowerCurve('all')};localRunEffortRows('all').forEach(e=>{const current=Number(data.run[e.label]);if(!(current>0)||e.value<current)data.run[e.label]=e.value;});return data;}
+      function getCurveMaintenanceRows(sport){
+        const today=Date.now(),age=date=>date?Math.max(0,Math.floor((today-new Date(`${date}T12:00:00`).getTime())/86400000)):null;if(sport==='ride'){const local=getLocalCyclingPowerCurve('all'),merged=getMergedCyclingPowerCurve('all'),specs=[['5 sec',5,90,'neuromuscular sprint'],['1 min',60,75,'short anaerobic power'],['5 min',300,60,'high aerobic power'],['20 min',1200,60,'threshold range']];return specs.map(([label,seconds,staleAfter,purpose])=>{const localEvidence=local?.evidence?.[seconds],value=nearestCurveValue(merged,seconds),days=age(localEvidence?.date);return{label,value:value?`${Math.round(value)} W`:'missing',date:localEvidence?.date||'',days,staleAfter,purpose,missing:!(value>0),unknown:value>0&&!localEvidence?.date};});}
+        const rows=localRunEffortRows('all'),base=getCurveMaintenanceData().run,specs=[['1k',90,'short speed / aerobic power'],['1 mile',90,'short race-strength range'],['5k',75,'critical-speed anchor'],['10k',120,'long aerobic performance']];return specs.map(([label,staleAfter,purpose])=>{const attempts=rows.filter(r=>r.label===label).sort((a,b)=>String(b.date).localeCompare(String(a.date))),latest=attempts[0],value=Number(base[label]),days=age(latest?.date);return{label,value:value?fmtPbTime(value):'missing',date:latest?.date||'',days,staleAfter,purpose,missing:!(value>0),unknown:value>0&&!latest?.date};});
+      }
+      function renderCurveMaintenance(){
+        const data=getCurveMaintenanceData();renderPowerDurationCurve(data,'curveMaintenancePowerWrap','curveMaintenancePowerNote','all');renderRunPaceDurationCurve(data,'curveMaintenanceRunWrap','curveMaintenanceRunNote','all');document.querySelectorAll('#curveMaintenanceTabs [data-curve-sport]').forEach(b=>b.classList.toggle('active',b.dataset.curveSport===curveMaintenanceSport));document.querySelectorAll('[data-curve-panel]').forEach(p=>p.classList.toggle('active',p.dataset.curvePanel===curveMaintenanceSport));const el=document.getElementById('curveMaintenanceTests');if(!el)return;const rows=getCurveMaintenanceRows(curveMaintenanceSport),call=getTrainingCallData(getToday()),qualityWindow=['medium','test'].includes(call.level),rank=r=>r.missing?1000:r.unknown?700:(r.days??0),recommended=rows.slice().sort((a,b)=>rank(b)-rank(a))[0],needs=rows.some(r=>r.missing||r.unknown||(r.days!=null&&r.days>r.staleAfter));el.innerHTML=`<div class="curve-gate-note"><strong>${qualityWindow?'Quality work is permitted—not required.':`Today is ${escapeHtml(call.level)}.`}</strong> ${qualityWindow&&needs?`If you were already due for quality work, ${escapeHtml(recommended.label)} is the curve gap most worth refreshing. Do one test, not the whole curve.`:needs?'Keep ordinary training as prescribed. The app will wait for a Recovery-approved quality day before suggesting a maximal check.':'No dedicated test is due. Ordinary strong efforts can refresh the curve.'}</div>${rows.map(r=>{const state=r.missing?'missing':r.unknown?'date unknown':r.days>r.staleAfter?'stale':'current',ageText=r.missing?'no record':r.unknown?'record exists · date unavailable':r.days===0?'today':`${r.days}d old`;return`<div class="curve-test-row ${state==='current'?'current':state==='stale'||state==='missing'?'stale':''}"><div class="curve-test-top"><strong>${escapeHtml(r.label)} · ${escapeHtml(r.value)}</strong><span class="curve-test-age">${escapeHtml(ageText)}</span></div><div class="curve-test-note">${escapeHtml(r.purpose)} · ${state==='current'?`current within the ${r.staleAfter}-day guide`:state==='stale'?`older than the ${r.staleAfter}-day freshness guide`:state==='missing'?'no usable point yet':'freshness cannot be judged until a dated file supplies the effort'}</div></div>`;}).join('')}`;
       }
       function renderCriticalSpeedChart(){
         const el=document.getElementById('criticalSpeedChart'),subtitle=document.getElementById('criticalSpeedSubtitle');if(!el||!subtitle)return;const estimate=criticalSpeedEstimateForRange(activityAnalysisRange),rangeLabel=activityAnalysisRange==='all'?'all time':activityAnalysisRange==='365'?'1 year':`${activityAnalysisRange} days`;if(!estimate){el.innerHTML='<div class="activity-analysis-empty">Need at least two best efforts at different distances, each lasting about 2–20 minutes.</div>';subtitle.textContent=`${rangeLabel} · no valid two-parameter fit yet. A 5 km test helps but is not required.`;return;}
@@ -6080,7 +6155,7 @@
         const cutoff=Date.now()-30*86400000,recent30=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff);
         const c=document.getElementById('activity30Count'),h=document.getElementById('activity30Hours'),l=document.getElementById('activity30Load');if(c)c.textContent=recent30.length||'—';if(h)h.textContent=recent30.length?(recent30.reduce((x,a)=>x+a.moving_time,0)/3600).toFixed(1):'—';if(l){const vals=recent30.map(getActivityLoadInfo).filter(x=>x.value!=null);l.textContent=vals.length?Math.round(vals.reduce((sum,x)=>sum+x.value,0)):'—';}
         const awardIndex=buildActivityAwardIndex();renderActivityCoverage();renderActivityDataHealth();renderActivityTrendSummary();renderActivityDistanceSummary();renderRunningLoadGuard();renderCardioBuildPlan();renderActivityLoadSettings();renderActivityNewBatchUndo();
-        renderPersonalBests(awardIndex);renderHeartRateRanges();renderAerobicBaselines();renderActivityAnalysis();
+        renderCurveMaintenance();renderPersonalBests(awardIndex);renderHeartRateRanges();renderAerobicBaselines();renderActivityAnalysis();
         const list=document.getElementById('activityList');if(!list)return;renderActivityHistoryPagers(importedActivities.length);if(!importedActivities.length){list.innerHTML=`<div class="activity-empty">${key?'Connected. Sync will import your Intervals.icu training history.':'Connect Intervals.icu once and your activities will appear here automatically.'}</div>`;return;}
         const start=(activityHistoryPage-1)*activityHistoryPageSize;list.innerHTML=importedActivities.slice(start,start+activityHistoryPageSize).map(a=>renderActivityRow(a,awardIndex.get(String(a.id))||[])).join('');bindActivityResponseControls(list);
       }
@@ -6110,7 +6185,9 @@
         document.getElementById('activityOpenBatchBtn')?.addEventListener('click',()=>openActivityFiles('repair'));
         const manualDate=document.getElementById('manualActivityDate');if(manualDate&&!manualDate.value)manualDate.value=getToday();
         document.getElementById('pbRangeTabs')?.addEventListener('click',e=>{const btn=e.target.closest('[data-pb-range]');if(!btn)return;personalBestRange=btn.dataset.pbRange;renderPersonalBests();if(['ride-duration','run-duration','critical-speed'].includes(activityChartView))renderActivityAnalysis(true);});
-        document.getElementById('powerUnitToggle')?.addEventListener('click',e=>{const btn=e.target.closest('[data-power-unit]');if(!btn)return;if(btn.dataset.powerUnit==='wkg'&&!getMostRecentBodyweight()){showToast('log bodyweight in Recovery first — W/kg needs your weight');return;}powerDisplayUnit=btn.dataset.powerUnit;renderPersonalBests();if(activityChartView==='ride-duration')renderActivityAnalysis(true);});
+        document.getElementById('powerUnitToggle')?.addEventListener('click',e=>{const btn=e.target.closest('[data-power-unit]');if(!btn)return;if(btn.dataset.powerUnit==='wkg'&&!getMostRecentBodyweight()){showToast('log bodyweight in Recovery first — W/kg needs your weight');return;}powerDisplayUnit=btn.dataset.powerUnit;renderPersonalBests();renderCurveMaintenance();if(activityChartView==='ride-duration')renderActivityAnalysis(true);});
+        document.getElementById('curveMaintenanceTabs')?.addEventListener('click',e=>{const btn=e.target.closest('[data-curve-sport]');if(!btn)return;curveMaintenanceSport=btn.dataset.curveSport;renderCurveMaintenance();});
+        document.getElementById('curveOpenRecoveryBtn')?.addEventListener('click',()=>switchPanel('recovery'));
         document.getElementById('activityAwardsTabs')?.addEventListener('click',e=>{const btn=e.target.closest('[data-awards-view]');if(!btn)return;activityAwardsView=btn.dataset.awardsView;renderAchievementFeed();});
         document.getElementById('activityAwardsMetricSelect')?.addEventListener('change',e=>{activityAwardsMetric=e.target.value;renderAchievementFeed();});
         document.getElementById('activityAwardsScopeSelect')?.addEventListener('change',e=>{activityAwardsScope=e.target.value;renderAchievementFeed();});
@@ -9683,7 +9760,7 @@ function updateNotificationSettingUI(){
         bgHabits.forEach(h=>{const opt=document.createElement('option');opt.value=h.name;dl.appendChild(opt);});
       }
       function renderBgHabits(){
-        updateHabitSuggestions();renderHabitOverview();renderTodayPanel();habitList.innerHTML='';
+        updateHabitSuggestions();renderHabitOverview();renderTodayPanel();renderHabitsAdaptivePlan();habitList.innerHTML='';
         let displayHabits=bgHabits;
         if(habitSearchQuery.trim())displayHabits=displayHabits.filter(h=>h.name.toLowerCase().includes(habitSearchQuery.trim().toLowerCase()));
         if(!displayHabits.length){habitList.innerHTML=`<li class="empty-habits">${habitSearchQuery.trim()?'no matches':'no habits yet'}</li>`;return;}
@@ -9709,7 +9786,8 @@ function updateNotificationSettingUI(){
           const editBtn=document.createElement('button');editBtn.className='edit-btn';editBtn.textContent='edit';editBtn.addEventListener('click',e=>{e.stopPropagation();startEditHabit(h.id,li,name);});
           const del=document.createElement('button');del.className='delete-habit-btn';del.textContent='delete';del.addEventListener('click',e=>{e.stopPropagation();deleteBgHabit(h.id);});
           settingsBody.appendChild(editBtn);settingsBody.appendChild(del);if(habitOrderSort==='manual')settingsBody.appendChild(createHabitReorderButtons(index));details.appendChild(settingsBody);
-          info.appendChild(name);info.appendChild(typeBadge);info.appendChild(meta);info.appendChild(details);li.appendChild(btn);li.appendChild(info);habitList.appendChild(li);
+          const adaptiveNote=document.createElement('div');adaptiveNote.className='habit-adaptation-note';adaptiveNote.textContent=getHabitAdaptiveNote(h);
+          info.appendChild(name);info.appendChild(typeBadge);info.appendChild(meta);info.appendChild(adaptiveNote);info.appendChild(details);li.appendChild(btn);li.appendChild(info);habitList.appendChild(li);
         });
       }
       function startEditHabit(id,li,nameSpan){const origName=nameSpan.textContent;const inp=document.createElement('input');inp.className='edit-input';inp.value=origName;nameSpan.replaceWith(inp);inp.focus();inp.select();const commit=()=>{const newName=inp.value.trim();if(newName&&newName!==origName){renameBgHabit(id,newName);}else{renderBgHabits();}};inp.addEventListener('blur',commit);inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}if(e.key==='Escape'){inp.value=origName;commit();}});}
@@ -10307,7 +10385,10 @@ function updateNotificationSettingUI(){
         const attention=tasks.filter(t=>!t.completed&&(t.outcome==='blocked'||(t.dueDate&&t.dueDate<today)||(t.deferCount||0)>=2)).length;
         const doneToday=tasks.filter(t=>t.completedAt===today&&t.outcome!=='dropped').length;
         summary.innerHTML=`<div class="task-overview-stat"><span class="task-overview-value">${active}</span><span class="task-overview-label">active</span></div><div class="task-overview-stat ${attention?'attention':''}"><span class="task-overview-value">${attention}</span><span class="task-overview-label">need attention</span></div><div class="task-overview-stat done"><span class="task-overview-value">${doneToday}</span><span class="task-overview-label">done today</span></div>`;
+        renderTaskCoachStrip();
       }
+      function getRecommendedTask(){const today=getToday(),active=tasks.filter(t=>!t.completed&&t.outcome!=='blocked'&&t.outcome!=='dropped');return active.slice().sort((a,b)=>{const dueScore=t=>(t.dueDate?(t.dueDate<today?60:t.dueDate===today?45:0):0),focusScore=t=>t.taskType==='todo'?0:8;return(dueScore(b)+PRIORITY_WEIGHT[b.priority||'none']*12+focusScore(b))-(dueScore(a)+PRIORITY_WEIGHT[a.priority||'none']*12+focusScore(a));})[0]||null;}
+      function renderTaskCoachStrip(){const el=document.getElementById('taskCoachStrip');if(!el)return;const recommended=getRecommendedTask(),remaining=Math.max(0,getAdaptiveFocusTarget().target-todayFocusMinutes),linked=tasks.filter(t=>!t.completed&&bgHabits.some(h=>h.linkedTask===t.text)).length,scheduled=getScheduleItemsForDate(getToday()).filter(x=>x.kind==='task'||x.kind==='adaptive').length;el.innerHTML=`<div class="task-coach-cell"><div class="task-coach-label">best next</div><div class="task-coach-value">${recommended?escapeHtml(recommended.text):'Nothing is waiting.'}</div></div><div class="task-coach-cell"><div class="task-coach-label">focus capacity left</div><div class="task-coach-value">about ${remaining} min · recovery-adjusted</div></div><div class="task-coach-cell"><div class="task-coach-label">connected plan</div><div class="task-coach-value">${linked} habit-linked · ${scheduled} scheduled today</div></div>`;}
       function createTaskDetailsPanel(t,index,li,textSpan,manualOrder){
         const isTodo=t.taskType==='todo',panel=document.createElement('div');panel.className='task-details-panel';
         const heading=document.createElement('div');heading.className='task-details-heading';heading.innerHTML=`<span>task details</span><span>${isTodo?'regular to-do':'focus task'}</span>`;panel.appendChild(heading);
@@ -10328,19 +10409,20 @@ function updateNotificationSettingUI(){
         updateTaskControlsSummary();
         const visibleTasks=taskFilter==='completed'?tasks.filter(t=>t.completed).slice().sort((a,b)=>(b.completedAt||'').localeCompare(a.completedAt||'')):sortTasksList(tasks.filter(t=>!t.completed));
         if(!visibleTasks.length){taskList.innerHTML=taskFilter==='completed'?'<li class="empty-tasks">No completed tasks yet.</li>':'<li class="empty-tasks">Nothing is waiting. Add one task when you are ready.</li>';updateCurrentTaskDisplay();renderSchedule();return;}
-        visibleTasks.forEach(t=>{
+        const ordered=taskFilter==='completed'?[{title:'completed',note:'recently finished',items:visibleTasks}]:[{title:'focus queue',note:'intentional work measured with the timer',items:visibleTasks.filter(t=>t.taskType!=='todo')},{title:'to-do queue',note:'complete it; no timer required',items:visibleTasks.filter(t=>t.taskType==='todo')}];
+        ordered.forEach(lane=>{if(!lane.items.length)return;const laneHeader=document.createElement('li');laneHeader.className='task-lane-header';laneHeader.innerHTML=`<span class="task-lane-title">${escapeHtml(lane.title)}</span><span class="task-lane-note">${escapeHtml(lane.note)} · ${lane.items.length}</span>`;taskList.appendChild(laneHeader);lane.items.forEach(t=>{
           const index=tasks.indexOf(t),isTodo=t.taskType==='todo',manualOrder=taskFilter==='active'&&taskSort==='manual',isExpanded=expandedTaskMeta.has(t.id);
           const li=document.createElement('li');li.className='task-item task-v145';if(t.id===currentTaskId&&!t.completed)li.classList.add('current');if(t.completed)li.classList.add('completed');if(t.outcome==='blocked')li.classList.add('blocked');const hasTimer=!isTodo&&taskTimeLimits[t.id]>0,remaining=taskTimerRemaining[t.id]||0;if(hasTimer&&remaining<=0&&!t.completed)li.classList.add('overdue');if(manualOrder)wireTaskDragHandlers(li,index,taskList);
           const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.className='task-checkbox';checkbox.checked=t.completed;checkbox.setAttribute('aria-label',t.completed?'mark task active':'mark task done');checkbox.addEventListener('change',()=>handleTaskComplete(t.id,checkbox.checked));li.appendChild(checkbox);
-          const info=document.createElement('div');info.className='task-info';const primary=document.createElement('div');primary.className='task-primary-row';const textSpan=document.createElement('span');textSpan.className='task-text';textSpan.textContent=t.text;textSpan.title=t.completed?'completed task':'make this the current focus task';textSpan.addEventListener('click',()=>{if(!t.completed){currentTaskId=t.id;updateCurrentTaskDisplay();renderTasks();}});primary.appendChild(textSpan);const overflow=document.createElement('button');overflow.className='task-overflow-btn';overflow.textContent='•••';overflow.title=isExpanded?'close task details':'open task details';overflow.setAttribute('aria-expanded',String(isExpanded));overflow.setAttribute('aria-label',overflow.title);overflow.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});primary.appendChild(overflow);info.appendChild(primary);
+          const info=document.createElement('div');info.className='task-info';const primary=document.createElement('div');primary.className='task-primary-row';const textSpan=document.createElement('span');textSpan.className='task-text';textSpan.textContent=t.text;textSpan.title=t.completed?'completed task':isTodo?'open task details':'make this the current focus task';textSpan.addEventListener('click',()=>{if(!t.completed){if(!isTodo)currentTaskId=t.id;toggleTaskMetaExpand(t.id);updateCurrentTaskDisplay();}});primary.appendChild(textSpan);if(!isTodo&&!t.completed){const start=document.createElement('button');start.className='task-start-focus';start.textContent=t.id===currentTaskId?'resume focus':'start focus';start.addEventListener('click',e=>{e.stopPropagation();currentTaskId=t.id;updateCurrentTaskDisplay();if(currentMode!=='pomodoro')switchMode('pomodoro');if(!isRunning)startTimer();switchPanel('today');saveData();});primary.appendChild(start);}if(bgHabits.some(h=>h.linkedTask===t.text)){const linked=document.createElement('span');linked.className='task-link-status';linked.textContent='habit linked';primary.appendChild(linked);}const overflow=document.createElement('button');overflow.className='task-overflow-btn';overflow.textContent='•••';overflow.title=isExpanded?'close task details':'open task details';overflow.setAttribute('aria-expanded',String(isExpanded));overflow.setAttribute('aria-label',overflow.title);overflow.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});primary.appendChild(overflow);info.appendChild(primary);
           const next=getTaskNextActionPreview(t);if(next&&!t.completed){const nextLine=document.createElement('div');nextLine.className='task-next-line'+(next.suggested?' suggested':'');const nextLabel=document.createElement('span');nextLabel.className='task-next-label';nextLabel.textContent=next.suggested?'try':'next';const nextText=document.createElement('span');nextText.textContent=next.text;nextLine.appendChild(nextLabel);nextLine.appendChild(nextText);info.appendChild(nextLine);}
           const compact=createCompactMetaSummary(t);if(compact.childElementCount)info.appendChild(compact);
           if(isExpanded)info.appendChild(createTaskDetailsPanel(t,index,li,textSpan,manualOrder));li.appendChild(info);taskList.appendChild(li);
-        });
+        });});
         updateCurrentTaskDisplay();renderSchedule();
       }
 
-      function addTask(){const tx=taskInput.value.trim();if(!tx)return;const selectedType=document.querySelector('#newTaskTypeTabs .sort-btn.active')?.dataset.type||'focus';const nt={id:generateId(),text:tx,completed:false,dueDate:null,priority:'none',subtasks:[],notes:'',taskType:selectedType};tasks.push(nt);taskTimeLog[nt.id]=0;if(selectedType==='focus'&&(!currentTaskId||!tasks.find(t=>t.id===currentTaskId&&!t.completed)))currentTaskId=nt.id;taskInput.value='';renderTasks();renderLibrary();saveData();}
+      function addTask(){const tx=taskInput.value.trim();if(!tx)return;const selectedType=document.querySelector('#newTaskTypeTabs .sort-btn.active')?.dataset.type||'focus',due=document.getElementById('taskQuickDue')?.value||null,priority=document.getElementById('taskQuickPriority')?.value||'none';const nt={id:generateId(),text:tx,completed:false,dueDate:due,priority,subtasks:[],notes:'',taskType:selectedType};tasks.push(nt);taskTimeLog[nt.id]=0;if(selectedType==='focus'&&(!currentTaskId||!tasks.find(t=>t.id===currentTaskId&&!t.completed)))currentTaskId=nt.id;taskInput.value='';const dueInput=document.getElementById('taskQuickDue'),priorityInput=document.getElementById('taskQuickPriority');if(dueInput)dueInput.value='';if(priorityInput)priorityInput.value='none';renderTasks();renderLibrary();saveData();}
       function deleteTask(id){const t=tasks.find(t=>t.id===id);showConfirm(`Remove "${t?t.text:'this task'}" from your list? Its history and library entry stay intact — this only removes today's card.`,()=>{if(t&&!t.completed)tasksAbandonedCount++;tasks=tasks.filter(t=>t.id!==id);delete taskTimeLog[id];delete taskTimeLimits[id];delete taskTimerRemaining[id];if(currentTaskId===id)currentTaskId=null;expandedSubtasks.delete(id);goals.forEach(g=>{if(g.linkedTaskIds&&g.linkedTaskIds.includes(id))g.linkedTaskIds=g.linkedTaskIds.filter(tid=>tid!==id);});renderTasks();renderGoals();saveData();},'remove');}
       function handleTaskComplete(id,chk){const t=tasks.find(t=>t.id===id);if(!t)return;const was=t.completed;t.completed=chk;t.completedAt=chk?getToday():null;if(!chk&&t.outcome==='dropped')t.outcome='';if(chk&&!was){trackTaskCompletion(t.text);logCompletionEvent(t.taskType==='todo'?'todo':'task',t.text);if(navigator.vibrate){try{navigator.vibrate(15);}catch(e){}}if(taskTimeLimits[id]){const estimateMin=formatMinutes(taskTimeLimits[id]),actualMin=formatMinutes(taskTimeLog[id]||0);if(actualMin>0){estimateAccuracyLog.push({taskName:t.text,estimateMin,actualMin,date:getToday()});if(estimateAccuracyLog.length>200)estimateAccuracyLog.shift();}}}if(chk){delete taskTimeLimits[id];delete taskTimerRemaining[id];if(currentTaskId===id)currentTaskId=getNextIncompleteTask()?.id||null;}renderTasks();saveData();renderGoals();}
 
@@ -10942,6 +11024,8 @@ function updateNotificationSettingUI(){
       document.getElementById('todayTodoQuickAdd').addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodayTodo();});
       document.getElementById('scheduleQuickBtn').addEventListener('click',quickAddSchedule);
       document.getElementById('scheduleQuickInput').addEventListener('keydown',e=>{if(e.key==='Enter')quickAddSchedule();});
+      document.getElementById('buildAchievableDayBtn')?.addEventListener('click',buildAchievableDay);
+      document.getElementById('adaptiveHabitsOpenRecovery')?.addEventListener('click',()=>switchPanel('recovery'));
       document.getElementById('todayNowChooseBtn').addEventListener('click',()=>{switchTodayHubTab('current');document.querySelector('.today-tasks-hub')?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('todayCurrentQuickAdd')?.focus();});
       document.getElementById('todayNowStartBtn').addEventListener('click',()=>{const current=tasks.find(t=>t.id===currentTaskId&&!t.completed&&t.taskType!=='todo');if(!current){showToast('add or choose a Focus Queue task first');return;}if(currentMode!=='pomodoro')switchMode('pomodoro');if(!isRunning)startTimer();else showToast('focus is already running');updateTodayNowCard();});
       document.getElementById('todayBestMoveAction').addEventListener('click',executeBestNextMove);
@@ -11093,21 +11177,33 @@ function updateNotificationSettingUI(){
           el.appendChild(li);
         });
       }
-      function renderAdaptivePlanHabits(el,todayStr){
-        let call;try{call=getTrainingCallData(todayStr);}catch(e){return;}const liftingLevel=getCallLiftingLevel(call),sessions=getTrainingSessionsForDate(todayStr).filter(s=>!s.superseded),cardioDone=sessions.some(s=>s.kind!=='lifting'&&s.type!=='weights'),liftDone=(liftingHistory||[]).find(h=>h.kind==='exposure'&&h.date===todayStr),recommendation=liftingLifts.length?getLiftingRecommendation(todayStr,liftingLevel):null,rows=[];
-        rows.push({name:'cardio prescription',done:call.level==='rest'||cardioDone,meta:call.level==='rest'?'rest is prescribed · following the plan counts':cardioDone?`${sessions.filter(s=>s.kind!=='lifting').length} cardio session${sessions.filter(s=>s.kind!=='lifting').length===1?'':'s'} logged`:`today’s dose · ${call.level}`,panel:'recovery'});
-        rows.push({name:'lifting prescription',done:!!liftDone||!recommendation,meta:liftDone?`${liftDone.liftName} completed`:recommendation?`${recommendation.lift.name} · minimum dose`:'skip is prescribed · following the plan counts',panel:'lifting'});
-        let primerDone=false,primerMeta='held back · following the plan counts';if(recommendation){const primer=getCalisthenicsPrescription(todayStr,recommendation.lift,call.level);if(primer.available){primerDone=primer.status==='done';primerMeta=primer.status==='done'?`${primer.reps} ${primer.type==='pushups'?'push-ups':'burpees'} completed`:primer.status==='skipped'?`not today · ${String(primer.reason||'reason logged').replace('-',' ')}`:`optional · 1 × ${primer.reps} ${primer.type==='pushups'?'push-ups':'burpees'}`;}else primerDone=true;}else primerDone=true;rows.push({name:'adaptive movement primer',done:primerDone,meta:primerMeta,panel:'lifting'});
-        rows.forEach(row=>{const li=document.createElement('li');li.className=`habit-item adaptive-plan-habit${row.done?' done':''}`;const status=document.createElement('button');status.className=`adaptive-plan-status${row.done?' done':''}`;status.textContent=row.done?'✓':'→';status.title=row.done?'today’s prescription followed':'open the prescription';status.addEventListener('click',()=>switchPanel(row.panel));const info=document.createElement('div');info.className='lib-info';const name=document.createElement('span');name.className='lib-name';name.textContent=row.name;const meta=document.createElement('span');meta.className='lib-meta';meta.textContent=row.meta;info.appendChild(name);info.appendChild(meta);li.appendChild(status);li.appendChild(info);el.appendChild(li);});
+      function getAdaptivePlanHabitRows(todayStr){
+        let call;try{call=getTrainingCallData(todayStr);}catch(e){return[];}const liftingLevel=getCallLiftingLevel(call),sessions=getTrainingSessionsForDate(todayStr).filter(s=>!s.superseded),cardioSessions=sessions.filter(s=>s.kind!=='lifting'&&s.type!=='weights'),cardioDone=cardioSessions.length>0,liftDone=(liftingHistory||[]).find(h=>h.kind==='exposure'&&h.date===todayStr),recommendation=liftingLifts.length?getLiftingRecommendation(todayStr,liftingLevel):null,rows=[];
+        const cutoff=new Date(`${todayStr}T12:00:00`);cutoff.setDate(cutoff.getDate()-29);const cutoffStr=toDateStr(cutoff),snapshotDates=Object.keys(trainingCallSnapshots||{}).filter(date=>date>=cutoffStr&&date<=todayStr),cardioFollowed=snapshotDates.filter(date=>{const snap=trainingCallSnapshots[date]||{};return snap.level==='rest'||getTrainingSessionsForDate(date).some(s=>!s.superseded&&s.kind!=='lifting'&&s.type!=='weights');}).length,liftExposures=(liftingHistory||[]).filter(h=>h.kind==='exposure'&&h.date>=cutoffStr&&h.date<=todayStr).length,primerHistory=getCalisthenicsWarmupState().history.filter(h=>h.date>=cutoffStr&&h.date<=todayStr),primerCompleted=primerHistory.filter(h=>h.status==='done').length;
+        rows.push({key:'cardio',name:'cardio prescription',done:call.level==='rest'||cardioDone,target:call.level==='rest'?'rest · protecting recovery is the target':`${call.level} cardio · use Today’s Training Call for the exact dose`,meta:call.level==='rest'?'rest is prescribed · following the plan counts':cardioDone?`${cardioSessions.length} cardio session${cardioSessions.length===1?'':'s'} logged`:`today’s dose · ${call.level}`,effort:snapshotDates.length?`${Math.round(cardioFollowed/snapshotDates.length*100)}% of ${snapshotDates.length} captured calls`:`${cardioSessions.length} logged today · history building`,panel:'recovery',action:'open cardio call'});
+        rows.push({key:'lifting',name:'lifting prescription',done:!!liftDone||!recommendation,target:recommendation?`${recommendation.lift.name} · minimum dose`:'skip · no useful strength exposure today',meta:liftDone?`${liftDone.liftName} completed`:recommendation?`${recommendation.lift.name} · minimum dose`:'skip is prescribed · following the plan counts',effort:`${liftExposures} exposure${liftExposures===1?'':'s'} in 30 days`,panel:'lifting',action:'open lifting'});
+        let primerDone=false,primerMeta='held back · following the plan counts',primerTarget='held back · no extra fatigue needed';if(recommendation){const primer=getCalisthenicsPrescription(todayStr,recommendation.lift,call.level);if(primer.available){primerDone=primer.status==='done';primerTarget=`1 × ${primer.reps} ${primer.type==='pushups'?'push-ups':'controlled burpees'}`;primerMeta=primer.status==='done'?`${primer.reps} ${primer.type==='pushups'?'push-ups':'burpees'} completed`:primer.status==='skipped'?`not today · ${String(primer.reason||'reason logged').replace('-',' ')}`:`optional · ${primerTarget}`;}else primerDone=true;}else primerDone=true;rows.push({key:'primer',name:'adaptive movement primer',done:primerDone,target:primerTarget,meta:primerMeta,effort:`${primerCompleted} completed · ${primerHistory.length} outcomes in 30 days`,panel:'lifting',action:'open primer'});
+        return rows;
       }
+      function renderAdaptivePlanHabits(el,todayStr){
+        getAdaptivePlanHabitRows(todayStr).forEach(row=>{const li=document.createElement('li');li.className=`habit-item adaptive-plan-habit${row.done?' done':''}`;const status=document.createElement('button');status.className=`adaptive-plan-status${row.done?' done':''}`;status.textContent=row.done?'✓':'→';status.title=row.done?'today’s prescription followed':'open the prescription';status.addEventListener('click',()=>switchPanel(row.panel));const info=document.createElement('div');info.className='lib-info';const name=document.createElement('span');name.className='lib-name';name.textContent=row.name;const meta=document.createElement('span');meta.className='lib-meta';meta.innerHTML=`${escapeHtml(row.meta)} · <span title="Recovery changes this target">target: ${escapeHtml(row.target)}</span> · <span title="Recent follow-through, not a score">30d effort: ${escapeHtml(row.effort)}</span>`;info.appendChild(name);info.appendChild(meta);li.appendChild(status);li.appendChild(info);el.appendChild(li);});
+      }
+      function renderHabitsAdaptivePlan(){
+        const el=document.getElementById('habitAdaptivePlan');if(!el)return;el.innerHTML='';getAdaptivePlanHabitRows(getToday()).forEach(row=>{const tile=document.createElement('div');tile.className=`adaptive-habit-tile${row.done?' done':''}`;tile.innerHTML=`<div class="adaptive-habit-top"><div class="adaptive-habit-name">${escapeHtml(row.name)}</div><span class="adaptive-habit-state${row.done?' done':''}">${row.done?'followed':'open'}</span></div><div class="adaptive-habit-target"><strong>Today’s target:</strong> ${escapeHtml(row.target)}</div><div class="adaptive-habit-metrics"><span class="adaptive-habit-chip">${escapeHtml(row.meta)}</span><span class="adaptive-habit-chip">30d effort · ${escapeHtml(row.effort)}</span></div><button class="btn small adaptive-habit-action" type="button">${escapeHtml(row.action)}</button>`;tile.querySelector('button').addEventListener('click',()=>switchPanel(row.panel));el.appendChild(tile);});
+      }
+      function getHabitUsualWindow(h){const events=(completionEvents||[]).filter(e=>e.type==='habit'&&e.name===h.name&&Number.isFinite(Number(e.minutes))).slice(-30);if(events.length<4)return null;const median=medianNumber(events.map(e=>Number(e.minutes)));if(median==null)return null;const spread=medianNumber(events.map(e=>Math.abs(Number(e.minutes)-median)))||0;return{minutes:Math.round(median/15)*15,samples:events.length,spread};}
+      function getHabitAdaptiveNote(h){const usual=getHabitUsualWindow(h),reason=getHabitPatternReason(h),parts=[];if(usual)parts.push(`Usually checked near ${formatScheduleTime(usual.minutes)} from ${usual.samples} completions.`);if(reason&&reason.tag!=='steady pattern')parts.push(reason.action.replace(/^Useful next step:\s*/i,''));return parts.join(' ')||'Keep recording check-ins; timing and support suggestions appear only after repeated evidence.';}
       function renderTodayHabits(){
         const el=document.getElementById('todayHabitList');if(!el)return;
         el.innerHTML='';
         const todayStr=getToday();
         renderAdaptivePlanHabits(el,todayStr);
+        renderHabitsAdaptivePlan();
         if(!bgHabits.length)return;
         let displayHabits=bgHabits.slice();
         if(todayHabitSort==='az'){const stable=applyStableHabitOrder(displayHabits,todayHabitOrderSnapshot,(a,b)=>a.name.localeCompare(b.name));displayHabits=stable.list;todayHabitOrderSnapshot=stable.ids;}
+        else if(todayHabitSort==='usual'){const stable=applyStableHabitOrder(displayHabits,todayHabitOrderSnapshot,(a,b)=>getHabitConsistency30d(b)-getHabitConsistency30d(a)||a.name.localeCompare(b.name));displayHabits=stable.list;todayHabitOrderSnapshot=stable.ids;}
+        else if(todayHabitSort==='support'){const stable=applyStableHabitOrder(displayHabits,todayHabitOrderSnapshot,(a,b)=>getHabitConsistency30d(a)-getHabitConsistency30d(b)||getHabitDaysBehind(b)-getHabitDaysBehind(a));displayHabits=stable.list;todayHabitOrderSnapshot=stable.ids;}
         else if(todayHabitSort==='effort'){const stable=applyStableHabitOrder(displayHabits,todayHabitOrderSnapshot,(a,b)=>getHabitConsistency30d(b)-getHabitConsistency30d(a)||a.name.localeCompare(b.name));displayHabits=stable.list;todayHabitOrderSnapshot=stable.ids;}
         displayHabits.forEach(h=>{
           const target=getHabitDayTarget(h),count=getHabitDayCount(h,todayStr),partial=count>0&&count<target,done=count>=target;
@@ -12141,7 +12237,7 @@ function updateNotificationSettingUI(){
       }
       function checkScheduleDayRollover(){
         const today=getToday();scheduleDate=today;
-        Object.entries(taskSchedule).forEach(([id,s])=>{const task=tasks.find(t=>String(t.id)===String(id));if(!task||task.completed)delete taskSchedule[id];else if(!s.date)s.date=today;});
+        Object.entries(taskSchedule).forEach(([id,s])=>{const task=tasks.find(t=>String(t.id)===String(id));if(s?.autoKind){if(!s.date)s.date=today;return;}if(!task||task.completed)delete taskSchedule[id];else if(!s.date)s.date=today;});
         scheduleCommitments=scheduleCommitments.filter(x=>x&&x.title&&Array.isArray(x.weekdays)&&x.weekdays.length);
       }
       function scheduleTask(taskId,startMinutes){
@@ -12219,9 +12315,22 @@ function updateNotificationSettingUI(){
       }
       function scheduleCommitmentOccursOn(item,dateStr){return Array.isArray(item.weekdays)&&item.weekdays.includes(new Date(dateStr+'T12:00:00').getDay())&&!(item.dismissedDates||[]).includes(dateStr);}
       function getScheduleItemsForDate(dateStr){
-        const taskItems=Object.entries(taskSchedule||{}).map(([taskId,sched])=>{const task=tasks.find(t=>String(t.id)===String(taskId));return task&&!task.completed&&(sched.date||getToday())===dateStr?{kind:'task',key:String(taskId),task,title:task.text,date:dateStr,startMinutes:Number(sched.startMinutes),durationMinutes:Number(sched.durationMinutes)||30}:null;}).filter(Boolean);
+        const taskItems=Object.entries(taskSchedule||{}).map(([taskId,sched])=>{if((sched.date||getToday())!==dateStr)return null;const task=tasks.find(t=>String(t.id)===String(taskId));if(task&&!task.completed)return{kind:'task',key:String(taskId),task,title:task.text,date:dateStr,startMinutes:Number(sched.startMinutes),durationMinutes:Number(sched.durationMinutes)||30};if(sched.autoKind)return{kind:'adaptive',key:String(taskId),title:sched.autoTitle||'adaptive plan',autoKind:sched.autoKind,sourceId:sched.sourceId||'',date:dateStr,startMinutes:Number(sched.startMinutes),durationMinutes:Number(sched.durationMinutes)||15};return null;}).filter(Boolean);
         const commitments=(scheduleCommitments||[]).filter(x=>scheduleCommitmentOccursOn(x,dateStr)).map(x=>({kind:'commitment',key:String(x.id),commitment:x,title:x.title,date:dateStr,startMinutes:Number(x.startMinutes),durationMinutes:Number(x.durationMinutes)||60}));
         return taskItems.concat(commitments).sort((a,b)=>a.startMinutes-b.startMinutes);
+      }
+      function getAchievableDayCutoff(today){const tomorrow=scheduleDateOffset(today,1),wake=getWakePlanForDate(tomorrow),opportunity=getSleepRecoveryOpportunity(today);if(!wake.time)return 23*60;const asleep=shiftClock(wake.time,-Math.round(opportunity.opportunityHours*60)),wind=shiftClock(asleep,-45),parts=wind.split(':').map(Number),minutes=parts[0]*60+parts[1];return minutes<12*60?24*60:minutes;}
+      function getHabitPlanningDuration(h){if(getHabitType(h)==='duration')return Math.max(5,Math.min(60,Math.round((Number(h.targetValue)||10)/5)*5));if(getHabitType(h)==='count'&&Number(h.targetValue)>5)return 15;return 10;}
+      function findPlanningSlot(occupied,duration,preferred,start,end){duration=Math.max(5,Math.ceil(duration/5)*5);const candidates=[];for(let t=Math.max(start,Math.round((preferred-duration/3)/15)*15);t+duration<=end;t+=15)candidates.push(t);for(let t=start;t+duration<=end;t+=15)if(!candidates.includes(t))candidates.push(t);return candidates.find(t=>!occupied.some(x=>t<x.end&&t+duration>x.start))??null;}
+      function buildAchievableDay(){
+        const today=getToday(),now=new Date(),start=Math.max(SCHEDULE_START_HOUR*60,Math.ceil((now.getHours()*60+now.getMinutes()+10)/15)*15),cutoff=Math.min(SCHEDULE_END_HOUR*60,getAchievableDayCutoff(today));Object.keys(taskSchedule).forEach(key=>{const s=taskSchedule[key];if(s?.autoKind&&s.date===today)delete taskSchedule[key];});
+        const fixed=getScheduleItemsForDate(today).filter(x=>x.kind==='commitment'||x.kind==='task'),occupied=fixed.map(x=>({start:x.startMinutes,end:x.startMinutes+x.durationMinutes})),call=getTrainingCallData(today),adaptive=getAdaptivePlanHabitRows(today),candidates=[],add=c=>candidates.push(c),focusRemaining=Math.max(0,getAdaptiveFocusTarget().target-todayFocusMinutes);
+        const cardio=adaptive.find(x=>x.key==='cardio'),lift=adaptive.find(x=>x.key==='lifting'),primer=adaptive.find(x=>x.key==='primer');if(cardio&&!cardio.done&&call.level!=='rest')add({kind:'training',sourceId:'cardio',title:`cardio · ${call.level} prescription`,duration:call.level==='test'?50:call.level==='medium'?45:30,preferred:17*60,priority:100});if(lift&&!lift.done&&!lift.target.startsWith('skip'))add({kind:'training',sourceId:'lifting',title:`strength · ${lift.target}`,duration:25,preferred:18*60,priority:92});if(primer&&!primer.done&&!primer.target.startsWith('held'))add({kind:'training',sourceId:'primer',title:`movement primer · ${primer.target}`,duration:5,preferred:17*60-10,priority:76});
+        bgHabits.filter(h=>getHabitDayCount(h,today)<getHabitDayTarget(h)).sort((a,b)=>getHabitConsistency30d(a)-getHabitConsistency30d(b)||getHabitDaysBehind(b)-getHabitDaysBehind(a)).slice(0,4).forEach((h,i)=>{const usual=getHabitUsualWindow(h);add({kind:'habit',sourceId:String(h.id),title:`habit · ${h.name}`,duration:getHabitPlanningDuration(h),preferred:usual?usual.minutes:19*60+i*15,priority:70-getHabitConsistency30d(h)/4});});
+        let focusBudget=focusRemaining;tasks.filter(t=>!t.completed&&t.taskType!=='todo'&&!taskSchedule[t.id]&&t.outcome!=='blocked').slice().sort((a,b)=>{const score=t=>(t.dueDate&&t.dueDate<=today?50:0)+PRIORITY_WEIGHT[t.priority||'none']*10;return score(b)-score(a);}).forEach(t=>{if(focusBudget<10)return;const learned=getLearnedTaskEstimate(t.text),duration=Math.min(focusBudget,Math.max(15,Math.min(60,Number(taskTimeLimits[t.id]?formatMinutes(taskTimeLimits[t.id]):learned?.minutes)||25)));add({kind:'task',task:t,duration,preferred:14*60,priority:80+PRIORITY_WEIGHT[t.priority||'none']*10+(t.dueDate&&t.dueDate<=today?25:0)});focusBudget-=duration;});
+        tasks.filter(t=>!t.completed&&t.taskType==='todo'&&!taskSchedule[t.id]&&(t.priority==='high'||(t.dueDate&&t.dueDate<=today))).slice(0,3).forEach((t,i)=>add({kind:'task',task:t,duration:15,preferred:16*60+i*15,priority:75+PRIORITY_WEIGHT[t.priority||'none']*8}));
+        let placed=0,skipped=0;const placedKinds={training:0,habit:0,task:0};candidates.sort((a,b)=>b.priority-a.priority).forEach(c=>{const slot=findPlanningSlot(occupied,c.duration,c.preferred,start,cutoff);if(slot==null){skipped++;return;}occupied.push({start:slot,end:slot+c.duration});if(c.kind==='task')taskSchedule[c.task.id]={date:today,startMinutes:slot,durationMinutes:c.duration,autoPlanned:true};else{const key=`auto:${c.kind}:${c.sourceId}:${today}`;taskSchedule[key]={date:today,startMinutes:slot,durationMinutes:c.duration,autoKind:c.kind,autoTitle:c.title,sourceId:c.sourceId};}placed++;placedKinds[c.kind]++;});
+        const summary=document.getElementById('scheduleAutoSummary'),cutoffText=cutoff>=24*60?'midnight':formatScheduleTime(cutoff);if(summary)summary.textContent=`Placed ${placed} blocks: ${placedKinds.training} training, ${placedKinds.habit} habits, ${placedKinds.task} tasks. ${skipped?`${skipped} lower-priority item${skipped===1?' did':'s did'} not fit. `:''}Planning stops at ${cutoffText} to protect wind-down. Learned times are suggestions, not deadlines.`;renderSchedule();renderTasks();saveData();showToast(`achievable day built · ${placed} blocks`);
       }
       function getUpcomingScheduleItems(days=7){const out=[],today=getToday();for(let i=0;i<days;i++){const date=scheduleDateOffset(today,i);getScheduleItemsForDate(date).forEach(item=>out.push(item));}return out.sort((a,b)=>a.date.localeCompare(b.date)||a.startMinutes-b.startMinutes);}
       function findLighterScheduleDate(){const today=getToday(),options=[];for(let i=1;i<=6;i++){const date=scheduleDateOffset(today,i),load=getScheduleItemsForDate(date).reduce((n,x)=>n+x.durationMinutes,0);options.push({date,load,weekend:[0,6].includes(new Date(date+'T12:00:00').getDay())});}return options.sort((a,b)=>a.load-b.load||Number(a.weekend)-Number(b.weekend)||a.date.localeCompare(b.date))[0]?.date||scheduleDateOffset(today,2);}
@@ -12253,7 +12362,7 @@ function updateNotificationSettingUI(){
         if(agenda){
           agenda.innerHTML='';
           getScheduleItemsForDate(getToday()).forEach(itemData=>{const taskId=itemData.key,sched=itemData,task=itemData.task||{text:itemData.title};
-            const item=document.createElement('div');item.className='schedule-agenda-item';
+            const item=document.createElement('div');item.className='schedule-agenda-item'+(itemData.kind==='adaptive'?' adaptive':'');
             const time=document.createElement('div');time.className='schedule-agenda-time';time.textContent=formatScheduleTime(sched.startMinutes);
             const title=document.createElement('div');title.className='schedule-agenda-title';title.textContent=task.text;title.title=task.text;
             const dur=document.createElement('div');dur.className='schedule-agenda-duration';dur.textContent=`${sched.durationMinutes}m`;
@@ -12265,7 +12374,7 @@ function updateNotificationSettingUI(){
         getScheduleItemsForDate(getToday()).forEach(itemData=>{
           const taskId=itemData.key,sched=itemData,task=itemData.task||{text:itemData.title};
           const block=document.createElement('div');block.className='schedule-block';block.dataset.taskId=taskId;
-          block.dataset.scheduleKey=`${itemData.kind}-${taskId}`;if(itemData.kind==='commitment')block.classList.add('commitment');
+          block.dataset.scheduleKey=`${itemData.kind}-${taskId}`;if(itemData.kind==='commitment')block.classList.add('commitment');if(itemData.kind==='adaptive')block.classList.add('adaptive');
           block.style.top=((sched.startMinutes-SCHEDULE_START_HOUR*60)/60*SCHEDULE_HOUR_HEIGHT)+'px';
           block.style.height=(sched.durationMinutes/60*SCHEDULE_HOUR_HEIGHT)+'px';
           block.draggable=itemData.kind==='task';
@@ -12273,7 +12382,7 @@ function updateNotificationSettingUI(){
           const title=document.createElement('div');title.className='schedule-block-title';title.textContent=task.text;title.title=task.text;
           const timeLabel=document.createElement('div');timeLabel.className='schedule-block-time';timeLabel.textContent=`${formatScheduleTime(sched.startMinutes)} – ${formatScheduleTime(sched.startMinutes+sched.durationMinutes)}`;
           if(sched.durationMinutes<30)timeLabel.style.display='none';
-          const del=document.createElement('button');del.className='schedule-block-del';del.textContent='×';del.title=itemData.kind==='commitment'?'remove recurring commitment':'unschedule';del.addEventListener('click',(e)=>{e.stopPropagation();if(itemData.kind==='commitment'){scheduleCommitments=scheduleCommitments.filter(x=>String(x.id)!==String(taskId));renderSchedule();renderTodayPanel();saveData();}else unscheduleTask(taskId);});
+          const del=document.createElement('button');del.className='schedule-block-del';del.textContent='×';del.title=itemData.kind==='commitment'?'remove recurring commitment':'unschedule';del.addEventListener('click',(e)=>{e.stopPropagation();if(itemData.kind==='commitment'){scheduleCommitments=scheduleCommitments.filter(x=>String(x.id)!==String(taskId));renderSchedule();renderTodayPanel();saveData();}else unscheduleTask(taskId);});block.addEventListener('click',()=>{if(itemData.kind!=='adaptive')return;if(itemData.autoKind==='habit')switchPanel('habits');else switchPanel(itemData.sourceId==='cardio'?'recovery':'lifting');});
           const resizeHandle=document.createElement('div');resizeHandle.className='schedule-block-resize';
           if(itemData.kind==='task')resizeHandle.addEventListener('mousedown',(e)=>{
             e.preventDefault();e.stopPropagation();
