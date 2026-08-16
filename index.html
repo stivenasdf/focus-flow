@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.176 verified curve retests, authoritative activity totals, calmer adaptive planning -->
+<!-- Focus::Flow deployment marker: v1.177 task workspace, cardio-load guard, sport time, clear HR context -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1238,7 +1238,7 @@
     .activity-card { background:var(--sub-alt-color); border:1px solid var(--border-color); border-radius:1rem; padding:1.15rem; color:var(--text-color); }
     .activity-card .card-header-title { color:var(--sub-color); }
     .activity-connect-status { display:flex; align-items:center; gap:.45rem; font-size:.68rem; color:var(--text-color); margin:.55rem 0; }
-    .activity-status-dot { width:8px; height:8px; border-radius:50%; background:var(--border-hover); flex:none; }
+    .activity-status-dot { width:8px; height:8px; border-radius:50%; background:var(--error-color); box-shadow:0 0 6px var(--error-glow); flex:none; }
     .activity-status-dot.connected { background:var(--main-color); box-shadow:0 0 7px var(--main-glow); }
     .activity-status-dot.paused { background:#d4a94a; box-shadow:0 0 6px rgba(212,169,74,.35); }
     .activity-api-row { display:flex; gap:.45rem; margin-top:.55rem; }
@@ -1524,6 +1524,11 @@
     .hr-zone-time { text-align:right; }
     .hr-zone-track { height:7px; background:var(--border-color); border-radius:6px; overflow:hidden; }
     .hr-zone-fill { height:100%; background:var(--main-color); border-radius:6px; min-width:0; }
+    .hr-zone-guide { display:grid; gap:.34rem; margin-top:.72rem; }
+    .hr-zone-guide-row { display:grid; grid-template-columns:38px minmax(105px,.72fr) minmax(0,1fr); gap:.5rem; align-items:center; padding:.42rem .5rem; border:1px solid var(--border-color); border-radius:.52rem; background:color-mix(in srgb,var(--bg-color) 96%,var(--sub-color) 4%); }
+    .hr-zone-guide-row strong { color:var(--sub-color); font:.62rem 'JetBrains Mono',monospace; }
+    .hr-zone-guide-row span { color:var(--text-color); font-size:.57rem; line-height:1.4; }
+    .hr-zone-guide-row span:last-child { opacity:.58; font-family:'JetBrains Mono',monospace; }
     [data-view-mode="mobile"] .hr-range-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
     [data-view-mode="mobile"] .activity-batch-row { grid-template-columns:1fr; }
     [data-view-mode="mobile"] .activity-batch-state { text-align:left; }
@@ -2720,6 +2725,18 @@
     .task-stuck-chip { line-height:1.42; }
     .task-library-card { min-width:0; }
     .task-library-card .library-item { padding:.55rem .62rem; }
+    .task-details-panel,.task-details-grid,.task-details-section,.task-details-panel .task-intelligence,.task-details-panel .subtask-block,.task-details-panel .notes-block { min-width:0; max-width:100%; box-sizing:border-box; }
+    .task-details-panel input,.task-details-panel select,.task-details-panel textarea { min-width:0; max-width:100%; }
+    .calendar-only-date { min-width:0; display:flex; align-items:center; gap:.38rem; padding:.12rem .28rem .12rem .48rem; border:1px solid var(--border-color); border-radius:.55rem; background:color-mix(in srgb,var(--bg-color) 96%,var(--main-color) 4%); cursor:pointer; }
+    .calendar-only-date > span { flex:none; color:var(--text-color); opacity:.46; font:.5rem 'JetBrains Mono',monospace; text-transform:uppercase; }
+    .calendar-only-date input { min-width:0; width:100%; margin:0; border:0; background:transparent; box-shadow:none; cursor:pointer; }
+    .calendar-only-date:hover,.calendar-only-date:focus-within { border-color:var(--main-color); }
+    .due-date-wrap.calendar-only-date { padding:.08rem .22rem .08rem .4rem; }
+    .due-date-wrap.calendar-only-date .due-date-input { max-width:128px; }
+    .task-drag-affordance { flex:none; min-width:42px!important; min-height:25px; display:inline-flex; align-items:center; justify-content:center; gap:.27rem; padding:.18rem .38rem!important; border:1px dashed color-mix(in srgb,var(--sub-color) 62%,var(--border-color)); border-radius:.45rem; color:var(--sub-color)!important; opacity:.8!important; cursor:grab; }
+    .task-drag-affordance:active { cursor:grabbing; }
+    .task-grip-dots { width:10px; height:14px; display:block; background:radial-gradient(circle,currentColor 1.2px,transparent 1.5px) 0 0/5px 5px; }
+    .task-drag-label { font:.46rem 'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.04em; }
 
     [data-view-mode="mobile"] #panel-tasks .tasks-panel-grid { grid-template-columns:1fr; }
     [data-view-mode="mobile"] .task-workbench-head { align-items:stretch; flex-direction:column; }
@@ -2735,6 +2752,8 @@
     [data-view-mode="mobile"] .task-details-footer { align-items:stretch; flex-direction:column; }
     [data-view-mode="mobile"] .task-order-tools,[data-view-mode="mobile"] .task-edit-tools { width:100%; }
     [data-view-mode="mobile"] .task-edit-tools .task-text-btn { flex:1; }
+    [data-view-mode="mobile"] .task-drag-label { display:none; }
+    [data-view-mode="mobile"] .task-drag-affordance { min-width:30px!important; padding:.18rem!important; }
 
     /* v1.147: icon navigation, movable Notes, forgiving sleep times, and a transaction-first Money view. */
     .sidebar-control-row { padding:0 0 .65rem; border-bottom:1px solid var(--border-color); }
@@ -3140,6 +3159,12 @@
     .effort-library-chart-path { fill:none; stroke:var(--sub-color); stroke-width:2; }
     .effort-library-chart-dot { fill:var(--main-color); stroke:var(--bg-color); stroke-width:1.5; }
     .effort-library-chart-label { fill:var(--text-color); opacity:.52; font:10px 'JetBrains Mono',monospace; }
+    @media(min-width:1000px){
+      #panel-tasks .tasks-panel-grid { grid-template-columns:minmax(0,1.82fr) minmax(255px,.52fr); }
+      .task-workbench-card .task-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.72rem; align-items:start; overflow:visible; }
+      .task-workbench-card .task-lane-section + .task-lane-section { margin-top:0; }
+      .task-workbench-card .task-lane-section:only-child,.task-workbench-card .task-lane-section.has-expanded,.task-workbench-card .task-lane-section.completed { grid-column:1/-1; }
+    }
     @media(max-width:900px){.today-task-lane-grid{grid-template-columns:1fr}.adaptive-history{overflow-x:auto}.adaptive-history-row{min-width:660px}.activity-response-quick{grid-template-columns:1fr 1fr}}
     @media(max-width:520px){.activity-response-quick{grid-template-columns:1fr}.effort-library-chart-svg{height:190px}}
   </style>
@@ -3321,7 +3346,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.176 verifies deliberate curve retests before changing working thresholds, makes Activity and Today’s Log share one authoritative session record, separates Focus and To Do, moves adaptive prescriptions into history, and refreshes a safe suggested schedule automatically.</div>
+        <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.177 gives Tasks a wider, clearer command workspace with calendar-first dates and visible reordering, adds time beside distance by sport, explains a familiar five-zone HR guide, fixes disconnected status colour, and lets a sharply elevated cardio-only load ratio hold back harder cardio without limiting lifting.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -3869,9 +3894,9 @@
         <div class="tasks-panel-grid">
           <div class="task-card task-workbench-card task-command-shell">
             <div class="task-command-hero">
-              <div class="task-command-head"><div><div class="task-command-title">task command center</div><div class="task-command-subtitle">Focus work is measured with the timer. To-dos are simply completed. Capture either one quickly, then let due date, priority, recovery, and learned duration help choose what fits now.</div></div><button class="btn small task-current-next-btn" id="viewCurrentNextBtn">current &amp; next</button></div>
+              <div class="task-command-head"><div><div class="card-header-title">Task command center</div><div class="task-command-subtitle">Focus work is measured with the timer. To-dos are simply completed. Capture either one quickly, then let due date, priority, recovery, and learned duration help choose what fits now.</div></div><button class="btn small task-current-next-btn" id="viewCurrentNextBtn">current &amp; next</button></div>
               <div class="task-kind-picker sort-tabs" id="newTaskTypeTabs" aria-label="Choose task type"><button class="sort-btn active" data-type="focus">focus work<small>needs attention + can use the timer</small></button><button class="sort-btn" data-type="todo">to-do<small>just needs completion</small></button></div>
-              <div class="task-capture-grid"><input type="text" id="taskInput" class="task-input" placeholder="Capture the next concrete action…" autocomplete="off" list="taskSuggestions" /><input type="date" id="taskQuickDue" class="search-input" aria-label="Due date"><select id="taskQuickPriority" class="search-input" aria-label="Priority"><option value="none">no priority</option><option value="high">high priority</option><option value="medium">medium priority</option><option value="low">low priority</option></select><button id="addTaskBtn" class="add-btn">add</button></div>
+              <div class="task-capture-grid"><input type="text" id="taskInput" class="task-input" placeholder="Capture the next concrete action…" autocomplete="off" list="taskSuggestions" /><label class="calendar-only-date task-quick-date"><span>due</span><input type="date" id="taskQuickDue" class="search-input" aria-label="Due date" inputmode="none"></label><select id="taskQuickPriority" class="search-input" aria-label="Priority"><option value="none">no priority</option><option value="high">high priority</option><option value="medium">medium priority</option><option value="low">low priority</option></select><button id="addTaskBtn" class="add-btn">add</button></div>
               <datalist id="taskSuggestions"></datalist>
               <div class="task-coach-strip" id="taskCoachStrip"></div>
             </div>
@@ -4586,7 +4611,6 @@
 
           <div class="recovery-card recovery-trend-card">
             <div class="graph-header"><h2 style="margin-bottom:0;">trend</h2><div class="graph-period-tabs" id="recoveryPeriodTabs"><button class="period-btn active" data-period="14">14d</button><button class="period-btn" data-period="31">31d</button><button class="period-btn" data-period="90">90d</button></div></div>
-            <div class="heart-rate-context" id="heartRateContext"><div><strong>—</strong><span>latest morning resting HR</span></div><div><strong>—</strong><span>highest observed HR · 365d</span></div><div><strong>—</strong><span>observed heart-rate reserve</span></div></div>
             <div class="chart-nav-row"><button class="chart-nav-btn" id="recoveryChartNavBack" title="previous period">◀</button><span class="chart-range-label" id="recoveryChartRangeLabel"></span><button class="chart-nav-btn" id="recoveryChartNavForward" title="next period">▶</button></div>
             <div class="sort-tabs" id="recoveryMetricTabs" style="margin-top:0.6rem;">
               <button class="sort-btn active" data-metric="freshness">freshness</button>
@@ -4730,6 +4754,13 @@
             <div class="activity-volume-summary" id="activityDistanceGrid"></div>
           </div>
 
+          <div class="activity-card" id="activityTimeCard">
+            <div class="card-header-title">Time by sport</div>
+            <div class="goals-intro-note" style="margin-top:.35rem;">Training time uses the same window selected in Distance by sport. It is the clean way to compare total volume without pretending a running kilometre equals a cycling kilometre.</div>
+            <div class="activity-pb-note" id="activityTimeWindowLabel" style="margin-top:.65rem;">30-day window</div>
+            <div class="activity-volume-summary" id="activityTimeGrid"></div>
+          </div>
+
           <div class="activity-card running-load-guard" id="runningLoadGuardCard">
             <div class="running-load-guard-head"><div><div class="card-header-title">Running load guard</div><div class="goals-intro-note" style="margin-top:.35rem;">A cautious early warning from your own running history—not a diagnosis, a promise of safety, or a rigid 10% weekly rule.</div></div><span class="running-load-guard-status" id="runningLoadGuardStatus">building history</span></div>
             <div class="running-load-guard-grid"><div class="running-load-guard-stat"><strong id="runningLoadSevenDay">—</strong><span>rolling 7-day distance</span></div><div class="running-load-guard-stat"><strong id="runningLoadWeeklyCeiling">—</strong><span>weekly planning ceiling*</span></div><div class="running-load-guard-stat"><strong id="runningLoadLongest30">—</strong><span>longest run · prior 30d</span></div><div class="running-load-guard-stat"><strong id="runningLoadSingleRun">—</strong><span>next-run ceiling†</span></div></div>
@@ -4750,10 +4781,12 @@
             <div class="goals-intro-note" style="margin-top:.35rem;">Automatically summarized from imported activities. The range cards show what your recorded training has actually looked like; zone time uses Intervals.icu's own HR-zone classification when it is included with the activity.</div>
             <div class="hr-range-grid">
               <div class="hr-range-stat"><div class="hr-range-value" id="hrObservedRange">—</div><div class="hr-range-label">30d avg-HR range</div></div>
-              <div class="hr-range-stat"><div class="hr-range-value" id="hrPeakValue">—</div><div class="hr-range-label">30d highest HR</div></div>
+              <div class="hr-range-stat"><div class="hr-range-value" id="hrPeakValue">—</div><div class="hr-range-label">365d highest observed HR</div></div>
               <div class="hr-range-stat"><div class="hr-range-value" id="hrRunRange">—</div><div class="hr-range-label">run avg-HR range</div></div>
               <div class="hr-range-stat"><div class="hr-range-value" id="hrRideRange">—</div><div class="hr-range-label">ride avg-HR range</div></div>
             </div>
+            <div class="hr-zone-guide" id="hrZoneGuide"></div>
+            <div class="activity-trend-title" id="hrZoneDistributionTitle" style="display:none;margin-top:.78rem;">30-day time in source-defined zones</div>
             <div class="hr-zone-list" id="hrZoneList"></div>
             <div class="activity-pb-note" id="hrRangeNote">Sync activities with heart-rate data to populate this card.</div>
           </div>
@@ -4954,7 +4987,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.176';
+      const APP_VERSION='1.177';
       const APP_RELEASE_DATE='2026-08-15';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -6036,15 +6069,19 @@
         return{direction:hrDelta>0?'high':'low',hrDelta,typicalHr:Math.round(typicalHr),peerCount:peers.length,detail:`whole-workout HR ${Math.abs(hrDelta)} bpm ${hrDelta>0?'above':'below'} your usual response across ${peers.length} similar ${type==='run'?'runs':'rides'}`};
       }
       function renderHeartRateRanges(){
-        const cutoff=Date.now()-30*86400000,recent=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff),withHr=recent.filter(a=>a.average_heartrate!=null),runs=withHr.filter(a=>/run/i.test(a.type)),rides=withHr.filter(a=>/ride|cycling|virtualride/i.test(a.type));
+        const cutoff=Date.now()-30*86400000,cutoff365=Date.now()-365*86400000,recent=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff),recentYear=importedActivities.filter(a=>new Date(a.start_date_local).getTime()>=cutoff365),withHr=recent.filter(a=>a.average_heartrate!=null),runs=withHr.filter(a=>/run/i.test(a.type)),rides=withHr.filter(a=>/ride|cycling|virtualride/i.test(a.type));
         const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
         set('hrObservedRange',fmtHrRange(withHr.map(a=>a.average_heartrate))+(withHr.length?' bpm':''));
-        const peaks=recent.map(a=>a.max_heartrate).filter(v=>Number.isFinite(v));set('hrPeakValue',peaks.length?`${Math.round(Math.max(...peaks))} bpm`:'—');
+        const peaks=recentYear.map(a=>Number(a.max_heartrate)).filter(v=>v>=120&&v<=225),observedMax=peaks.length?Math.max(...peaks):null;set('hrPeakValue',observedMax?`${Math.round(observedMax)} bpm`:'—');
         set('hrRunRange',fmtHrRange(runs.map(a=>a.average_heartrate))+(runs.length?' bpm':''));set('hrRideRange',fmtHrRange(rides.map(a=>a.average_heartrate))+(rides.length?' bpm':''));
-        const zoneEl=document.getElementById('hrZoneList'),note=document.getElementById('hrRangeNote');if(!zoneEl||!note)return;const zoneRows=recent.filter(a=>Array.isArray(a.hr_zone_times)&&a.hr_zone_times.some(x=>x>0));
-        if(!zoneRows.length){zoneEl.innerHTML='';note.textContent=withHr.length?'Average/max HR is available. Intervals.icu did not include time-in-HR-zone data in these activity summaries, so Focus::Flow will not invent zone boundaries.':'Sync activities with heart-rate data to populate this card.';return;}
+        const guide=document.getElementById('hrZoneGuide'),zoneEl=document.getElementById('hrZoneList'),note=document.getElementById('hrRangeNote'),distributionTitle=document.getElementById('hrZoneDistributionTitle');if(!zoneEl||!note)return;
+        const typicalZones=[['Z1','recovery',.50,.60],['Z2','easy aerobic',.60,.70],['Z3','steady',.70,.80],['Z4','threshold',.80,.90],['Z5','very hard',.90,1]];
+        if(guide)guide.innerHTML=typicalZones.map(([zone,name,low,high])=>`<div class="hr-zone-guide-row"><strong>${zone}</strong><span>${escapeHtml(name)}</span><span>${observedMax?`${Math.round(observedMax*low)}–${Math.round(observedMax*high)} bpm · `:''}${Math.round(low*100)}–${Math.round(high*100)}% of max</span></div>`).join('');
+        const zoneRows=recent.filter(a=>Array.isArray(a.hr_zone_times)&&a.hr_zone_times.some(x=>x>0));
+        if(!zoneRows.length){zoneEl.innerHTML='';if(distributionTitle)distributionTitle.style.display='none';note.textContent=observedMax?'The five rows are a familiar percentage-of-max guide calculated from your highest observed HR in the last 365 days. They are orientation, not lab-tested thresholds. Intervals.icu zone time was not included in the recent activity summaries.':'The five rows show the usual percentage-of-max model. Add activities with recorded max HR for personal bpm estimates; these are orientation, not lab-tested thresholds.';return;}
         const n=Math.max(...zoneRows.map(a=>a.hr_zone_times.length)),sums=Array(n).fill(0);zoneRows.forEach(a=>a.hr_zone_times.forEach((x,i)=>sums[i]+=Number(x)||0));const total=sums.reduce((a,b)=>a+b,0)||1;
         zoneEl.innerHTML=sums.map((sec,i)=>{const pct=sec/total*100,h=Math.floor(sec/3600),m=Math.round((sec%3600)/60),time=h?`${h}h ${m}m`:`${m}m`;return `<div class="hr-zone-row"><div class="hr-zone-name">Z${i+1}</div><div class="hr-zone-track"><div class="hr-zone-fill" style="width:${pct.toFixed(1)}%"></div></div><div class="hr-zone-time">${time}</div></div>`;}).join('');note.textContent=`30-day HR-zone distribution from ${zoneRows.length} activit${zoneRows.length===1?'y':'ies'} · zone definitions remain the ones Intervals.icu used when each activity was analyzed.`;
+        if(distributionTitle)distributionTitle.style.display='block';
       }
       function fullHistoryWindows(){return[{oldest:isoDateOffset(-ACTIVITY_SUMMARY_RETENTION_DAYS),newest:isoDateOffset(1)}];}
       async function fetchIntervalsActivityWindow(auth,oldest,newest){const url=`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}`,res=await fetch(url,{headers:{Authorization:auth,Accept:'application/json'},cache:'no-store'});if(!res.ok)throw new Error(res.status===401?'API key was rejected':`Intervals.icu returned ${res.status}`);const rows=await res.json();if(!Array.isArray(rows))throw new Error('unexpected response from Intervals.icu');return rows;}
@@ -6370,7 +6407,7 @@
         list.querySelectorAll('.activity-replace-file').forEach(btn=>btn.addEventListener('click',()=>chooseActivityReplacement(decodeURIComponent(btn.dataset.activityReplaceId))));
         list.querySelectorAll('.activity-delete').forEach(btn=>btn.addEventListener('click',()=>removeActivity(decodeURIComponent(btn.dataset.activityDeleteId))));
       }
-      function renderActivityDistanceSummary(){const grid=document.getElementById('activityDistanceGrid');if(!grid)return;const days=activityDistanceRange==='all'?null:Number(activityDistanceRange),cutoff=days?Date.now()-days*86400000:null,rows=importedActivities.filter(a=>!cutoff||new Date(a.start_date_local).getTime()>=cutoff),groups=[['run','running'],['ride','cycling'],['row','rowing'],['other','other cardio']],markup=groups.map(([group,label])=>{const groupRows=rows.filter(a=>activitySportGroup(a)===group),km=groupRows.reduce((sum,a)=>sum+(Number(a.distance)||0)/1000,0),withDistance=groupRows.filter(a=>Number(a.distance)>0).length;return`<div class="hr-range-stat"><div class="hr-range-value">${km>0?km.toFixed(km>=100?0:1):'—'}${km>0?' km':''}</div><div class="hr-range-label">${escapeHtml(label)} · ${withDistance}/${groupRows.length} with distance</div></div>`;}).join('');grid.innerHTML=markup;document.querySelectorAll('#activityDistanceTabs [data-distance-range]').forEach(btn=>btn.classList.toggle('active',btn.dataset.distanceRange===activityDistanceRange));}
+      function renderActivityDistanceSummary(){const distanceGrid=document.getElementById('activityDistanceGrid'),timeGrid=document.getElementById('activityTimeGrid');if(!distanceGrid&&!timeGrid)return;const days=activityDistanceRange==='all'?null:Number(activityDistanceRange),cutoff=days?Date.now()-days*86400000:null,rows=importedActivities.filter(a=>!cutoff||new Date(a.start_date_local).getTime()>=cutoff),summaryGroup=a=>/run/i.test(a?.type||'')?'run':/ride|cycling|virtualride|bik/i.test(a?.type||'')?'ride':/row/i.test(a?.type||'')?'row':'other',groups=[['run','running'],['ride','cycling'],['row','rowing'],['other','other cardio']],groupRows=group=>rows.filter(a=>summaryGroup(a)===group);if(distanceGrid)distanceGrid.innerHTML=groups.map(([group,label])=>{const sportRows=groupRows(group),km=sportRows.reduce((sum,a)=>sum+(Number(a.distance)||0)/1000,0),withDistance=sportRows.filter(a=>Number(a.distance)>0).length;return`<div class="hr-range-stat"><div class="hr-range-value">${km>0?km.toFixed(km>=100?0:1):'—'}${km>0?' km':''}</div><div class="hr-range-label">${escapeHtml(label)} · ${withDistance}/${sportRows.length} with distance</div></div>`;}).join('');if(timeGrid)timeGrid.innerHTML=groups.map(([group,label])=>{const sportRows=groupRows(group),seconds=sportRows.reduce((sum,a)=>sum+getActivityTrainingDurationSeconds(a),0),withTime=sportRows.filter(a=>getActivityTrainingDurationSeconds(a)>0).length,hours=Math.floor(seconds/3600),minutes=Math.round((seconds%3600)/60),value=seconds?(hours?`${hours}h ${minutes}m`:`${minutes}m`):'—';return`<div class="hr-range-stat"><div class="hr-range-value">${value}</div><div class="hr-range-label">${escapeHtml(label)} · ${withTime}/${sportRows.length} with time</div></div>`;}).join('');const timeLabel=document.getElementById('activityTimeWindowLabel');if(timeLabel)timeLabel.textContent=activityDistanceRange==='all'?'all-time window':`${activityDistanceRange}-day window`;document.querySelectorAll('#activityDistanceTabs [data-distance-range]').forEach(btn=>btn.classList.toggle('active',btn.dataset.distanceRange===activityDistanceRange));}
       function getRunningLoadGuardData(referenceDateStr=getToday()){
         const end=new Date(referenceDateStr+'T23:59:59'),runs=importedActivities.filter(a=>activitySportGroup(a)==='run'&&Number(a.distance)>0&&new Date(a.start_date_local).getTime()<=end.getTime()).map(a=>({...a,_date:new Date(String(a.start_date_local).slice(0,10)+'T12:00:00'),_km:Number(a.distance)/1000})).filter(a=>Number.isFinite(a._date.getTime())).sort((a,b)=>a._date-b._date),daysAgo=d=>(end-d)/86400000,current=runs.filter(a=>daysAgo(a._date)>=0&&daysAgo(a._date)<7),currentKm=current.reduce((sum,a)=>sum+a._km,0),weeks=Array.from({length:4},(_,i)=>{const newer=7+i*7,older=newer+7,rows=runs.filter(a=>daysAgo(a._date)>=newer&&daysAgo(a._date)<older);return{km:rows.reduce((sum,a)=>sum+a._km,0),count:rows.length};}),trainedWeeks=weeks.filter(w=>w.count>0).map(w=>w.km),provisionalBaseline=trainedWeeks.length?medianNumber(trainedWeeks):null,baseline=trainedWeeks.length>=3?provisionalBaseline:null,recent30=runs.filter(a=>daysAgo(a._date)>=0&&daysAgo(a._date)<30),longest30=recent30.length?Math.max(...recent30.map(a=>a._km)):null,nextMarker=longest30?longest30*1.1:null;
         let latestSpike=null;runs.forEach((run,index)=>{if(daysAgo(run._date)<0||daysAgo(run._date)>7)return;const prior=runs.slice(0,index).filter(a=>(run._date-a._date)/86400000<=30),priorLongest=prior.length?Math.max(...prior.map(a=>a._km)):null;if(priorLongest&&run._km>priorLongest*1.1)latestSpike={run,priorLongest,ratio:run._km/priorLongest};});const weeklyRatio=baseline?currentKm/baseline:null,weeklyCeiling=baseline?baseline*1.08:null;let level='insufficient';if(baseline||longest30)level='steady';if((weeklyCeiling&&currentKm>weeklyCeiling)||(latestSpike&&latestSpike.ratio>1.1))level='watch';if((baseline&&currentKm>baseline*1.3)||(latestSpike&&latestSpike.ratio>1.3))level='caution';return{runs,current,currentKm,weeks,trainedWeeks,baseline,provisionalBaseline,weeklyCeiling,longest30,nextMarker,latestSpike,weeklyRatio,level};
@@ -7118,10 +7155,14 @@ function updateNotificationSettingUI(){
         if(acute==null||!chronic)return null;
         return{ratio:acute/chronic,acute,chronic};
       }
+      function getCardioACWR(referenceDateStr){
+        const loads=[];for(let i=0;i<28;i++)loads.push(getTrainingLoadBreakdown(getDateStrFromReference(referenceDateStr,i)).other||0);
+        const acute=loads.slice(0,7).reduce((sum,value)=>sum+value,0)/7,chronic=loads.reduce((sum,value)=>sum+value,0)/28,trainedDays=loads.filter(value=>value>0).length;
+        return chronic>0?{ratio:acute/chronic,acute,chronic,trainedDays}:null;
+      }
       function getDisplayedACWR(referenceDateStr){
         if(trainingLoadView!=='cardio')return getACWR(referenceDateStr);
-        const avg=days=>{let sum=0;for(let i=0;i<days;i++)sum+=getTrainingLoadBreakdown(getDateStrFromReference(referenceDateStr,i)).other||0;return sum/days;};
-        const acute=avg(7),chronic=avg(28);return chronic?{ratio:acute/chronic,acute,chronic}:null;
+        return getCardioACWR(referenceDateStr);
       }
       function getDateStrFromReference(referenceDateStr,daysAgo){const d=new Date(referenceDateStr+'T12:00:00');d.setDate(d.getDate()-daysAgo);return toDateStr(d);}
       function getACWRStatus(ratio){
@@ -7551,6 +7592,7 @@ function updateNotificationSettingUI(){
         const freshness=getFreshnessData(referenceDateStr);
         const acwrInfo=getACWR(referenceDateStr);
         const acwrStatus=acwrInfo?getACWRStatus(acwrInfo.ratio):null;
+        const cardioAcwrInfo=getCardioACWR(referenceDateStr),cardioAcwrEnough=!!cardioAcwrInfo&&cardioAcwrInfo.trainedDays>=4,cardioAcwrStatus=cardioAcwrEnough?getACWRStatus(cardioAcwrInfo.ratio):null;
         let tier,reasons=[];
         if(freshness.score==null){tier=1;reasons.push('not enough recovery data logged yet — defaulting to easy');}
         else if(freshness.label==='fatigued — prioritize recovery'){tier=0;reasons.push('freshness signals are showing fatigue today');}
@@ -7595,6 +7637,7 @@ function updateNotificationSettingUI(){
         const modalityExposureCount=Object.keys(TRAINING_MODALITY_META).reduce((n,m)=>n+getTrainingModalityExposures(m).filter(x=>x.date<referenceDateStr).length,0);
         factors.push({label:'modality acclimation',status:modalityRecovery.length?'yellow':modalityExposureCount?'green':null,detail:modalityRecovery.length?`re-entry buffer: ${modalityRecovery.map(x=>`${TRAINING_MODALITY_META[x.modality].label} ${x.bufferDays-x.daysSince}d`).join(' · ')}`:'no re-entry buffer active',explain:'running, cycling, rowing, weights, and plyometrics keep separate recent-exposure histories. after a layoff, the first few sessions get a temporary same-modality recovery buffer; that buffer fades after repeated manageable exposures.'});
         factors.push({label:'recent / base load',status:acwrStatus==='green'?'green':acwrStatus?'yellow':null,detail:acwrInfo?`${acwrInfo.ratio.toFixed(2)} — ${acwrStatus==='green'?'near recent base':acwrInfo.ratio>1?'above recent base':'below recent base'}`:'not enough data yet',explain:'describes your last 7-day average relative to your 28-day average. It is context only: Focus::Flow does not treat a fixed ratio band as a proven safe zone or injury predictor.'});
+        factors.push({label:'cardio recent / base',status:cardioAcwrStatus==='green'?'green':cardioAcwrStatus==='red'?'red':cardioAcwrStatus?'yellow':null,detail:cardioAcwrEnough?`${cardioAcwrInfo.ratio.toFixed(2)} cardio-only · ${cardioAcwrInfo.trainedDays} loaded days in 28d`:cardioAcwrInfo?`building history · ${cardioAcwrInfo.trainedDays}/4 loaded days`:'not enough cardio load yet',explain:'compares cardio load only: activity and manual run, ride, row or other-cardio load. Job demand and lifting are excluded. A sharply elevated ratio can hold back harder cardio, but no ratio is treated as proof that training is safe or unsafe.'});
         if(consecutiveDays>=3&&tier>0){tier=tier-1;reasons.push(`${consecutiveDays} consecutive training days (cardio and/or lifting) pull today one step easier to make room for recovery`);}
         factors.push({label:'consecutive training days',status:consecutiveDays>=3?'yellow':'green',detail:`${consecutiveDays} day${consecutiveDays===1?'':'s'} in a row`,explain:'This is a general recovery streak, not the six-day cardio cap. Cardio and lifting can extend the streak; work never counts as a training day, although its fatigue is handled separately. Three or more consecutive training days makes the next call one step easier.'});
         const yesterday=new Date(refDate);yesterday.setDate(yesterday.getDate()-1);
@@ -7612,6 +7655,8 @@ function updateNotificationSettingUI(){
         if(tier===2&&mediumCount7d>=mediumCap7d){tier=1;reasons.push(`already ${mediumCount7d} medium-or-harder cardio days in the last 7 days — your cap is ${mediumCap7d}`);}
         factors.push({label:'medium cardio (7d)',status:mediumCount7d>=mediumCap7d?'yellow':'green',detail:`${mediumCount7d}/${mediumCap7d} medium-or-harder cardio days`,explain:`This cardio-only guard counts an explicitly logged medium, test, or race day, plus an imported or manual cardio session with clear quality evidence. Lifts and work do not consume one of the three days.`});
         const liftingLevelBeforeCardioCeiling=['rest','easy','medium'][tier];
+        let cardioRatioGuardApplied=false;
+        if(cardioAcwrEnough&&cardioAcwrInfo.ratio>1.5&&tier>1){tier=1;cardioRatioGuardApplied=true;reasons.push(`cardio load is ${cardioAcwrInfo.ratio.toFixed(2)}× its 28-day base, so harder cardio waits while lifting remains on its separate recovery call`);}
         if(cardioDayAtCeiling){if(tier>0)tier=0;reasons.push(todayCardioEvidence.trained?`today’s cardio brought this week to ${weekCount}/${weeklyCap} cardio days. Rest now means no additional cardio today—not that the completed session was a mistake`:`this week already contains ${weekCount}/${weeklyCap} cardio days, so the app will not prescribe a seventh cardio day`);}
         if(cardioHourAtCeiling){if(tier>0)tier=0;reasons.push(todayCardioEvidence.trained?`today’s logged cardio reached the ${cardioPlan.ceiling}h rolling-week ceiling, so no additional cardio is prescribed today`:`the rolling week has reached the ${cardioPlan.ceiling}h cardio ceiling, so no additional cardio is prescribed`);}
         let level=['rest','easy','medium'][tier];
@@ -7644,7 +7689,7 @@ function updateNotificationSettingUI(){
         }
         if(weekCount>=weeklyTarget&&tier>1&&level!=='test')reasons.push(`already at ${weekCount} cardio days this week — a sixth can fit only if every other signal supports it`);
         if(!reasons.length)reasons.push('recovery signals look good today');
-        return{level,liftingLevel:cardioAtCeiling?liftingLevelBeforeCardioCeiling:level,cardioAtCeiling,cardioDayAtCeiling,cardioHourAtCeiling,todayCardioTrained:todayCardioEvidence.trained,reasons,weekCount,weeklyTarget,weeklyCap,weekEvidence,consecutiveDays,mediumCount7d,daysSinceHard,cardioPlan,factors};
+        return{level,liftingLevel:cardioAtCeiling||cardioRatioGuardApplied?liftingLevelBeforeCardioCeiling:level,cardioAtCeiling,cardioDayAtCeiling,cardioHourAtCeiling,cardioRatioGuardApplied,todayCardioTrained:todayCardioEvidence.trained,reasons,weekCount,weeklyTarget,weeklyCap,weekEvidence,consecutiveDays,mediumCount7d,daysSinceHard,cardioPlan,factors};
       }
       function getTrainingCallPlainContext(data){
         const base='Work affects recovery but never fills a cardio day. Lifting is evaluated separately.';if(data.todayCardioTrained&&data.cardioDayAtCeiling)return`How to read this: today’s cardio is already counted. “Rest” means do not add another cardio session today; it is not a retroactive judgment that the completed session was wrong. ${base}`;if(data.todayCardioTrained&&data.cardioHourAtCeiling)return`How to read this: today’s cardio is already counted and reached the rolling time ceiling. The recommendation applies to any additional cardio from now—not to the session already completed. ${base}`;if(data.cardioDayAtCeiling)return`How to read this: the six-day guard is cardio-only. It protects at least one cardio-free day in the Monday-to-Sunday week; it does not claim that all activity or movement must stop. ${base}`;if(data.cardioHourAtCeiling)return`How to read this: the personal hour ceiling limits additional cardio time, not all movement. It is an availability guard, not a diagnosis of overtraining. ${base}`;if(data.consecutiveDays>=3)return`How to read this: the consecutive-day caution looks at both cardio and lifting and makes the next prescription easier. It is separate from the six-cardio-day limit. ${base}`;return`How to read this: the badge describes the next cardio choice. “Rest” means no structured cardio is prescribed; it does not mean bed rest. ${base}`;
@@ -10593,7 +10638,10 @@ function updateNotificationSettingUI(){
         overviewDragTouchState=null;
       });
       function createPriorityFlag(taskId,priority){const cur=priority||'none';const sel=document.createElement('select');sel.className='priority-select priority-'+cur;PRIORITY_LEVELS.forEach(p=>{const opt=document.createElement('option');opt.value=p;opt.textContent=p==='none'?'no priority':p+' priority';if(cur===p)opt.selected=true;sel.appendChild(opt);});sel.title='priority';sel.addEventListener('click',e=>e.stopPropagation());sel.addEventListener('change',e=>{e.stopPropagation();sel.className='priority-select priority-'+sel.value;setTaskPriority(taskId,sel.value);});return sel;}
-      function createDueDateControl(taskId,due,completed){const wrap=document.createElement('span');wrap.className='due-date-wrap';const label=document.createElement('span');label.className='due-date-label';label.textContent='due';const inp=document.createElement('input');inp.type='date';inp.className='due-date-input';inp.value=due||'';if(due&&due<getToday()&&!completed)inp.classList.add('overdue');inp.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();try{inp.showPicker();}catch(err){}});inp.addEventListener('change',e=>{e.stopPropagation();setTaskDueDate(taskId,inp.value||null);});wrap.appendChild(label);wrap.appendChild(inp);wrap.addEventListener('click',e=>{e.stopPropagation();try{inp.showPicker();}catch(err){inp.focus();}});return wrap;}
+      function openCalendarInput(input){if(!input)return;try{input.showPicker();}catch(err){input.focus();}}
+      function bindCalendarOnlyDateInput(input,wrap=input?.parentElement){if(!input||input.dataset.calendarBound)return;input.dataset.calendarBound='true';input.inputMode='none';input.title='click anywhere in this box to choose a date';input.addEventListener('click',e=>{e.stopPropagation();openCalendarInput(input);});input.addEventListener('keydown',e=>{if(e.key==='Tab'||e.key==='Escape')return;e.preventDefault();if(e.key==='Enter'||e.key===' ')openCalendarInput(input);});if(wrap)wrap.addEventListener('click',e=>{if(e.target===input)return;e.stopPropagation();openCalendarInput(input);});}
+      function createDueDateControl(taskId,due,completed){const wrap=document.createElement('span');wrap.className='due-date-wrap calendar-only-date';const label=document.createElement('span');label.className='due-date-label';label.textContent='due';const inp=document.createElement('input');inp.type='date';inp.className='due-date-input';inp.value=due||'';if(due&&due<getToday()&&!completed)inp.classList.add('overdue');inp.addEventListener('change',e=>{e.stopPropagation();setTaskDueDate(taskId,inp.value||null);});wrap.appendChild(label);wrap.appendChild(inp);bindCalendarOnlyDateInput(inp,wrap);return wrap;}
+      bindCalendarOnlyDateInput(document.getElementById('taskQuickDue'));
       function createSubtaskBlock(t){const block=document.createElement('div');block.className='subtask-block';const subs=t.subtasks||[];subs.forEach(s=>{const row=document.createElement('div');row.className='subtask-row';const scb=document.createElement('input');scb.type='checkbox';scb.className='subtask-checkbox';scb.checked=s.completed;scb.addEventListener('click',e=>e.stopPropagation());scb.addEventListener('change',()=>toggleSubtask(t.id,s.id));const stext=document.createElement('span');stext.className='subtask-text';if(s.completed)stext.classList.add('done');stext.textContent=s.text;const sdel=document.createElement('button');sdel.className='subtask-delete';sdel.textContent='×';sdel.addEventListener('click',e=>{e.stopPropagation();deleteSubtask(t.id,s.id);});row.appendChild(scb);row.appendChild(stext);row.appendChild(sdel);block.appendChild(row);});const addRow=document.createElement('div');addRow.className='subtask-add-row';const sinput=document.createElement('input');sinput.type='text';sinput.className='subtask-input';sinput.placeholder='add subtask...';sinput.addEventListener('click',e=>e.stopPropagation());sinput.addEventListener('keypress',e=>{if(e.key==='Enter'&&sinput.value.trim()){addSubtask(t.id,sinput.value);}});addRow.appendChild(sinput);block.appendChild(addRow);return block;}
       const PRIORITY_WEIGHT={high:3,medium:2,low:1,none:0};
       function sortTasksList(list,mode){
@@ -10691,11 +10739,11 @@ function updateNotificationSettingUI(){
         const visibleTasks=taskFilter==='completed'?tasks.filter(t=>t.completed).slice().sort((a,b)=>(b.completedAt||'').localeCompare(a.completedAt||'')):sortTasksList(tasks.filter(t=>!t.completed));
         if(!visibleTasks.length){taskList.innerHTML=taskFilter==='completed'?'<li class="empty-tasks">No completed tasks yet.</li>':'<li class="empty-tasks">Nothing is waiting. Add one task when you are ready.</li>';updateCurrentTaskDisplay();renderSchedule();return;}
         const ordered=taskFilter==='completed'?[{title:'completed',note:'recently finished',items:visibleTasks}]:[{title:'focus queue',note:'intentional work measured with the timer',items:visibleTasks.filter(t=>t.taskType!=='todo')},{title:'to-do queue',note:'complete it; no timer required',items:visibleTasks.filter(t=>t.taskType==='todo')}];
-        ordered.forEach(lane=>{if(!lane.items.length)return;const laneSection=document.createElement('li');laneSection.className=`task-lane-section ${lane.title.startsWith('focus')?'focus':lane.title.startsWith('to-do')?'todo':'completed'}`;const laneHeader=document.createElement('div');laneHeader.className='task-lane-header';laneHeader.innerHTML=`<span class="task-lane-title">${escapeHtml(lane.title)}</span><span class="task-lane-note">${escapeHtml(lane.note)} · ${lane.items.length}</span>`;const laneList=document.createElement('ul');laneList.className='task-lane-list';laneSection.appendChild(laneHeader);laneSection.appendChild(laneList);lane.items.forEach(t=>{
+        ordered.forEach(lane=>{if(!lane.items.length)return;const laneSection=document.createElement('li');laneSection.className=`task-lane-section ${lane.title.startsWith('focus')?'focus':lane.title.startsWith('to-do')?'todo':'completed'}${lane.items.some(task=>expandedTaskMeta.has(task.id))?' has-expanded':''}`;const laneHeader=document.createElement('div');laneHeader.className='task-lane-header';laneHeader.innerHTML=`<span class="task-lane-title">${escapeHtml(lane.title)}</span><span class="task-lane-note">${escapeHtml(lane.note)} · ${lane.items.length}</span>`;const laneList=document.createElement('ul');laneList.className='task-lane-list';laneSection.appendChild(laneHeader);laneSection.appendChild(laneList);lane.items.forEach(t=>{
           const index=tasks.indexOf(t),isTodo=t.taskType==='todo',manualOrder=taskFilter==='active'&&taskSort==='manual',isExpanded=expandedTaskMeta.has(t.id);
           const li=document.createElement('li');li.className='task-item task-v145';if(t.id===currentTaskId&&!t.completed)li.classList.add('current');if(t.completed)li.classList.add('completed');if(t.outcome==='blocked')li.classList.add('blocked');const hasTimer=!isTodo&&taskTimeLimits[t.id]>0,remaining=taskTimerRemaining[t.id]||0;if(hasTimer&&remaining<=0&&!t.completed)li.classList.add('overdue');if(manualOrder)wireTaskDragHandlers(li,index,laneList);
           const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.className='task-checkbox';checkbox.checked=t.completed;checkbox.setAttribute('aria-label',t.completed?'mark task active':'mark task done');checkbox.addEventListener('change',()=>handleTaskComplete(t.id,checkbox.checked));li.appendChild(checkbox);
-          const info=document.createElement('div');info.className='task-info';const primary=document.createElement('div');primary.className='task-primary-row';const textSpan=document.createElement('span');textSpan.className='task-text';textSpan.textContent=t.text;textSpan.title=t.completed?'completed task':isTodo?'open task details':'make this the current focus task';textSpan.addEventListener('click',()=>{if(!t.completed){if(!isTodo)currentTaskId=t.id;toggleTaskMetaExpand(t.id);updateCurrentTaskDisplay();}});primary.appendChild(textSpan);if(!isTodo&&!t.completed){const start=document.createElement('button');start.className='task-start-focus';start.textContent=t.id===currentTaskId?'resume focus':'start focus';start.addEventListener('click',e=>{e.stopPropagation();currentTaskId=t.id;updateCurrentTaskDisplay();if(currentMode!=='pomodoro')switchMode('pomodoro');if(!isRunning)startTimer();switchPanel('today');saveData();});primary.appendChild(start);}if(bgHabits.some(h=>h.linkedTask===t.text)){const linked=document.createElement('span');linked.className='task-link-status';linked.textContent='habit linked';primary.appendChild(linked);}const overflow=document.createElement('button');overflow.className='task-overflow-btn';overflow.textContent='•••';overflow.title=isExpanded?'close task details':'open task details';overflow.setAttribute('aria-expanded',String(isExpanded));overflow.setAttribute('aria-label',overflow.title);overflow.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});primary.appendChild(overflow);info.appendChild(primary);
+          const info=document.createElement('div');info.className='task-info';const primary=document.createElement('div');primary.className='task-primary-row';if(manualOrder){const drag=document.createElement('span');drag.className='drag-handle task-drag-affordance';drag.title='drag this task to reorder it';drag.setAttribute('aria-label','drag to reorder');drag.innerHTML='<span class="task-grip-dots" aria-hidden="true"></span><span class="task-drag-label">drag</span>';primary.appendChild(drag);}const textSpan=document.createElement('span');textSpan.className='task-text';textSpan.textContent=t.text;textSpan.title=t.completed?'completed task':isTodo?'open task details':'make this the current focus task';textSpan.addEventListener('click',()=>{if(!t.completed){if(!isTodo)currentTaskId=t.id;toggleTaskMetaExpand(t.id);updateCurrentTaskDisplay();}});primary.appendChild(textSpan);if(!isTodo&&!t.completed){const start=document.createElement('button');start.className='task-start-focus';start.textContent=t.id===currentTaskId?'resume focus':'start focus';start.addEventListener('click',e=>{e.stopPropagation();currentTaskId=t.id;updateCurrentTaskDisplay();if(currentMode!=='pomodoro')switchMode('pomodoro');if(!isRunning)startTimer();switchPanel('today');saveData();});primary.appendChild(start);}if(bgHabits.some(h=>h.linkedTask===t.text)){const linked=document.createElement('span');linked.className='task-link-status';linked.textContent='habit linked';primary.appendChild(linked);}const overflow=document.createElement('button');overflow.className='task-overflow-btn';overflow.textContent='•••';overflow.title=isExpanded?'close task details':'open task details';overflow.setAttribute('aria-expanded',String(isExpanded));overflow.setAttribute('aria-label',overflow.title);overflow.addEventListener('click',e=>{e.stopPropagation();toggleTaskMetaExpand(t.id);});primary.appendChild(overflow);info.appendChild(primary);
           const next=getTaskNextActionPreview(t);if(next&&!t.completed){const nextLine=document.createElement('div');nextLine.className='task-next-line'+(next.suggested?' suggested':'');const nextLabel=document.createElement('span');nextLabel.className='task-next-label';nextLabel.textContent=next.suggested?'try':'next';const nextText=document.createElement('span');nextText.textContent=next.text;nextLine.appendChild(nextLabel);nextLine.appendChild(nextText);info.appendChild(nextLine);}
           const compact=createCompactMetaSummary(t);if(compact.childElementCount)info.appendChild(compact);
           if(isExpanded)info.appendChild(createTaskDetailsPanel(t,index,li,textSpan,manualOrder));li.appendChild(info);laneList.appendChild(li);
