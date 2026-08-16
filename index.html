@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Focus::Flow deployment marker: v1.187 cleans stale schedule habits, gives Task Library room, and connects Nutrition history to training context -->
+<!-- Focus::Flow deployment marker: v1.188 unifies Today habit rows, reconciles cardio-day evidence with load bars, and removes duplicate schedule actions -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -3467,6 +3467,24 @@
       #panel-today .today-tasks-hub .task-item{gap:.42rem;padding:.58rem .54rem}
       #panel-today .today-tasks-hub .drag-handle{min-width:15px;width:15px;font-size:.7rem}
     }
+    /* v1.188: adaptive prescriptions should read like habits, with only the changing dose distinguished. */
+    #todayHabitList .adaptive-plan-habit{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:.65rem;padding:.54rem .66rem;min-height:62px;border-left-width:1px;background:transparent}
+    #todayHabitList .adaptive-plan-habit:hover{background:color-mix(in srgb,var(--main-color) 3%,transparent)}
+    #todayHabitList .adaptive-plan-status{width:30px;height:30px;font-size:.62rem!important}
+    #todayHabitList .adaptive-habit-row-info{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(180px,.85fr);gap:.65rem;align-items:center}
+    #todayHabitList .adaptive-habit-primary,#todayHabitList .adaptive-habit-context{min-width:0}
+    #todayHabitList .adaptive-habit-primary .lib-name{display:block;font-size:.78rem!important;line-height:1.25}
+    #todayHabitList .adaptive-habit-meta{display:block;margin-top:.14rem;color:var(--text-color);opacity:.68;font:.68rem/1.35 'JetBrains Mono',monospace;overflow-wrap:anywhere}
+    #todayHabitList .adaptive-habit-context{display:grid;gap:.16rem;padding-left:.65rem;border-left:1px solid color-mix(in srgb,var(--border-color) 72%,transparent)}
+    #todayHabitList .adaptive-habit-dose,#todayHabitList .adaptive-habit-momentum{display:block;color:var(--text-color);font:.67rem/1.35 'JetBrains Mono',monospace;overflow-wrap:anywhere}
+    #todayHabitList .adaptive-habit-dose{opacity:.8}
+    #todayHabitList .adaptive-habit-momentum{opacity:.55}
+    .training-load-stack.recorded-no-load{height:12%!important;min-height:9px;background:transparent;border:1px dashed #d4a94a;opacity:1;border-radius:3px}
+    .training-load-strip-swatch.recorded-no-load{background:transparent!important;border:1px dashed #d4a94a}
+    @media(max-width:720px){
+      #todayHabitList .adaptive-habit-row-info{grid-template-columns:1fr;gap:.32rem}
+      #todayHabitList .adaptive-habit-context{padding:.3rem 0 0;border-left:0;border-top:1px solid color-mix(in srgb,var(--border-color) 68%,transparent)}
+    }
     @media(min-width:901px) and (max-width:1199px){body:not([data-view-mode="mobile"]) #panel-tasks .task-library-card{position:static}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
   </style>
@@ -3649,7 +3667,7 @@
         <div class="settings-section-title">about</div>
         <div class="settings-desc" style="margin-top:0;"><strong id="settingsVersionLabel">Version</strong></div>
         <div class="settings-desc" id="settingsReleaseLabel" style="margin-top:0.2rem;"></div>
-            <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.187 removes deleted habits from the schedule, gives Task Library a readable desktop layout, shows Nutrition bodyweight in pounds, adds a 30-day fuel-check chart, and lets clear or repeated under-fuelling context gently hold back harder training without forcing rest.</div>
+            <div class="settings-desc" style="margin-top:0.2rem;max-width:none;">v1.188 gives adaptive and regular Today habits one compact visual language, distinguishes recorded cardio days from days with quantified load, and hides the duplicate schedule shortcut whenever Best Next Move already points to the schedule.</div>
         <button class="btn small" id="reloadAppBtn" style="width:100%;justify-content:center;margin-top:0.5rem;">reload app</button>
         <div class="settings-desc">gets the latest version — useful in installed/home-screen mode where there's no browser reload button</div>
       </div>
@@ -4914,11 +4932,11 @@
             <div class="recovery-acwr-caption" id="acwrCaption"></div>
             <div class="training-load-detail-grid">
               <div class="training-load-detail"><div class="training-load-detail-label">4-week base</div><div class="training-load-detail-value" id="trainingLoadBaseTrend">--</div></div>
-              <div class="training-load-detail"><div class="training-load-detail-label">last 7 days</div><div class="training-load-detail-value" id="trainingLoadMix">--</div></div>
+              <div class="training-load-detail"><div class="training-load-detail-label">rolling 7 days</div><div class="training-load-detail-value" id="trainingLoadMix">--</div></div>
               <div class="training-load-detail" id="trainingLoadWorkDetail"><div class="training-load-detail-label">work today</div><div class="training-load-detail-value" id="trainingLoadWork">--</div></div>
             </div>
             <div class="training-load-strip-wrap">
-              <div class="training-call-subheading">last 7 days — where the stress came from</div>
+              <div class="training-call-subheading">rolling 7 days — where the stress came from</div>
               <div class="training-load-strip" id="trainingLoadStressStrip"></div>
               <div class="training-load-strip-legend" id="trainingLoadStripLegend"><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--text-color);opacity:.5;"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span></div>
             </div>
@@ -5390,7 +5408,7 @@
       let isApplyingRemoteUpdate=false;
       let pendingCloudPushTimeout=null;
       let pendingConflictRemoteState=null;
-      const APP_VERSION='1.187';
+      const APP_VERSION='1.188';
       const APP_RELEASE_DATE='2026-08-16';
       document.getElementById('appTitle').title=`Focus::Flow version ${APP_VERSION}`;
       document.getElementById('settingsVersionLabel').textContent=`Version ${APP_VERSION}`;
@@ -8326,8 +8344,9 @@ function updateNotificationSettingUI(){
             factorsEl.appendChild(chip);
           });
         }
-        weekText.textContent=`${data.weekCount} / ${data.weeklyTarget} cardio days this week (cap ${data.weeklyCap})`;
-        weekText.title=(data.weekEvidence||[]).length?`Counted cardio days: ${(data.weekEvidence||[]).map(item=>`${item.date} · ${item.sources.join(' + ')}`).join(' | ')}. Lifts and work do not use a cardio day.`:'No cardio day is counted yet. Lifts and work do not use the six-day cardio allowance.';
+        const quantifiedCardioDays=(data.weekEvidence||[]).filter(item=>getTrainingLoadBreakdown(item.date).other>0).length,cardioDaysMissingLoad=Math.max(0,data.weekCount-quantifiedCardioDays);
+        weekText.textContent=`${data.weekCount} cardio day${data.weekCount===1?'':'s'} this calendar week${cardioDaysMissingLoad?` · ${quantifiedCardioDays} with load`:''} · target ${data.weeklyTarget} / cap ${data.weeklyCap}`;
+        weekText.title=(data.weekEvidence||[]).length?`Counted cardio days: ${(data.weekEvidence||[]).map(item=>`${item.date} · ${item.sources.join(' + ')} · ${getTrainingLoadBreakdown(item.date).other>0?'numeric load available':'cardio recorded, load missing'}`).join(' | ')}. A cardio day can count toward frequency before its load is available. Lifts and work do not use a cardio day.`:'No cardio day is counted yet. Lifts and work do not use the six-day cardio allowance.';
         const fillPct=Math.min(100,(data.weekCount/data.weeklyCap)*100);
         weekFill.style.width=fillPct+'%';
         weekFill.style.background=data.weekCount>=data.weeklyCap?'var(--error-color)':data.weekCount>=data.weeklyTarget?'#d4a94a':'var(--main-color)';
@@ -8984,15 +9003,15 @@ function updateNotificationSettingUI(){
         const counts={rest:0,easy:0,medium:0,test:0,race:0};
         days.forEach(d=>{const x=biometrics[d]&&biometrics[d].actualIntensity;if(x&&counts[x]!=null)counts[x]++;});
         const mix=document.getElementById('trainingLoadMix');
-        if(mix){const bits=[];if(counts.easy)bits.push(`${counts.easy} easy`);if(counts.medium)bits.push(`${counts.medium} medium`);if(counts.test)bits.push(`${counts.test} test`);if(counts.race)bits.push(`${counts.race} race`);if(counts.rest)bits.push(`${counts.rest} rest`);mix.textContent=bits.length?bits.join(' · '):'no sessions logged';}
+        const loadBreakdowns=days.map(getTrainingLoadBreakdown),cardioEvidence=days.map(date=>getCardioDayEvidence(biometrics[date]||{},date)),cardioRecordedDays=cardioEvidence.filter(item=>item.trained).length,cardioLoadedDays=loadBreakdowns.filter(item=>item.other>0).length,cardioMissingLoadDays=Math.max(0,cardioRecordedDays-cardioLoadedDays);
+        if(mix){if(trainingLoadView==='cardio')mix.textContent=cardioRecordedDays?`${cardioRecordedDays} recorded · ${cardioLoadedDays} with load${cardioMissingLoadDays?` · ${cardioMissingLoadDays} missing load`:''}`:'no cardio recorded';else{const bits=[];if(counts.easy)bits.push(`${counts.easy} easy`);if(counts.medium)bits.push(`${counts.medium} medium`);if(counts.test)bits.push(`${counts.test} test`);if(counts.race)bits.push(`${counts.race} race`);if(counts.rest)bits.push(`${counts.rest} rest`);mix.textContent=bits.length?bits.join(' · '):'no sessions logged';}}
         const work=getWorkStressData(today),workEl=document.getElementById('trainingLoadWork'),workDetail=document.getElementById('trainingLoadWorkDetail'),legend=document.getElementById('trainingLoadStripLegend');
         if(workDetail)workDetail.style.display=trainingLoadView==='cardio'?'none':'';
         if(workEl)workEl.textContent=work.score==null?'not logged':`${work.status==='red'?'high':work.status==='yellow'?'moderate':'low'}${work.hours!=null?` · ${work.hours}h`:''}`;
-        if(legend)legend.innerHTML=trainingLoadView==='cardio'?'<span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio only · job and lifting excluded</span>':'<span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--text-color);opacity:.5;"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span>';
+        if(legend)legend.innerHTML=trainingLoadView==='cardio'?'<span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>numeric cardio load</span><span class="training-load-strip-key"><span class="training-load-strip-swatch recorded-no-load"></span>cardio recorded · load missing</span><span class="training-load-strip-key">job and lifting excluded</span>':'<span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--main-color);"></span>cardio / other</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--text-color);opacity:.5;"></span>lifting</span><span class="training-load-strip-key"><span class="training-load-strip-swatch" style="background:var(--sub-color);"></span>work</span>';
         const strip=document.getElementById('trainingLoadStressStrip');
         if(strip){
           strip.innerHTML='';
-          const loadBreakdowns=days.map(getTrainingLoadBreakdown);
           const trainingVals=loadBreakdowns.map(x=>trainingLoadView==='cardio'?x.other:x.total);
           const liftingVals=loadBreakdowns.map(x=>x.lifting);
           const otherTrainingVals=loadBreakdowns.map(x=>x.other);
@@ -9001,7 +9020,7 @@ function updateNotificationSettingUI(){
           days.forEach((d,i)=>{
             const day=document.createElement('div');day.className='training-load-day';
             const bars=document.createElement('div');bars.className='training-load-bars';
-            const tb=document.createElement('div');tb.className='training-load-stack'+(trainingVals[i]?'':' empty');tb.style.height=(trainingVals[i]?Math.max(8,trainingVals[i]/tMax*100):4)+'%';
+            const recordedWithoutLoad=trainingLoadView==='cardio'&&cardioEvidence[i].trained&&!trainingVals[i],tb=document.createElement('div');tb.className='training-load-stack'+(trainingVals[i]?'':' empty')+(recordedWithoutLoad?' recorded-no-load':'');tb.style.height=(trainingVals[i]?Math.max(8,trainingVals[i]/tMax*100):recordedWithoutLoad?12:4)+'%';
             if(trainingVals[i]){
               const cardioShown=trainingLoadView==='cardio'?trainingVals[i]:otherTrainingVals[i],liftingShown=trainingLoadView==='cardio'?0:liftingVals[i];
               if(cardioShown){const seg=document.createElement('div');seg.className='training-load-segment other';seg.style.height=(cardioShown/trainingVals[i]*100)+'%';tb.appendChild(seg);}
@@ -9012,7 +9031,7 @@ function updateNotificationSettingUI(){
             const label=document.createElement('div');label.className='training-load-day-label';label.textContent=new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'narrow'});
             const fmtLoad=v=>v?Math.round(v*10)/10:'--';
             const sourceText=loadBreakdowns[i].sources.length?` · source: ${loadBreakdowns[i].sources.join(' + ')}`:'';
-            day.title=trainingLoadView==='cardio'?`${d} — cardio only ${fmtLoad(trainingVals[i])}${sourceText}; lifting and job stress excluded`:`${d} — total training ${fmtLoad(trainingVals[i])} (cardio / other ${fmtLoad(otherTrainingVals[i])}, lifting ${fmtLoad(liftingVals[i])})${sourceText}; work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
+            day.title=trainingLoadView==='cardio'?(recordedWithoutLoad?`${d} — cardio was recorded (${cardioEvidence[i].sources.join(' + ')}), but no numeric load is available yet; lifting and job stress excluded`:`${d} — cardio load ${fmtLoad(trainingVals[i])}${sourceText}; lifting and job stress excluded`):`${d} — total training ${fmtLoad(trainingVals[i])} (cardio / other ${fmtLoad(otherTrainingVals[i])}, lifting ${fmtLoad(liftingVals[i])})${sourceText}; work stress ${workVals[i]?Math.round(workVals[i]):'--'}`;
             day.appendChild(bars);day.appendChild(label);strip.appendChild(day);
           });
         }
@@ -12105,7 +12124,7 @@ function updateNotificationSettingUI(){
         rows.forEach(row=>{if(row.key==='cardio'){const rest=callLevel==='rest';row.state=rest&&cardioDone?'override':rest||cardioDone?'followed':'open';row.done=row.state==='followed';row.target=rest?'rest · protect recovery; no cardio dose is needed':`${callLevel} cardio · open the Training Call for the exact dose`;row.meta=row.state==='override'?`${sessions.filter(session=>session.kind!=='lifting'&&session.type!=='weights').length} cardio session${sessions.length===1?'':'s'} logged despite a rest call`:rest?'rest prescription followed':cardioDone?'cardio prescription completed':`${callLevel} dose still open`;}if(row.key==='lifting'){const skip=row.target.startsWith('skip');row.state=skip&&liftDone?'override':skip||liftDone?'followed':'open';row.done=row.state==='followed';if(row.state==='override')row.meta='lift logged despite a skip prescription';}if(row.key==='primer'){const held=row.target.startsWith('held'),performed=primerOutcome?.status==='done';row.state=held&&performed?'override':held||performed?'followed':'open';row.done=row.state==='followed';}});const activeRecoveryRow=getActiveRecoveryHabitRow(todayStr,computed);if(activeRecoveryRow)rows.push(activeRecoveryRow);const legRow=getLegRecoveryHabitRow(todayStr);if(legRow)rows.push(legRow);return rows;
       };
       renderAdaptivePlanHabits=function(el,todayStr){
-        const rows=getAdaptivePlanHabitRows(todayStr);if(!rows.length){const li=document.createElement('li');li.className='fitness-quiet-note';li.textContent='Fitness is quiet today. Whole-body fatigue, illness, pain, or low motivation means there is no training habit to complete. Your regular life habits still stay here.';el.appendChild(li);return;}rows.forEach(row=>{const li=document.createElement('li');li.className=`habit-item adaptive-plan-habit ${row.state}${row.done?' done':''}`;const status=document.createElement('button');status.className=`adaptive-plan-status ${row.state}${row.done?' done':''}`;status.textContent=row.state==='override'?'×':row.done?'✓':'→';status.title=row.state==='override'?'today’s rest / skip prescription was overridden':row.done?'today’s prescription followed':'open the prescription';status.addEventListener('click',()=>openAdaptiveHabit(row));const info=document.createElement('div');info.className='lib-info';info.innerHTML=`<span class="lib-name">${escapeHtml(row.name)}</span><span class="lib-meta">${escapeHtml(row.meta)} · <span title="Recovery changes this dose">target: ${escapeHtml(row.target)}</span> · <span title="Recent follow-through, not a score">30d momentum: ${escapeHtml(row.effort)}</span></span>`;li.appendChild(status);li.appendChild(info);el.appendChild(li);});
+        const rows=getAdaptivePlanHabitRows(todayStr);if(!rows.length){const li=document.createElement('li');li.className='fitness-quiet-note';li.textContent='Fitness is quiet today. Whole-body fatigue, illness, pain, or low motivation means there is no training habit to complete. Your regular life habits still stay here.';el.appendChild(li);return;}rows.forEach(row=>{const li=document.createElement('li');li.className=`habit-item adaptive-plan-habit ${row.state}${row.done?' done':''}`;const status=document.createElement('button');status.className=`adaptive-plan-status ${row.state}${row.done?' done':''}`;status.textContent=row.state==='override'?'×':row.done?'✓':'→';status.title=row.state==='override'?'today’s rest / skip prescription was overridden':row.done?'today’s prescription followed':'open the prescription';status.addEventListener('click',()=>openAdaptiveHabit(row));const stateLabel=row.state==='override'?'overridden':row.done?'followed':'still open',info=document.createElement('div');info.className='lib-info adaptive-habit-row-info';info.innerHTML=`<div class="adaptive-habit-primary"><span class="lib-name">${escapeHtml(row.name)}</span><span class="adaptive-habit-meta">${escapeHtml(stateLabel)} · ${escapeHtml(row.meta)}</span></div><div class="adaptive-habit-context"><span class="adaptive-habit-dose" title="Recovery changes this dose">today · ${escapeHtml(row.target)}</span><span class="adaptive-habit-momentum" title="Recent follow-through, not a score">30d momentum · ${escapeHtml(row.effort)}</span></div>`;li.appendChild(status);li.appendChild(info);el.appendChild(li);});
       };
       renderAdaptiveHabitOverviewRows=function(grid,days,todayStr){
         const byDay=new Map(days.map(date=>[date,getAdaptivePlanHabitRows(date)])),todayRows=byDay.get(todayStr)||byDay.get(days.at(-1))||[];['cardio','lifting','primer','active-recovery','leg-recovery'].forEach(key=>{const identity=todayRows.find(row=>row.key===key)||Array.from(byDay.values()).flat().find(row=>row.key===key);if(!identity)return;const row=document.createElement('div');row.className='overview-row habit-week-row adaptive-overview-row';const header=document.createElement('div');header.className='overview-row-header';header.innerHTML=`<div class="overview-label-cell"><div class="overview-name-row"><span class="overview-name-text">${escapeHtml(identity.name)}</span></div><span class="overview-freq">today · ${escapeHtml(identity.target)}</span><span class="overview-week-summary">30d momentum · ${escapeHtml(identity.effort)}</span></div>`;row.appendChild(header);const cells=document.createElement('div');cells.className='overview-cells-row';days.forEach(date=>{const item=(byDay.get(date)||[]).find(value=>value.key===key),cell=document.createElement('button');cell.type='button';cell.disabled=true;cell.className=`overview-cell${item?.state==='followed'?' done':''}${item?.state==='override'?' override':''}${item?' prescribed':''}${date===todayStr?' today':''}`;cell.textContent=item?.state==='override'?'×':item?.state==='followed'?'✓':item?'·':'';cell.title=item?`${date} · ${item.target} · ${item.state==='override'?'rest / skip was overridden':item.state==='followed'?'prescription followed':'still open or not confirmed'}`:`${date}: no adaptive prescription captured`;cells.appendChild(cell);});row.appendChild(cells);grid.appendChild(row);});
@@ -12369,7 +12388,7 @@ function updateNotificationSettingUI(){
         if(!candidates.length)add({score:1,title:'Leave the space open',why:'There is no urgent scheduled, training, habit, or task signal competing for attention right now.',confidence:'limited',action:'none',label:'nothing required'});
         return candidates.sort((a,b)=>b.score-a.score)[0];
       }
-      function renderBestNextMove(){lastBestNextMove=getBestNextMove();const title=document.getElementById('todayBestMoveTitle'),why=document.getElementById('todayBestMoveWhy'),confidence=document.getElementById('todayBestMoveConfidence'),action=document.getElementById('todayBestMoveAction');if(title)title.textContent=lastBestNextMove.title;if(why)why.textContent=lastBestNextMove.why;if(confidence)confidence.textContent=`${lastBestNextMove.confidence} confidence`;if(action){action.textContent=lastBestNextMove.label;action.disabled=lastBestNextMove.action==='none';}}
+      function renderBestNextMove(){lastBestNextMove=getBestNextMove();const title=document.getElementById('todayBestMoveTitle'),why=document.getElementById('todayBestMoveWhy'),confidence=document.getElementById('todayBestMoveConfidence'),action=document.getElementById('todayBestMoveAction'),plan=document.getElementById('todayScheduleQuickView');if(title)title.textContent=lastBestNextMove.title;if(why)why.textContent=lastBestNextMove.why;if(confidence)confidence.textContent=`${lastBestNextMove.confidence} confidence`;if(action){action.textContent=lastBestNextMove.label;action.disabled=lastBestNextMove.action==='none';}if(plan)plan.style.display=lastBestNextMove.action==='schedule'?'none':'';}
       function executeBestNextMove(){const move=lastBestNextMove||getBestNextMove();if(move.action==='focus'){currentTaskId=move.taskId;renderTasks();saveData();document.getElementById('todayNowStartBtn')?.click();}else if(move.action==='schedule'){document.querySelector('.schedule-card')?.scrollIntoView({behavior:'smooth',block:'start'});}else if(move.action==='recovery'||move.action==='training'){switchPanel('recovery');setTimeout(()=>document.querySelector(move.action==='training'?'.training-call-card':'.recovery-entry-card')?.scrollIntoView({behavior:'smooth',block:'start'}),0);}else if(move.action==='habit'){switchPanel('habits');}else if(move.action==='todo'){switchTodayHubTab('todo');document.querySelector('.today-tasks-hub')?.scrollIntoView({behavior:'smooth',block:'start'});}}
       function updateTodayNowCard(){
         const taskEl=document.getElementById('todayNowTask'),actionEl=document.getElementById('todayNowNextAction'),startBtn=document.getElementById('todayNowStartBtn');
